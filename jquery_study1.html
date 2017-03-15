@@ -5,12 +5,21 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Untitled Document</title>
     <head>
+        <script type="text/javascript">
 
-        <script>
             /*
              예제01 : 스크립트를 이용해 문서에서 #menu2의 li 태그 글자색을 모두 빨간색으로
-             변경하고 싶다면 어떻게 해야 할까요?
+             변경하고 싶다면 어떻게 해야 할까요?  fdkfkfkdfd
              */
+        window.onload = function() {
+            var menu2 = document.getElementById("menu2");
+            var vList = menu2.getElementsByTagName("li");
+
+            for (var i = 0; i < vList.length; i++) {
+                var li = vList[i];
+                li.style.color = "#f00";
+            }
+        }
 
         </script>
 
