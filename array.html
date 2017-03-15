@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type = "text/javascript">
+
+
+
+    function testFunc(){
+
+        this.familyArr = {
+            fathers : [],
+            mothers : [],
+            children : []
+        }
+
+        for( var vIdx = 0; vIdx < 3; vIdx ++ ){
+
+            var fatherObj = {
+                    ID: vIdx,
+                    phone: vIdx + 1,
+                    number: vIdx + 2
+            }
+
+            this.familyArr.fathers.push( fatherObj );
+        }
+
+        for( var vIdx in this.familyArr.fathers ){
+            console.log( this.familyArr.fathers[vIdx].ID  );
+            console.log( this.familyArr.fathers[vIdx].phone  );
+            console.log( this.familyArr.fathers[vIdx].number  );
+        }
+    }
+
+    var test = new testFunc();
+
+
+
+    var g_vertices = [  1, 2, 3 , 4, 5, 6 , 7, 8, 9 ];
+    var g_normals = [  11, 12, 13 , 14, 15, 16 , 17, 18, 19 ];
+
+    function Parse() {
+        var object, objects = [];
+        var geometry_, material_;
+
+        this.geometry = {
+            vertices: [],
+            normals: [],
+            uvs: []
+        };
+
+        this.material = {
+            name: ''
+        };
+
+        this.LogPrint = function(){
+
+            for (var vIdx = 0; vIdx < geometry.vertices.length; vIdx += 3) {
+                // for( var vIdx in geometry.vertices ){
+                console.log(geometry.vertices[vIdx] + "," + geometry.vertices[vIdx + 1] + "," + geometry.vertices[vIdx + 2]);
+            }
+
+            for (var vIdx = 0; vIdx < object.geometry.normals.length; vIdx += 3) {
+                // for( var vIdx in geometry.vertices ){
+                console.log(object.geometry.normals[vIdx] + "," + object.geometry.normals[vIdx + 1] + "," + object.geometry.normals[vIdx + 2]);
+            }
+        };
+
+
+        this.tempPushVertex = function( ){
+            var vNumber = 100;
+            this.geometry.vertices.push( vNumber );
+        };
+
+
+        this.pushVertices = function( vertexArr )
+        {
+            // var vNumber = 100;
+            // geometry.vertices.push( vertexArr[0] );
+
+            for( var vIdx in vertexArr ){
+                // geometry.vertices.push( vertexArr[0]);
+                this.geometry.vertices.push( vertexArr[vIdx]);
+            }
+
+        };
+
+        this.pushNormals = function( normalArr )
+        {
+            for( var vIdx in normalArr ){
+                this.geometry.normals.push( normalArr[vIdx]);
+            }
+        };
+
+
+    }
+
+    var fParse =  new Parse();
+
+    fParse.tempPushVertex( );
+    fParse.pushVertices( g_vertices );
+
+    for( var vIdx in g_vertices ){
+        fParse.geometry.vertices.push( g_vertices[vIdx]);
+    }
+
+
+    fParse.pushNormals( g_normals );
+
+    fParse.LogPrint();
+
+
+
+</script>
+</body>
+</html>

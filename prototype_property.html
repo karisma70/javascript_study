@@ -1,0 +1,31 @@
+<html>
+<head>
+	 <title> WebGL Beginner's Guide - Setting up the canvas </title>
+     <script type="text/javascript" src="./Sources/06.01.inherit.js"></script>
+	 <style type="text/css">
+	 canvas {border: 2px dotted blue;}
+	 </style>
+</head>
+<body>
+<script type="text/javascript">
+
+var var1 = {};
+var1.x = 1;
+
+var var2 = inherit( var1 );
+var2.x = 5; 
+var2.y = 2;
+
+
+console.log( "var2 val: ", var2.x + var2.y ); 
+
+var var3 = inherit( var2 );
+var3.z = 3; 
+
+var var4 = var3.x + var3.y + var3.z; 
+
+console.log( "val " + var4 ); 
+
+</script>
+</body>
+</html>

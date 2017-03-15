@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script type = "text/javascript">
+
+    var aData = [1, 2, 3, 4, 5];
+
+    // forEach의 파라미터 순서 : 배열의 원소값, 인덱스, 배열 자체
+    aData.forEach( function( value, index, arr ){
+       console.log( "index : "+ index + ", value: " + value );
+        arr[ index ] = value + 2;
+    });
+
+
+    aData.forEach( function( value, index, arr ){
+        document.write("idx : " + index + "value: " +  value );  // arr[idx]);
+        document.write("<br>");
+    });
+
+
+    /*
+    for( var idx = 0; idx < aData.length; idx ++ ) {
+        document.write("idx : " + idx + "value: " + aData[idx]);
+        document.write("<br>");
+    }
+    */
+
+</script>
+</body>
+</html>
