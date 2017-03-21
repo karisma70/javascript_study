@@ -38,7 +38,7 @@
     console.log( socPlayer.Sleep() );
     */
 
-    SoccerPlayer.prototype = new Man();
+    SoccerPlayer.prototype = new Man();                     // 정상적인 상속이다
     var heritPlayer = new SoccerPlayer("Chrimpson");       // heritPlayer.__proto__ : man
 
     console.log( heritPlayer.name );
