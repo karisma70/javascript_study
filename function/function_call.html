@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type = "text/javascript">
+    function map( func, arr ){
+        var result = [], i;
+
+        for( i = 0; i != arr.length; i++ ){
+            result[i] = func( arr[i] );
+         }
+        return result;
+    }
+
+    var mulFunc = function( x){
+        return x * x * x;
+    }
+
+    var result = map( mulFunc, [0, 1, 2, 5, 10 ]);
+
+    for( var i =0; i < result.length; i++ ){
+        console.log( result[ i ]);
+    }
+
+
+</script>
+
+</body>
+</html>

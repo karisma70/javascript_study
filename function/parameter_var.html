@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type ="text/javascript">
+    function setParamFunc( theObject ){
+        theObject.make = "Toyota";
+    }
+
+    var myCar = { make: "Honda", model: "Accord", year: 1998 };
+
+    var companyX = myCar.make;
+
+    console.log( companyX );
+
+    setParamFunc( myCar );
+
+    var companyY = myCar.make;
+    console.log( companyY );
+
+    ////////////////////////////////////////////
+
+    function setObjectFunc( theObject ){
+        theObject = { make: "Hyundai", model: "Sonata" , year: 2010 };
+    }
+
+    setObjectFunc( myCar );
+    var companyZ = myCar.make;
+
+    console.log( companyZ );
+
+</script>
+
+</body>
+</html>

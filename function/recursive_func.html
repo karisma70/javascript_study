@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type = "text/javascript">
+    function factorial(n){
+        if(  n == 0 || n == 1 ) {
+            console.log("n : " + n );
+            return 1;
+
+
+        }
+        else {
+            console.log( n + " * factorial( " + (n-1) +" ) " );
+            return ( n * factorial(n - 1));
+        }
+    };
+
+    var a, b, c, d, e;
+
+    a = factorial(1);
+    console.log("--------------------------------------");
+    b = factorial(2);
+    console.log("--------------------------------------");
+    c = factorial(3);
+    console.log("--------------------------------------");
+    d = factorial(4);
+    console.log("--------------------------------------");
+    e = factorial(5);
+    console.log("--------------------------------------");
+
+
+</script>
+
+</body>
+</html>

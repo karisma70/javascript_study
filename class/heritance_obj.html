@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type = "text/javascript">
+    function Man(){
+        this.name = "None";
+        this.gender = "male";
+        this.Run = function(){
+            return this.name + " is running";
+        };
+        this.Sleep = function(){
+            return this.name + " is sleeping";
+        };
+    }
+
+    function SoccerPlayer( name ){
+        if( name )
+            this.name = name;
+        else
+            this.name = "anonymous Soccer Player"
+        this.Pass = function(){
+            return this.name + " is passing to other player!";
+        }
+    }
+
+    var socPlayer = new SoccerPlayer("david");
+    socPlayer.prototype = new Man();           // socPlayer.prototype : man,  socPlayer.__proto__ : object
+    console.log( socPlayer.name );
+    console.log( socPlayer.Pass() );
+
+    /*
+    console.log( socPlayer.gender );    // 불능!!!
+    console.log( socPlayer.Run() );
+    console.log( socPlayer.Sleep() );
+    */
+
+    SoccerPlayer.prototype = new Man();
+    var heritPlayer = new SoccerPlayer("Chrimpson");       // heritPlayer.__proto__ : man
+
+    console.log( heritPlayer.name );
+    console.log( heritPlayer.gender );
+    console.log( heritPlayer.Run() );
+    console.log( heritPlayer.Sleep() );
+    console.log( heritPlayer.Pass() );
+
+    var heritPlayer2 = new heritPlayer.constructor("Jjang goo ");
+    console.log( heritPlayer2.name );
+
+</script>
+
+</body>
+</html>
