@@ -62,6 +62,43 @@
     console.log( result1 );
 
 
+    function testFunc(){
+        var name = "david";
+        return {
+            setName: function () {
+                console.log("setName");
+            },
+            getName: function () {
+                console.log("getName");
+            }
+        }
+    };
+
+    var tempFunc = testFunc();
+
+    tempFunc.setName();
+
+    function testFunc2(){
+        var name = "wang king";
+        this.setName = function( new_name ){
+            name = new_name;
+        };
+        this.getName = function(){
+            return name;
+        }
+    }
+
+    var tempFunc2 = new testFunc2();
+    var name = tempFunc2.getName();
+    console.log( name );
+
+    var obj  = {
+        x: 1,
+        y:2
+    }
+
+    console.log( "x: " + obj.x + "  y: " + obj.y );
+
 
 </script>
 
