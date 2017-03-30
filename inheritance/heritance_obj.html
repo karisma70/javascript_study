@@ -20,17 +20,23 @@
     function SoccerPlayer( name ){
         if( name )
             this.name = name;
-        else
-            this.name = "anonymous Soccer Player"
+   //     else {
+     //       this.name = "anonymous Soccer Player"
+     //   }
         this.Pass = function(){
             return this.name + " is passing to other player!";
         }
     }
 
     var socPlayer = new SoccerPlayer("david");
-    socPlayer.prototype = new Man();           // socPlayer.prototype : man,  socPlayer.__proto__ : object
+    socPlayer.prototype = new Man();           // socPlayer.prototype : man,  socPlayer.__proto__ : object  //   .__proto__  상위에서 물려받은 객체의 프로토타입에 관한 정보
     console.log( socPlayer.name );
     console.log( socPlayer.Pass() );
+
+    var socPlayer2 = new socPlayer;     // 불능이다,  이건 안된다.  socPlayer는 함수객체가 아니다.
+    console.log( socPlayer2.name );
+    console.log( socPlayer2.Pass() );
+
 
     /*
     console.log( socPlayer.gender );    // 불능!!!
@@ -39,7 +45,8 @@
     */
 
     SoccerPlayer.prototype = new Man();                     // 정상적인 상속이다
-    var heritPlayer = new SoccerPlayer("Chrimpson");       // heritPlayer.__proto__ : man
+    //var heritPlayer = new SoccerPlayer("Chrimpson");       // heritPlayer.__proto__ : man
+    var heritPlayer = new SoccerPlayer( );       // heritPlayer.__proto__ : man
 
     console.log( heritPlayer.name );
     console.log( heritPlayer.gender );

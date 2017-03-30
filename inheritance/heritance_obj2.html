@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type = "text/javascript">
+
+    // <참고> http://unikys.tistory.com/320
+
+    var person = {
+        name : "anonymous",
+        sayHello : function() {
+            alert("Hello,  my name is " + this.name );
+        }
+    }
+
+    function Unikys(){
+        this.name = "Unikys";
+    }
+
+    Unikys.prototype = person;
+
+    var instUnikys = new Unikys();
+
+    instUnikys.sayHello();
+    person.sayHello();
+
+    var result1 = instUnikys instanceof Unikys;
+
+    // var result2 = instUnikys instanceof person;  //  XX  이건 불능이다.  person 이 instanceof 로 확인할 수 있는 함수객체가 아니기 때문이다.
+
+    document.write( "unikys is instanceof Unikys => result : " + result1 + "<br>");
+    // document.write( "unikys is instanceof person => result : " + result2 );
+
+</script>
+
+</body>
+</html>

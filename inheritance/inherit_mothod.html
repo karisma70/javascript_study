@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type = "text/javascript">
+// < 참조 >  https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Inheritance_and_the_prototype_chain
+
+    var o = {
+        a: 2,
+        m: function(b){
+            if( b )
+                return b+1;
+            else
+                return this.a + 1;
+        },
+        this_print:function(){
+            console.log( this );
+        }
+    };
+
+    console.log( o.m() );
+    o.this_print();
+
+    var p = Object.create(o);   // p는 프로토타입을 o로 가지는 오브젝트이다.
+    p.a = 12;
+    console.log( p.m());
+
+    var o2 = o;
+    o2.a = 7;
+    console.log( o2.m());
+    console.log( o.m());
+
+</script>
+
+</body>
+</html>

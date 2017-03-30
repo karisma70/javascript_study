@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type = "text/javascript">
+    //  <참조>  https://msdn.microsoft.com/ko-kr/library/zh0zb36z(v=vs.94).aspx
+
+//  결과 = 객체 instanceof 클래스
+    function objectTest( obj ){
+        var obj_arr;
+        var strText = "";
+        var idx;
+
+        obj_arr = new Array();
+        obj_arr["Date"] = Date;
+        obj_arr["Object"] = Object;
+        obj_arr["Array"] = Array;
+
+        for( idx in obj_arr){       // * 주의할것!!  여기에서 idx 는 obj_arr 배열내에 있는 객체이다.
+            if( obj instanceof obj_arr[idx] ){    //  true | false = obj instance of class
+                strText += " obj is an instance of " + idx + "<br>";    //  OK!
+                // strText += " obj is an instance of " + idx.toString() + "<br>";   //   OK!
+                // strText += " obj is an instance of " + obj_arr[idx].toString() + "<br>";        // NO!!
+            }
+            else{
+                strText += " obj is not an instance of " + idx + "<br>";
+            }
+        }
+
+        strText += "<br>"
+
+        return strText;
+    }
+
+    var dateObj = new Date();
+    var objObj = new Object();
+    var arrObj = new Array();
+    var strObj = new String();
+
+    document.write( objectTest( dateObj) );
+    document.write( objectTest( objObj) );
+    document.write( objectTest( arrObj) );
+    document.write( objectTest( strObj) );
+
+    ///////////////////////////////////////////////////////////////
+    // <참조> http://unikys.tistory.com/260
+    //  Below is typeof sample code
+
+    var bool = true;
+    var numeric = 12;
+    var stringName = "david";
+    var obj = {};
+    var arr = [];
+    var func = function(){};
+
+    function typeofTest( param ){
+
+        var strText;
+
+       if( typeof param == 'boolean'){
+            document.write( "param is boolean ")
+        }
+
+        strText = "result : " + typeof param + "<br>";
+
+        document.write( strText );
+    }
+
+    typeofTest( bool );
+    typeofTest( numeric );
+    typeofTest( stringName );
+    typeofTest( arr );
+    typeofTest( func );
+
+    document.write( "<br> --------------<br>");
+    // Below is instanceof sample code
+
+
+    var tempFunc = function(){
+        this.name = "david";
+    }
+
+    var temp_inst = new tempFunc();
+
+    var result = temp_inst instanceof tempFunc;
+
+    document.write( "temp_inst instanceof tempFunc() => result : " + temp_inst instanceof tempFunc ;
+
+
+</script>
+</body>
+</html>
