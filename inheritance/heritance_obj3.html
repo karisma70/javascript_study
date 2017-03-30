@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type = "text/javascript">
+    function Person(){
+        this.name = "anonymous";
+        this.job = "none";
+        this.sayHello = function(){
+            alert("Hello, my name is " + this.name );
+        };
+    }
+
+    function Programmer(){
+        this.name = "david";
+        this.job = "Programmer";
+    }
+
+    Programmer.prototype = new Person();      // Programmer 는 Person을 상속받았다.
+
+    var instProgrammer = new Programmer();
+
+    console.log( instProgrammer.constructor );      // 출력결과는 Programmer()가 아닌 Person()이다.
+
+    var tempObj = new instProgrammer.constructor;
+    tempObj.sayHello();
+
+    function Linustovals(){
+        this.name = "Linus Tovals";
+        this.job = "Linx Developer";
+    }
+
+    Linustovals.prototype = new Programmer;
+
+    var linusTovals = new Linustovals();
+
+    console.log( linusTovals.constructor );     // 출력결과는 Programmer()가 아닌 Person()이다.
+    linusTovals.sayHello();
+
+
+    // instProgrammer.sayHello();
+
+    // Person.sayHello();   // XXXX   Person 객체가 없는데 어떻게 함수를 호출하겠소!!!
+
+    document.write("instProgrammer is instance of Programmer => result : " , ( instProgrammer instanceof Programmer ) + "<br>");
+    document.write("instProgrammer is instance of Person => result : " , ( instProgrammer instanceof Person ));
+
+
+</script>
+</body>
+</html>

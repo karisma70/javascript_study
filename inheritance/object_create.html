@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type = "text/javascript">
+    // <참조> http://unikys.tistory.com/320           Object.Create 함수에 관한 설명 샘플
+
+
+    function Person(){
+        this.name = name;
+    }
+
+    Person.prototype = {
+        yell: function(){
+            alert("My name is " + this.name );
+        }
+    }
+
+    /*
+     Object.create = function (o) {
+        function F() {}
+        F.prototype = o;
+        return new F();
+      }
+
+     출처: http://unikys.tistory.com/320 [All-round programmer]
+     */
+
+    var sportsman = Object.create( Person.prototype );  // Person이 아닌 Person.prototype으로 david 객체를 생성하고 있다.
+    sportsman.name = "sports man";
+    sportsman.yell();
+
+    console.log( sportsman.constructor );
+
+    document.write("sportsman is instance of Person => result : " + ( sportsman instanceof Person) + "<br>");
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+    // var park = Object.create( sportsman.prototype );    // XXX 불능이다.
+    var park = Object.create( {yell: function(){
+        alert("Your name is ");
+    }});
+    park.name = "park ji sung";
+
+    document.write("park is instance of Person => result : " + ( park instanceof Person) + "<br>");
+    // document.write("park is instance of sportsman => result : " + ( park instanceof sportsman ) + "<br>");   // XXX   sportsman은 함수객체가 아니므로 비교가 확인이 불가능하다.
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+    function Person2(){
+        this.name = "anonymous";
+        this.job = "none";
+        this.sayHello = function(){
+         //   alert("Hello, my name is " + this.name );
+            console.log("Hello, my name is " + this.name );
+        };
+    }
+
+    /*
+    Person2.prototype = {
+        run: function(){
+            alert("Running is " + this.name );
+        }
+    }
+    */
+
+
+    Person2.prototype = {
+        run : function(){
+            console.log(  this.name + " is running ");
+        }
+    }
+
+
+    var father = Object.create( new Person2() );
+    father.name = "father";
+    father.sayHello();
+
+    document.write(" father is instance of Person2 => result : " + ( father instanceof Person2) + "<br>");
+
+    function Mother(){
+    }
+
+    Mother.prototype = new Person2();
+    var mother = new Mother();
+    mother.name = "mother";
+    mother.sayHello();
+
+    document.write(" mother is instance of Person2 => result : " + ( mother instanceof Person2) + "<br>");
+
+    var uncle = Object.create( Person2.prototype );
+    uncle.name = "uncle";
+    uncle.run();
+    uncle.sayHello();
+
+    document.write(" uncle is instance of Person2 => result : " + ( uncle instanceof Person2) + "<br>");
+
+
+
+</script>
+
+</body>
+</html>
