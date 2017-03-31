@@ -39,14 +39,16 @@
 
     /////////////////////////////////////////////////////////////////////////////////////////////
 
-    // var park = Object.create( sportsman.prototype );    // XXX 불능이다.
+    // var park = Object.create( sportsman.prototype );    // XXX 불능이다.  상속을 이어줄 prototype이 비어 있다.
     var park = Object.create( {yell: function(){
         alert("Your name is ");
     }});
     park.name = "park ji sung";
+    park.yell();
 
-    document.write("park is instance of Person => result : " + ( park instanceof Person) + "<br>");
-    // document.write("park is instance of sportsman => result : " + ( park instanceof sportsman ) + "<br>");   // XXX   sportsman은 함수객체가 아니므로 비교가 확인이 불가능하다.
+    var park2 = Object.create( sportsman.__proto__ );    // 상속의 근원인 __proto__가 object로 정의되어 있기 때문이다.
+    park2.name = "Min ho";
+    park2.yell();
 
     /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -59,15 +61,6 @@
         };
     }
 
-    /*
-    Person2.prototype = {
-        run: function(){
-            alert("Running is " + this.name );
-        }
-    }
-    */
-
-
     Person2.prototype = {
         run : function(){
             console.log(  this.name + " is running ");
@@ -75,28 +68,58 @@
     }
 
 
-    var father = Object.create( new Person2() );
-    father.name = "father";
-    father.sayHello();
-
-    document.write(" father is instance of Person2 => result : " + ( father instanceof Person2) + "<br>");
+    //////////////////////////////////////////////////  1. new를 통한 상속의 경우
 
     function Mother(){
     }
 
     Mother.prototype = new Person2();
     var mother = new Mother();
+
     mother.name = "mother";
+    mother.job = "가사일";
     mother.sayHello();
+    mother.run();
+
+    console.log( "mother.name : " + mother.name );
+    console.log( "mother.job : " + mother.job );
 
     document.write(" mother is instance of Person2 => result : " + ( mother instanceof Person2) + "<br>");
 
+
+    /////////////////////////////////////////////////// 2. Object.create를 통한 상속의 경우
+
     var uncle = Object.create( Person2.prototype );
     uncle.name = "uncle";
+    uncle.job = "repair of car";
     uncle.run();
-    uncle.sayHello();
+    //  uncle.sayHello();        // XXX 불능이다.   uncle.sayHello는 함수로 인식하지 못한다.
+    // 결국 Person2의 property는 상속을 받아도, sayHello()와 같은 함수는 상속을 받지 못한다.
+
+    console.log("uncle.name : " + uncle.name );
+    console.log("uncle.job : " + uncle.job );
 
     document.write(" uncle is instance of Person2 => result : " + ( uncle instanceof Person2) + "<br>");
+
+
+    /////////////////////////////////////////////////// 3.  Object.create에서 new를 통한 상속의 경우 1.번과 동일하게 동작한다.
+    var father = Object.create( new Person2() );
+    father.name = "father";
+    father.job = "bank";
+    father.sayHello();
+    father.run();
+
+    document.write(" father is instance of Person2 => result : " + ( father instanceof Person2) + "<br>");
+
+
+    /////////////////////////////////////////////////// 4.  Object.create에서 객체 타입을 통한 상속의 경우
+
+    var aunt = Object.create( Person2 );
+    aunt.name = "aunt";
+    // aunt.run();              // XX 불능이다.
+    // aunt.sayHello();        // XXX 불능이다.   uncle.sayHello는 함수로 인식하지 못한다.
+
+    document.write(" aunt is instance of Person2 => result : " + ( aunt instanceof Person2) + "<br>");
 
 
 

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type = "text/javascript">
+    function objFunction( callback ){
+
+        var obj = {
+            name : "david",
+            printSelfName: function( ){
+                console.log( "name is :" + this.name );
+            },
+            printByParam : function( param_name, param_age ){
+                console.log( "arg name is : " + param_name + ", age is : " + param_age );
+            },
+            printByFunction : function( param_name, func ){
+                func( param_name );
+            }
+        };
+
+        callback( obj );
+    }
+
+
+    var exeFunc = function( prt_text ){
+        console.log("print out in console log => print text is " + prt_text );
+    }
+
+
+    objFunction( function(obj_arg){
+        obj_arg.printSelfName();
+        obj_arg.printByParam( "Charlie", 35 );
+
+
+        obj_arg.printByFunction( "I'm a geneous !!! ", exeFunc );
+    } );
+
+
+    function callbackfunc( obj_arg){
+        obj_arg.printSelfName();
+        obj_arg.printByParam( "Wangchang", 35 );
+        obj_arg.printByFunction( "You are my heart. ", exeFunc );
+    }
+
+    objFunction( callbackfunc );
+
+</script>
+
+</body>
+</html>

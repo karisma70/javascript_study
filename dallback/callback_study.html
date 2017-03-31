@@ -7,6 +7,9 @@
 <body>
 <script type = "text/javascript">
 
+    var obj = 1;
+
+
     function calculator( operator, num1, num2, callback ){
         var result = "";
 
@@ -28,22 +31,23 @@
                 result = "지원하지 않는 연산자입니다.";
         }
 
-        function PrintFunc( result ){
-            this.Console( result ){
-                cnosole.log("result :" + result );
+        var obj = {
+            result_val : result,
+            printFunc : function(){
+                console.log(" result is :" + this.result_val );
             }
-        }
+        };
 
-        var printFunc = new PrintFunc();
-
-        callback( printFunc( result) );
+        callback( obj);
     }
 
-    function callBackPrint( function( printfFunc ) ){
-        // document.write( " 두수의 합은 " + result + "입니다 " , "<br>");
-        printFunc.Console( result);
+
+    function callBackPrint( obj ){
+        console.log( obj.result_val );
+        obj.printFunc();
     }
 
+    calculator( "+", 10, 14, callBackPrint( obj ) );
 
 
 </script>
