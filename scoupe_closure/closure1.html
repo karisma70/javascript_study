@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type = "text/javascript">
+    function outer(){
+        var count = 0;
+        return {
+            increase: function(){
+                return ++ count;
+            },
+            decrease: function(){
+                return -- count;
+            }
+        };
+    }
+
+    var counter = outer();
+
+    console.log( "counter 1 inc :" + counter.increase() );
+    console.log( "counter 1 inc :" + counter.increase() );
+    console.log( "counter 1 dec :" + counter.decrease() );
+
+    var counter2 = outer();
+
+    console.log( "counter 2 inc :" + counter2.increase() );
+    console.log( "counter 1 dec :" + counter.decrease() );
+
+</script>
+
+</body>
+</html>

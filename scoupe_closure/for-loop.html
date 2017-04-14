@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type = "text/javascript">
+    for( var i = 0 ; i < 10; i ++ ){
+        var total = (total || 0 ) + i;      // total의 값이 true 이거나  total 값이 0인경우  (or 연산이다)
+        var last = i;
+        if( total > 16 ){
+            break;
+        }
+    }
+
+    //console.log(typeof total !== "undefined");
+
+    var m = 15;
+    if( typeof m )
+        console.log(typeof m );
+    if( !(typeof m === "undefined ") )
+        console.log("defined!!!");
+
+    console.log(typeof total === "undefined");
+
+    console.log(typeof last !== "undefined");
+
+</script>
+</body>
+</html>

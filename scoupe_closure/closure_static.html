@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type = "text/javascript">
+    var countFactory = (function(){         // 즉시 실행함수로 함수를 리턴한다.
+       var staticCount = 0;
+        return function(){
+            var localCount = 0;
+            return {
+                increase : function(){
+                    return{
+                        static: ++ staticCount,
+                        local : ++ localCount
+                    };
+                },
+                decrease: function(){
+                    return{
+                        static: -- staticCount,
+                        local : -- localCount
+                    };
+                }
+            };
+        };
+    }());
+
+    var counter = countFactory(), counter2 = countFactory();
+
+    var inc_result = counter.increase();
+    console.log( "counter1 inc  static :" + inc_result.static + " local : " + inc_result.local  );
+
+    inc_result = counter.increase();
+    console.log( "counter1 inc  static :" + inc_result.static + " local : " + inc_result.local  );
+
+    var inc_result2 = counter2.decrease();
+    console.log( "counter2 dec  static :" + inc_result2.static + " local : " + inc_result2.local  );
+
+    inc_result = counter.increase();
+    console.log( "counter1 inc  static :" + inc_result.static + " local : " + inc_result.local  );
+
+    inc_result2 = counter2.increase();
+    console.log( "counter2 inc  static :" + inc_result2.static + " local : " + inc_result2.local  );
+
+</script>
+
+</body>
+</html>
