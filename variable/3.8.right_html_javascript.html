@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form id = "formWrite" >        //  <-- 여기가 다르다.  글로벌 함수가 없다.
+    <input type = "text" id = "name" name = "name"/>
+    <input type = "text" id = "age" name ="age" />
+    <input type = "submit"  value = "Submit" />
+</form>
+<script>
+
+(function(){        // <-- 여기가 다르다.
+    var formWrite = document.getElementById("formWrite");
+    formWrite.onsubmit = validate;
+
+    function validate(){
+        var inputName = document.getElementById("name");
+        var inputAge;
+        if( inputName === "" ){
+            alert( "input name" );
+            intputName.focus();
+            return false;
+        }
+        inputAge = document.getElementById("age");
+        if( inputAge === "" ){
+            alert( "input age ");
+            inputAge.focus();
+            return false;
+        }
+    }
+}());
+
+
+</script>
+</body>
+</html>

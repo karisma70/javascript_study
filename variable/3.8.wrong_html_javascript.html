@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form id = "formWrite" onsubmit = "return validate()">      // <-- 여기가 다르다 , 글로벌 함수 validate를 활용해야 한다.
+    <input type = "text" id = "name" name = "name"/>
+    <input type = "text" id = "age" name ="age" />
+    <input type = "submit"  value = "Submit" />
+</form>
+<script>
+    function validate(){
+        var inputName = document.getElementById("name");
+        var inputAge;
+        if( inputName.value === ""){
+            alert("Input name");
+            inputName.focus();
+            return false;
+        }
+        inputAge = document.getElementById("age");
+        if( inputAge.value === "" ){
+            alert("input age");
+            inputAge.focus();
+            return false;
+        }
+    }
+</script>
+</body>
+</html>

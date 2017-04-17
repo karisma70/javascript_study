@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id = "divMouseOver">Mouse Over Highlight</div>
+    <div id = "divFloatingContent">Floating Content</div>
+
+<script>
+    (function(){
+        var divMouseOver = document.getElementById("divMouseOver");
+        var divFloatingContent = document.getElementById("divFloatingContent");
+
+        divMouseOver.onmouseover = function(){
+            console.log("mouse over!!!");
+            var xhr = new XMLHttpRequest();
+            divMouseOver.style.backgroundColor = "#FF0000";
+            divMouseOver.style.color = "white";
+            divMouseOver.style.fontSize = "12px";
+
+            //xhr.open("GET", "http://myserver.com/floating_contents");
+            xhr.open("GET", "http://13.124.86.217:8081/hello.html");
+            xhr.onload = function(){
+                divFloatingContent.innerHTML = xhr.responseText;
+                divFloatingContent.style.display = "block";
+            };
+            xhr.send();
+        }
+
+        divMouseOver.onmouseout = function(){
+            divMouseOver.style.backgroundColor = "#FFFFFF";
+            divMouseOver.style.color = "black";
+            divMouseOver.style.fontSize = "10px";
+            divFloatingContent.style.display = "none";
+        }
+
+    }());
+</script>
+
+</body>
+</html>

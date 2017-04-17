@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var getVariable = "global";
+
+    (function() {
+        var getVariable = "immediate function";
+        insideFunction();
+        console.log("2. immediate function : " + getVariable );
+
+        function insideFunction(){
+            console.log("1. Inside function :" + getVariable );
+            getVariable = "will I be global ? ";
+        }
+    }());
+</script>
+</body>
+</html>

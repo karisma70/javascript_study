@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+
+    // #1 ---------------------------------
+    console.log( "# 1 ------------------------- ");
+    console.log( null instanceof Object );          // false
+    console.log( [0, 1] instanceof Object );        // true
+    console.log( { name: "uniKeys" } instanceof Object );        // true
+    console.log( "red" instanceof String );        // false
+
+    // #2 ---------------------------------
+    console.log( "# 2 ------------------------- ");
+    var color1 = new String("red");
+    var color2 = "red";                 // 기본형
+
+    console.log( "color1 == color2 : " + (color1 == color2) );                // true  형변환을 통한 비교
+
+    console.log( "color1 instanceof String : " + (color1 instanceof String)  );       // true
+    console.log( "color2 instanceof String : " + (color2 instanceof String)  );       // false
+    console.log( "color2 instanceof Object : " + (color2 instanceof Object)  );       // false
+
+    console.log("color1 === color2 : " + ( color1 === color2) );               // false   형변환이 없는 엄격한 비교
+    console.log("color1.constructor === String : " + ( color1.constructor === String ) );        // true
+    console.log("color2.constructor === String : " + ( color2.constructor === String) );         // false
+
+    // #3 ---------------------------------
+    console.log( "# 3 ------------------------- ");
+
+    var color1 = new String("red");
+    var color2 = "red";
+    var color3 = String("red");
+
+    console.log( "color1.toUpperCase() : " + color1.toUpperCase());
+    console.log( "color2.toUpperCase() : " + color2.toUpperCase());
+    console.log( "color3.toUpperCase() : " + color3.toUpperCase());
+
+    console.log( "color1 instanceof String : " + (color1 instanceof String) );      // true
+    console.log( "color2 instanceof String : " + (color2 instanceof String) );      // false
+    console.log( "color3 instanceof String : " + (color3 instanceof String) );      // false
+
+    console.log( "typeof color1 : "  + (typeof color1) );       // object
+    console.log( "typeof color2 : "  + (typeof color2) );       // string
+    console.log( "typeof color3 : "  + (typeof color3) );       // string
+
+    console.log( "color1 === color2 : "  + ( color1 === color2 ) );       // false
+    console.log( "color2 === color3 : "  + ( color2 === color3 ) );       // true
+
+    // # 4 ---------------------------------
+    console.log( "# 4 ------------------------- ");
+    var constructString = new String("unikeys");
+    constructString.blog = "http://unikys.tistory.com";
+    console.log( constructString.blog === "http://unikys.tistory.com" );    // true
+
+    var primitiveString = "unikys";
+    primitiveString.blog = "http://unikys.tistory.com";
+    console.log(primitiveString.blog === "http://unikys.tistory.com" );     // false
+    console.log(primitiveString.blog === undefined );
+
+</script>
+
+</body>
+</html>
