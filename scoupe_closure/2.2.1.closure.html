@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script type = "text/javascript">
+
+    function sum(base){
+        var inClosure = base;
+        return function( adder ){
+           return inClosure + adder;
+        } ;
+    }
+
+    var fiveAddr = sum( 5 );
+    console.log( "result 5 -> 3: " + fiveAddr( 3 ) ) ;
+    console.log( "result 5 -> 1: " + fiveAddr( 1 ) ) ;
+    var threeAddr = sum( 3 );
+    console.log( "result 3 -> 4: " + threeAddr( 4 ) );
+
+</script>
+
+<button id = "btnToggle">Toggle Pending</button>
+<div id = "divPending">Pending</div>
+
+<script type = "text/javascript">
+    (function() {
+        var pendingInterval = false;
+        var div = document.getElementById("divPending");
+        var btn = document.getElementById("btnToggle");
+
+        function startPending(){
+            if( div.innerHTML.length > 13 ){
+                div.innerHTML = "Pending";
+            }
+            div.innerHTML += ".";
+        };
+
+        btn.addEventListener( "click", function(){
+           if( !pendingInterval ){
+               pendingInterval = setInterval( startPending, 500 );
+           }else{
+               clearInterval( pendingInterval );
+               pendingInterval = false;
+           }
+        });
+
+    }());
+
+</script>
+</body>
+</html>
