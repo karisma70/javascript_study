@@ -6,6 +6,7 @@
 </head>
 <body>
 <script type = "text/javascript">
+
     var countFactory = (function(){         // 즉시 실행함수로 함수를 리턴한다.
        var staticCount = 0;
         return function(){
@@ -27,7 +28,8 @@
         };
     }());
 
-    var counter = countFactory(), counter2 = countFactory();
+    var counter = countFactory();
+    var counter2 = countFactory();
 
     var inc_result = counter.increase();
     console.log( "counter1 inc  static :" + inc_result.static + " local : " + inc_result.local  );
