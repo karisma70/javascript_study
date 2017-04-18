@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    class Person{
+        constructor(){
+            this.name = "anonymous";
+        }
+    };
+
+    class Unikys extends Person {
+        constructor() {
+            super();
+            this.name = "Unikys";
+        }
+    };
+
+    var unikys = new Unikys();
+    console.log( "unikys instanceof Unikys:" + (unikys instanceof Unikys) );
+    console.log( "unikys instanceof Person:" + (unikys instanceof Person) );
+    console.log( "unikys.construcor:" + unikys.constructor );
+
+</script>
+
+</body>
+</html>

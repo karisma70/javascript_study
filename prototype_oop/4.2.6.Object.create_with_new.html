@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function Person(){
+        this.name = "anonymous";
+    }
+
+    function Unikys(){
+        this.name = "Unikys";
+    }
+
+    Unikys.prototype = Object.create( Person.prototype, {
+        constructor : {
+            value: Unikys
+        }
+    });
+
+    var unikys = new Unikys();
+    console.log( "unikys instanceof Unikys : " + (unikys instanceof Unikys) );
+    console.log( "unikys instanceof Person : " + (unikys instanceof Person) );
+    console.log( "unikys.constructor : " + unikys.constructor );
+
+</script>
+
+</body>
+</html>

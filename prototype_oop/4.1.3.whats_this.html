@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function whatsThis(){
+        return this.toString();
+    }
+
+    var unikys = {
+        what: whatsThis,
+        toString : function(){
+            return "** object unikys **";
+        }
+    };
+
+    var david = {
+        toString : function(){
+            return "-- object david -- ";
+        }
+    }
+
+    console.log( whatsThis() );            //  this = window
+    console.log( unikys.what() );          //  this = unikys            -> unikys.whatsThis();  -> unikys.toString();
+    console.log( whatsThis.call());       // this = window              -> whatsThis()
+    console.log( whatsThis.apply());      // this = window              -> whatsThis()
+    console.log( unikys.what.call(undefined));    // this = window     -> whatsThis()
+    console.log( unikys.what.call(unikys));       // this = unikys      -> unikys.whatsThis();  -> unikys.toString();
+    console.log( unikys.what.call(david));       // this = david        -> david.whatThis(); -> david.toString();
+    console.log( unikys.what.call());       // this = window
+
+    var newWhat = unikys.what;
+    console.log( newWhat() );               // this = window
+    console.log( newWhat.call(unikys) ) ;      //
+    console.log( newWhat.call(david) );         //
+
+    console.log( "----------------------------------------" );
+
+    ///////////////////////////////////////////////////
+
+    function whatsThis2(){
+        return this;
+    }
+
+    console.log( whatsThis2() );
+    console.log( whatsThis2.call( true ) );
+    console.log( whatsThis2.call( 3 ) );
+    console.log( whatsThis2.call( "hello" ) );
+    console.log( whatsThis2.call( ["unikeys"] ) );
+    console.log( whatsThis2.call( ["david"] ) );
+
+
+</script>
+</body>
+</html>

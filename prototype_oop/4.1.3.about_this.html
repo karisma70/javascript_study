@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function say(something){
+        var size = something.size;
+        if( size > 0 ){
+            for( var idx = 0; idx < size; idx ++ )
+                console.log( something[idx] );
+        }
+        else
+            alert(something);
+    }
+
+    say("hello");
+
+    say.call( undefined, "Hello world!");   // 위의 say 함수 호출과 동일하다
+    say.apply( undefined, ["Hello young hee !", "You too"] );   // 위의 say 함수 호출과 동일하나 배열로 인자를 넘긴다.
+
+</script>
+</body>
+</html>

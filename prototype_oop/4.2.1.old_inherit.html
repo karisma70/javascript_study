@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    /// # 1. -----------------------------------------
+
+    function Person(){
+        this.name = "anonymous";
+        this.job = "none";
+        this.sayHello = function(){
+            console.log("Hello, my name is " + this.name );
+        }
+    }
+
+    function Unikys(){
+        var obj = new Person();
+        obj.name = "Unikys";
+        obj.job = "Programmer";
+        return obj;                 // 결국 Person을 new로 생성해서 리턴하는 결과다
+    }
+
+    var unikys = new Unikys();
+    unikys.sayHello();
+
+    console.log( "unikys instanceof Unikys : " + (unikys instanceof Unikys) );       // false;
+    console.log( "unikys instanceof Person : " + (unikys instanceof Person) );       // true;
+
+    /// # 2. ----------------------------------------- 위의 상속을 prototype을 이용하여 수정한 소스
+
+    var person = {
+        name : "anonymous",
+        sayHello : function(){
+            console.log("Hello, my name is " + this.name );
+        }
+    };
+
+    function David(){
+        this.name = "David";
+    }
+
+    David.prototype = person;       // 상속
+    var david = new David();
+    david.sayHello();
+    person.sayHello();
+
+    // console.log( "david instanceof person : " + (david instanceof person) );       // 불능  person은 함수객체가 아니다.
+    console.log( "david instanceof David : " + (david instanceof David) );       // false;
+
+    /// # 3. ----------------------------------------- prototype을 이용하여 상속 구현
+
+    function Human(){
+        this.name = "Human";
+        this.sayHello = function(){
+            console.log( "Hello, my name is " + this.name );
+        };
+    }
+
+    function Charlie(){
+        this.name = "Freegan";
+    }
+
+    Charlie.prototype = new Human();    // 상속,  Charlie가 갖고 있는 고유의 prototype을 상실하고 새로 덮어씌운 new Human객체가 참조하는 constructor를 가지게 된다.
+
+    var charlie = new Charlie();
+    charlie.sayHello();
+
+    console.log( "charlie instanceof Human : " + (charlie instanceof Human) );       // false;
+    console.log( "charlie instanceof Charlie : " + (charlie instanceof Charlie) );       // false;
+    console.log("charle.constructor : " + charlie.constructor);
+
+    // charlie.constructor -> function Charlie -> function Charlie.prototype -> function Human -> function Human.constructor -> function Human.prototype -> {}
+
+</script>
+
+</body>
+</html>

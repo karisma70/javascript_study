@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function Car(){
+        this.wheel = 4;
+        this.beep = "BEEP";
+        this.lifecycle = 12;
+    };
+
+    Car.prototype.go = function(){
+        alert( this.beep );
+    }
+
+    function Truck(){
+        this.wheel = 6;
+        this.beep = "HONK";
+        this.company = "SSang Yong";
+    }
+
+    Truck.prototype = new Car();
+
+    function SUV(){
+        this.beep = "WANK!";
+        this.company = "Hyundai";
+    }
+
+    SUV.prototype = new Car();
+
+    var truck = new Truck();
+    var suv = new SUV();
+
+    console.log( "--------- here is truck ");
+    console.log( truck.wheel );
+    console.log( truck.beep );
+    console.log( truck.company );
+    console.log( truck.lifecycle );
+    truck.go();
+
+    console.log( "--------- here is suv ");
+    console.log( suv.wheel );
+    console.log( suv.beep );
+    console.log( suv.company );
+    console.log( suv.lifecycle );
+    suv.go();
+
+    console.log( "------------------------ here is truck ");
+
+    for( prop in truck ){
+        console.log( "truck[ " + prop + " ] = " + truck[ prop ] );
+    }
+
+    console.log( "------------------------ here is suv ");
+
+    for( prop in suv ){
+        console.log( "suv[ " + prop + " ] = " + suv[ prop ] );
+    }
+
+    console.log( "------------------------ here is immediate heritance obj of suv ");
+
+    for( prop in suv ){
+        if( suv.hasOwnProperty( prop ) ) {      // SUV에 별도로 정의된 객체 this.beep과 this.company 만 출력된다.
+            console.log("suv[ " + prop + " ] = " + suv[prop]);
+        }
+    }
+
+</script>
+
+</body>
+</html>

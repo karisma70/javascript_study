@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function Person( name, blog ){
+        this.name = name;
+        this.blog = blog;
+    }
+
+    Person.prototype.getName = function(){
+        return this.name;
+    }
+
+    Person.prototype.setName = function( name ){
+        this.name = name;
+    }
+
+    Person.prototype.getBlog = function(){
+        return this.blog;
+    }
+
+    Person.prototype.setBlog = function( blog ){
+        this.blog = blog;
+    }
+
+    var david = new Person( "david", "codecrue.egloos.com");
+    var stranger = new Person( "stranger", "none");
+
+    console.log( david.getName() );
+    david.setName( "Lee dae jin");
+    console.log( david.getName() );
+    console.log( stranger.getName() );
+
+    Person.prototype.introduce = function(){
+        console.log("Hi !!! my name is " + this.name + "..  please visit my blog : " + this.blog );
+    }
+
+    david.introduce();
+
+    Person.prototype.introduce = function(){
+        console.log("Hello!! my name is " + this.name + "! , my blog is " + this.blog );
+    }
+
+    david.introduce();
+
+    Person.prototype.gender = "male";
+    console.log( "david gender : " + david.gender );
+    console.log( "stranger gender : " + stranger.gender );
+
+    stranger.gender = "female";
+    console.log( "david gender : " + david.gender );
+    console.log( "stranger gender : " + stranger.gender );
+
+    console.log( Person );
+    console.log( "david : " + david.constructor );
+    console.log( "stranger : " + stranger.constructor );
+
+    var neighbor = new stranger.constructor("kim ki chang", "www.naver.com");
+    console.log( neighbor.getName );
+    neighbor.setName("Kim il dong");
+    console.log( "neighbor gender : " + neighbor.gender );
+    neighbor.introduce();
+
+    /*
+    var neighbor2 = new stranger;   // 실패 오류 코드
+    console.log( neighbor2 );
+    */
+
+
+</script>
+</body>
+</html>

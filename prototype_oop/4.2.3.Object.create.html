@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+
+    // # 1. 함수를 통한 Object.create 를 이용하여 상속 구현
+    console.log("# 1. ------------------------------------ ");
+
+    function Person( name ){
+        this.name = name;
+    }
+
+    Person.prototype = {
+        yell: function(){
+            console.log( "My name is " + this.name );
+        }
+    };
+
+    var unikys = Object.create( Person.prototype );     // 상속
+    unikys.yell();
+    unikys.name = "Unikys";
+    unikys.yell();
+
+    console.log( "unikys instanceof Person :" + (unikys instanceof Person) );     // true
+
+    // # 2. 객체를 이용한 Object.create 를 이용하여 상속 구현     ---------------------------------
+    console.log("# 2. ------------------------------------ ");
+
+    var person = {
+        yell: function(){
+            console.log(" in Obj : My name is " + this.name );
+        }
+    }
+
+    var david = Object.create( person );        // 상속
+    david.name = "David";
+
+    david.yell();
+
+    // console.log( "david instanceof person :" + david instanceof person );     // false  , 불능 -> person이 함수객체가 아니기 때문에 불능이다.
+    console.log( "Object.getPrototype(david) === person :" +  (Object.getPrototypeOf(david) === person) );
+    console.log( "Object.getPrototype(david) :" +  Object.getPrototypeOf(david) );
+
+    console.log("person.isPrototypeOf(david) : " + person.isPrototypeOf(david) );
+    console.log("Object.prototype.isPrototypeOf(david) : " + Object.prototype.isPrototypeOf(david) );
+
+
+    // # 3.  Object.create( 파라미터 1, 파라미터 2 ) 형태 ---------------------------------
+
+    console.log("# 3. ------------------------------------ ");
+
+    function Human( name ){
+        this.name = name;
+    }
+
+    Human.prototype = {
+        yell : function(){
+             console.log("Human name is .. " + this.name );
+        }
+    };
+
+    var chrimson = Object.create( Human.prototype, {
+        name : {
+            value : "Chrimson"
+        }
+    } );
+
+    chrimson.yell();
+    chrimson.name = "Moonlight";    // 위의 chrimson이 moonlight로 안바뀐다.
+    chrimson.yell();
+
+    console.log( "chrimson instanceof Human : " + ( chrimson instanceof Human ) );
+
+
+    var charlie = Object.create( Human.prototype, {
+        name : {                        // Object.defineProperty ( value, configurable,..... )
+            value : "Charlie",          // 설정할 속성 값
+            configurable : true,        //  속성을 지우거나 value 속성 이외의 설정 속성 바꿀 것인가?
+            enumerable : true,          // for-in 루프에서 해당 속성도 참조할지 여부
+            writable : true             // 속성의 값을 write 할지 여부
+        }
+    } );
+
+    charlie.yell();
+    charlie.name = "Moonlight";
+    charlie.yell();
+
+    // # 4.  Object.defineProperties --------------------------
+    console.log("# 4. ------------------------------------ ");
+    var sportsman = {
+        name : "Lee Dae Jin",
+        gender : {
+            value : "male",
+            get : function(){
+                return this.gender;
+            },
+            set : function( gender ){
+              this.gender = gender;
+            }
+        }
+    };
+
+    Object.defineProperties( sportsman, {
+       major_action : {
+            value : "running",
+            writable: true
+       },
+       minor_action : {
+            value : "hit" ,
+            writable : true
+       },
+       whole_action : {
+           get : function(){
+               return this.major_action + " " + this.minor_action;
+           },
+           set : function(value){
+               var res = value.split(" ");
+               if( res.length > 1 ){
+                   this.major_action = res[0];
+                   this.minor_action = res[1];
+               }
+               else {
+                   alert("wrong format");
+               }
+           }
+
+       }
+    });
+
+    var golfman = Object.create( sportsman);
+    console.log( golfman.name );
+    golfman.name = "Lee Chul soo";
+    console.log( golfman.name );
+
+    console.log( golfman.gender.get() );    // 불가하다  property에 대한 속성은 defineProperties()를 통하여 생성된 것이 아니므로 적용이 안된다.
+
+    console.log( golfman.major_action );
+    console.log( golfman.minor_action );
+    golfman.whole_action = "walking swing";
+    console.log( golfman.whole_action );
+
+
+</script>
+
+</body>
+</html>
