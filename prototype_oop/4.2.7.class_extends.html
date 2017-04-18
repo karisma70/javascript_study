@@ -9,17 +9,51 @@
     class Person{
         constructor(){
             this.name = "anonymous";
+            this.age = 0;
+        }
+        setName( name ){
+            this.name = name;
+        }
+        displayName(){
+            console.log("this.name : " + this.name );
+        }
+        displayAge(){
+            console.log("this.age : " + this.age );
         }
     };
 
     class Unikys extends Person {
         constructor() {
-            super();
+           super();         // 부모 클래스의 constructor를 호출한다.
+            // this.name = "Unikys";
+            this.setName();
+        }
+        setName(){
             this.name = "Unikys";
         }
+        setAge( age ){
+            this.age = age;
+        }
+        setSuperName( name ){
+            super.setName( name );
+        }
+
     };
 
     var unikys = new Unikys();
+    unikys.displayName();
+    unikys.setName("david");
+    unikys.displayName();
+    // unikys.super.setName("david");   // 불가능하다.
+    unikys.displayName();
+    unikys.setSuperName("david");
+    unikys.displayName();
+
+    unikys.displayAge();
+    unikys.setAge( 20 );
+    unikys.displayAge();
+
+    console.log( )
     console.log( "unikys instanceof Unikys:" + (unikys instanceof Unikys) );
     console.log( "unikys instanceof Person:" + (unikys instanceof Person) );
     console.log( "unikys.construcor:" + unikys.constructor );
