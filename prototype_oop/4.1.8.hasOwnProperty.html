@@ -27,6 +27,12 @@
         console.log( "david[ " + prop + " ] = " + david[ prop ] );
     }
 
+    for( prop in david ){
+        if( david.hasOwnProperty(prop)) {   // 객체 자체의 속성인지 여부를 검사
+            console.log("david[ " + prop + " ] = " + david[prop]);
+        }
+    }
+
 
 </script>
 
