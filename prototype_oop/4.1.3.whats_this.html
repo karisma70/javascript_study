@@ -28,9 +28,9 @@
     console.log( whatsThis.call());       // this = window              -> whatsThis()
     console.log( whatsThis.apply());      // this = window              -> whatsThis()
     console.log( unikys.what.call(undefined));    // this = window     -> whatsThis()
+    console.log( unikys.what.call());               // this = window
     console.log( unikys.what.call(unikys));       // this = unikys      -> unikys.whatsThis();  -> unikys.toString();
     console.log( unikys.what.call(david));       // this = david        -> david.whatThis(); -> david.toString();
-    console.log( unikys.what.call());       // this = window
 
     var newWhat = unikys.what;
     console.log( newWhat() );               // this = window
