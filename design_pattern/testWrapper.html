@@ -6,8 +6,6 @@
 </head>
 <body>
 <script>
-
-
         var testFunc = function() {
             console.log( "testFunc Called !!!");
             for (idx in arguments) {
@@ -16,13 +14,11 @@
         };
 
         var strText = ["David", "Lee"];
-
         var objArray = [];
 
         objArray.push( testFunc );
         objArray.push( strText[0] );
         objArray.push( strText[1] );
-
         console.log( "obj Array size : " + objArray.length );
 
         var objContainer = [testFunc].concat( Array.prototype.slice.call( strText) );
@@ -34,19 +30,15 @@
         funcCall.apply( this, objContainer );
         funcCall.apply( this, objArray );
 
+        function wrap( func, paramFunc ) {
 
+            return function () {    // WrapperFunc( 1, 2, 3 )                                       //      2.
+                console.log("4. arguments length : " + arguments.length );
+                var func_with_args = [func].concat( Array.prototype.slice.call( arguments ));       //    4.
+                console.log("4. make args length : " + func_with_args.length );
 
-
-
-    function wrap( func, paramFunc ) {
-
-        return function () {    // WrapperFunc( 1, 2, 3 )                                       //      2.
-            console.log("4. arguments length : " + arguments.length );
-            var func_with_args = [func].concat( Array.prototype.slice.call( arguments ));       //    4.
-            console.log("4. make args length : " + func_with_args.length );
-
-            paramFunc.apply(this, func_with_args );     // >>  1.의 2번째 파라미터로 정의한 함수를 실행하는 함수를 러턴할 거다.
-        }                                               // >>  그리고 여기에서 리턴하게 될 함수의 파라미터는 existFunction에서 취하는 파라미터를 가리킬 것이다.
+                paramFunc.apply(this, func_with_args );     // >>  1.의 2번째 파라미터로 정의한 함수를 실행하는 함수를 러턴할 거다.
+            }                                               // >>  그리고 여기에서 리턴하게 될 함수의 파라미터는 existFunction에서 취하는 파라미터를 가리킬 것이다.
     }
 
     var existFunction = function(){
@@ -56,7 +48,6 @@
     }
 
     var WrapperFunction = wrap( existFunction, function( func_with_args ){      //  1.
-        func_with_args();                                                       //  5.
         console.log("5. arguments length : " + arguments.length );
         console.log( func_with_args );
 
