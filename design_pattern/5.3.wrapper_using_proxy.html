@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+
+    function isNumber(s) {
+        s += ''; // 문자열로 변환
+        s = s.replace(/^\s*|\s*$/g, ''); // 좌우 공백 제거
+        if (s == '' || isNaN(s))
+            return false;
+        return true;
+    }
+
+    function kiki( wrapfun ){
+
+        for( var idx in arguments )
+            console.log( idx + ".: " + arguments[idx] );
+
+        return function(){
+            var args = Array.prototype.slice.call( arguments );
+            return wrapfun.apply( this, args );
+        }
+    }
+
+    var kikis = kiki( function(){
+        for( var idx in arguments )
+            console.log( arguments[idx] );
+
+    });
+
+
+    kikis( 1, 2, 3 );
+
+    (function(){
+        function wrap( func, wrapper ){             // 2.
+            return function(){
+                for( var idx in arguments )
+                    console.log( arguments[idx] );
+
+                var args = [func].concat( Array.prototype.slice.call( arguments ));
+               // return wrapper.apply( this, args );
+                //return wrapper.apply( this, [func] );
+              //  return wrapper.call( this, func, arguments[0], arguments[1], arguments[2] );
+                wrapper.call( this, func, arguments[0], arguments[1], arguments[2] );
+            };
+        }
+
+        function existingFunction( ){
+            console.log("Existing function is called with arguments");
+            console.log( "---------------------- len : " + arguments.length  );
+
+            var total = 0;
+
+            for (var idx in arguments) {
+                console.log(arguments[idx]);
+                if( isNumber( arguments[idx]))
+                    total += arguments[idx];
+            }
+
+            console.log( "----------------------" );
+            return total;
+        }
+
+        var wrappedFunction = wrap( existingFunction, function( func_with_args ){         // 1.
+
+            func_with_args();
+
+            console.log( "Wrapper function is called with arguments");
+            console.log( "---------------------- len : " + arguments.length  + " func : " + func_with_args );
+            for( var idx in arguments )
+                console.log( arguments[idx] );
+            console.log( "----------------------" );
+            return func_with_args.apply( this, Array.prototype.slice.call( arguments, 1));
+        });
+
+        console.log( "1. Calling existing function");
+        existingFunction( "First argument", "Second argument", "Third argument");
+
+        console.log( "2. Calling wrapped function");
+        // wrappedFunction( "First argument", "Second argument", "Third argument" );
+        var result = wrappedFunction( "First argument", "Second argument", "Third argument" );
+        console.log( result );
+
+        // result = wrappedFunction( 1, 2, 3 );
+        console.log( result );
+    }());
+</script>
+</body>
+</html>

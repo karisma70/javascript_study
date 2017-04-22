@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<video style = "width:640px" id = "videoBunny"
+        src = "http://media.w3.org/2010/05/bunny/movie.ogv">
+</video>
+<div id = "controlPanel">
+    <button id = "play">Play</button>
+    <button id = "pause">Pause</button>
+    <button id = "volumeUp">Volume +</button>
+    <button id = "volumeDown">Volume -</button>
+</div>
+<script>
+    (function(){
+        var divControlPanel = document.getElementById("controlPanel");
+        var videoBunny = document.getElementById("videoBunny");
+
+        proxyClickEventHandler = {      // 이벤트를 처리할 Proxy 객체 생성 , 객체이름은 아무렇게나 지어도 상관없다
+            "play" : function(){
+                videoBunny.play();
+            },
+            "pause" : function(){
+                videoBunny.pause();
+            },
+            "volumeUp" : function(){
+                if( videoBunny.volume <= 0.9 ){
+                    videoBunny.volume += 0.1;
+                }else{
+                    videoBunny.volume = 1;
+                }
+            },
+            "volumeDown" : function(){
+                if( videoBunny.volume > 0.1 ){
+                    videoBunny.volume -= 0.1;
+                }else{
+                    videoBunny.volume = 0;
+                }
+            }
+        };
+
+        divControlPanel.addEventListener( "click", function(e){
+           var target = e.target || e.srcElement;       // 이 부분은 추후 조사할 것 , click 할 때마다 target.id 에는 <button id = ... 로 정의한 id 스트링이 넘어온다.
+            if( proxyClickEventHandler.hasOwnProperty( target.id )){        // 위에서 생성한 객체의 속성값에 있는지 확인한다. 결국 <button id = ... 로 정의한 id 스트링과 proxyClickEventHandler 의 속성 스트링이 일치하는지 확인한다.
+                console.log("hasOwnProperty : " + target.id );
+                proxyClickEventHandler[ target.id ].call();     // 속성이 일치할 경우 각 속성에 맞는 함수를 호출한다.
+            }else{
+                console.log("It's not hasOwnProperty : " + target.id );
+            }
+        }, true );
+    }());
+</script>
+</body>
+</html>

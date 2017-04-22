@@ -1,0 +1,74 @@
+<!-- 참고 사이트  http://blog.javarouka.me/2011/12/html-event-bubbling.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+    div { margin : 10px; padding: 10px; background-color: red; }
+    div div { background-color : yellow; }
+    div div div { background-color : blue; }
+    textarea { width: 90%; height: 200px; }
+    </style>
+</head>
+<body>
+<div id = "depth1">
+    <div id = "depth2">
+        <div id = "depth3">
+        </div>
+    </div>
+    <textarea>
+    </textarea>
+</div>
+<script>
+    window.onload = function(e){
+        var logger = document.getElementsByTagName("textarea")[0];
+
+        function log( newtext ){
+            logger.value += newtext + "\n";
+            logger.scrollTop = logger.scrollHeight;
+        }
+
+        var eventPhaseMap = {
+            0: 'NONE',
+            1: 'CAPTURE',
+            2: 'TARGET',
+            3: 'BUBBLE'
+        };
+
+        var divs = document.getElementsByTagName("div");
+
+        logger.value = "";
+
+        for( var i = 0; i < divs.length; i++ ){
+            (function(){
+               var div = divs[i];
+                /*
+                div.onmouseover = function(e){
+                    if( div.id === "depth1"){
+                        log( div.id );
+                    }
+                    else if (div.id === "depth2"){
+                        log( div.id );
+                    }
+                    else if( div.id === "depth3"){
+                        log( div.id );
+                    }
+                }
+                */
+
+                div.onmouseover = function(e){
+                    console.log( e.eventPhase );
+                    log( eventPhaseMap[e.eventPhase] + "  : " + div.id );
+                }
+
+            }());
+        }
+
+    }
+
+</script>
+
+</body>
+</html>
