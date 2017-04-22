@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+
+    var obj = {
+        a: 1,
+        b: 2,
+        c: function( arg ){
+            console.log( arg );
+        }
+    };
+
+    var obj2 = {
+        a: 10,
+        b: 12
+    };
+
+    function Print( ){
+        this.a = 20;
+        console.log( this.a );
+
+        for( i in arguments )
+            console.log( arguments[i] );
+    }
+
+    Print();
+
+    console.log( obj.a );
+
+    Print.apply( obj, [2, 3 ]);
+
+    console.log( obj.a );
+
+    // Print.apply( obj2 );
+
+    function callMe(arg1, arg2){
+        var s = "";
+
+        s += "this value: " + this;
+        s += "<br />";
+        for (i in callMe.arguments) {
+            s += "arguments: " + callMe.arguments[i];
+            s += "<br />";
+        }
+        return s;
+    }
+
+    var string = callMe.apply(3, [ 4, 5 ] );
+    console.log( string );
+
+    function callMe2(){
+        for( i in arguments ){
+            console.log( arguments[i] );
+        }
+    }
+
+    callMe2.apply( 5, [4, 3]);
+
+</script>
+
+</body>
+</html>
