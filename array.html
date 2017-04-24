@@ -38,7 +38,7 @@
     var test = new testFunc();
 
 
-
+/*
     var g_vertices = [  1, 2, 3 , 4, 5, 6 , 7, 8, 9 ];
     var g_normals = [  11, 12, 13 , 14, 15, 16 , 17, 18, 19 ];
 
@@ -111,7 +111,23 @@
     fParse.pushNormals( g_normals );
 
     fParse.LogPrint();
+*/
 
+    /* Array객체 */
+    var arr_val = new Array();
+    arr_val[0]= "green";
+    arr_val[1]= "pink";
+    arr_val[2]= "red";
+    arr_val[3]= "blue";
+
+    function arr_concat(){
+        /* concat 배열 합치기 => 배열객체명.concat(합칠객체명) */
+        var arr_val2 = ["white", "black"]; // 배열임
+        var arr_sum = arr_val2.concat(arr_val);     // arr_val2에 arr_val을 뒤에 붙여 합친다.
+        document.getElementById("array_concat").innerHTML=arr_sum.join(", ");
+    }
+
+    arr_concat();
 
 
 </script>
