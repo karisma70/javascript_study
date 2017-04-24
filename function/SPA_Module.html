@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+
+    var app = (function(){
+        var scopeVar = {};
+        var utilMethod;
+        var manipulateDom;
+        var eventHandle;
+        var initModule;
+
+        utilMethod = function(){
+            console.log( "Called utilMethod() ");
+        };
+        manipulateDom = function(){
+            console.log( "Called manipuateDom() ");
+        };
+        eventHandle = function(){
+            console.log( "Called eventHandle() ");
+        };
+        initModule = function(){
+            console.log( "Called initModule() ");
+        };
+
+        return {
+            init : initModule
+        };
+    }());
+
+    app.init();
+
+    /////////////////////////////////////////////////////////////////////
+    //  type 1  : call을 통한 this 객체 전달
+
+    (function(){
+        'use strict';
+        var root = this;
+        var version = '1.1';
+        var inModule;
+
+        if(typeof this.exports !== 'undefined') {
+                inModule = exports;
+            }else{
+                inModule = root.extModule1 = {};
+        }
+
+        inModule.getVersion = function(){
+            return version;
+        }
+
+    }).call(this);
+
+    var ver = extModule1.getVersion();
+    console.log( ver );
+
+    /////////////////////////////////////////////////////////////////////
+    //  type 2  : 파라미터를 통한 this 객체 전달
+
+    var window2 = { what : "window2" };
+
+    (function(global){
+
+        if( typeof global.what !== 'undefined ')
+            console.log( "this is : " + global.what );
+
+        var root = global;
+        var version = '1.2';
+        var inModule;
+
+        if( typeof this.exports !== 'undefined'){
+            inModule = exports;
+        } else {
+            inModule = root.extModule2 = {};
+        }
+
+        inModule.getVersion = function(){
+            return version;
+        }
+    // }( this ));
+    }( window2 ));
+
+    // console.log( extModule2.getVersion() );
+    console.log( window2.extModule2.getVersion() );
+
+    /////////////////////////////////////////////////////////////////////
+    //  type 3  :  직접 글로벌 객체 this를 root에 대입
+
+    var window3 = { what : "window3" };
+
+    (function(){
+        // var root = this;
+        var root = window3;
+        var version = "1.3";
+        var inModule;
+        if( typeof exports !== 'undefined'){
+            inModule = expors;
+        }else{
+            inModule = root.extModule3 = {};        //  inModule =  window.extModule3  = {}
+        }
+
+        inModule.getVersion = function(){           // window.extModule3.getVersion()
+            return version;
+        }
+    }());
+
+    //console.log( extModule3.getVersion() );       // root = this 일 경우
+    console.log( window3.extModule3.getVersion() );
+
+    /////////////////////////////////////////////////////////////////////
+    //  type 4  :  apply 함수를 통한 this 넘기기
+
+    var window4 = { what : "window4" };
+
+    (function( ){
+        if( typeof this.what !== 'undefined ')      // 여기에서의 this는 전역 this로써 window가 아닌 apply() 함수를 통해 입력된 파라미터가 this이다.
+            console.log( "this is : " + this.what );
+        var root = this;
+        var version = "1.4";
+        var inModule;
+        if( typeof exports !== 'undefined'){
+            inModule = expors;
+        }else{
+            inModule = root.extModule4 = {};        //  inModule =  window.extModule3  = {}
+        }
+
+        inModule.getVersion = function(){           // window.extModule3.getVersion()
+            return version;
+        }
+
+    // }).apply( this );
+    }).apply( window4 );
+
+    // console.log( extModule4.getVersion() );
+    console.log( window4.extModule4.getVersion() );
+
+    /////////////////////////////////////////////////////////////////////
+    //  type 5  :   즉실실행함수에서 inModule 객체 자체를 리턴하고 리턴된 객체의 함수를 실행하는 형태
+
+    var extModule5 = (function(){
+        var root = this;        // 여기에서 this는 전역 객체인 window 이다.
+        var version = "'1.5";
+        var inModule;
+        if( typeof exports !== 'undefined') {
+            inModule = exports;
+        }
+        else{
+            inModule = root.extModule = {};
+        }
+
+        inModule.getVersion = function(){
+            return version;
+        }
+
+        return inModule;
+
+    }());
+
+    console.log( extModule5.getVersion() );
+
+
+</script>
+
+</body>
+</html>
