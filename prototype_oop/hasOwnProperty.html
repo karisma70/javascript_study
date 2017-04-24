@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var parent = {
+        method_1 : function(){
+            console.log( "It's a method_1 of parent");
+        }
+    }
+
+    var child = (function( parentObj ){
+        var F = function(){
+            this.method_2 = function(){
+                console.log( "It's a method_2  of " + parentObj );
+            };
+        };
+        F.prototype = parentObj;
+        return (new F());
+    })( parent );
+
+    console.log( "parent.hasOwnProperty('method1') : " + parent.hasOwnProperty("method_1"));    // true
+
+    console.log( "child.hasOwnProperty('method1') : " + child.hasOwnProperty("method_1"));      // false
+    console.log( "child.hasOwnProperty('method2') : " + child.hasOwnProperty("method_2"));      // true
+
+
+</script>
+</body>
+</html>
