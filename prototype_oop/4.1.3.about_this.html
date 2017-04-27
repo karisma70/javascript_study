@@ -21,6 +21,28 @@
     say.call( undefined, "Hello world!");   // 위의 say 함수 호출과 동일하다
     say.apply( undefined, ["Hello young hee !", "You too"] );   // 위의 say 함수 호출과 동일하나 배열로 인자를 넘긴다.
 
+    say.prototype.obj = {};
+    say.prototype.objFunction = function( funcName, funcBody ){     // 이 함수는 say의 인스턴스가 생성되고 그 인스턴스의 함수를 실행할때 함수 내부가 실행된다.
+        console.log( this );
+        this.obj[funcName ] = funcBody;
+    };
+
+    say.prototype.CallObjFunction = function( where ){
+        if( this.obj.hasOwnProperty("GoTo") )
+            this.obj["GoTo"].call( null, where );
+    }
+
+    var SayInstance = new say( "Lee Dae Jin");
+    SayInstance.objFunction( "GoTo", function( where ){
+        console.log( this.something + " : " + where );
+    } );
+
+    SayInstance.CallObjFunction( "School");
+
+
+
+
+
 </script>
 </body>
 </html>
