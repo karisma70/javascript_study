@@ -6,10 +6,80 @@
 </head>
 <body>
 <script>
-    function Person( name, blog ){
-        this.name = name;
-        this.blog = blog;
+
+    a = { a: 'abc'};
+    b = {};
+
+    b.__proto__ = a;
+    console.log( b.a );
+
+    function Func( name ){
+        if( arguments.length > 0)
+            this.name = name;
+
+        if( this.name ) {
+            this.getName = function () {          // 1. getName
+                console.log("1. getName called >> ");
+                return this.name;
+            }
+        }
+
+        this.setName = function( name ){
+            this.name = name;
+        }
     }
+
+    Func.prototype.getName = function(){        // 2. getName
+        console.log("2. prototype.getName called >> ");
+        return this.name;
+    }
+
+    var func = new Func( "func1 Instance Function" );
+    console.log( func.getName() );                              // 1. called  >> Instance Function
+    console.log( func.__proto__.getName() );                    // 2. called  >> undefined
+    console.log( func.constructor.prototype.getName() );        // 2. called  >> undefined
+
+    var func2 = new Func();                                     // this 변수 초기화 안됨
+    console.log( func2.getName() );                             // if(this.name) 이면 1. called >> undefined 아니면 2. called >> undefined
+
+    Func.prototype.name = "Prototype Function";
+
+    console.log( func.getName() );                              // 1. called  >> func1 Instance Function
+    console.log( func.constructor.prototype.getName() );        // 2. called  >> Prototype Function
+
+    console.log( func2.getName() );                             // 2. called  >> Prototype Function
+    console.log( func2.__proto__.getName() );                   // 2. called  >> Prototype Function
+
+    func2.setName("func2 Instance Function");
+    console.log( func2.getName() );                             // 2. called >> func2 Instance Function
+    console.log( func2.__proto__.getName() );                   // 2. called >> Prototype Function
+
+    var func3 = new Func("func3 Instance Function");                                     // this is not initialized
+    console.log( func3.getName() );                             // 1. called >> func3 Instance Function
+
+    func3.getName = function(){
+        console.log( "3.getName called >> ");
+        return this.name;
+     }
+
+    console.log( func3.getName() );
+
+
+
+
+    function Person( name, blog ){
+        this.setName( name );
+        this.setBlog( blog );
+        this.age = 0;
+
+        this.getBlog = function(){
+            return this.blog;
+        }
+    }
+
+
+//    Person.__proto__ = a;
+ //   console.log( Person.a );
 
     Person.prototype.getName = function(){
         return this.name;
@@ -19,56 +89,183 @@
         this.name = name;
     }
 
-    Person.prototype.getBlog = function(){
-        return this.blog;
-    }
-
     Person.prototype.setBlog = function( blog ){
         this.blog = blog;
     }
 
     var david = new Person( "david", "codecrue.egloos.com");
-    var stranger = new Person( "stranger", "none");
 
-    console.log( david.getName() );
-    david.setName( "Lee dae jin");
-    console.log( david.getName() );
-    console.log( stranger.getName() );
+    console.log( david.getBlog());
 
-    Person.prototype.introduce = function(){
-        console.log("Hi !!! my name is " + this.name + "..  please visit my blog : " + this.blog );
+    Person.prototype.getBlog = function(){
+        return this.blog;
     }
 
-    david.introduce();
+    console.log( david.__proto__.getBlog() );   // undefined    ->  Person.prototype.getBlog()
+    console.log( david.constructor.prototype.getBlog() );   // undefined    ->  Person.prototype.getBlog()
+    console.log( david.getName() );
+    console.log( david.__proto__.getName() );   // undefined
 
-    Person.prototype.introduce = function(){
-        console.log("Hello!! my name is " + this.name + "! , my blog is " + this.blog );
+    Person.prototype.blog = "www.google.com";
+    console.log( david.getBlog() );   // undefined    ->  Person.prototype.getBlog()
+    console.log( david.__proto__.getBlog() );   // undefined    ->  Person.prototype.getBlog()
+    console.log( david.constructor.prototype.getBlog() );   // undefined    ->  Person.prototype.getBlog()
+
+    var charlie = new Person();
+    console.log( charlie.getBlog() );
+
+    Person.prototype.hobby = "soccer";
+    console.log( charlie.hobby );
+    console.log( charlie.__proto__.hobby );
+    console.log( charlie.constructor.prototype.hobby );
+
+    Person.prototype.setHobby = function( hobby ){
+        this.hobby = hobby;
     }
 
-    david.introduce();
+    charlie.setHobby( "tennis" );
+
+    console.log( charlie.hobby );
+    console.log( charlie.__proto__.hobby );
+    console.log( charlie.constructor.prototype.hobby );
+
+    Person.setParent = function( parent ){
+        this.parent = parent;
+    }
+
+    Person.setParent( "mother");
+
+    Person.getParent = function(){
+        return this.parent;
+    }
+
+    console.log( Person.getParent() );
+
+    var brown = new Person("brown");
+    console.log( brown.getName() );
+    console.log( brown.getParent() );
+
+
+
+    console.log( charlie.getName() );   // undefined
+    console.log( charlie.__proto__.getName() );   // human
+
+
+    var objHuman = {
+        name : "oldHuman",
+        age : 12
+    }
+
+    console.log( david.getName.call( objHuman ) );
+    console.log( david.constructor.prototype.getName.call( objHuman ) );
+    console.log( Person.prototype.getName.call( objHuman) );
+
+    console.log( david.getBlog.call( objHuman ) );
+
+
+    Person.prototype.getBlog = function(){
+        return this.blog;
+    }
+
+    console.log( david.getBlog());
+    console.log( david.constructor.prototype.getBlog());
+
+
+    console.log( david.getName() );
+    console.log( david.constructor.name );
+
+    Person.prototype.gender = "female";
+    console.log( david.gender );            // female
+    console.log( david.constructor.prototype.gender );      // female
 
     Person.prototype.gender = "male";
-    console.log( "david gender : " + david.gender );
-    console.log( "stranger gender : " + stranger.gender );
+    console.log( david.gender );            // male
+    console.log( david.constructor.prototype.gender );      // male
 
-    stranger.gender = "female";
-    console.log( "david gender : " + david.gender );
-    console.log( "stranger gender : " + stranger.gender );
+    Person.prototype.getGender = function(){
+        return this.gender;
+    }
 
-    console.log( Person );
-    console.log( "david : " + david.constructor );
-    console.log( "stranger : " + stranger.constructor );
+    Person.prototype.setGender = function( gender ){
+        this.gender = gender;
+    }
 
-    var neighbor = new stranger.constructor("kim ki chang", "www.naver.com");
-    console.log( neighbor.getName );
-    neighbor.setName("Kim il dong");
-    console.log( "neighbor gender : " + neighbor.gender );
-    neighbor.introduce();
+    console.log( david.getGender() );       // male
+    console.log( Person.prototype.gender );     //
+
+    Person.prototype.gender = "female";
+    console.log( david.getGender() );       // female
+    console.log( david.constructor.prototype.gender );      // female
+    console.log( david.constructor.prototype.getGender() );      // female
+    console.log( Person.prototype.gender );     //
+
+    var con1 = david.__proto__.constructor;
+    var con2 = david.constructor;
+
+    console.log( con1.prototype.getName());
+    console.log( con1.prototype.getGender());
+    console.log( con2.prototype.getGender());
+
+
+
+    var person = david.constructor;
+    console.log( person.prototype.getGender());
+    person.prototype.setGender("male");
+    console.log( david.getGender() );
+    console.log( person.prototype.getGender());
+    console.log( Person.prototype.gender );     //
+
+    person.prototype.setGender("female");
+    console.log( david.getGender() );
+    console.log( person.prototype.getGender());
+    console.log( david.constructor.prototype.getGender());
+    console.log( Person.prototype.gender );     //
+
+    david.constructor.prototype.gender = "male";
+
+    console.log( david.getGender() );
+    console.log( person.prototype.getGender());
+    console.log( david.constructor.prototype.getGender());
+    console.log( Person.prototype.gender );     //
+
+    console.log( david.gender );
+    david.setGender( "female");
+    console.log( david.gender );
+    console.log( david.getGender() );
+    console.log( david.constructor.prototype.gender );      // female
+
+    david.gender = "male";
+    console.log( david.gender );            // male
+    console.log( david.getGender() );       // male
+    console.log( david.constructor.prototype.gender );      // female
+
+    //////////////////////////////////////////////////////////////////////////////////
+
+    console.log( david.age );                               // undefined
+    console.log( david.constructor.prototype.age );         // undefine
 
     /*
-    var neighbor2 = new stranger;   // 실패 오류 코드
-    console.log( neighbor2 );
+    david.constructor.prototype.age = 12;
+    console.log( david.age );                               // undefined
+    console.log( david.constructor.prototype.age );         // 12
+
+    david.age = 32;
+    console.log( david.age );                               // 32
+    console.log( david.constructor.prototype.age );         // 12
     */
+
+    stranger = new Person( "stranger", "none", 22 );
+
+    console.log( stranger.age );                            //
+    console.log( stranger.constructor.prototype.age );      //
+
+    stranger.age = 38;
+    console.log( stranger.age );         // female
+    console.log( stranger.constructor.prototype.age );      //
+
+
+
+
 
 
 </script>
