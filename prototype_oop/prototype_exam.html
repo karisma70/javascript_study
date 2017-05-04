@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    obj = { ver: 1.0 };
+
+    function Func(){
+        this.name = "Func";
+        this.print = function(){
+            console.log( "My name is " + this.name );
+        }
+    }
+
+    function Func2(){
+        this.name = "Func2";
+    }
+
+    function Func3(){
+        this.name = "Func3";
+    }
+
+    Func.prototype = obj;
+    Func.prototype.getName = function(){
+        return this.name;
+    }
+
+    Func2.prototype = Func;
+
+    // Func2.prototype.print();         // 불능
+
+    Func3.prototype = new Func;
+
+    Func3.prototype.print();
+
+    var func2 = new Func2();
+    //func.print();                 // 불능
+    var func3 = new Func3();
+    func3.print();                 // 불능
+    console.log( func3.getName());
+
+    console.log( Func.prototype );
+    console.log( obj.__proto__ );
+</script>
+
+</body>
+</html>
