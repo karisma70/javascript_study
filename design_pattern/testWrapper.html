@@ -6,41 +6,86 @@
 </head>
 <body>
 <script>
-        var testFunc = function() {
-            console.log( "testFunc Called !!!");
-            for (idx in arguments) {
-                console.log(arguments[idx]);
-            }
-        };
+    var testFunc = function() {
+        console.log( "testFunc Called !!!");
 
-        var strText = ["David", "Lee"];
-        var objArray = [];
-
-        objArray.push( testFunc );
-        objArray.push( strText[0] );
-        objArray.push( strText[1] );
-        console.log( "obj Array size : " + objArray.length );
-
-        var objContainer = [testFunc].concat( Array.prototype.slice.call( strText) );
-
-        var funcCall = function( param ){
-            param.apply( this, Array.prototype.slice.call( arguments, 1 ));
+        for (idx in arguments) {
+            console.log(arguments[idx]);
         }
+    };
 
-        funcCall.apply( this, objContainer );
-        funcCall.apply( this, objArray );
+    var strText = ["David", "Lee"];
+    var objArray = [];
 
-        /////////////////////////////////////////////////////////////////////////////////////////
+    objArray.push( testFunc );
+    objArray.push( strText[0] );
+    objArray.push( strText[1] );
+    console.log( Array.isArray( objArray ) );
+    console.log( "obj Array size : " + objArray.length );
 
-        function wrap( func, paramFunc ) {
+    var objContainer = [testFunc].concat( Array.prototype.slice.call( strText) );
 
-            return function () {    // WrapperFunc( 1, 2, 3 )                                       //      2.
-                console.log("4. arguments length : " + arguments.length );
-                var func_with_args = [func].concat( Array.prototype.slice.call( arguments ));       //    4.
-                console.log("4. make args length : " + func_with_args.length );
+    console.log( Array.isArray( objContainer ) );
 
-                paramFunc.apply(this, func_with_args );     // >>  1.의 2번째 파라미터로 정의한 함수를 실행하는 함수를 러턴할 거다.
-            }                                               // >>  그리고 여기에서 리턴하게 될 함수의 파라미터는 existFunction에서 취하는 파라미터를 가리킬 것이다.
+    /*
+    for( idx in objContainer ){
+        console.log( objContainer[idx]);
+    }
+    */
+
+    objContainer[0]( objContainer[1], objContainer[2] );
+
+    //var funcCall = function( param ){
+    function funcCall( param ){
+
+        console.log( Array.isArray(param) );
+        // console.log( Array.isArray(arguments) );    // arguments는 array가 아니다.
+
+        var paramArray = param;
+
+        for( idx in paramArray )
+            console.log( paramArray[idx]);
+        if( typeof param === 'function' )
+            param.apply( this, Array.prototype.slice.call( arguments, 1 ));
+    }
+
+    funcCall.apply( null, objContainer );
+    funcCall.apply( this, objContainer );
+    funcCall.apply( this, objArray );
+
+    funcCall( objContainer );
+
+
+    var paramArray = Array.prototype.slice.call( objContainer, 1 );
+
+    funcCall.apply( this, testFunc );
+
+    funcCall.apply( this, paramArray );
+
+    objContainer[0].apply( this, paramArray );
+
+    testFunc.apply( this, paramArray );
+
+    var tempFunction = function( param ){
+        console.log( typeof param );
+        console.log( Array.isArray( param ));
+    }
+
+    tempFunction( objContainer );
+    tempFunction.apply( this, objContainer);
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+
+    function wrap( func, paramFunc ) {
+
+        return function () {    // WrapperFunc( 1, 2, 3 )                                       //      2.
+            console.log("4. arguments length : " + arguments.length );
+            var func_with_args = [func].concat( Array.prototype.slice.call( arguments ));       //    4.
+            console.log("4. make args length : " + func_with_args.length );
+
+            paramFunc.apply(this, func_with_args );     // >>  1.의 2번째 파라미터로 정의한 함수를 실행하는 함수를 러턴할 거다.
+        }                                               // >>  그리고 여기에서 리턴하게 될 함수의 파라미터는 existFunction에서 취하는 파라미터를 가리킬 것이다.
     }
 
     var existFunction = function(){
@@ -49,15 +94,15 @@
             console.log( arguments[idx]);
     }
 
-    var WrapperFunction = wrap( existFunction, function( func_with_args ){      //  1.
+    var WrapperFunction = wrap( existFunction, function( func ){      //  1.   42 라인에서 input 파라미터에 배열로 넣은 func_with_args 에서 배열의 첫번째 아이템이 func로 들어온다.
         console.log("5. arguments length : " + arguments.length );
-        console.log( func_with_args );
+        console.log( func.name );
 
         for( idx in arguments ){
             console.log( arguments[idx]);
         }
 
-        func_with_args.apply( this, Array.prototype.slice.call( arguments, 1 ) );
+        func.apply( this, Array.prototype.slice.call( arguments, 1 ) );
     });
 
     WrapperFunction( "abc", "bcd" );                                        //  3.
