@@ -15,6 +15,8 @@
         return true;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////
+
     function kiki( wrapfun ){
 
         for( var idx in arguments )
@@ -35,6 +37,8 @@
 
     kikis( 1, 2, 3 );
 
+    /////////////////////////////////////////////////////////////////////////////////////
+
     (function(){
         function wrap( func, wrapper ){             // 2.
             return function(){
@@ -42,10 +46,10 @@
                     console.log( arguments[idx] );
 
                 var args = [func].concat( Array.prototype.slice.call( arguments ));
-               // return wrapper.apply( this, args );
+                return wrapper.apply( this, args );
                 //return wrapper.apply( this, [func] );
               //  return wrapper.call( this, func, arguments[0], arguments[1], arguments[2] );
-                wrapper.call( this, func, arguments[0], arguments[1], arguments[2] );
+                // wrapper.call( this, func, arguments[0], arguments[1], arguments[2] );
             };
         }
 
@@ -66,9 +70,7 @@
         }
 
         var wrappedFunction = wrap( existingFunction, function( func_with_args ){         // 1.
-
             func_with_args();
-
             console.log( "Wrapper function is called with arguments");
             console.log( "---------------------- len : " + arguments.length  + " func : " + func_with_args );
             for( var idx in arguments )
