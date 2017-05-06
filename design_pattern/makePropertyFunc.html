@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+
+    var consistOperation = new ConsistOperation();
+
+    function ConsistOperation() {
+        this.callOperation = function( operationName ){
+            if( this.operate.hasOwnProperty(operationName )) {
+                return this.operate[operationName].apply(this, Array.prototype.slice.call(arguments, 1));
+            }
+            else
+                alert( operationName + " is not own property");
+        }
+    }
+
+    ConsistOperation.prototype.operate = {};
+
+    ConsistOperation.prototype.getResult = function(){
+        return this.result;
+    }
+
+    ConsistOperation.prototype.registFunc = function( operation, func ){
+        this.operate[ operation ] = func;
+    }
+
+    ConsistOperation.prototype.examParam = function(){
+        if( ! this.param1 || ! this.param2 ){
+            console.log( "please set the input parameter by call input function ");
+            return false;
+        }
+        return true;
+    }
+
+    consistOperation.registFunc( "input", function( param1, param2 ){
+        if( ! param1  ) {
+            console.log( "please input param1 !!");
+            return false;
+        }
+        if( ! param2 ){
+            console.log( "please input param2 !!");
+            return false;
+        }
+
+        this.param1 = param1;
+        this.param2 = param2;
+        return true;
+    } );
+
+
+    consistOperation.registFunc( "Add", function( ){
+        if( this.examParam() == true) {
+            this.result = this.param1 + this.param2;
+            return this.result;
+        }
+    } );
+
+    consistOperation.registFunc( "Subtract", function(){
+        if( this.examParam () == true){
+            this.result = this.param1 - this.param2;
+            return this.result;
+        }
+        return false;
+    });
+
+    consistOperation.callOperation( "input", 10, 15 );
+    console.log( consistOperation.callOperation( "Add" ));
+
+    console.log( consistOperation.callOperation( "Subtract"));
+
+    consistOperation.callOperation( "Divide" );
+
+    consistOperation.registFunc( "Divide", function(){
+       if( this.examParam () == true ){
+           this.result = this.param1 / this.param2;
+           return this.result;
+       }
+    });
+
+    consistOperation.callOperation( "input", 6, 2 );
+
+    console.log( consistOperation.callOperation( "Divide"));
+
+    console.log( consistOperation.getResult());
+
+
+
+</script>
+
+</body>
+</html>
