@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    (function(){
+        var strCat = function( ) {
+            var strText = "";
+            for (idx in arguments) {
+                strText += arguments[idx];
+                strText += " ";
+            }
+            return strText;
+        }
+
+
+       var car = {
+           beep: function beep(){
+               if( arguments.length > 0 ){
+                   var strText = strCat( Array.prototype.slice.call( arguments ) );
+                   /*
+                   var strText = "";
+                   for (idx in arguments) {
+                       strText += arguments[idx];
+                       strText += " ";
+                   }
+                   */
+                   alert( strText );
+               } else {
+                   alert("BEEP");
+               }
+           },
+           brake : function brake(){
+               alert( "STOP!");
+           },
+           accelator: function accelator(){
+               alert( "GO");
+           }
+       };
+
+        car.beep( "abc", "def");
+
+       function wrap( func, wrapper ){
+           return function(){
+               var args = [func].concat( Array.prototype.slice.call( arguments ));  // 인자로 받은 함수와 파라미터를 셋트로 묶어서 배열구성
+               return wrapper.apply(this, args );       // wrapper 함수를 호출함과 동시에 위에서 구성된 배열을 파라미터로 넘긴다.
+           }
+       }
+
+       function wrapObject( obj, wrapper ){
+           var prop;
+           for( prop in obj ){
+               if( obj.hasOwnProperty(prop) && typeof obj[prop] === "function" ){
+                   console.log( obj[prop].name);
+                   obj[prop] = wrap( obj[prop], wrapper );
+               }
+           }
+       }
+
+       wrapObject( car, function( func ){
+           console.log( func.name +  " has been invoked");
+
+           func.apply( this, Array.prototype.slice.call(arguments, 1));
+       });
+
+        car.beep( "abc", "def");
+        car.accelator();
+        car.brake();
+
+        car.brake = function(){
+            console.log("Changed brake function!!!");
+        }
+
+        car.brake();
+
+    }());
+
+</script>
+</body>
+</html>
