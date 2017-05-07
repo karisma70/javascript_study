@@ -38,10 +38,17 @@
            },
            accelator: function accelator(){
                alert( "GO");
+           },
+           etc : function(){
+                console.log( "etc!!!");
            }
        };
 
-        car.beep( "abc", "def");
+   //     car.beep( "abc", "def");
+
+        car.__proto__.bbb = function(){
+            console.log( "aaa");
+        }
 
        function wrap( func, wrapper ){
            return function(){
@@ -58,6 +65,14 @@
                    obj[prop] = wrap( obj[prop], wrapper );
                }
            }
+
+           for( prop in obj.constructor.prototype ){
+               if( obj.constructor.prototype.hasOwnProperty(prop) && typeof constructor.prototype[prop] === "function" ){
+                   console.log( prop + " => typeof : " + ( typeof constructor.prototype[prop] ) );
+                   console.log( constructor.prototype[prop].name);
+               }
+           }
+
        }
 
        wrapObject( car, function( func ){
@@ -65,6 +80,10 @@
 
            func.apply( this, Array.prototype.slice.call(arguments, 1));
        });
+
+
+
+        car.etc();
 
         car.beep( "abc", "def");
         car.accelator();
