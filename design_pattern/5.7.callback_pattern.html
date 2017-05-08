@@ -8,10 +8,11 @@
 <input type = "text" id = "userInfo"></input>
 
 <script>
+
     (function() {
         function ajax(method, url, data, callback) {
             var xhr = new XMLHttpRequest();
-            xhr.open(method.url);
+            xhr.open(method, url);
             xhr.onload = function () {
                 if (xhr.status === 200) {
                     callback.call(this, xhr.responseText);
@@ -21,8 +22,8 @@
             xhr.send(data);
         }
 
-        ajax("POST", "/login", "id=hello&password=world", function (responseText) {
-            if (response.text === "Sucess") {
+        ajax("POST", "/login", "id=hello&password=world", function( responseText ){
+            if (responseText === "Sucess") {
                 alert("Success to login!");
                 ajax("GET", "/userInfo", "id=hello", displayUserInfo);
             } else {
@@ -35,7 +36,35 @@
         };
     }());
 
-    console.log( "complete");
+
+/*
+//  source 원본
+    (function () {
+        function ajax(method, url, data, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open(method, url);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    callback.call(this, xhr.responseText);
+                }
+            }
+            xhr.send(data);
+        }
+        ajax("POST", "/login", "id=hello&password=world", function (responseText) {
+            if (responseText === "Success") {
+                alert("Success to login!");
+                ajax("GET", "/userInfo", "id=hello", displayUserInfo);
+            } else {
+                alert("Failed to login");
+            }
+        });
+
+        function displayUserInfo(responseText) {
+            document.getElementById("userInfo").innerHTML = responseText;
+        }
+
+    }());
+*/
 
 </script>
 
