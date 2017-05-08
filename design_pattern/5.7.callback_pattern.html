@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input type = "text" id = "userInfo"></input>
+
+<script>
+    (function() {
+        function ajax(method, url, data, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open(method.url);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    callback.call(this, xhr.responseText);
+                }
+            };
+
+            xhr.send(data);
+        }
+
+        ajax("POST", "/login", "id=hello&password=world", function (responseText) {
+            if (response.text === "Sucess") {
+                alert("Success to login!");
+                ajax("GET", "/userInfo", "id=hello", displayUserInfo);
+            } else {
+                alert("Faild to login");
+            }
+        });
+
+        function displayUserInfo( responseText ){
+            document.getElementByI("userInfo").innerHTML = responseText;
+        };
+    }());
+
+</script>
+
+</body>
+</html>
