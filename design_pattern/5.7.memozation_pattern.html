@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <input type = "text" id = "itemId"></input>
+    <button id = "search">Search </button>
+<script>
+    (function() {
+        var inputItemId = document.getElementById("itemId");
+
+        function searchItem(id) {
+            var xhr;
+            if (serachItem.cache.hasOwnProperty(id)) {
+                return serachItem.cache[id];
+            }
+
+            xhr = new XMLHttpRequest();
+            xhr.open("GET", "/searchItem");
+            xhr.onload = function () {
+                var item = JSON.parse(xhr.responseText);
+                searchItem.cache[item.id] = item;
+            };
+            xhr.send();
+        }
+
+        searchItem.cache = {};
+        document.getElementById("search").addEventListener("click", function(){
+            searchItem( searchItem.value );
+        });
+
+    }());
+
+</script>
+</body>
+</html>
