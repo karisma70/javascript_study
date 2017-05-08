@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+
+    var number1 = 0;
+    var number2 = 0;
+    var result = 0;
+
+    var addCalculator = function(){
+        number1 = 10;
+        number2 = 20;
+        result = 0;
+
+        addCalculator = function(){
+            result = number1 + number2;
+        }
+
+
+    }
+
+    addCalculator();
+
+    addCalculator();
+
+    console.log( result );
+
+    addCalculator();
+
+    console.log( result );
+
+</script>
+</body>
+</html>
