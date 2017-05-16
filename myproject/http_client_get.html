@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>XMLHttpRequest 사용예제</title>
+</head>
+<body>
+<form name="f" accept-charset="utf-8">
+    <input type="text" name="name">
+    <input type="button" value="이름 입력" onclick="requestMessage('get_name_process.jsp')">
+</form>
+<div id="message1"></div>
+<br>
+<br>
+<form name="f2" accept-charset="utf-8">
+    <input type="text" name="name">
+    <input type="button" value="파일명 입력" onclick="requestFile()">
+</form>
+<div id="message2"></div>
+
+<script>
+
+    var httpFileDownload = (function(){
+        var xmlhttp = null;
+
+        function createRequest() {
+            var http = null;
+
+            if( window.XMLHttpRequest ){
+                http = new XMLHttpRequest();
+            } else if( window.ActiveXObject ){
+                http = new ActiveXObject("Microsoft.XMLHTTP");      // IE를 위한 코드
+            }
+            return http;
+        }
+
+        function receiveEvent( propertyFunction, method, callback ) {
+            if (xmlhttp.readyState != 4 ){
+                if( propertyFunction == "onload") {
+                    alert("Error!! readyState Code : " + xmlhttp.readyState);
+                } else {
+                    console.log("readyState Code : " + xmlhttp.readyState);
+                }
+                return;
+            }
+
+            if( xmlhttp.status == 200) {
+                if (method == "HEAD") {
+                    alert(xmlhttp.getAllResponseHeaders());
+                    callback(xmlhttp);
+                } else {
+                    callback(xmlhttp);
+                }
+            }
+            else{
+                alert( "Error!! status code : " + xmlhttp.status );
+            }
+        }
+
+        function requestFile( method, url, callback ){
+            if( xmlhttp == null ){
+                xmlhttp = createRequest();
+            }
+            xmlhttp.open( method, url,true);
+
+
+            if( typeof( xmlhttp.onload ) != "undefined"){
+                xmlhttp.onload = function() {
+                    receiveEvent( "onload", method, callback );
+                }
+            } else {
+                xmlhttp.onreadystatechange = function () {
+                    receiveEvent( "onreadystatechange", method, callback );
+                }
+            }
+
+            xmlhttp.send(null)
+        }
+
+        return function( method, url, callback ){
+            if( url.indexOf("?") != -1 ){
+                requestFile(method, url, callback);
+            } else {
+                requestFile("HEAD", url, function (http) {
+                    var fileLen = parseInt( http.getResponseHeader("Content-Length"), 10);
+                    if (fileLen > 0) {
+                        http.responseAttachText = "Flie Len : " + fileLen + ", Last Updated Date : " + http.getResponseHeader("Last-Modified") + ", Content type : " + http.getResponseHeader("Content-Type");
+                        requestFile(method, url, callback);
+                    }
+                    else {
+                        alert("HEAD read Error!! " + url + " is not exist!!");
+                    }
+                });
+            }
+        }
+
+    }());
+
+    function showRequestResult( http ){
+        document.getElementById("message1").innerHTML = http.responseText;
+    }
+
+    function showFileContents( http ){
+        document.getElementById("message2").innerHTML = http.responseAttachText + "</br>" + http.responseText;
+    }
+
+    function requestMessage( url ){
+        param = f.name.value;
+        url = url + "?name=" + encodeURIComponent(param);   // 어떤 시스템에서나 읽을 수 있는 ascii 문자로 변환한
+        console.log( "request url : " + url );
+        httpFileDownload( "GET", url, showRequestResult );
+    }
+
+    function requestFile(){
+        fileName = f2.name.value;
+        httpFileDownload("GET", fileName, showFileContents );
+    }
+
+</script>
+
+</body>
+</html>
