@@ -1,0 +1,41 @@
+<!-- 출처 :  http://cafe.naver.com/oznet/426 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>간단한 XMLHttpRequest 예제</title>
+    <script type="text/javascript">
+        var xmlHttp;
+        function createXMLHttpRequest(){
+            if( window.ActiveXObject ){
+                xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }else if(window.XMLHttpRequest){
+                xmlHttp = new XMLHttpRequest();
+            }
+        }
+
+        function startRequest(){
+            createXMLHttpRequest();
+            xmlHttp.onreadystatechange = handleStateChange;
+            xmlHttp.open("GET", "simpleResponse.xml", true );
+            xmlHttp.send( null );
+        }
+
+        function handleStateChange(){
+            if( xmlHttp.readyState == 4 ){
+                if( xmlHttp.status == 200 )
+                   alert("서버로 부터의 응답 : "+ xmlHttp.responseText );
+            }
+        }
+
+    </script>
+</head>
+<body>
+<h3> 간단한 XMLHttpRequest 예제 </h3>
+<form action=""#">
+    <input type = "button" value="간단한 비동기 요청 시작" onclick = "startRequest();"/>
+</form>
+<br/>
+<a href=""javascript:history.back();">뒤로</a>
+</body>
+</html>
