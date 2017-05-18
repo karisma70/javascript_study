@@ -10,24 +10,31 @@
     <input type="text" name="name">
     <input type="button" value="이름 입력(GET 방식)" onclick="requestMessage( 'GET', 'get_name_process.jsp')">
     <input type="button" value="이름 입력(POST 방식)" onclick="requestMessage( 'POST', 'get_name_process.jsp')">
+    <div id="message1"></div>
 </form>
-<div id="message1"></div>
 <br>
+------------------------------
 <br>
 <form name="fileFrame" accept-charset="utf-8">
     <input type="text" name="name">
     <input type="button" value="파일명 입력" onclick="requestFile()">
+    <div id="message2"></div>
 </form>
-<div id="message2"></div>
+<br>
+------------------------------
+<br>
+<form name="getWeather" accept-charset="utf-8">
+    <input id = "city" /><br>
+    <input type="button" value = "Get Weather" onclick="requestWeather();"/>
+    <div id="message3"></div>
+    <br>
+    <input type="button" value = "Test" onclick="requestNodeJS();"/>
+</form>
 
 <script>
 
     function showRequestResult( http ){
         document.getElementById("message1").innerHTML = http.responseText;
-    }
-
-    function showFileContents( http ){
-        document.getElementById("message2").innerHTML = http.responseAttachText + "</br>" + http.responseText;
     }
 
     function requestMessage( method, url ){
@@ -37,10 +44,57 @@
         httpRequest( method, url, showRequestResult );
     }
 
+
+    function showFileContents( http ){
+        if( http.dataType == "text/plain") {
+            document.getElementById("message2").innerHTML = http.responseAttachText + "</br>" + http.responseText;
+            // }else if( http.dataType == "image/png") {
+        } else {
+            var strData = http.responseText;
+            if( typeof strData == "string") {
+                alert( "length : " + strData.length + "\r\n" + http.responseAttachText );
+            }
+
+            /*
+             document.getElementById("message2").innerHTML = http.responseAttachText;
+             var img = document.createElement("img");
+             img.src = http.responseBody;
+             */
+        }
+    }
+
+
     function requestFile(){
         document.getElementById("message2").innerHTML = "";
         fileName = fileFrame.name.value;
         httpRequest( "GET", fileName, showFileContents );
+    }
+
+
+    function showWeatherInfo( http ){
+        console.log( http.dataType );
+        document.getElementById("message3").innerHTML = http.responseText;
+    }
+
+    function requestWeather( ){
+        document.getElementById("message3").innerHTML = "";
+        var cityName = document.getElementById("city").value;
+        console.log( cityName );
+        var host = "http://api.openweathermap.org//data/2.5/weather";
+        url = host + "?q="+cityName+"&APPID=a24c349975e7c26f39a120927e512cd3";
+        console.log(url);
+
+        httpRequest( "GET", url, showWeatherInfo );
+        return false;
+    }
+
+    function showResponseNodeJS( http ){
+        alert( http.responseText );
+    }
+
+    function requestNodeJS(){
+        httpRequest("GET", "http://13.124.86.217:8081/hello.html", showResponseNodeJS )
+
     }
 
 </script>

@@ -30,6 +30,9 @@ var httpRequest = (function(){
                 alert(xmlhttp.getAllResponseHeaders());
                 callback( xmlhttp );
             } else {
+                xmlhttp.dataLength = xmlhttp.getResponseHeader("Content-Length");
+                xmlhttp.dataType = xmlhttp.getResponseHeader("Content-Type");
+
                 callback( xmlhttp );
             }
         }
@@ -45,13 +48,6 @@ var httpRequest = (function(){
 
         var urlArray = null;
 
-        if( method == "POST") {
-            urlArray = url.split("?");
-            xmlhttp.open(method, urlArray[0], true);
-        } else {
-            xmlhttp.open(method, url, true);
-        }
-
         if( typeof( xmlhttp.onload ) != "undefined"){
             xmlhttp.onload = function() {
                 receiveEvent( "onload", method, callback );
@@ -61,6 +57,16 @@ var httpRequest = (function(){
                 receiveEvent( "onreadystatechange", method, callback );
             }
         }
+
+        if( method == "POST") {
+            urlArray = url.split("?");
+            xmlhttp.open(method, urlArray[0], true);
+        } else {
+            xmlhttp.open(method, url, true);
+        }
+
+        // if ( xmlhttp.overrideMimeType)       // 사용자 정의 파일 다운로드시
+           //  xmlhttp.overrideMimeType('text/plain; charset=x-user-defined');
 
         if( method == "POST") {
             xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
