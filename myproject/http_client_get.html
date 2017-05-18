@@ -71,9 +71,36 @@
     }
 
 
+    parseJSONtoText = (function(){
+        var strText = "";
+
+        function parseJsonObj( jsonObj ){
+            for( prop in jsonObj ){
+                if( jsonObj.hasOwnProperty(prop) && typeof( jsonObj[prop] ) == "object" ){
+                    strText += "<br>< " + prop + " ><br>";
+                    parseJsonObj( jsonObj[prop]);
+                }else{
+                    strText += prop + " : " + jsonObj[prop] + ", ";
+                }
+            }
+        }
+        return function( jsonObj ){
+            strText = "";
+            parseJsonObj( jsonObj);
+            return strText;
+        }
+
+    }());
+
+
     function showWeatherInfo( http ){
+        var weatherInfo = "";
         console.log( http.dataType );
-        document.getElementById("message3").innerHTML = http.responseText;
+        weatherInfo = http.responseText + "<br><br>";
+
+        var weatherObj = JSON.parse( http.responseText );
+        weatherInfo += parseJSONtoText( weatherObj );
+        document.getElementById("message3").innerHTML = weatherInfo;
     }
 
     function requestWeather( ){
