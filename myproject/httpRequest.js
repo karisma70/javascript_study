@@ -78,10 +78,10 @@ var httpRequest = (function(){
 
     return function( method, url, callback ){
         requestData( "HEAD", url, function (http) {
-            http.responseAttachText = "Flie Len : " + parseInt( http.getResponseHeader("Content-Length"), 10) + ", Last Updated Date : "
-                + http.getResponseHeader("Last-Modified") + ", Content type : " + http.getResponseHeader("Content-Type");
+            http.responseAttachText = "Flie Len : " + parseInt( http.getResponseHeader("Content-Length"), 10)
+                + ", Last Updated Date : " + http.getResponseHeader("Last-Modified")
+                + ", Content type : " + http.getResponseHeader("Content-Type");
             requestData( method, url, callback );
         });
-
     }
 }());
