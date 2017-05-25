@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bible 검색 예제</title>
+    <script type = "text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
+    <script type = "text/javascript" src = "httpRequest.js"></script>
+</head>
+<body>
+<form name="bibleSearch" accept-charset="utf-8">
+    <input type="text" name="title">
+    <input type="text" name="chapter"> 장
+    <input type="text" name="paragraph"> 절
+    <input type="button" value="검색" onclick="requestBible()">
+    <br>
+    <br>
+    <textarea id = "receiveMsg" name = "comment" cols = "80" rows = "50"></textarea>
+</form>
+
+<script>
+    function requestBible(){
+        document.getElementById("receiveMsg").value = "";
+
+        var searchOpt = {};
+
+        function consistSearchOpt( obj ){
+            searchOpt[obj.name] = obj.value;
+        }
+
+        if( bibleSearch.title.value == "" ){
+            alert ("Please insert title!!")
+            return;
+        }
+
+        if( bibleSearch.chapter.value == "" ){
+            alert ("Please insert chapter!!")
+            return;
+        }
+
+        if( bibleSearch.paragraph.value == "" ){
+            alert ("Please insert paragraph !!")
+            return;
+        }
+
+        consistSearchOpt( bibleSearch.title  );
+        consistSearchOpt( bibleSearch.chapter );
+        consistSearchOpt( bibleSearch.paragraph );
+
+        var jsonStr = JSON.stringify( searchOpt );
+        console.log( "send param : " + jsonStr );
+
+        url = "http://13.124.86.217:8082?" + jsonStr;
+        httpRequest("POST", url, function( http ){
+            var resObj = JSON.parse( http.responseText );
+            $('#receiveMsg').val( resObj.title + " " + resObj.chapter + ":" + resObj.paragraph + "\r\n" +  resObj.content + "\r\n" );
+
+        } );
+    }
+
+</script>
+
+</body>
+</html>

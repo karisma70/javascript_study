@@ -1,0 +1,35 @@
+<!-- refrende Code => http://bcho.tistory.com/896 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- <script src="/socket.io/socket.io.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+    <script src="//code.jquery.com/jquery-latest.min.js"></script>
+</head>
+<body>
+<b>Send message</b><p>
+    Message  <input type="text" id="msgbox"/>
+    <br>
+    <span id="msgs"></span>
+    <script type="text/javascript">
+        var socket = io.connect('http://13.124.86.217:8081');
+        if( socket )
+            console.log("Ok!! socket");
+        else
+            console.log("Fail!! socket");
+
+        $("#msgbox").keyup(function(event) {
+            if (event.which == 13) {
+                socket.emit('fromclient',{msg:$('#msgbox').val()});
+                $('#msgbox').val('');
+            }
+        });
+        socket.on('toclient',function(data){
+            console.log(data.msg);
+            $('#msgs').append(data.msg+'<BR>');
+        });
+    </script>
+</body>
+</html>
