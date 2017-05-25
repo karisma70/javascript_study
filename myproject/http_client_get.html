@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>XMLHttpRequest 사용예제</title>
+    <script type = "text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
     <script type = "text/javascript" src = "httpRequest.js"></script>
 </head>
 <body>
@@ -17,21 +19,54 @@
 <br>
 <form name="fileFrame" accept-charset="utf-8">
     <input type="text" name="name">
-    <input type="button" value="파일명 입력" onclick="requestFile()">
+    <input type="button" value="파일명(WAS 요청)" onclick="requestFileToWAS()">
+    <input type="button" value="파일명(Node.JS 요청)" onclick="requestFileToNodeJS()">
     <div id="message2"></div>
 </form>
 <br>
 ------------------------------
+
+<fieldset style = "width:100">
+    <input type="button" value="소켓 접속" onclick="connectChatNodeJS()">
+    <legend> 채팅  입력</legend>
+    <br>
+    채팅 메세지 입력
+    <input id= "sendMsg" type="text" name="chatBox" size = "50"
+           placeholder="채팅메세지를 입력해 주세요.">
+    <br><br>
+    <textarea id = "receiveMsg" name = "comment" cols = "80" rows = "5"></textarea>
+</fieldset>
+
+------------------------------
 <br>
 <form name="getWeather" accept-charset="utf-8">
-    <input id = "city" /><br>
-    <input type="button" value = "Get Weather" onclick="requestWeather();"/>
+    <input id = "city" >  <input type="button" value = "Get Weather" onclick="requestWeather();" >
     <div id="message3"></div>
     <br>
-    <input type="button" value = "Test" onclick="requestNodeJS();"/>
 </form>
 
 <script>
+
+    (function() {
+
+        var chatSocket = io.connect('http://13.124.86.217:8081');
+
+        $("#sendMsg").keyup(function (event) {
+            if (event.which == 13) {
+                if (chatSocket.connected == true) {    // 접속이 되어있을 경우
+                    chatSocket.emit('fromclient', {msg: $('#sendMsg').val()});
+                    $('#sendMsg').val('');
+                } else {
+                    alert("socket is not connected!! ");
+                }
+            }
+        });
+
+        chatSocket.on('toclient', function (data) {
+            $('#receiveMsg').append(data.msg + '\r\n');
+        });
+
+    }());
 
     function showRequestResult( http ){
         document.getElementById("message1").innerHTML = http.responseText;
@@ -46,8 +81,17 @@
 
 
     function showFileContents( http ){
-        if( http.dataType == "text/plain") {
+        if( http.dataType == "undefined "){
+            console.log( "http.dataType is not defined !!");
+            return;
+        }
+
+        urlArray = http.dataType.split(";");
+        http.dataType = urlArray[0];
+        if( http.dataType == "text/plain" || http.dataType == "text/html") {
             document.getElementById("message2").innerHTML = http.responseAttachText + "</br>" + http.responseText;
+            console.log( http.responseText );
+            // $('#receiveContents').append(  http.responseAttachText + "</br>" + http.responseText; );
             // }else if( http.dataType == "image/png") {
         } else {
             var strData = http.responseText;
@@ -55,21 +99,27 @@
                 alert( "length : " + strData.length + "\r\n" + http.responseAttachText );
             }
 
-            /*
-             document.getElementById("message2").innerHTML = http.responseAttachText;
-             var img = document.createElement("img");
-             img.src = http.responseBody;
-             */
         }
     }
 
 
-    function requestFile(){
+    function requestFileToWAS(){
         document.getElementById("message2").innerHTML = "";
         fileName = fileFrame.name.value;
         httpRequest( "GET", fileName, showFileContents );
     }
 
+    function requestFileToNodeJS(){
+        document.getElementById("message2").innerHTML = "";
+        fileName = fileFrame.name.value;
+        url = "http://13.124.86.217:8082/" + fileName;
+        httpRequest("POST", url, showFileContents );
+        /*
+         $.get("http://13.124.86.217:8081/hello.txt", function( receivedData){
+         console.log( receivedData );
+         } );
+         */
+    }
 
     parseJSONtoText = (function(){
         var strText = "";
@@ -91,6 +141,16 @@
         }
 
     }());
+
+
+    function connectChatNodeJS(){
+        if( chatSocket != null && chatSocket.connected == true ){
+            alert("already connected socket!!");
+            return;
+        }
+        chatSocket = io.connect('http://13.124.86.217:8081');
+    }
+
 
 
     function showWeatherInfo( http ){
@@ -119,10 +179,6 @@
         alert( http.responseText );
     }
 
-    function requestNodeJS(){
-        httpRequest("GET", "http://13.124.86.217:8081/hello.html", showResponseNodeJS )
-
-    }
 
 </script>
 
