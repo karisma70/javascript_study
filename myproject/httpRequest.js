@@ -55,8 +55,6 @@ var httpRequest = (function(){
         }
 */
         xmlhttp.onreadystatechange = function ( e ) {
-         //    console.log( "readyState : " + getStateString( e.target.readyState ) + ", status : " + e.target.status );
-            //fdsfsdfsd
             if( e.target.readyState == XMLHttpRequest.DONE ) {
                 if (e.target.status == 200) {
                     callback(xmlhttp);
@@ -106,8 +104,8 @@ var httpRequest = (function(){
     }
 
     return function( method, url, callback ){
-        // requestData( method, url, callback );
-
+        requestData( method, url, callback );
+        /*
         requestData( "HEAD", url, function (http) {
             // alert(xmlhttp.getAllResponseHeaders());
             http.dataLength = parseInt( http.getResponseHeader("Content-Length"));
@@ -117,6 +115,6 @@ var httpRequest = (function(){
                 + ", Content type : " + http.getResponseHeader("Content-Type");
             requestData( method, url, callback );
         });
-
+        */
     }
 }());

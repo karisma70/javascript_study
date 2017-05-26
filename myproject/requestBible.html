@@ -19,8 +19,9 @@
 </form>
 
 <script>
+
     function requestBible(){
-        document.getElementById("receiveMsg").value = "";
+        $('#receiveMsg').empty();
 
         var searchOpt = {};
 
@@ -31,21 +32,21 @@
         if( bibleSearch.title.value == "" ){
             alert ("Please insert title!!")
             return;
+        } else {
+            consistSearchOpt( bibleSearch.title  );
         }
 
         if( bibleSearch.chapter.value == "" ){
             alert ("Please insert chapter!!")
             return;
+        } else {
+            consistSearchOpt( bibleSearch.chapter );
         }
 
-        if( bibleSearch.paragraph.value == "" ){
-            alert ("Please insert paragraph !!")
-            return;
-        }
 
-        consistSearchOpt( bibleSearch.title  );
-        consistSearchOpt( bibleSearch.chapter );
-        consistSearchOpt( bibleSearch.paragraph );
+        if( bibleSearch.paragraph.value != "" ){
+            consistSearchOpt( bibleSearch.paragraph );
+        }
 
         var jsonStr = JSON.stringify( searchOpt );
         console.log( "send param : " + jsonStr );
@@ -53,8 +54,14 @@
         url = "http://13.124.86.217:8082?" + jsonStr;
         httpRequest("POST", url, function( http ){
             var resObj = JSON.parse( http.responseText );
-            $('#receiveMsg').val( resObj.title + " " + resObj.chapter + ":" + resObj.paragraph + "\r\n" +  resObj.content + "\r\n" );
-
+            if( resObj.length != "undefined" ) {    // 배열로 받아올 경우
+                for (idx in resObj) {
+                    // console.log(resObj[idx]);
+                    $('#receiveMsg').append( resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "\r\n" +  resObj[idx].content + "\r\n" );
+                }
+            } else {
+                $('#receiveMsg').append( resObj.title + " " + resObj.chapter + ":" + resObj.paragraph + "\r\n" +  resObj.content + "\r\n" );
+            }
         } );
     }
 
