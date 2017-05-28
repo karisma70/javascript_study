@@ -12,32 +12,68 @@
     <input type="text" name="title">
     <input type="text" name="chapter"> 장
     <input type="text" name="paragraph"> 절
-    <input type="button" value="검색" onclick="requestBible()">
-    <br>
-    <br>
-    <textarea id = "receiveMsg" name = "comment" cols = "80" rows = "50"></textarea>
+    <input type="button" value="검색" onclick="requestBibleByChapter()">
 </form>
+<br>
+<form name="bibleWordSearch" accept-charset="utf-8">
+    <input type="text" name="word"> 검색어
+    <input type="button" value="검색" onclick="requestBibleByWord()">
+</form>
+<br>
+<textarea id = "receiveMsg" name = "comment" cols = "80" rows = "50"></textarea>
 
 <script>
 
-    function requestBible(){
+    function requestBibleByWord(){
         $('#receiveMsg').empty();
+        var searchParam = {
+            type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
+            option: {}
+        };
 
-        var searchOpt = {};
+        if( bibleWordSearch.word.value == "" ){
+            alert ("Please insert word! for search!");
+        }else{
+            searchParam.option.content= { $regex : bibleWordSearch.word.value };
+            var jsonStr = JSON.stringify( searchParam );
+            console.log( "send param : " + jsonStr );
+
+            url = "http://13.124.86.217:8082?" + jsonStr;
+            httpRequest("POST", url, function( http ){
+                var resObj = JSON.parse( http.responseText );
+                if( resObj.length != "undefined" ) {    // 배열로 받아올 경우
+                    for (idx in resObj) {
+                        // console.log(resObj[idx]);
+                        $('#receiveMsg').append( resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "\r\n" +  resObj[idx].content + "\r\n" );
+                    }
+                } else {
+                    $('#receiveMsg').append( resObj.title + " " + resObj.chapter + ":" + resObj.paragraph + "\r\n" +  resObj.content + "\r\n" );
+                }
+            } );
+        }
+
+    }
+
+    function requestBibleByChapter(){
+        $('#receiveMsg').empty();
+        var searchParam = {
+            type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
+            option: {}
+            };
 
         function consistSearchOpt( obj ){
-            searchOpt[obj.name] = obj.value;
+            searchParam.option[obj.name] = obj.value;
         }
 
         if( bibleSearch.title.value == "" ){
-            alert ("Please insert title!!")
+            alert ("Please insert title!!");
             return;
         } else {
             consistSearchOpt( bibleSearch.title  );
         }
 
         if( bibleSearch.chapter.value == "" ){
-            alert ("Please insert chapter!!")
+            alert ("Please insert chapter!!");
             return;
         } else {
             consistSearchOpt( bibleSearch.chapter );
@@ -48,7 +84,7 @@
             consistSearchOpt( bibleSearch.paragraph );
         }
 
-        var jsonStr = JSON.stringify( searchOpt );
+        var jsonStr = JSON.stringify( searchParam );
         console.log( "send param : " + jsonStr );
 
         url = "http://13.124.86.217:8082?" + jsonStr;
