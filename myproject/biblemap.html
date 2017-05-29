@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bible Map</title>
+    <script type = "text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
+    <script type = "text/javascript" src = "httpRequest.js"></script>
+
+    <script type="text/javascript" src="lib/binaryajax.js"></script>
+    <script type="text/javascript" src="src/binarywrapper.js"></script>
+    <script type="text/javascript" src="src/shapefile.js"></script>
+    <!--[if IE]><script src="lib/excanvas.js"></script><![endif]-->
+
+    <style type = "text/css">
+        body {
+            background-color: #eee;
+            color: #000;
+            font: 12px sans-serif;
+            margin: 20px;
+        }
+        #map_div {
+            width: 800px;
+            height: 800px;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            float : left;
+            background-color: #9dc3e0;
+        }
+        canvas {
+            padding: 10px
+            background-color: #9dc3e0;
+        }
+
+    </style>
+</head>
+<body>
+<div id ="container" style="width:1200px">
+    <div id ="header" style="background-color:#FFA500; text-align: center;">
+        <h1 style="margin-bottom:0;">Bible Map</h1>
+    </div>
+    <div id="menu" style="background-color:#FFD700; text-align: left; width: 400px; height: 800px; float: left;"><br>
+        <form name="bibleSearch" accept-charset="utf-8">
+            <input type="text" name="title" size="8"> 권
+            <input type="text" name="chapter" size="3"> 장
+            <input type="text" name="paragraph" size="3"> 절
+            <input type="button" value="검색" onclick="requestBibleByChapter()">
+        </form>
+        <br>
+        <form name="bibleWordSearch" accept-charset="utf-8">
+            <input type="text" name="word" size="8"> 검색어
+            <input type="button" value="검색" onclick="requestBibleByWord()">
+        </form>
+        <br>
+        <textarea id = "receiveMsg" name = "comment" cols = "54" rows = "46"></textarea>
+        <!-- <div id = "receiveMsg" ></div> -->
+    </div>
+    <canvas id="map"  width = "800" height = 400 ></canvas>
+    <!--
+    <div id ="map_div" >
+    </div> -->
+    <div id ="footer" style="background-color:#FFA500; clear: both;">
+        @IT Center
+    </div>
+</div>
+
+<script>
+
+    function reqeustAndShowContents( searchParam ){
+        var jsonStr = JSON.stringify( searchParam );
+        console.log( "send param : " + jsonStr );
+
+        url = "http://13.124.86.217:8082?" + jsonStr;
+        httpRequest("POST", url, function( http ){
+            var resObj = JSON.parse( http.responseText );
+
+            if( resObj.result != "undefined" && resObj.result == "fail" ){
+                $('#receiveMsg').append( resObj.error + "\r\n" );
+            }
+            else {
+                if (resObj.length != "undefined") {    // 배열로 받아올 경우
+                    for (idx in resObj) {
+                        $('#receiveMsg').append( resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "\r\n" + resObj[idx].content + "\r\n");
+                        // $('#receiveMsg').append( resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "<br>" + resObj[idx].content + "<br><br>");
+                    }
+                } else {
+                    $('#receiveMsg').append(  resObj.title + " " + resObj.chapter + ":" + resObj.paragraph + "\r\n" + resObj.content + "\r\n");
+                    // $('#receiveMsg').append(  resObj.title + " " + resObj.chapter + ":" + resObj.paragraph + "<br>" + resObj.content + "<br>");
+                }
+            }
+
+        } );
+    }
+
+    function requestBibleByWord(){
+        $('#receiveMsg').empty();
+        var searchParam = {
+            type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
+            option: {}
+        };
+
+        if( bibleWordSearch.word.value == "" ){
+            alert ("Please insert word! for search!");
+        }else{
+            searchParam.option.content= { $regex : bibleWordSearch.word.value };
+            reqeustAndShowContents( searchParam );
+        }
+
+    }
+
+    function requestBibleByChapter(){
+        $('#receiveMsg').empty();
+        var searchParam = {
+            type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
+            option: {}
+        };
+
+        function consistSearchOpt( obj ){
+            searchParam.option[obj.name] = obj.value;
+        }
+
+        if( bibleSearch.title.value == "" ){
+            alert ("Please insert title!!");
+            return;
+        } else {
+            consistSearchOpt( bibleSearch.title  );
+        }
+
+        if( bibleSearch.chapter.value == "" ){
+            alert ("Please insert chapter!!");
+            return;
+        } else {
+            consistSearchOpt( bibleSearch.chapter );
+        }
+
+        if( bibleSearch.paragraph.value != "" ){
+            consistSearchOpt( bibleSearch.paragraph );
+        }
+
+        reqeustAndShowContents( searchParam );
+    }
+////////////////////////////////////////////////////////////////////
+
+    var file = "thematicmapping/TM_WORLD_BORDERS_SIMPL-0.3.shp";
+
+    window.onload = function() {
+        var b = new BinaryAjax(file, onBinaryAjaxComplete, onBinaryAjaxFail);
+    }
+
+    function onBinaryAjaxFail() {
+        alert('failed to load ' + file);
+    }
+
+    function onBinaryAjaxComplete(oHTTP) {
+        var binFile = oHTTP.binaryResponse;
+
+        if (window.console && window.console.log) console.log('got data, parsing shapefile');
+
+        var shpFile = new ShpFile(binFile);
+
+        if (shpFile.header.shapeType != ShpType.SHAPE_POLYGON && shpFile.header.shapeType != ShpType.SHAPE_POLYLINE) {
+            alert("Shapefile does not contain Polygon records (found type: "+shp.shapeType+")");
+        }
+
+        //if (window.console && window.console.log) console.log(records);
+        render(shpFile.records);
+    }
+
+    function render(records) {
+
+        if (window.console && window.console.log) console.log('creating canvas and rendering');
+
+        var canvas = document.getElementById('map');
+
+        if (window.G_vmlCanvasManager) {
+            G_vmlCanvasManager.initElement(canvas);
+        }
+
+        var t1 = new Date().getTime();
+        if (window.console && window.console.log) console.log('calculating bbox...');
+
+        var box;
+        for (var i = 0; i < records.length; i++) {
+            var record = records[i];
+            if (record.shapeType == ShpType.SHAPE_POLYGON || record.shapeType == ShpType.SHAPE_POLYLINE) {
+                var shp = record.shape
+                for (var j = 0; j < shp.rings.length; j++) {
+                    var ring = shp.rings[j];
+                    for (var k = 0; k < ring.length; k++) {
+                        if (!box) {
+                            box = { x: ring[k].x, y: ring[k].y, width: 0, height: 0 };
+                        }
+                        else {
+                            var l = Math.min(box.x, ring[k].x);
+                            var t = Math.min(box.y, ring[k].y);
+                            var r = Math.max(box.x+box.width, ring[k].x);
+                            var b = Math.max(box.y+box.height, ring[k].y);
+                            box.x = l;
+                            box.y = t;
+                            box.width = r-l;
+                            box.height = b-t;
+                        }
+                    }
+                }
+            }
+        }
+
+        var t2 = new Date().getTime();
+        if (window.console && window.console.log) console.log('found bbox in ' + (t2 - t1) + ' ms');
+
+        t1 = new Date().getTime();
+        if (window.console && window.console.log) console.log('starting rendering...');
+
+        var ctx = canvas.getContext('2d');
+
+        var sc = Math.min(800 / box.width, 400 / box.height);
+
+        ctx.fillStyle = '#ccccff';
+        ctx.fillRect(0,0,800,400);
+
+        ctx.lineWidth = 0.5;
+        ctx.strokeStyle = '#888888';
+        ctx.fillStyle = '#fff8f0';
+        ctx.beginPath();
+        for (var i = 0; i < records.length; i++) {
+            var record = records[i];
+            if (record.shapeType == ShpType.SHAPE_POLYGON || record.shapeType == ShpType.SHAPE_POLYLINE) {
+                var shp = record.shape;
+                for (var j = 0; j < shp.rings.length; j++) {
+                    var ring = shp.rings[j];
+                    if (ring.length < 1) continue;
+                    ctx.moveTo((ring[0].x - box.x) * sc, 400 - (ring[0].y - box.y) * sc);
+                    for (var k = 1; k < ring.length; k++) {
+                        ctx.lineTo((ring[k].x - box.x) * sc, 400 - (ring[k].y - box.y) * sc);
+                    }
+                }
+            }
+        }
+        ctx.fill();
+        ctx.stroke();
+        t2 = new Date().getTime();
+        if (window.console && window.console.log) console.log('done rendering in ' + (t2 - t1) + ' ms');
+    }
+
+
+
+</script>
+
+
+</body>
+</html>
