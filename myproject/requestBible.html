@@ -6,6 +6,15 @@
     <script type = "text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
     <script type = "text/javascript" src = "httpRequest.js"></script>
+    <link rel="STYLESHEET" type="text/css" href="css/public.css">
+    <style type = "text/css">
+        div.editable {
+            width: 600px;
+            height: 600px;
+            border: 1px solid #ccc;
+            padding: 5px;
+        }
+    </style>
 </head>
 <body>
 <form name="bibleSearch" accept-charset="utf-8">
@@ -20,9 +29,36 @@
     <input type="button" value="검색" onclick="requestBibleByWord()">
 </form>
 <br>
-<textarea id = "receiveMsg" name = "comment" cols = "80" rows = "50"></textarea>
+<!-- <textarea id = "receiveMsg" name = "comment" cols = "80" rows = "50"></textarea> -->
+<div id = "receiveMsg" ></div>
 
 <script>
+
+    function reqeustAndShowContents( searchParam ){
+        var jsonStr = JSON.stringify( searchParam );
+        console.log( "send param : " + jsonStr );
+
+        url = "http://13.124.86.217:8082?" + jsonStr;
+        httpRequest("POST", url, function( http ){
+            var resObj = JSON.parse( http.responseText );
+
+            if( resObj.result != "undefined" && resObj.result == "fail" ){
+                $('#receiveMsg').append( resObj.error + "\r\n" );
+            }
+            else {
+                if (resObj.length != "undefined") {    // 배열로 받아올 경우
+                    for (idx in resObj) {
+                        // $('#receiveMsg').append( resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "\r\n" + resObj[idx].content + "\r\n");
+                        $('#receiveMsg').append( resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "<br>" + resObj[idx].content + "<br><br>");
+                    }
+                } else {
+                    // $('#receiveMsg').append(  resObj.title + " " + resObj.chapter + ":" + resObj.paragraph + "\r\n" + resObj.content + "\r\n");
+                    $('#receiveMsg').append(  resObj.title + " " + resObj.chapter + ":" + resObj.paragraph + "<br>" + resObj.content + "<br>");
+                }
+            }
+
+        } );
+    }
 
     function requestBibleByWord(){
         $('#receiveMsg').empty();
@@ -35,21 +71,7 @@
             alert ("Please insert word! for search!");
         }else{
             searchParam.option.content= { $regex : bibleWordSearch.word.value };
-            var jsonStr = JSON.stringify( searchParam );
-            console.log( "send param : " + jsonStr );
-
-            url = "http://13.124.86.217:8082?" + jsonStr;
-            httpRequest("POST", url, function( http ){
-                var resObj = JSON.parse( http.responseText );
-                if( resObj.length != "undefined" ) {    // 배열로 받아올 경우
-                    for (idx in resObj) {
-                        // console.log(resObj[idx]);
-                        $('#receiveMsg').append( resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "\r\n" +  resObj[idx].content + "\r\n" );
-                    }
-                } else {
-                    $('#receiveMsg').append( resObj.title + " " + resObj.chapter + ":" + resObj.paragraph + "\r\n" +  resObj.content + "\r\n" );
-                }
-            } );
+            reqeustAndShowContents( searchParam );
         }
 
     }
@@ -79,26 +101,12 @@
             consistSearchOpt( bibleSearch.chapter );
         }
 
-
         if( bibleSearch.paragraph.value != "" ){
             consistSearchOpt( bibleSearch.paragraph );
         }
 
-        var jsonStr = JSON.stringify( searchParam );
-        console.log( "send param : " + jsonStr );
+        reqeustAndShowContents( searchParam );
 
-        url = "http://13.124.86.217:8082?" + jsonStr;
-        httpRequest("POST", url, function( http ){
-            var resObj = JSON.parse( http.responseText );
-            if( resObj.length != "undefined" ) {    // 배열로 받아올 경우
-                for (idx in resObj) {
-                    // console.log(resObj[idx]);
-                    $('#receiveMsg').append( resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "\r\n" +  resObj[idx].content + "\r\n" );
-                }
-            } else {
-                $('#receiveMsg').append( resObj.title + " " + resObj.chapter + ":" + resObj.paragraph + "\r\n" +  resObj.content + "\r\n" );
-            }
-        } );
     }
 
 </script>
