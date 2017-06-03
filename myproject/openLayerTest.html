@@ -114,7 +114,7 @@
              if (textString) {
                  return new ol.style.Text({
                      textAlign: paramStyle.textStroke.align,
-                     textBaseline: 'middle',
+                     textBaseline: paramStyle.textStroke.baseline,
                      font: paramStyle.textStroke.font,
                      text: feature.get('name'),
                      fill: new ol.style.Fill({color: paramStyle.textStroke.color}),
@@ -123,7 +123,7 @@
                          width: paramStyle.textStroke.outlineWidth
                      }),
                      offsetX: 0,
-                     offsetY: 0,
+                     offsetY: 5,
                      rotation: 0
                  });
              } else {
@@ -134,7 +134,7 @@
          function pointStyleFunction(feature, resolution) {
              return new ol.style.Style({
                  image: new ol.style.Circle({
-                     radius: 10,
+                     radius: 3,
                      fill: new ol.style.Fill({color: 'rgba(255, 0, 0, 0.1)'}),
                      stroke: new ol.style.Stroke({color: 'red', width: 1})
                  }),
@@ -181,7 +181,12 @@
 
                  if( style.textStroke.prop ) {
                      var textString = attrs.values[style.textStroke.prop];
-                     feature.setProperties({'name': textString});
+                     var textArr = new Array();
+                     textArr = textString.split(' ');
+                     var textLabel = textArr[0];
+                     if( textArr[1] != '' )
+                         textLabel += ' ' + textArr[1];
+                     feature.setProperties({'name': textLabel });
                  }
                  features.push( feature );
              }
@@ -225,7 +230,6 @@
                  }
 
                  var wkt = 'POLYGON(' + wktOuter.join(', ') + ')';
-                 var feature = {};
 
                  if( bTransform == true ) {
                      feature = format.readFeature(wkt, {
@@ -239,7 +243,12 @@
 
                  if( style.textStroke.prop ) {
                      var textString = attrs.values[style.textStroke.prop];
-                     feature.setProperties({'name': textString});
+                     var textArr = new Array();
+                     textArr = textString.split(' ');
+                     var textLabel = textArr[0];
+                     if( textArr[1] != '' )
+                         textLabel += ' ' + textArr[1];
+                     feature.setProperties({'name': textLabel });
                  }
                  features.push( feature );
              }
@@ -292,8 +301,8 @@
     new ShapeFileDownload( 'naturalearthdata/cultural/110m-admin-0-countries',
         {
             fillColor : 'rgba(0, 0, 255, 0.01)',
-            lineStroke : {  color: 'green', width : 1, opacity: 0.01  },
-            textStroke : { prop: 'Name1', align: 'center', font : 'bold 14px Areal', color: "white", outlineColor : "#fffff", outlineWidth : 3  }
+            lineStroke : {  color: [234, 179, 74], width : 1, opacity: 0.01  },
+            textStroke : { prop: 'Name1', align: 'center', baseline: 'middle', font : 'bold 16px Areal', color: 'white', outlineColor : 'black', outlineWidth : 3  }
         }, map );
 
 /*
@@ -309,7 +318,7 @@
             {
                 fillColor : 'rgba(0, 0, 255, 0.01)',
                 lineStroke : {  color: [234, 179, 74], width : 2, opacity: 0.001  },
-                textStroke : { prop: 'Name_Town', align: 'center', font : 'bold 14px Areal', color: "white", outlineColor : "#fffff", outlineWidth : 3  }
+                textStroke : { prop: 'Name_Town', align: 'center', baseline: 'top', font : 'bold 10px Areal', color: "green", outlineColor : "white", outlineWidth : 3  }
             }, map );
 
 
