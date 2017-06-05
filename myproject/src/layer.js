@@ -49,23 +49,21 @@ function Layer(url, style) {
   }
 }
 
-function renderPoints(canvas, records, data, box, style) {
-
-  log('rendering points');
-
-  var t1 = new Date().getTime();
-  log('starting rendering...');
-
+function getContextWithStyle( canvas, style ) {
   var ctx = canvas.getContext('2d');
-  
-  var sc = Math.min(canvas.width / box.width, canvas.height / box.height);
 
-  if (style.fillStyle) ctx.fillStyle = style.fillStyle;
-  if (style.strokeStyle) ctx.strokeStyle = style.strokeStyle;
-  if (style.lineWidth) ctx.lineWidth = style.lineWidth;
+  if (style.fillStyle)
+    ctx.fillStyle = style.fillStyle;
+  if (style.strokeStyle)
+    ctx.strokeStyle = style.strokeStyle;
+  if (style.lineWidth)
+    ctx.lineWidth = style.lineWidth;
 
-  // TODO: style attributes for point type (circle, square) and size/radius
+  return ctx;
+}
 
+
+function drawRectsWithContext(canvas, ctx, records, style, box, sc ){
   for (var i = 0; i < records.length; i++) {
     var record = records[i];
     if (record.shapeType == ShpType.SHAPE_POINT) {
@@ -78,7 +76,40 @@ function renderPoints(canvas, records, data, box, style) {
       }
     }
   }
-  
+}
+
+function setContextFontAndText( ctx, style ){
+  if (style.font)
+      ctx.font = style.font;
+  if (style.textFill)
+    ctx.fillStyle = style.textFill;
+  if (style.textStroke) {
+    ctx.strokeStyle = style.textStroke;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.lineWidth = style.textHalo || 1;
+  }
+  ctx.textAlign = 'left';
+  // ctx.textAlign = style.textAlign;
+  ctx.textBaseline = 'middle';
+}
+
+
+function renderPoints(canvas, records, data, box, style) {
+
+  log('rendering points');
+
+  var t1 = new Date().getTime();
+  log('starting rendering...');
+
+
+  var sc = Math.min(canvas.width / box.width, canvas.height / box.height);
+
+  var ctx = getContextWithStyle( canvas, style );
+
+  // TODO: style attributes for point type (circle, square) and size/radius
+  drawRectsWithContext( canvas, ctx, records, style, box, sc );
+
   if ((style.textFill || style.textStroke) && style.textProp) {
   
     if (!style.helper) {
@@ -92,18 +123,8 @@ function renderPoints(canvas, records, data, box, style) {
     helper.clearRect(0,0,style.helper.width,style.helper.height);
     helper.fillStyle = 'black';
     
-    //var helper = ctx;
+    setContextFontAndText( ctx, style );
 
-    if (style.font) ctx.font = style.font;
-    if (style.textFill) ctx.fillStyle = style.textFill;
-    if (style.textStroke) {
-      ctx.strokeStyle = style.textStroke;
-      ctx.lineJoin = 'round';
-      ctx.lineCap = 'round';
-      ctx.lineWidth = style.textHalo || 1;
-    }
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'middle';
     for (var i = 0; i < records.length; i++) {
       if (data[i] && data[i].values && data[i].values[style.textProp]) {
         var record = records[i];
@@ -130,8 +151,10 @@ function renderPoints(canvas, records, data, box, style) {
           
           helper.fillRect(tx, ty-th/2, tw, th);
           
-          if (style.textStroke) ctx.strokeText(text, tx, ty);
-          if (style.textFill) ctx.fillText(text, tx, ty);
+          if (style.textStroke)
+            ctx.strokeText(text, tx, ty);
+          if (style.textFill)
+            ctx.fillText(text, tx, ty);
         }
       }
       else {
@@ -139,6 +162,11 @@ function renderPoints(canvas, records, data, box, style) {
       }
     }
   }
+
+  var text = sc.toString();
+
+  ctx.strokeText(text, 10, 10 );
+  ctx.fillText(text, 10, 10 );
   
   t2 = new Date().getTime();
   log('done rendering in ' + (t2 - t1) + ' ms');

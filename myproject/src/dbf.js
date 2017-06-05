@@ -118,5 +118,5 @@ function DbfRecord(src, header) {
     for (var i = 0; i < header.fields.length; i++) {
         var field = header.fields[i];
         this.values[field.name] = src.getString(field.length);
-    }                             
+    }
 }
