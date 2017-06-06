@@ -73,7 +73,7 @@ function genLayerFromWkt( wkt, attrs, bTransform, format, style ) {
 }
 
 
-function ShapeFileDownload( url, layerId, style, paramMap ) {
+function ShapeFileDownload( url, layerId, style, layerContainer, paramMap ) {
     var theLayer = this;
     var shpURL = url+'.shp';
     var dbfURL = url+'.dbf';
@@ -223,8 +223,30 @@ function ShapeFileDownload( url, layerId, style, paramMap ) {
         shapeLayer.set( 'visibleRange', style.visibleRange );
         console.log( url + ",   id  : " + layerId );
 
-        paramMap.addLayer( shapeLayer );
+
+        layerContainer.layers.push( shapeLayer );
+
+        if( layerContainer.totalCount <= layerContainer.layers.length ){
+            layerContainer.layers.sort( function( layerA, layerB ){
+                var aID = layerA.get( 'id' );
+                var bID = layerB.get( 'id' );
+                if( aID < bID )
+                    return -11;
+                if( aID > bID )
+                    return 1;
+                return 0;
+            } );
+
+            for( idx in layerContainer.layers ){
+                console.log( "ID : " + layerContainer.layers[idx].get( 'id'));
+                paramMap.addLayer( layerContainer.layers[ idx ] );
+            }
+        }
+
     };   // end of callback
+
+
+
 
     var onShpComplete = function (oHTTP) {
         var binFile = oHTTP.binaryResponse;
