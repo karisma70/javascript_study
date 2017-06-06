@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <title>Accessible Map</title>
-    <link rel="stylesheet" href="https://openlayers.org/en/v4.1.1/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="https://openlayers.org/en/v4.1.1/css/ol.css" type="text/css;">
     <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
     <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
@@ -12,6 +12,9 @@
     <script type="text/javascript" src="src/binarywrapper.js"></script>
     <script type="text/javascript" src="src/shapefile.js"></script>
     <script type="text/javascript" src="src/dbf.js"></script>
+    <script type="text/javascript" src="src/shapedownload.js"></script>
+    <script type="text/javascript" src="src/openLayersControl.js"></script>
+    <script type = "text/javascript" src = "httpRequest.js"></script>
 
     <script src="openLayers_v4.1.1/ol.js"></script>
 
@@ -44,282 +47,131 @@
 <button id="zoom-in">Zoom in</button>
 <button id="pan-to-nazareth">나사렛</button>
 <button id="pan-to-damascus">다메섹</button>
+
+<div id ="container" style="width:1200px">
+     <div id="menu" style="background-color:#EEFCB4; text-align: left; width: 1200px; height: 100px; float: left;"><br>
+        <form name="bibleSearch" accept-charset="utf-8">
+            <input type="text" name="title" size="8"> 권
+            <input type="text" name="chapter" size="3"> 장
+            <input type="text" name="paragraph" size="3"> 절
+            <input type="button" value="검색" onclick="requestBibleByChapter()">
+        </form>
+        <br>
+        <form name="bibleWordSearch" accept-charset="utf-8">
+            <input type="text" name="word" size="8"> 검색어
+            <input type="button" value="검색" onclick="requestBibleByWord()">
+        </form>
+        <br>
+    </div>
+    <div class="map" id = "physical" style = "background-color : #6797FF;"></div>
+    <div id ="receiveMsg" style="background-color:#eee; clear: both;">
+    </div>
+</div>
+
 <script>
 
     var nazareth = [ 3930131.5467687743,3856253.586329119 ];
     var damascus = [ 4042817.037061023,3963251.110387449 ];
 
-    var wmsLayer = new ol.layer.Tile({
+    var wmsLayer1 = new ol.layer.Tile({
+        source: new ol.source.Stamen({
+            layer: 'terrain-background'
+        })
+    });
+
+    wmsLayer1.set( 'id', 1, false );
+    wmsLayer1.set( 'visibleRange', { max : 12, min : 1 }   );
+
+    var wmsLayer2 = new ol.layer.Tile({
         source: new ol.source.OSM({
             // attributions: [
             //    'All maps © <a href="https://www.opencyclemap.org/">OpenCycleMap</a>',
             //     ol.source.OSM.ATTRIBUTION
             // ],
-            url : 'https://{a-c}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey=bc6eff89a9cc457995e03c54c19e24d5'
+            url : 'https://{a-c}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey=bc6eff89a9cc457995e03c54c19e24d5'   // Open Cycle Map
         })
     });
 
+    wmsLayer2.set( 'id', 2, false );
+    wmsLayer2.set( 'visibleRange', { max : 16, min : 12 }   );
+
+    var view = new ol.View({
+        center: [3942321.454123089,3792452.570684223],
+        maxZoom : 16,
+        minZoom : 5,
+        zoom: 7
+        // // center: [703365.7089403362, 5714629.865071137],
+        // center: [1347915.6039902964, 4782812.903769424],
+        // zoom: 7
+    })
+
     var map = new ol.Map({
-        layers: [ wmsLayer ],
+        layers: [ wmsLayer1, wmsLayer2 ],
         target: 'map',
         controls: ol.control.defaults({
             attributionOptions:  ({    // @type {olx.control.AttributionOptions}
                 collapsible: false
             })
         }),
-        view: new ol.View({
-            center: [3942321.454123089,3792452.570684223],
-             zoom: 7
-            // // center: [703365.7089403362, 5714629.865071137],
-            // center: [1347915.6039902964, 4782812.903769424],
-            // zoom: 7
-        })
+        view: view
     });
+
+    var layerContainer = {
+        layers : [],
+        totalCount : 6
+    };
 
      //////////////////////////////////////////////////////
 
- function ShapeFileDownload( url, style, paramMap ) {
-     var theLayer = this;
-     var shpURL = url+'.shp';
-     var dbfURL = url+'.dbf';
-
-     var onShpFail = function ( errCode ) {
-        alert('failed to load ' + theLayer.shpURL + ", errCode : " + errCode  );
-     };
-     var onDbfFail = function ( errCode ) {
-        alert('failed to load ' + theLayer.dbfURL + ", errCode : " + errCode  );
-     };
-
-     var completeCallback = function( shpFile, style,  dbfFile ){       // callback Function
-
-         var paramStyle = style;
-
-         if ( shpFile.header.shapeType == ShpType.SHAPE_POLYGON ){
-             console.log( "download Shape_polygon ");
-         }
-         if ( shpFile.header.shapeType == ShpType.SHAPE_POLYLINE ){
-             console.log( "download Shape_polyline ");
-         }
-         if ( shpFile.header.shapeType == ShpType.SHAPE_POINT ){
-             console.log( "download Shape_point ");
-         }
-
-         var bTransform = false;
-         if( shpFile.header.boundsXY.width < 1000 ){
-             bTransform = true;
-         }
-
-         var createTextStyle = function( feature, resolution ){
-             var textString = feature.get('name');
-             if (textString) {
-                 return new ol.style.Text({
-                     textAlign: paramStyle.textStroke.align,
-                     textBaseline: paramStyle.textStroke.baseline,
-                     font: paramStyle.textStroke.font,
-                     text: feature.get('name'),
-                     fill: new ol.style.Fill({color: paramStyle.textStroke.color}),
-                     stroke: new ol.style.Stroke({
-                         color: paramStyle.textStroke.outlineColor,
-                         width: paramStyle.textStroke.outlineWidth
-                     }),
-                     offsetX: 0,
-                     offsetY: 5,
-                     rotation: 0
-                 });
-             } else {
-                 return null;
-             }
-         }
-
-         function pointStyleFunction(feature, resolution) {
-             return new ol.style.Style({
-                 image: new ol.style.Circle({
-                     radius: 3,
-                     fill: new ol.style.Fill({color: 'rgba(255, 0, 0, 0.1)'}),
-                     stroke: new ol.style.Stroke({color: 'red', width: 1})
-                 }),
-                 text: createTextStyle(feature, resolution )
-             });
-         }
-
-         function polygonStyleFunction(feature, resolution ){
-             return new ol.style.Style( {
-                 stroke: new ol.style.Stroke( {
-                     color: style.lineStroke.color,
-                     opacity : style.lineStroke.opacity,
-                     width: style.lineStroke.width
-                 } ),
-                 fill: new ol.style.Fill({
-                     color: style.fillColor
-                 }),
-                 text : createTextStyle( feature, resolution )
-             });
-         }
-
-         var format = new ol.format.WKT();
-         var feature = {};
-         var features = [];
-
-         var recsLen = shpFile.records.length;
-         for (var i = 0; i < recsLen; i++) {
-             var record = shpFile.records[i];
-             var attrs = dbfFile.records[i];
-
-             // turn shapefile geometry into WKT
-             // points are easy!
-             if (shpFile.header.shapeType == ShpType.SHAPE_POINT) {
-                 var wkt = 'POINT(' + record.shape.x + ' ' + record.shape.y + ')';
-                 if( bTransform == true ) {
-                     feature = format.readFeature(wkt, {
-                         dataProjection : 'EPSG:4326',
-                         featureProjection : 'EPSG:3857'
-                     });
-                 }
-                 else {
-                     feature = format.readFeature( wkt );
-                 }
-
-                 if( style.textStroke.prop ) {
-                     var textString = attrs.values[style.textStroke.prop];
-                     var textArr = new Array();
-                     textArr = textString.split(' ');
-                     var textLabel = textArr[0];
-                     if( textArr[1] != '' )
-                         textLabel += ' ' + textArr[1];
-                     feature.setProperties({'name': textLabel });
-                 }
-                 features.push( feature );
-             }
-
-             // lines: not too hard--
-             else if (shpFile.header.shapeType == ShpType.SHAPE_POLYLINE) {
-                 // prepopulate the first point
-                 var points = [];//record.shape.rings[0].x + ' ' + record.shape.rings[0].y];
-                 var pointsLen = record.shape.rings[0].length;
-                 for (var j = 0; j < pointsLen; j++) {
-                     points.push(record.shape.rings[0][j].x + ' ' + record.shape.rings[0][j].y);
-                 }
-
-                 var wkt = 'LINESTRING(' + points.join(', ') + ')';
-                 if( bTransform == true ) {
-                     feature = format.readFeature(wkt, {
-                         dataProjection : 'EPSG:4326',
-                         featureProjection : 'EPSG:3857'
-                     });
-                 }
-                 else {
-                     feature = format.readFeature( wkt );
-                 }
-                 features.push( feature );
-             }
-
-             // polygons: donuts
-             else if (shpFile.header.shapeType == ShpType.SHAPE_POLYGON) {
-                 var ringsLen = record.shape.rings.length;
-                 var wktOuter = [];
-                 for (var j = 0; j < ringsLen; j++) {
-                     var ring = record.shape.rings[j];
-                     if (ring.length < 1)
-                         continue;
-                     var wktInner = [];//ring.x + ' ' + ring.y];
-                     var ringLen = ring.length;
-                     for (var k = 0; k < ringLen; k++) {
-                         wktInner.push(ring[k].x + ' ' + ring[k].y);
-                     }
-                     wktOuter.push('(' + wktInner.join(', ') + ')');
-                 }
-
-                 var wkt = 'POLYGON(' + wktOuter.join(', ') + ')';
-
-                 if( bTransform == true ) {
-                     feature = format.readFeature(wkt, {
-                         dataProjection : 'EPSG:4326',
-                         featureProjection : 'EPSG:3857'
-                     });
-                 }
-                 else {
-                     feature = format.readFeature( wkt );
-                 }
-
-                 if( style.textStroke.prop ) {
-                     var textString = attrs.values[style.textStroke.prop];
-                     var textArr = new Array();
-                     textArr = textString.split(' ');
-                     var textLabel = textArr[0];
-                     if( textArr[1] != '' )
-                         textLabel += ' ' + textArr[1];
-                     feature.setProperties({'name': textLabel });
-                 }
-                 features.push( feature );
-             }
-         }  // end of  for (var i = 0; i < recsLen; i++) {
-
-         var styleFunction;
-
-         if (shpFile.header.shapeType == ShpType.SHAPE_POLYGON || shpFile.header.shapeType == ShpType.SHAPE_POLYLINE ) {
-             styleFunction = polygonStyleFunction;
-         }else {
-             styleFunction = pointStyleFunction;
-         }
-
-         var shapeLayer = new ol.layer.Vector({
-             source: new ol.source.Vector({
-                 features: features
-             }),
-             style: styleFunction
-         });
-
-         paramMap.addLayer( shapeLayer );
-     }
-
-     var onShpComplete = function (oHTTP) {
-         var binFile = oHTTP.binaryResponse;
-         console.log('got data for ' + theLayer.shpURL + ', parsing shapefile');
-         theLayer.shpFile = new ShpFile(binFile);
-         if (theLayer.dbfFile ){
-             completeCallback( theLayer.shpFile, style, theLayer.dbfFile );
-         }
-     };
-
-     var onDbfComplete = function (oHTTP) {
-         var binFile = oHTTP.binaryResponse;
-         console.log('got data for ' + theLayer.dbfURL + ', parsing dbf file');
-
-         theLayer.dbfFile = new DbfFile(binFile);
-         if (theLayer.shpFile) {
-             completeCallback( theLayer.shpFile, style, theLayer.dbfFile );
-         }
-     };
-
-     this.shpURL = shpURL;
-     this.dbfURL = dbfURL;
-
-     var shpLoader = new BinaryAjax(shpURL, onShpComplete, onShpFail);
-     var dbfLoader = new BinaryAjax(dbfURL, onDbfComplete, onDbfFail);
- }
-
-    new ShapeFileDownload( 'naturalearthdata/cultural/110m-admin-0-countries',
+    new ShapeFileDownload( 'naturalearthdata/cultural/110m-admin-0-countries',  3,
         {
-            fillColor : 'rgba(0, 0, 255, 0.01)',
-            lineStroke : {  color: [234, 179, 74], width : 1, opacity: 0.01  },
-            textStroke : { prop: 'Name1', align: 'center', baseline: 'middle', font : 'bold 16px Areal', color: 'white', outlineColor : 'black', outlineWidth : 3  }
-        }, map );
+            visibleRange : { max : 16, min : 1 },
+            fillColor : 'rgba( 255, 255, 255, 0.001)',
+            lineStroke : {  color: [234, 179, 74], width : 2, opacity: 0.01  },
+            textStroke : { prop: 'Name2', align: 'center', baseline: 'middle', font : 'bold 18px Areal', color: 'white', outlineColor : 'black', outlineWidth : 3  }
+        }, layerContainer, map );
 
-/*
-    new ShapeFileDownload( 'naturalearthdata/cultural/110m-admin-0-boundary-lines',
+
+    new ShapeFileDownload( 'biblemap/israel_pale/river_polyline',  4,
             {
+                visibleRange : { max : 16,  min : 8 },
                 fillColor : 'rgba(0, 0, 255, 0.01)',
-                lineStroke : {  color: [234, 179, 74], width : 2, opacity: 0.001  }
-            }, map );
-*/
+                lineStroke : {  color: [134, 211, 249], width : 2, opacity: 0.001  }   // water color
+            }, layerContainer, map );
 
-
-    new ShapeFileDownload( 'naturalearthdata/cultural/110m-populated-places',
+    new ShapeFileDownload( 'biblemap/AD_admin_poi',  5,
             {
+                visibleRange : { max : 16 , min : 6 },
                 fillColor : 'rgba(0, 0, 255, 0.01)',
                 lineStroke : {  color: [234, 179, 74], width : 2, opacity: 0.001  },
-                textStroke : { prop: 'Name_Town', align: 'center', baseline: 'top', font : 'bold 10px Areal', color: "green", outlineColor : "white", outlineWidth : 3  }
-            }, map );
+                textStroke : { prop: 'name', align: 'center', baseline: 'top', font : 'bold 16px Areal', color: 'blue', outlineColor : 'white', outlineWidth : 2  }
+            }, layerContainer, map );
+
+
+    new ShapeFileDownload( 'biblemap/AD_israel_admin_poi',  6,
+            {
+                visibleRange : { max : 16 , min : 7 },
+                fillColor : 'rgba(0, 0, 255, 0.01)',
+                lineStroke : {  color: [234, 179, 74], width : 1, opacity: 0.001  },
+                textStroke : { prop: 'name', align: 'center', baseline: 'top', font : 'bold 15px Areal', color: 'blue', outlineColor : 'white', outlineWidth : 1  }
+            }, layerContainer, map );
+
+    // new ShapeFileDownload( 'naturalearthdata/cultural/110m-populated-places',
+    new ShapeFileDownload( 'biblemap/bible_map_poi',  8,
+            {
+                visibleRange : { max : 16 , min : 7 },
+                fillColor : 'rgba(0, 0, 255, 0.01)',
+                lineStroke : {  color: [234, 179, 74], width : 1, opacity: 0.001  },
+                textStroke : { prop: 'name', align: 'center', baseline: 'top', font : 'bold 14px Areal', color: [36, 38, 132 ], outlineColor : "white", outlineWidth : 1  }
+            }, layerContainer, map );
+
+    new ShapeFileDownload( 'biblemap/jesus_move',  9,
+            {
+                visibleRange : { max : 16 , min : 13 },
+                fillColor : 'rgba(0, 0, 255, 0.01)',
+                lineStroke : {  color: [234, 179, 74], width : 3, opacity: 0.001  },
+                textStroke : { prop: 'name', align: 'center', baseline: 'top', font : 'bold 12px Areal', color: "white", outlineColor : "black", outlineWidth : 3  }
+            }, layerContainer, map );
 
 
 
@@ -330,6 +182,33 @@
         console.log( evt.coordinate );
         var zoom = map.getView().getZoom();
         console.log( "zoom level : " + zoom );
+
+        var layers = map.getLayers();
+
+        layers.forEach( function(layer){
+            console.log( layer.get('id') );
+        } );
+    });
+
+
+    map.on('precompose', function(evt) {
+        var zoom = map.getView().getZoom();
+        console.log( "zoom level : " + zoom );
+
+        var layers = map.getLayers();
+
+        layers.forEach( function(layer){
+            var visibleRange = layer.get('visibleRange');
+            if( typeof visibleRange !== "undefined") {
+
+                if ( visibleRange.min <= zoom && zoom <= visibleRange.max ){
+                    layer.setVisible( true );
+                }
+                else {
+                    layer.setVisible( false );
+                }
+            }
+        } );
     });
 
 
@@ -346,20 +225,87 @@
     };
 
     document.getElementById('pan-to-nazareth').onclick = function() {
-        var view = map.getView();
-        view.animate({
-            center: nazareth,
-            duration: 2000
-        });
+        flyTo( view, nazareth, function() {});
     };
 
     document.getElementById('pan-to-damascus').onclick = function() {
-        var view = map.getView();
-        view.animate({
-            center: damascus,
-            duration: 2000
-        });
+        flyTo( view, damascus, function() {});
     };
+
+
+    function reqeustAndShowContents( searchParam ){
+        var jsonStr = JSON.stringify( searchParam );
+        console.log( "send param : " + jsonStr );
+
+        url = "http://13.124.86.217:8082?" + jsonStr;
+        httpRequest("POST", url, function( http ){
+            var resObj = JSON.parse( http.responseText );
+
+            if( resObj.result != "undefined" && resObj.result == "fail" ){
+                $('#receiveMsg').append( resObj.error + "\r\n" );
+            }
+            else {
+                var spaceStr = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+                if (resObj.length != "undefined") {    // 배열로 받아올 경우
+                    for (idx in resObj) {
+                        $('#receiveMsg').append( resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "<br>" + spaceStr + resObj[idx].content + "<br>");
+                    }
+                } else {
+                    $('#receiveMsg').append(  resObj.title + " " + resObj.chapter + ":" + resObj.paragraph + "<br>" + spaceStr + resObj[idx].content + "<br>");
+                }
+            }
+
+        } );
+    }
+
+    function requestBibleByWord(){
+        $('#receiveMsg').empty();
+        var searchParam = {
+            type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
+            option: {}
+        };
+
+        if( bibleWordSearch.word.value == "" ){
+            alert ("Please insert word! for search!");
+        }else{
+            searchParam.option.content= { $regex : bibleWordSearch.word.value };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
+            // searchParam.option.content= { bibleWordSearch.word.value };
+            reqeustAndShowContents( searchParam );
+        }
+
+    }
+
+    function requestBibleByChapter(){
+        $('#receiveMsg').empty();
+        var searchParam = {
+            type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
+            option: {}
+        };
+
+        function consistSearchOpt( obj ){
+            searchParam.option[obj.name] = obj.value;
+        }
+
+        if( bibleSearch.title.value == "" ){
+            alert ("Please insert title!!");
+            return;
+        } else {
+            consistSearchOpt( bibleSearch.title  );
+        }
+
+        if( bibleSearch.chapter.value == "" ){
+            alert ("Please insert chapter!!");
+            return;
+        } else {
+            consistSearchOpt( bibleSearch.chapter );
+        }
+
+        if( bibleSearch.paragraph.value != "" ){
+            consistSearchOpt( bibleSearch.paragraph );
+        }
+
+        reqeustAndShowContents( searchParam );
+    }
 
 
 </script>
