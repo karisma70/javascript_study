@@ -5,9 +5,10 @@
     <title>Title</title>
 </head>
 <body>
+<div id = "array_concat" >
+    나는 천재다
+</div>
 <script type = "text/javascript">
-
-
 
     function testFunc(){
 
@@ -124,10 +125,49 @@
         /* concat 배열 합치기 => 배열객체명.concat(합칠객체명) */
         var arr_val2 = ["white", "black"]; // 배열임
         var arr_sum = arr_val2.concat(arr_val);     // arr_val2에 arr_val을 뒤에 붙여 합친다.
-        document.getElementById("array_concat").innerHTML=arr_sum.join(", ");
+        document.getElementById("array_concat").innerHTML=arr_sum.join("/ ");
     }
 
     arr_concat();
+
+    ////////////////// Below is array sort
+
+    var dataArr = {
+        "hello": [  {
+            "h_id": "3",
+            "city": "Dallas",
+            "state": "TX",
+            "zip": "75201",
+            "price": "162500"
+        }, {
+            "h_id": "4",
+            "city": "Bevery Hills",
+            "state": "CA",
+            "zip": "90210",
+            "price": "319250"
+        }, {
+            "h_id": "5",
+            "city": "New York",
+            "state": "NY",
+            "zip": "00010",
+            "price": "962500"
+        } ]
+    };
+
+    var sortArray = dataArr['hello'];
+
+    sortArray.sort( function( a, b ) {
+        if ( a.h_id < b.h_id )
+            return -1;
+        if ( a.h_id > b.h_id )
+            return 1;
+        return 0;
+    } );
+
+    for( idx in sortArray ){
+        console.log( sortArray[idx].h_id + ", " + sortArray[idx].city );
+    }
+
 
 
 </script>
