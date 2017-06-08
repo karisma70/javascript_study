@@ -73,7 +73,7 @@ function genLayerFromWkt( wkt, attrs, bTransform, format, style ) {
 }
 
 
-function ShapeFileDownload( url, layerId, style, layerContainer, paramMap ) {
+function ShapeFileDownload( url, layerId, style, layerContainer, wholeCompleteCallback ) {
     var theLayer = this;
     var shpURL = url+'.shp';
     var dbfURL = url+'.dbf';
@@ -123,11 +123,13 @@ function ShapeFileDownload( url, layerId, style, layerContainer, paramMap ) {
 
         function pointStyleFunction(feature, resolution) {
             return new ol.style.Style({
+                /*
                 image: new ol.style.Circle({
                     radius: 3,
                     fill: new ol.style.Fill({color: 'rgba(255, 0, 0, 0.1)'}),
                     stroke: new ol.style.Stroke({color: 'red', width: 1})
                 }),
+                */
                 text: createTextStyle(feature, resolution )
             });
         }
@@ -166,6 +168,12 @@ function ShapeFileDownload( url, layerId, style, layerContainer, paramMap ) {
                 var wkt = 'POINT(' + record.shape.x + ' ' + record.shape.y + ')';
                 var feature = genLayerFromWkt( wkt, attrs, bTransform, format, style );
                 features.push( feature );
+
+                var textString = feature.get('name');
+                if (textString) {
+                    layerContainer.poiLayer[ textString ] = { x: record.shape.x, y :record.shape.y, zoomIn: style.visibleRange.min };
+                }
+
             }
 
             // lines: not too hard--
@@ -227,26 +235,10 @@ function ShapeFileDownload( url, layerId, style, layerContainer, paramMap ) {
         layerContainer.layers.push( shapeLayer );
 
         if( layerContainer.totalCount <= layerContainer.layers.length ){
-            layerContainer.layers.sort( function( layerA, layerB ){
-                var aID = layerA.get( 'id' );
-                var bID = layerB.get( 'id' );
-                if( aID < bID )
-                    return -11;
-                if( aID > bID )
-                    return 1;
-                return 0;
-            } );
-
-            for( idx in layerContainer.layers ){
-                console.log( "ID : " + layerContainer.layers[idx].get( 'id'));
-                paramMap.addLayer( layerContainer.layers[ idx ] );
-            }
+            wholeCompleteCallback();
         }
 
     };   // end of callback
-
-
-
 
     var onShpComplete = function (oHTTP) {
         var binFile = oHTTP.binaryResponse;
