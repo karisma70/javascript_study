@@ -51,8 +51,8 @@ function flyTo( view, location, zoomIn, done) {
 
      zoomIn += 1;
 
-    if( zoomIn < 10 )
-        zoomIn = 10;
+    if( zoomIn < 11 )
+        zoomIn = 11;
 
     function callback(complete) {
         --parts;

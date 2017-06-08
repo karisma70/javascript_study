@@ -61,7 +61,7 @@
         <br>
     </div>
     <div class="map" id = "physical" style = "background-color : #6797FF;"></div>
-    <div id ="receiveMsg" style="background-color:#eee; font-size:0.9em; font-family: 바탕체; clear: both;">
+    <div id ="receiveMsg" style="overflow:scroll; height:160px; background-color:#eee; font-size:0.9em; font-family: 돋움체; clear: both;">
     </div>
 </div>
 
@@ -93,7 +93,7 @@
         center: [3942321.454123089,3792452.570684223],
         maxZoom : 18,
         minZoom : 5,
-        zoom: 7
+        zoom: 8
 
     });
 
@@ -149,7 +149,7 @@
             return false;
         }
 
-        if( strPos > 0 && strText.substring(strPos-1, strPos) != " " ){
+        if( strPos < 1 && strText.substring(strPos-1, strPos) != " " ){
             return false;
         }
         return true;
@@ -168,22 +168,25 @@
             return strText;
         }
 
-        if( strPos > 0 && strText.substring(strPos-1, strPos) != " " ){
+        if( strPos > 0 && strText.substring(strPos-1, strPos) != "<" && strText.substring(strPos-1, strPos) != " " ){
             return strText;
         }
 
-        var posStart = '<a href=' + '"javascript:moveToPlaceByWord( \'' + strWord + '\')\">';
+        var posStart = '<a href=' + '"javascript:moveToPlaceByWord( \'' + strWord + '\')\"  style=\"text-decoration:none; color:' + color + '\" >';
         var posEnd = '</a>';
         var pos = layerContainerFunc.getPoiByName( strWord );
 
         var strStrong = strText.substring(0, strPos);
-        strStrong += strongStart;
+
         if( pos )
             strStrong += posStart;
+        else
+            strStrong += strongStart;
         strStrong += strWord;
         if( pos )
             strStrong += posEnd;
-        strStrong += strongEnd;
+        else
+            strStrong += strongEnd;
         strStrong += makeStrongWordInText( strWord, strText.substring( strPos + strWord.length, strText.length ), color );
 
         return strStrong;
@@ -320,7 +323,7 @@
                 }
             }
 
-            $('#receiveMsg').append( "<br><br><br>" );
+            $('#receiveMsg').append( "<br>" );
 
         } );
     }
