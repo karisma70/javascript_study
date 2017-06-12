@@ -171,6 +171,9 @@ function ShapeFileDownload( url, layerId, style, layerContainer, wholeCompleteCa
 
                 var textString = feature.get('name');
                 if (textString) {
+                    if( textString == "우르"){
+                        console.log( "textString : " + textString + ", zoomIn : " + style.visibleRange.min)
+                    }
                     layerContainer.poiLayer[ textString ] = { x: record.shape.x, y :record.shape.y, zoomIn: style.visibleRange.min };
                 }
 

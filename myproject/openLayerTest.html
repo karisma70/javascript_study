@@ -38,34 +38,87 @@
         #map:focus {
             outline: "white" solid 0.15em;
         }
+
+        .ol-popup {
+            position: absolute;
+            background-color: white;
+            -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+            filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #cccccc;
+            bottom: 12px;
+            left: -50px;
+            min-width: 120px;
+        }
+        .ol-popup:after, .ol-popup:before {
+            top: 100%;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+        }
+        .ol-popup:after {
+            border-top-color: white;
+            border-width: 10px;
+            left: 48px;
+            margin-left: -10px;
+        }
+        .ol-popup:before {
+            border-top-color: #cccccc;
+            border-width: 11px;
+            left: 48px;
+            margin-left: -11px;
+        }
+        .ol-popup-closer {
+            text-decoration: none;
+            position: absolute;
+            top: 2px;
+            right: 8px;
+        }
+        .ol-popup-closer:after {
+            content: "✖";
+        }
+
     </style>
 </head>
 <body>
 <a class="skiplink" href="#map">Go to map</a>
 <div id="map" class="map" tabindex="0"></div>
-<div id ="container" style="width:1200px">
-     <div id="menu" style="background-color:#EEFCB4; text-align: left; width: 1200px; height: 100px; float: left;"><br>
-        <form name="bibleSearch" accept-charset="utf-8">
-            <input type="text" name="title" size="8"> 권
-            <input type="text" name="chapter" size="3"> 장
-            <input type="text" name="paragraph" size="3"> 절
-            <input type="button" value="검색" onclick="requestBibleByChapter()">
-        </form>
-        <br>
-        <form name="bibleWordSearch" accept-charset="utf-8">
-            <input type="text" name="word" size="12"> 성경단어
-            <input type="button" value="검색" onclick="requestBibleByWord()">
-            <input type="text" name="place" size="12"> 성경지명
-            <input type="button" value="이동" onclick="moveToPlace()">
-        </form>
-        <br>
-    </div>
-    <div class="map" id = "physical" style = "background-color : #6797FF;"></div>
-    <div id ="receiveMsg" style="overflow:scroll; height:200px; background-color:#eee; font-size:0.9em; font-family: 돋움체; clear: both;">
-    </div>
+<div id="popup" class="ol-popup">
+    <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+    <div id="popup-content"></div>
 </div>
+<div id = "mouse-position">Mouse Move </div>
+<div id ="container" style="width:1200px"></div>
+ <div id="menu" style="background-color:#EEFCB4; text-align: left; width: 1200px; height: 100px; float: left;"><br>
+    <form name="bibleSearch" accept-charset="utf-8">
+        <input type="text" name="title" size="8"> 권
+        <input type="text" name="chapter" size="3"> 장
+        <input type="text" name="paragraph" size="3"> 절
+        <input type="button" value="검색" onclick="requestBibleByChapter()">
+    </form>
+    <br>
+    <form name="bibleWordSearch" accept-charset="utf-8">
+        <input type="text" name="word" size="12"> 성경단어
+        <input type="button" value="검색" onclick="requestBibleByWord()">
+        <input type="text" name="place" size="12"> 성경지명
+        <input type="button" value="이동" onclick="moveToPlace()">
+    </form>
+    <br>
+</div>
+<div class="map" id = "physical" style = "background-color : #6797FF;"></div>
+<div id ="receiveMsg" style="overflow:scroll; height:200px; background-color:#eee; font-size:0.9em; font-family: 돋움체; clear: both;"></div>
+
 
 <script>
+    var container = document.getElementById('popup');
+    var content = document.getElementById('popup-content');
+    var closer = document.getElementById('popup-closer');
+
+    var overlay = createOverlay( container );    // container
 
     var wmsLayer1 = new ol.layer.Tile({
         source: new ol.source.Stamen({
@@ -87,7 +140,7 @@
     });
 
     wmsLayer2.set( 'id', 2, false );
-    wmsLayer2.set( 'visibleRange', { max : 16, min : 13 }   );
+    wmsLayer2.set( 'visibleRange', { max : 18, min : 13 }   );
 
     var view = new ol.View({
         center: [3942321.454123089,3792452.570684223],
@@ -97,30 +150,20 @@
 
     });
 
+    var scaleLineControl = new ol.control.ScaleLine();
+    scaleLineControl.setUnits("metric");
+
     var map = new ol.Map({
         layers: [ wmsLayer1, wmsLayer2 ],
+        overlays: [overlay],
         target: 'map',
         controls: ol.control.defaults({
             attributionOptions:  ({    // @type {olx.control.AttributionOptions}
                 collapsible: false
             })
-        }),
+        }).extend([scaleLineControl]),
         view: view
     });
-
-    var layerContainer = {
-        layers : [],
-        totalCount : 8,
-        poiLayer : {}
-    };
-
-    function LayerContainerFunc( layerContainer ){
-        this.layerContainer = layerContainer;
-    }
-
-    LayerContainerFunc.prototype.getPoiByName = function( name ){
-        return this.layerContainer.poiLayer[ name ];
-    };
 
     var layerContainerFunc = new LayerContainerFunc( layerContainer );
 
@@ -136,7 +179,7 @@
         } );
 
         for( idx in layerContainer.layers ){
-            console.log( "ID : " + layerContainer.layers[idx].get( 'id'));
+            console.log( "Inserted Layer ID : " + layerContainer.layers[idx].get( 'id'));
             map.addLayer( layerContainer.layers[ idx ] );
         }
     }
@@ -172,7 +215,7 @@
             return strText;
         }
 
-        var posStart = '<a href=' + '"javascript:moveToPlaceByWord( \'' + strWord + '\')\"  style=\"text-decoration:none; color:' + color + '\" >';
+        var posStart = '<a href=' + '"javascript:moveToPlaceByWord( \'' + strWord + '\')\"  style=\"text-decoration:none; font-weight:bold; color:' + color + '\" >';
         var posEnd = '</a>';
         var pos = layerContainerFunc.getPoiByName( strWord );
 
@@ -193,7 +236,7 @@
     }
 
 
-    function makeStrongTextInLocation( strText ) {
+    function makeStrongWordOfLocation( strText ) {
         var retStrText = strText;
 
         for (prop in layerContainer.poiLayer) {
@@ -251,22 +294,82 @@
     ///////////////////////////////////////////////////////////////////
     ///////  below is event process!!!
 
-    map.on('click', function(evt) {
-        console.log( evt.coordinate );
-        var zoom = map.getView().getZoom();
-        console.log( "zoom level : " + zoom );
+    var clickedPos = null;
+    var selectedFeatures = null;
 
+    map.on('click', function(evt) {
+     //    console.log( "click Evernt !!! " + evt.coordinate );
+        // if( selectedFeatures )
+           //  slectedFeatures.clear();
+
+        clickedPos = evt.coordinate;
+        /*
         var layers = map.getLayers();
 
         layers.forEach( function(layer){
             console.log( layer.get('id') );
         } );
+        */
+    });
+
+    map.on('singleclick', function(evt) {
+        clickedPos = evt.coordinate;
+      //  var hdms = ol.coordinate.toStringHDMS(ol.proj.transform(
+//                coordinate, 'EPSG:3857', 'EPSG:4326'));
+
+        //content.innerHTML = '<p>You clicked here:</p><code>' + hdms +
+                // '</code>';
+        // content.innerHTML = "I'm a david!";
+        // overlay.setPosition(coordinate);
+
+        console.log( "singleClick Evernt !!! " + clickedPos );
+        if( selectedFeatures )
+            selectedFeatures.clear();
+
+    });
+
+
+    var selectClick = new ol.interaction.Select({
+        // layers: [ layer명 ]
+        condition: ol.events.condition.click
+    });
+
+    map.addInteraction( selectClick );
+
+    selectClick.on('select', function(e) {
+                var len = e.target.getFeatures().getLength();
+                var selLen = e.selected.length;
+                selectedFeatures = e.target.getFeatures();
+
+                if( selLen > 0 ){
+                    var feature = e.selected[0];
+                    var posName = feature.get("name");
+                    requestBibleByWord( posName );
+                    content.innerHTML = posName;
+                    overlay.setPosition( clickedPos );
+                }
+
+                /*
+                for( var id = 0 ; id < selLen ; id ++ ){
+                    var feature = e.selected[id];
+                    console.log( "Name: " + feature.get("name") );
+                    var geometry = feature.get("geometry");
+                    var len = geometry.length;
+                }
+                */
+
+                /*
+                  document.getElementById('status').innerHTML = '&nbsp;' +
+                e.target.getFeatures().getLength() +
+                ' selected features (last operation selected ' + e.selected.length +
+                ' and deselected ' + e.deselected.length + ' features)';
+                */
     });
 
 
     map.on('precompose', function(evt) {
         var zoom = map.getView().getZoom();
-        console.log( "zoom level : " + zoom );
+        $("#mouse-position").html( "zoom level : " + zoom ); // + zoom;
 
         var layers = map.getLayers();
 
@@ -305,7 +408,7 @@
                                 $('#receiveMsg').append(resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "<br>" + spaceStr + strConvText + "<br>");
                             }
                         }else {
-                            var strConvText = makeStrongTextInLocation( resObj[idx].content );
+                            var strConvText = makeStrongWordOfLocation( resObj[idx].content );
                             $('#receiveMsg').append(resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "<br>" + spaceStr + strConvText + "<br>");
                         }
                     }
@@ -317,7 +420,7 @@
                             $('#receiveMsg').append(resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "<br>" + spaceStr + strConvText + "<br>");
                         }
                     } else {
-                        var strConvText = makeStrongTextInLocation( resObj[idx].content );
+                        var strConvText = makeStrongWordOfLocation( resObj[idx].content );
                         $('#receiveMsg').append(resObj.title + " " + resObj.chapter + ":" + resObj.paragraph + "<br>" + spaceStr + strConvText + "<br>");
                     }
                 }
@@ -345,6 +448,21 @@
         }
     }
 
+    function requestBibleByWord( word ){
+        $('#receiveMsg').empty();
+        var searchParam = {
+            type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
+            option: {}
+        };
+
+        bibleWordSearch.place.value =  word;
+
+        var searchWord = word;
+        searchParam.option.content= { $regex : searchWord };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
+        reqeustAndShowContents( searchParam );
+
+    }
+
     function moveToPlace(){
 
         if( bibleWordSearch.place.value == "" ){
@@ -363,12 +481,26 @@
         }
     }
 
+    closer.onclick = function() {
+        overlay.setPosition(undefined);
+        closer.blur();
+        return false;
+    };
+
     function moveToPlaceByWord( word ){
         var pos = layerContainerFunc.getPoiByName( word );
+        if( word == "예루살렘"){
+            pos.zoomIn = 13;
+        }
 
         if( pos ) {
             console.log(pos.x + ", " + pos.y + ", zoomIn : " + pos.zoomIn );
-            flyTo( view, [pos.x, pos.y ] , pos.zoomIn, function() {});
+            flyTo( view, [pos.x, pos.y ] , pos.zoomIn, function( complete){
+                if( complete == true ){
+                    content.innerHTML = word;
+                    overlay.setPosition( [pos.x, pos.y] );
+                }
+            });
             // moveTo( view, [pos.x, pos.y ] , pos.zoomIn );
         }
     }
