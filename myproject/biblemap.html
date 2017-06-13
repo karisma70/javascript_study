@@ -1,112 +1,346 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <title>Bible Map</title>
-    <script type = "text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
-    <script type = "text/javascript" src = "httpRequest.js"></script>
+    <link rel="stylesheet" href="https://openlayers.org/en/v4.1.1/css/ol.css" type="text/css;">
+    <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
 
     <script type="text/javascript" src="lib/binaryajax.js"></script>
     <script type="text/javascript" src="src/binarywrapper.js"></script>
     <script type="text/javascript" src="src/shapefile.js"></script>
-    <!--[if IE]><script src="lib/excanvas.js"></script><![endif]-->
+    <script type="text/javascript" src="src/dbf.js"></script>
+    <script type="text/javascript" src="src/shapedownload.js"></script>
+    <script type="text/javascript" src="src/openLayersControl.js"></script>
+    <script type="text/javascript" src="src/contentTextProc.js"></script>
+    <script type = "text/javascript" src = "httpRequest.js"></script>
 
-    <style type = "text/css">
-        body {
-            background-color: #eee;
-            color: #000;
-            font: 12px sans-serif;
-            margin: 20px;
+    <script src="openLayers_v4.1.1/ol.js"></script>
+    <style>
+        .fullscreen:-moz-full-screen {
+            height: 100%;
         }
-        #map_div {
-            width: 800px;
-            height: 800px;
-            margin: 0;
-            padding: 0;
-            border: 0;
-            float : left;
-            background-color: #9dc3e0;
+        .fullscreen:-webkit-full-screen {
+            height: 100%;
         }
-        canvas {
-            padding: 10px
-            background-color: #9dc3e0;
+        .fullscreen:-ms-fullscreen {
+            height: 100%;
         }
 
+        .fullscreen:fullscreen {
+            height: 100%;
+        }
+
+        .fullscreen {
+            margin-bottom: 10px;
+            width: 100%;
+            height: 400px;
+        }
+
+        .ol-rotate {
+            top: 3em;
+        }
+
+        .map {
+            width: 80%;
+            height: 140%;
+            float: left;
+        }
+
+        .sidepanel {
+            background: #EEFCB4;
+            width: 20%;
+            height: 140%;
+            float: left;
+        }
+
+        .sidepanel-title {
+            width: 100%;
+            font-size: 2em;
+            color: #00ffff;
+            display: block;
+            text-align: center;
+        }
+
+        .ol-popup {
+            position: absolute;
+            background-color: white;
+            -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+            filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #cccccc;
+            bottom: 12px;
+            left: -50px;
+            min-width: 120px;
+        }
+        .ol-popup:after, .ol-popup:before {
+            top: 100%;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+        }
+        .ol-popup:after {
+            border-top-color: white;
+            border-width: 10px;
+            left: 48px;
+            margin-left: -10px;
+        }
+        .ol-popup:before {
+            border-top-color: #cccccc;
+            border-width: 11px;
+            left: 48px;
+            margin-left: -11px;
+        }
+        .ol-popup-closer {
+            text-decoration: none;
+            position: absolute;
+            top: 2px;
+            right: 8px;
+        }
+        .ol-popup-closer:after {
+            content: "✖";
+        }
     </style>
 </head>
 <body>
-<div id ="container" style="width:1200px">
-    <div id ="header" style="background-color:#FFA500; text-align: center;">
-        <h1 style="margin-bottom:0;">Bible Map</h1>
+<div id="fullscreen" class="fullscreen">
+    <div id="map" class="map"></div>
+    <div id="popup" class="ol-popup">
+        <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+        <div id="popup-content"></div>
     </div>
-    <div id="menu" style="background-color:#FFD700; text-align: left; width: 400px; height: 800px; float: left;"><br>
+    <div class="sidepanel">
+        <span class="sidepanel-title">Search</span>
         <form name="bibleSearch" accept-charset="utf-8">
-            <input type="text" name="title" size="8"> 권
-            <input type="text" name="chapter" size="3"> 장
-            <input type="text" name="paragraph" size="3"> 절
-            <input type="button" value="검색" onclick="requestBibleByChapter()">
-        </form>
-        <br>
+            &nbsp<input type="text" name="title" size="8"> 권
+                <input type="text" name="chapter" size="3"> 장
+                <input type="button" value="검색" onclick="requestBibleByChapter()">
+            </form>
+            <br>
         <form name="bibleWordSearch" accept-charset="utf-8">
-            <input type="text" name="word" size="8"> 검색어
-            <input type="button" value="검색" onclick="requestBibleByWord()">
-        </form>
-        <br>
-        <textarea id = "receiveMsg" name = "comment" cols = "54" rows = "46"></textarea>
-        <!-- <div id = "receiveMsg" ></div> -->
-    </div>
-    <canvas id="map"  width = "800" height = 400 ></canvas>
-    <!--
-    <div id ="map_div" >
-    </div> -->
-    <div id ="footer" style="background-color:#FFA500; clear: both;">
-        @IT Center
+            &nbsp<input type="text" name="place" size="12"> 성경지명
+                <input type="button" value="이동" onclick="moveToPlace()">
+            </form>
+            <br>
     </div>
 </div>
+<div id = "mouse-position">Mouse Move </div>
+<div id ="receiveMsg" style="overflow:scroll; height:400px; background-color:#eee; font-size:0.9em; font-family: 돋움체; clear: both;"></div>
 
 <script>
 
-    function reqeustAndShowContents( searchParam ){
-        var jsonStr = JSON.stringify( searchParam );
-        console.log( "send param : " + jsonStr );
+    var container = document.getElementById('popup');
+    var content = document.getElementById('popup-content');
+    var closer = document.getElementById('popup-closer');
 
-        url = "http://13.124.86.217:8082?" + jsonStr;
-        httpRequest("POST", url, function( http ){
-            var resObj = JSON.parse( http.responseText );
+    var overlay = createOverlay( container );    // container
 
-            if( resObj.result != "undefined" && resObj.result == "fail" ){
-                $('#receiveMsg').append( resObj.error + "\r\n" );
-            }
-            else {
-                if (resObj.length != "undefined") {    // 배열로 받아올 경우
-                    for (idx in resObj) {
-                        $('#receiveMsg').append( resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "\r\n" + resObj[idx].content + "\r\n");
-                        // $('#receiveMsg').append( resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "<br>" + resObj[idx].content + "<br><br>");
-                    }
-                } else {
-                    $('#receiveMsg').append(  resObj.title + " " + resObj.chapter + ":" + resObj.paragraph + "\r\n" + resObj.content + "\r\n");
-                    // $('#receiveMsg').append(  resObj.title + " " + resObj.chapter + ":" + resObj.paragraph + "<br>" + resObj.content + "<br>");
-                }
-            }
+    var wmsLayer1 = new ol.layer.Tile({
+        source: new ol.source.Stamen({
+            layer: 'terrain-background'
+        })
+    });
 
+    wmsLayer1.set( 'id', 1, false );
+    wmsLayer1.set( 'visibleRange', { max : 13, min : 1 }   );
+
+    var wmsLayer2 = new ol.layer.Tile({
+        source: new ol.source.OSM({
+            // attributions: [
+            //    'All maps © <a href="https://www.opencyclemap.org/">OpenCycleMap</a>',
+            //     ol.source.OSM.ATTRIBUTION
+            // ],
+            url : 'https://{a-c}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey=bc6eff89a9cc457995e03c54c19e24d5'   // Open Cycle Map
+        })
+    });
+
+    wmsLayer2.set( 'id', 2, false );
+    wmsLayer2.set( 'visibleRange', { max : 18, min : 13 }   );
+
+    var view = new ol.View({
+        center: [3942321.454123089,3792452.570684223],
+        maxZoom : 18,
+        minZoom : 5,
+        zoom: 8
+
+    });
+
+    var scaleLineControl = new ol.control.ScaleLine();
+    scaleLineControl.setUnits("metric");
+
+    var map = new ol.Map({
+        layers: [ wmsLayer1, wmsLayer2 ],
+        overlays: [overlay],
+        target: 'map',
+        controls: ol.control.defaults({
+            attributionOptions:  ({    // @type {olx.control.AttributionOptions}
+                collapsible: false
+            })
+        }).extend([ new ol.control.FullScreen({
+            source: 'fullscreen'
+        }), scaleLineControl]),
+        view: view
+    });
+
+    var layerManager = new LayerManager();
+
+
+    function addAllLayersToMap( layerContainer ){
+        layerContainer.layers.sort( function( layerA, layerB ){
+            var aID = layerA.get( 'id' );
+            var bID = layerB.get( 'id' );
+            if( aID < bID )
+                return -11;
+            if( aID > bID )
+                return 1;
+            return 0;
         } );
+
+        for( idx in layerContainer.layers ){
+            console.log( "Inserted Layer ID : " + layerContainer.layers[idx].get( 'id'));
+            map.addLayer(  layerContainer.layers[ idx ] );
+        }
     }
 
-    function requestBibleByWord(){
+    (function(){
+        for( idx in bibleMapLayers ){
+            var layer = bibleMapLayers[idx];
+            new ShapeFileDownload( layer.url, layer.order, layer.style, layerManager.getLayerContainer(), addAllLayersToMap );
+        }
+    }());
+
+    map.on('precompose', function(evt) {
+        var zoom = map.getView().getZoom();
+        $("#mouse-position").html( "zoom level : " + zoom ); // + zoom;
+
+        var layers = map.getLayers();
+
+        layers.forEach( function(layer){
+            var visibleRange = layer.get('visibleRange');
+            if( typeof visibleRange !== "undefined") {
+
+                if ( visibleRange.min <= zoom && zoom <= visibleRange.max ){
+                    layer.setVisible( true );
+                }
+                else {
+                    layer.setVisible( false );
+                }
+            }
+        } );
+    });
+
+    var clickedPos = null;
+    var selectedFeatures = null;
+
+    map.on('click', function(evt) {
+        clickedPos = evt.coordinate;
+        /*
+         var layers = map.getLayers();
+
+         layers.forEach( function(layer){
+         console.log( layer.get('id') );
+         } );
+         */
+    });
+
+    map.on('singleclick', function(evt) {
+        clickedPos = evt.coordinate;
+        //  var hdms = ol.coordinate.toStringHDMS(ol.proj.transform(
+//                coordinate, 'EPSG:3857', 'EPSG:4326'));
+
+        //content.innerHTML = '<p>You clicked here:</p><code>' + hdms +
+        // '</code>';
+        // content.innerHTML = "I'm a david!";
+        // overlay.setPosition(coordinate);
+        if( selectedFeatures )
+            selectedFeatures.clear();
+
+    });
+
+
+    var selectClick = new ol.interaction.Select({
+        // layers: [ layer명 ]
+        condition: ol.events.condition.click
+    });
+
+    map.addInteraction( selectClick );
+
+    selectClick.on('select', function(e) {
+        var len = e.target.getFeatures().getLength();
+        var selLen = e.selected.length;
+        selectedFeatures = e.target.getFeatures();
+
+        if( selLen > 0 ){
+            var feature = e.selected[0];
+            var posName = feature.get("name");
+            requestBibleByWord( posName );
+            content.innerHTML = posName;
+            overlay.setPosition( clickedPos );
+        }
+    });
+
+    closer.onclick = function() {
+        overlay.setPosition(undefined);
+        closer.blur();
+        return false;
+    };
+
+    function moveToPlace(){
+
+        if( bibleWordSearch.place.value == "" ){
+            alert ("Please insert place! for search!");
+        }else{
+            var placeWord = bibleWordSearch.place.value;
+            $('#receiveMsg').empty();
+            var searchParam = {
+                type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
+                option: {}
+            };
+            searchParam.option.content= { $regex : placeWord };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
+            reqeustAndShowContents( searchParam );
+
+            moveToPlaceByWord( placeWord );
+        }
+    }
+
+    function moveToPlaceByWord( word ){
+        var pos = layerManager.getPoiByName( word );
+        if( word == "예루살렘"){
+            pos.zoomIn = 13;
+        }
+
+        if( pos ) {
+            console.log(pos.x + ", " + pos.y + ", zoomIn : " + pos.zoomIn );
+            flyTo( view, [pos.x, pos.y ] , pos.zoomIn, function( complete){
+                if( complete == true ){
+                    content.innerHTML = word;
+                    overlay.setPosition( [pos.x, pos.y] );
+                }
+            });
+            // moveTo( view, [pos.x, pos.y ] , pos.zoomIn );
+        }
+    }
+
+
+
+    function requestBibleByWord( word ){
         $('#receiveMsg').empty();
         var searchParam = {
             type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
             option: {}
         };
 
-        if( bibleWordSearch.word.value == "" ){
-            alert ("Please insert word! for search!");
-        }else{
-            searchParam.option.content= { $regex : bibleWordSearch.word.value };
-            reqeustAndShowContents( searchParam );
-        }
+        bibleWordSearch.place.value =  word;
 
+        var searchWord = word;
+        searchParam.option.content= { $regex : searchWord };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
+        reqeustAndShowContents( searchParam );
     }
 
     function requestBibleByChapter(){
@@ -134,119 +368,59 @@
             consistSearchOpt( bibleSearch.chapter );
         }
 
+        /*
         if( bibleSearch.paragraph.value != "" ){
             consistSearchOpt( bibleSearch.paragraph );
-        }
+        }*/
 
         reqeustAndShowContents( searchParam );
     }
-////////////////////////////////////////////////////////////////////
 
-    var file = "thematicmapping/TM_WORLD_BORDERS_SIMPL-0.3.shp";
+    function reqeustAndShowContents( searchParam ){
+        var jsonStr = JSON.stringify( searchParam );
 
-    window.onload = function() {
-        var b = new BinaryAjax(file, onBinaryAjaxComplete, onBinaryAjaxFail);
-    }
+        url = "http://13.124.86.217:8082?" + jsonStr;
+        httpRequest("POST", url, function( http ){
+            var resObj = JSON.parse( http.responseText );
 
-    function onBinaryAjaxFail() {
-        alert('failed to load ' + file);
-    }
-
-    function onBinaryAjaxComplete(oHTTP) {
-        var binFile = oHTTP.binaryResponse;
-
-        if (window.console && window.console.log) console.log('got data, parsing shapefile');
-
-        var shpFile = new ShpFile(binFile);
-
-        if (shpFile.header.shapeType != ShpType.SHAPE_POLYGON && shpFile.header.shapeType != ShpType.SHAPE_POLYLINE) {
-            alert("Shapefile does not contain Polygon records (found type: "+shp.shapeType+")");
-        }
-
-        //if (window.console && window.console.log) console.log(records);
-        render(shpFile.records);
-    }
-
-    function render(records) {
-
-        if (window.console && window.console.log) console.log('creating canvas and rendering');
-
-        var canvas = document.getElementById('map');
-
-        if (window.G_vmlCanvasManager) {
-            G_vmlCanvasManager.initElement(canvas);
-        }
-
-        var t1 = new Date().getTime();
-        if (window.console && window.console.log) console.log('calculating bbox...');
-
-        var box;
-        for (var i = 0; i < records.length; i++) {
-            var record = records[i];
-            if (record.shapeType == ShpType.SHAPE_POLYGON || record.shapeType == ShpType.SHAPE_POLYLINE) {
-                var shp = record.shape
-                for (var j = 0; j < shp.rings.length; j++) {
-                    var ring = shp.rings[j];
-                    for (var k = 0; k < ring.length; k++) {
-                        if (!box) {
-                            box = { x: ring[k].x, y: ring[k].y, width: 0, height: 0 };
+            if( resObj.result != "undefined" && resObj.result == "fail" ){
+                $('#receiveMsg').append( resObj.error + "\r\n" );
+            }
+            else {
+                var spaceStr = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                if (resObj.length != "undefined") {    // 배열로 받아올 경우
+                    for (idx in resObj) {
+                        if( searchParam.type == "Word" ){
+                            // var strConvText = makeStrongWordInText(  searchParam.option.content.$regex, resObj[idx].content, '#9C1AC8'  );
+                            if( examinRightWordinText( searchParam.option.content.$regex, resObj[idx].content ) == true ){
+                                var strConvText = makeStrongInText( layerManager, searchParam.option.content.$regex, resObj[idx].content );
+                                $('#receiveMsg').append(resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "<br>" + spaceStr + strConvText + "<br>");
+                            }
+                        }else {
+                            var strConvText = makeStrongWordOfLocation( layerManager, resObj[idx].content );
+                            $('#receiveMsg').append(resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "<br>" + spaceStr + strConvText + "<br>");
                         }
-                        else {
-                            var l = Math.min(box.x, ring[k].x);
-                            var t = Math.min(box.y, ring[k].y);
-                            var r = Math.max(box.x+box.width, ring[k].x);
-                            var b = Math.max(box.y+box.height, ring[k].y);
-                            box.x = l;
-                            box.y = t;
-                            box.width = r-l;
-                            box.height = b-t;
+                    }
+                } else {
+                    if( searchParam.type == "Word" ){
+                        if( examinRightWordinText( searchParam.option.content.$regex, resObj[idx].content ) == true ) {
+                            // var strConvText = makeStrongWordInText(  searchParam.option.content.$regex, resObj[idx].content, '#9C1AC8'  );
+                            var strConvText = makeStrongInText( layerManager, searchParam.option.content.$regex, resObj[idx].content);
+                            $('#receiveMsg').append(resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "<br>" + spaceStr + strConvText + "<br>");
                         }
+                    } else {
+                        var strConvText = makeStrongWordOfLocation( layerManager, resObj[idx].content );
+                        $('#receiveMsg').append(resObj.title + " " + resObj.chapter + ":" + resObj.paragraph + "<br>" + spaceStr + strConvText + "<br>");
                     }
                 }
             }
-        }
 
-        var t2 = new Date().getTime();
-        if (window.console && window.console.log) console.log('found bbox in ' + (t2 - t1) + ' ms');
+            $('#receiveMsg').append( "<br>" );
 
-        t1 = new Date().getTime();
-        if (window.console && window.console.log) console.log('starting rendering...');
-
-        var ctx = canvas.getContext('2d');
-
-        var sc = Math.min(800 / box.width, 400 / box.height);
-
-        ctx.fillStyle = '#ccccff';
-        ctx.fillRect(0,0,800,400);
-
-        ctx.lineWidth = 0.5;
-        ctx.strokeStyle = '#888888';
-        ctx.fillStyle = '#fff8f0';
-        ctx.beginPath();
-        for (var i = 0; i < records.length; i++) {
-            var record = records[i];
-            if (record.shapeType == ShpType.SHAPE_POLYGON || record.shapeType == ShpType.SHAPE_POLYLINE) {
-                var shp = record.shape;
-                for (var j = 0; j < shp.rings.length; j++) {
-                    var ring = shp.rings[j];
-                    if (ring.length < 1) continue;
-                    ctx.moveTo((ring[0].x - box.x) * sc, 400 - (ring[0].y - box.y) * sc);
-                    for (var k = 1; k < ring.length; k++) {
-                        ctx.lineTo((ring[k].x - box.x) * sc, 400 - (ring[k].y - box.y) * sc);
-                    }
-                }
-            }
-        }
-        ctx.fill();
-        ctx.stroke();
-        t2 = new Date().getTime();
-        if (window.console && window.console.log) console.log('done rendering in ' + (t2 - t1) + ' ms');
+        } );
     }
-
 
 
 </script>
-
-
 </body>
 </html>

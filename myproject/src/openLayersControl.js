@@ -2,12 +2,6 @@
  * Created by Administrator on 2017-06-06.
  */
 
- var layerContainer = {
-     layers : [],
-     totalCount : 9,
-     poiLayer : {}
- };
-
  var bibleMapLayers = [
      { url : 'biblemap/110m-admin-0-countries', order: 1, style: {
              visibleRange : { max : 16, min : 1 },
@@ -54,15 +48,21 @@
  ];
 
 
- function LayerContainerFunc( layerContainer ){
-     this.layerContainer = layerContainer;
+ function LayerManager( ){
+     this.layerContainer = {
+         layers : [],
+         totalCount : 9,
+         poiLayer : {}
+     };
  }
 
- LayerContainerFunc.prototype.getPoiByName = function( name ){
+ LayerManager.prototype.getPoiByName = function( name ){
      return this.layerContainer.poiLayer[ name ];
  };
 
-
+ LayerManager.prototype.getLayerContainer = function(){
+     return this.layerContainer;
+ }
 
 
  function createOverlay( divID ){    // container

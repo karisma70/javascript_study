@@ -238,7 +238,7 @@ function ShapeFileDownload( url, layerId, style, layerContainer, wholeCompleteCa
         layerContainer.layers.push( shapeLayer );
 
         if( layerContainer.totalCount <= layerContainer.layers.length ){
-            wholeCompleteCallback();
+            wholeCompleteCallback( layerContainer );
         }
 
     };   // end of callback
