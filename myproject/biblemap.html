@@ -19,6 +19,11 @@
 
     <script src="openLayers_v4.1.1/ol.js"></script>
     <style>
+        table { border-spacing: 2px;
+        }
+        td { padding:2px;
+        }
+
         .fullscreen:-moz-full-screen {
             height: 100%;
         }
@@ -45,20 +50,21 @@
 
         .map {
             width: 80%;
-            height: 140%;
+            height: 120%;
+            outline: "blue solid 0.15em";
             float: left;
         }
 
         .sidepanel {
-            background: #EEFCB4;
-            width: 20%;
-            height: 140%;
+            background: white;
+            width: 18%;
+            height: 120%;
             float: left;
         }
 
         .sidepanel-title {
             width: 100%;
-            font-size: 2em;
+            font-size: 1em;
             color: #00ffff;
             display: block;
             text-align: center;
@@ -106,40 +112,105 @@
         .ol-popup-closer:after {
             content: "✖";
         }
+
+       /*  #receiveMsg { background:url("./image/empty_book2.png") no-repeat; background-size: 100% 100% } */
+
     </style>
 </head>
 <body>
 <div id="fullscreen" class="fullscreen">
+    <div class="sidepanel" style = "border: 1px solid black;">
+        <!-- <span class="sidepanel-title"> <font  color = "#04520C">Search</font></span> -->
+        <form name="bibleSearch" style="font-size:0.8em;" accept-charset="utf-8">
+            <br>
+            &nbsp<select name="title" style="height:1.7em; font-size:1.0em;" >
+            <option>창세기</option><option>출애굽기</option><option>레위기</option><option>민수기</option><option>신명기</option>
+            <option>여호수아</option><option>사사기</option><option>룻기</option><option>사무엘상</option><option>사무엘하</option>
+            <option>열왕기상</option><option>열왕기하</option><option>역대상</option><option>역대하</option><option>에스라</option>
+            <option>느헤미야</option><option>에스더</option><option>욥기</option><option>시편</option><option>잠언</option>
+            <option>전도서</option>아가<option>이사야</option><option>예레미야</option><option>예레미야애가</option>
+            <option>에스겔</option><option>다니엘</option><option>호세아</option><option>요엘</option><option>아모스</option>
+            <option>오바댜</option><option>요나</option><option>미가</option><option>나훔</option><option>하박국</option>
+            <option>스바냐</option><option>학개</option><option>스가랴</option><option>말라기</option><option>마태복음</option>
+            <option>마가복음</option><option>누가복음</option><option>요한복음</option><option>사도행전</option><option>로마서</option>
+            <option>고린도전서</option><option>고린도후서</option><option>갈라디아서</option><option>에베소서</option><option>빌립보서</option>
+            <option>골로새서</option><option>데살로니가전서</option><option>데살로니가후서</option><option>디모데전서</option><option>디모데후서</option>
+            <option>디도서</option><option>빌레몬서</option><option>히브리서</option><option>야고보서</option><option>베드로전서</option>
+            <option>베드로후서</option><option>요한1서</option><option>요한2서</option><option>요한3서</option><option>유다서</option>
+            <option>요한계시록</option>
+        </select>
+            <input type="text" name="chapter" size="2"  style="font-size:1.0em;"> 장
+            <input type="button" value="검색" onclick="requestBibleByChapter()">
+        </form>
+        <br>
+        <form name="bibleWordSearch" style="font-size:0.8em;" accept-charset="utf-8">
+            &nbsp<input type="text" name="place" size="12" style="font-size:1.0em;"> 지명
+            <input type="button" value="검색" style="font-size:1.0em;" onclick="moveToPlace()">
+        </form>
+        <br>
+        <div id = "mouse-position">Mouse Move </div>
+    </div>
     <div id="map" class="map"></div>
-    <div id="popup" class="ol-popup">
-        <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-        <div id="popup-content"></div>
-    </div>
-    <div class="sidepanel">
-        <span class="sidepanel-title">Search</span>
-        <form name="bibleSearch" accept-charset="utf-8">
-            &nbsp<input type="text" name="title" size="8"> 권
-                <input type="text" name="chapter" size="3"> 장
-                <input type="button" value="검색" onclick="requestBibleByChapter()">
-            </form>
-            <br>
-        <form name="bibleWordSearch" accept-charset="utf-8">
-            &nbsp<input type="text" name="place" size="12"> 성경지명
-                <input type="button" value="이동" onclick="moveToPlace()">
-            </form>
-            <br>
-    </div>
 </div>
-<div id = "mouse-position">Mouse Move </div>
-<div id ="receiveMsg" style="overflow:scroll; height:400px; background-color:#eee; font-size:0.9em; font-family: 돋움체; clear: both;"></div>
+<div id="popup" class="ol-popup">
+    <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+    <div id="popup-content"></div>
+</div>
+<div id ="receiveMsg" style="border: 1px solid black; position: relative; top: 10px; overflow-y:scroll; height:300px; line-height: 150%; font-size:0.8em; font-family: 돋움체; clear: both;">
+</div>
+
 
 <script>
+
+    bibleSearch.chapter.value = 1;
+    bibleWordSearch.place.value = "예루살렘";
 
     var container = document.getElementById('popup');
     var content = document.getElementById('popup-content');
     var closer = document.getElementById('popup-closer');
 
     var overlay = createOverlay( container );    // container
+
+
+    ol.Feature.prototype.getLayer = function(map) {
+        var this_ = this, layer_, layersToLookFor = [];
+        /**
+         * Populates array layersToLookFor with only
+         * layers that have features
+         */
+        var check = function(layer){
+            var source = layer.getSource();
+            if(source instanceof ol.source.Vector){
+                var features = source.getFeatures();
+                if(features.length > 0){
+                    layersToLookFor.push({
+                        layer: layer,
+                        features: features
+                    });
+                }
+            }
+        };
+        //loop through map layers
+        map.getLayers().forEach(function(layer){
+            if (layer instanceof ol.layer.Group) {
+                layer.getLayers().forEach(check);
+            } else {
+                check(layer);
+            }
+        });
+        layersToLookFor.forEach(function(obj){
+            var found = obj.features.some(function(feature){
+                return this_ === feature;
+            });
+            if(found){
+                //this is the layer we want
+                layer_ = obj.layer;
+            }
+        });
+        return layer_;
+    };
+
+
 
     var wmsLayer1 = new ol.layer.Tile({
         source: new ol.source.Stamen({
@@ -166,7 +237,7 @@
     var view = new ol.View({
         center: [3942321.454123089,3792452.570684223],
         maxZoom : 18,
-        minZoom : 5,
+        minZoom : 4,
         zoom: 8
 
     });
@@ -174,15 +245,23 @@
     var scaleLineControl = new ol.control.ScaleLine();
     scaleLineControl.setUnits("metric");
 
+    var raster = new ol.layer.Tile({
+        source: new ol.source.OSM()
+    });
+
+    raster.set( 'id', 2, false );
+    raster.set( 'visibleRange', { max : 18, min : 13 }   );
+
     var map = new ol.Map({
-        layers: [ wmsLayer1, wmsLayer2 ],
+        // layers: [ wmsLayer1, wmsLayer2 ],
+        layers: [ wmsLayer1, raster ],
         overlays: [overlay],
         target: 'map',
         controls: ol.control.defaults({
-            attributionOptions:  ({    // @type {olx.control.AttributionOptions}
-                collapsible: false
-            })
-        }).extend([ new ol.control.FullScreen({
+                attributionOptions:  ({    // @type {olx.control.AttributionOptions}
+                    collapsible: false
+                }) }).
+        extend([ new ol.control.FullScreen({
             source: 'fullscreen'
         }), scaleLineControl]),
         view: view
@@ -279,7 +358,11 @@
         if( selLen > 0 ){
             var feature = e.selected[0];
             var posName = feature.get("name");
-            requestBibleByWord( posName );
+            var layer = feature.getLayer(map);
+            var id = layer.get("id");
+            if( id > 1) {   // 전세계 폴리곤 경계임
+                requestBibleByWord(posName);
+            }
             content.innerHTML = posName;
             overlay.setPosition( clickedPos );
         }
@@ -297,6 +380,8 @@
             alert ("Please insert place! for search!");
         }else{
             var placeWord = bibleWordSearch.place.value;
+            placeWord = removeSpaceInWord( placeWord );
+            // placeWord = placeWord.replace(/^\s*|\s*$/g, ''); // 좌우 공백 제거
             $('#receiveMsg').empty();
             var searchParam = {
                 type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
@@ -316,13 +401,20 @@
         }
 
         if( pos ) {
-            console.log(pos.x + ", " + pos.y + ", zoomIn : " + pos.zoomIn );
-            flyTo( view, [pos.x, pos.y ] , pos.zoomIn, function( complete){
-                if( complete == true ){
-                    content.innerHTML = word;
-                    overlay.setPosition( [pos.x, pos.y] );
-                }
-            });
+            var curZoom = map.getView().getZoom();
+            if( pos.zoomIn <= (curZoom +2) && pos.zoomIn >= (curZoom-2) ){
+                moveTo( view, [pos.x, pos.y], pos.zoomIn );
+                content.innerHTML = word;
+                overlay.setPosition( [pos.x, pos.y]);
+            }
+            else {
+                flyTo(view, [pos.x, pos.y], pos.zoomIn, function (complete) {
+                    if (complete == true) {
+                        content.innerHTML = word;
+                        overlay.setPosition( [pos.x, pos.y]);
+                    }
+                });
+            }
             // moveTo( view, [pos.x, pos.y ] , pos.zoomIn );
         }
     }
@@ -387,34 +479,47 @@
                 $('#receiveMsg').append( resObj.error + "\r\n" );
             }
             else {
-                var spaceStr = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                $('#receiveMsg').append( "<br><table>");
+                var chapterStart =  "<td width = \"110\">&nbsp&nbsp";
+                var contentStart = "<td>";
+                var endString = "</td>";
+
+                function appendReceiveMsg( chapterStart, endString, resObj, contentStart, strContent ){
+                    $('#receiveMsg').append( "<tr>");
+                    $('#receiveMsg').append( chapterStart + "<strong>" + resObj.title + " " + resObj.chapter + ":" + resObj.paragraph +"</strong>"+ endString + contentStart + strContent + endString );
+                    $('#receiveMsg').append( "</tr>");
+                }
+
                 if (resObj.length != "undefined") {    // 배열로 받아올 경우
                     for (idx in resObj) {
                         if( searchParam.type == "Word" ){
                             // var strConvText = makeStrongWordInText(  searchParam.option.content.$regex, resObj[idx].content, '#9C1AC8'  );
                             if( examinRightWordinText( searchParam.option.content.$regex, resObj[idx].content ) == true ){
                                 var strConvText = makeStrongInText( layerManager, searchParam.option.content.$regex, resObj[idx].content );
-                                $('#receiveMsg').append(resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "<br>" + spaceStr + strConvText + "<br>");
+                                appendReceiveMsg( chapterStart, endString, resObj[idx], contentStart, strConvText );
                             }
                         }else {
                             var strConvText = makeStrongWordOfLocation( layerManager, resObj[idx].content );
-                            $('#receiveMsg').append(resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "<br>" + spaceStr + strConvText + "<br>");
+                            // $('#receiveMsg').append(resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "<br>" + spaceStr + strConvText + "<br>");
+                            appendReceiveMsg( chapterStart, endString, resObj[idx], contentStart, strConvText );
                         }
                     }
-                } else {
+                } else {        // 수신받은 데이터가 배열이 아니고 하나만 있을 경우
                     if( searchParam.type == "Word" ){
-                        if( examinRightWordinText( searchParam.option.content.$regex, resObj[idx].content ) == true ) {
+                        if( examinRightWordinText( searchParam.option.content.$regex, resObj.content ) == true ) {
                             // var strConvText = makeStrongWordInText(  searchParam.option.content.$regex, resObj[idx].content, '#9C1AC8'  );
-                            var strConvText = makeStrongInText( layerManager, searchParam.option.content.$regex, resObj[idx].content);
-                            $('#receiveMsg').append(resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "<br>" + spaceStr + strConvText + "<br>");
+                            var strConvText = makeStrongInText( layerManager, searchParam.option.content.$regex, resObj.content);
+                            // $('#receiveMsg').append(resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "<br>" + spaceStr + strConvText + "<br>");
+                            appendReceiveMsg( chapterStart, endString, resObj, contentStart, strConvText );
                         }
                     } else {
-                        var strConvText = makeStrongWordOfLocation( layerManager, resObj[idx].content );
-                        $('#receiveMsg').append(resObj.title + " " + resObj.chapter + ":" + resObj.paragraph + "<br>" + spaceStr + strConvText + "<br>");
+                        var strConvText = makeStrongWordOfLocation( layerManager, resObj.content );
+                        // $('#receiveMsg').append(resObj.title + " " + resObj.chapter + ":" + resObj.paragraph + "<br>" + spaceStr + strConvText + "<br>");
+                        appendReceiveMsg( chapterStart, endString, resObj, contentStart, strConvText );
                     }
                 }
             }
-
+            $('#receiveMsg').append( "<br></table >");
             $('#receiveMsg').append( "<br>" );
 
         } );

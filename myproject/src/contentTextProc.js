@@ -14,6 +14,11 @@ function examinRightWordinText( strWord, strText ){
     return true;
 }
 
+function removeSpaceInWord( strText){
+    strText = strText.replace(/^\s*|\s*$/g, '');
+    return strText;
+} // 좌우 공백 제거
+
 
 // 검색어이긴 하지만 지도 데이터에 없을때 보라색
 //  검색어이긴 하지만 지도 데이터에 있을때 군청색
@@ -85,7 +90,7 @@ function makeStrongInText( LayerManager, searchWord, strText ) {
     for ( pos in layerContainer.poiLayer) {
         if (layerContainer.poiLayer.hasOwnProperty( pos ) && typeof layerContainer.poiLayer[ pos ] === "object") {
             var color = "";
-            if( location == searchWord ) {
+            if( pos == searchWord ) {
                 boolFind = true;
                 color = "#B404AE";  // 핑크색 , //  텍스트 내에 검색어와 지명이 일치할때
                 retStrText = makeStrongWordInText( LayerManager, pos, retStrText, color );

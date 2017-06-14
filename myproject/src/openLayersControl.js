@@ -6,9 +6,10 @@
      { url : 'biblemap/110m-admin-0-countries', order: 1, style: {
              visibleRange : { max : 16, min : 1 },
              fillColor : 'rgba( 255, 255, 255, 0.001)',
-             lineStroke : {  color: [234, 179, 74], width : 2, opacity: 0.01  },
-             textStroke : { prop: 'Name2', align: 'center', baseline: 'middle', font : 'normal 17px 돋움', color: '#BBDBF5', outlineColor : 'black', outlineWidth : 3 }}
+             lineStroke : {  color: [183, 181, 181], width : 2, opacity: 0.01  },
+             //textStroke : { prop: 'Name2', align: 'center', baseline: 'middle', font : 'normal 17px 돋움', color: '#BBDBF5', outlineColor : 'black', outlineWidth : 3 }}
             // textStroke : { prop: 'Name2', align: 'center', baseline: 'middle', font : 'Normal 17px Arial', color: "#6E6E6E" }}
+                textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 15px 돋움', color: 'white', outlineColor : '#5C5C5C', outlineWidth : 4 }}
      },
      { url: 'biblemap/israel_pale/river_polyline',  order: 2, style: {
              visibleRange : { max : 16,  min : 8 },
@@ -25,24 +26,24 @@
      },
      { url : 'biblemap/AD_level_7_poi',  order: 4, style: {
          visibleRange : { max : 16 , min : 7 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'bold 13px 돋움', color: "black", outlineColor : "white", outlineWidth : 2  } }
+         textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "black", outlineWidth : 3  } }
      },
      { url : 'biblemap/AD_level_8_poi',  order: 5, style: {
          visibleRange : { max : 16 , min : 8 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'bold 13px 돋움', color: "black", outlineColor : "white", outlineWidth : 2  } }
+         textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "black", outlineWidth : 3  } }
      },
      { url: 'biblemap/AD_israel_admin_poi',  order: 6, style: {
          visibleRange : { max : 16 , min : 7 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 14px 돋움', color: 'black', outlineColor : 'white', outlineWidth : 2  }}
+         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'normal 13px 돋움', color: 'white', outlineColor : '#4C4B4B', outlineWidth : 4  }}
      },
      {
          url: 'biblemap/AD_admin_poi',  order: 6, style: {
          visibleRange : { max : 16 , min : 6 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 14px 굴림', color: 'black', outlineColor : 'white', outlineWidth : 2  }}
+         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'normal 13px 돋움', color: 'white', outlineColor : '#4C4B4B', outlineWidth : 4  }}
      },
      { url: 'biblemap/BC_admin_poi',  order: 7, style: {
          visibleRange : { max : 16 , min : 7 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 14px 굴림', color: 'black', outlineColor : 'white', outlineWidth : 2  }}
+         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'normal 13px 돋움', color: 'white', outlineColor : '#4C4B4B', outlineWidth : 4  }}
      }
 
  ];
@@ -118,15 +119,40 @@ function flyTo( view, location, zoomIn, done) {
     }, callback);
 }
 
-function moveTo( view, location, zoomIn ) {
+function moveTo( view, location, zoomIn, done ) {
     zoomIn += 1;
 
     if( zoomIn < 10 )
         zoomIn = 10;
 
+    var parts = 2;
+    var called = false;
+
+    function callback(complete) {
+        --parts;
+        if (called) {
+            return;
+        }
+        if (parts === 0 || !complete) {
+            called = true;
+            done(complete);
+        }
+    }
+
     view.animate({
         center: location,
         zoom : zoomIn,
-        duration: 2000
-    });
+        duration: 1000
+    }, callback );
 }
+
+function isExistStringPropInObj( obj, prop ) {
+    var result = false;
+    if ( obj.hasOwnProperty(prop) ){
+        if( typeof obj[prop] === "string") {
+            result = true;
+        }
+    }
+    return result;
+}
+

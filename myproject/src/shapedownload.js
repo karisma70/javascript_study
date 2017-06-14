@@ -49,6 +49,7 @@ function convertUTF8String( strLabel ) {
     return textLabel;
 }
 
+/*
 function genLayerFromWkt( wkt, attrs, bTransform, format, style ) {
 
     var feature = {};
@@ -67,6 +68,34 @@ function genLayerFromWkt( wkt, attrs, bTransform, format, style ) {
         var strLabel = attrs.values[style.textStroke.prop].toString();
         var textLabel = convertUTF8String( strLabel );
         feature.setProperties({'name': textLabel });
+    }
+
+    return feature;
+}
+*/
+
+function genLayerFromWkt( wkt, attrs, bTransform, format, paramProp ) {
+
+    var feature = {};
+
+    if (bTransform == true) {
+        feature = format.readFeature(wkt, {
+            dataProjection: 'EPSG:4326',
+            featureProjection: 'EPSG:3857'
+        });
+    }
+    else {
+        feature = format.readFeature(wkt);
+    }
+
+    if( paramProp ) {
+        var wktProp = {};
+        var strLabel = attrs.values[paramProp].toString();
+        wktProp[paramProp] = convertUTF8String(strLabel);
+
+        feature.setProperties( wktProp );
+        // var str = feature.get( paramProp );
+        // console.log( str );
     }
 
     return feature;
@@ -166,17 +195,41 @@ function ShapeFileDownload( url, layerId, style, layerContainer, wholeCompleteCa
             // points are easy!
             if (shpFile.header.shapeType == ShpType.SHAPE_POINT) {
                 var wkt = 'POINT(' + record.shape.x + ' ' + record.shape.y + ')';
-                var feature = genLayerFromWkt( wkt, attrs, bTransform, format, style );
-                features.push( feature );
 
-                var textString = feature.get('name');
-                if (textString) {
-                    if( textString == "우르"){
-                        console.log( "textString : " + textString + ", zoomIn : " + style.visibleRange.min)
+                for( prop in attrs.values ){
+                    if( isExistStringPropInObj( attrs.values, prop ) == false)
+                        continue;
+
+                    if( prop == 'id')
+                        continue;
+
+                    var strLabel = attrs.values[prop].toString();
+                    strLabel = removeSpaceInWord(strLabel);
+                    if( strLabel == "")
+                        continue;
+
+                    var feature = genLayerFromWkt(wkt, attrs, bTransform, format, prop );
+                    features.push(feature);
+
+                    // var textString = feature.get(style.textStroke.prop);
+                    var textString = feature.get( prop );
+                    if (textString) {
+                        if (textString == "우르") {
+                            console.log("textString : " + textString + ", zoomIn : " + style.visibleRange.min)
+                        }
+
+                        if( prop == "name2" || prop == "name3" ){
+                            console.log( url + ">>" + prop + ": " + textString  );
+                        }
+
+                        layerContainer.poiLayer[textString] = {
+                            x: record.shape.x,
+                            y: record.shape.y,
+                            zoomIn: style.visibleRange.min
+                        };
                     }
-                    layerContainer.poiLayer[ textString ] = { x: record.shape.x, y :record.shape.y, zoomIn: style.visibleRange.min };
-                }
 
+                } // end of for( prop in attrs.values )
             }
 
             // lines: not too hard--
@@ -189,7 +242,12 @@ function ShapeFileDownload( url, layerId, style, layerContainer, wholeCompleteCa
                 }
 
                 var wkt = 'LINESTRING(' + points.join(', ') + ')';
-                var feature = genLayerFromWkt( wkt, attrs, bTransform, format, style );
+                var feature = null;
+                if( typeof style.textStroke !== "undefined" && typeof style.textStroke.prop !== "undefined" ) {
+                    feature = genLayerFromWkt(wkt, attrs, bTransform, format, style.textStroke.prop);
+                }else{
+                    feature = genLayerFromWkt(wkt, attrs, bTransform, format, null );
+                }
                 features.push( feature );
             }
 
@@ -210,7 +268,7 @@ function ShapeFileDownload( url, layerId, style, layerContainer, wholeCompleteCa
                 }
 
                 var wkt = 'POLYGON(' + wktOuter.join(', ') + ')';
-                var feature = genLayerFromWkt( wkt, attrs, bTransform, format, style );
+                var feature = genLayerFromWkt( wkt, attrs, bTransform, format, style.textStroke.prop );
                 features.push( feature );
             }
         }  // end of  for (var i = 0; i < recsLen; i++) {
