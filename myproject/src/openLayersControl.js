@@ -9,7 +9,7 @@
              lineStroke : {  color: [183, 181, 181], width : 2, opacity: 0.01  },
              //textStroke : { prop: 'Name2', align: 'center', baseline: 'middle', font : 'normal 17px 돋움', color: '#BBDBF5', outlineColor : 'black', outlineWidth : 3 }}
             // textStroke : { prop: 'Name2', align: 'center', baseline: 'middle', font : 'Normal 17px Arial', color: "#6E6E6E" }}
-                textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 15px 돋움', color: 'white', outlineColor : '#5C5C5C', outlineWidth : 4 }}
+                textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'bold 15px 돋움', color: '#5C5C5C', outlineColor : 'white', outlineWidth : 2 }}
      },
      { url: 'biblemap/israel_pale/river_polyline',  order: 2, style: {
              visibleRange : { max : 16,  min : 8 },
@@ -23,6 +23,10 @@
      { url: 'biblemap/jesus_move',  order: 3, style: {
              visibleRange : { max : 16 , min : 11 },
              textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "black", outlineWidth : 3  }}
+     },
+     { url : 'biblemap/nature_poi_7_poi',  order: 4, style: {
+         visibleRange : { max : 16 , min : 7 },
+         textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "black", outlineWidth : 3  } }
      },
      { url : 'biblemap/AD_level_7_poi',  order: 4, style: {
          visibleRange : { max : 16 , min : 7 },
@@ -52,7 +56,7 @@
  function LayerManager( ){
      this.layerContainer = {
          layers : [],
-         totalCount : 9,
+         totalCount : 10,
          poiLayer : {}
      };
  }

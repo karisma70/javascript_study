@@ -89,13 +89,10 @@ function genLayerFromWkt( wkt, attrs, bTransform, format, paramProp ) {
     }
 
     if( paramProp ) {
-        var wktProp = {};
+        var wktProp = { };
         var strLabel = attrs.values[paramProp].toString();
         wktProp[paramProp] = convertUTF8String(strLabel);
-
         feature.setProperties( wktProp );
-        // var str = feature.get( paramProp );
-        // console.log( str );
     }
 
     return feature;
@@ -196,6 +193,8 @@ function ShapeFileDownload( url, layerId, style, layerContainer, wholeCompleteCa
             if (shpFile.header.shapeType == ShpType.SHAPE_POINT) {
                 var wkt = 'POINT(' + record.shape.x + ' ' + record.shape.y + ')';
 
+                var orgName = "";
+
                 for( prop in attrs.values ){
                     if( isExistStringPropInObj( attrs.values, prop ) == false)
                         continue;
@@ -214,15 +213,16 @@ function ShapeFileDownload( url, layerId, style, layerContainer, wholeCompleteCa
                     // var textString = feature.get(style.textStroke.prop);
                     var textString = feature.get( prop );
                     if (textString) {
-                        if (textString == "우르") {
-                            console.log("textString : " + textString + ", zoomIn : " + style.visibleRange.min)
-                        }
 
                         if( prop == "name2" || prop == "name3" ){
                             console.log( url + ">>" + prop + ": " + textString  );
                         }
 
+                        if( prop == "name" )
+                            orgName = textString;
+
                         layerContainer.poiLayer[textString] = {
+                            orgName : orgName,
                             x: record.shape.x,
                             y: record.shape.y,
                             zoomIn: style.visibleRange.min

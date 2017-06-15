@@ -156,13 +156,14 @@
     <a href="#" id="popup-closer" class="ol-popup-closer"></a>
     <div id="popup-content"></div>
 </div>
-<div id ="receiveMsg" style="border: 1px solid black; position: relative; top: 10px; overflow-y:scroll; height:300px; line-height: 150%; font-size:0.8em; font-family: 돋움체; clear: both;">
+<div id ="receiveMsg" style="border: 1px solid black; position: relative; top: 10px; overflow-y:scroll; width : 98%; height:300px; line-height: 150%; font-size:0.8em; font-family: 돋움체; clear: both;">
 </div>
 
 
 <script>
 
-    bibleSearch.chapter.value = 1;
+    bibleSearch.title.value ="출애굽기";
+    bibleSearch.chapter.value = 14;
     bibleWordSearch.place.value = "예루살렘";
 
     var container = document.getElementById('popup');
@@ -270,7 +271,6 @@
 
     var layerManager = new LayerManager();
 
-
     function addAllLayersToMap( layerContainer ){
         layerContainer.layers.sort( function( layerA, layerB ){
             var aID = layerA.get( 'id' );
@@ -294,6 +294,10 @@
             new ShapeFileDownload( layer.url, layer.order, layer.style, layerManager.getLayerContainer(), addAllLayersToMap );
         }
     }());
+
+    requestBibleByChapter();
+
+    ///////////////////////////////////////////////////////////////
 
     map.on('precompose', function(evt) {
         var zoom = map.getView().getZoom();
@@ -334,13 +338,8 @@
         //  var hdms = ol.coordinate.toStringHDMS(ol.proj.transform(
 //                coordinate, 'EPSG:3857', 'EPSG:4326'));
 
-        //content.innerHTML = '<p>You clicked here:</p><code>' + hdms +
-        // '</code>';
-        // content.innerHTML = "I'm a david!";
-        // overlay.setPosition(coordinate);
         if( selectedFeatures )
             selectedFeatures.clear();
-
     });
 
 
@@ -361,10 +360,27 @@
             var posName = feature.get("name");
             var layer = feature.getLayer(map);
             var id = layer.get("id");
-            if( id > 1) {   // 전세계 폴리곤 경계임
-                requestBibleByWord(posName);
+            if( id > 1) {   // 전세계 폴리곤 경계가 아닌 경우 검색 단어에 대한 성경검색 요청
+                requestBibleByWord(posName, function( ){
+                    var pos = layerManager.getPoiByName(posName);
+                    var youtube = "";
+
+                    requestPoiInfo(pos.orgName, function (poiObj) {
+                        if (poiObj.hasOwnProperty("youtube")) {
+                            youtube = poiObj["youtube"];
+                        }
+                        if (youtube != "") {
+                            content.innerHTML = posName + "<br><iframe width=\"320\" height=\"240\" src=\"" + youtube + "\" frameborder = \"0\" allowfullscreen></iframe>" ;
+                        } else
+                            content.innerHTML = posName;
+                    }, function(){
+                        content.innerHTML = posName;
+                    });
+                });
+            } else {        // 전세계 폴리곤 경계라면...
+                posName = "<현재 국가><br>" + "&nbsp" + posName;
+                content.innerHTML = posName;
             }
-            content.innerHTML = posName;
             overlay.setPosition( clickedPos );
         }
     });
@@ -384,14 +400,21 @@
             placeWord = removeSpaceInWord( placeWord );
             // placeWord = placeWord.replace(/^\s*|\s*$/g, ''); // 좌우 공백 제거
             $('#receiveMsg').empty();
+
+            moveToPlaceByWord( placeWord );
+
             var searchParam = {
                 type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
                 option: {}
             };
             searchParam.option.content= { $regex : placeWord };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
-            reqeustAndShowContents( searchParam );
 
-            moveToPlaceByWord( placeWord );
+            reqeustAndShowContents( searchParam, function(){
+                var placeWord = searchParam.option.content.$regex;
+                var orgName = layerManager.getPoiByName( placeWord ).orgName;
+                searchParam.option.content= { $regex : orgName };
+                reqeustAndShowContents( searchParam, null );
+            } );
         }
     }
 
@@ -422,7 +445,7 @@
 
 
 
-    function requestBibleByWord( word ){
+    function requestBibleByWord( word, competeCallback ){
         $('#receiveMsg').empty();
         var searchParam = {
             type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
@@ -433,7 +456,7 @@
 
         var searchWord = word;
         searchParam.option.content= { $regex : searchWord };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
-        reqeustAndShowContents( searchParam );
+        reqeustAndShowContents( searchParam, competeCallback );
     }
 
     function requestBibleByChapter(){
@@ -466,22 +489,70 @@
             consistSearchOpt( bibleSearch.paragraph );
         }*/
 
-        reqeustAndShowContents( searchParam );
+        reqeustAndShowContents( searchParam, null );
     }
 
-    function reqeustAndShowContents( searchParam ){
+    function requestPoiInfo( poiName, recvFunc,  errFunc){
+
+        var searchParam = {
+            type: "Poi",     // book, chapter, paragraph 등으로 구성된 검색
+            option: {}
+        };
+
+        searchParam.option["name"] = poiName;
+
         var jsonStr = JSON.stringify( searchParam );
 
         url = "http://13.124.86.217:8082?" + jsonStr;
+        console.log( url );
+        httpRequest("POST", url, function( http ) {
+            var resObj = JSON.parse( http.responseText );
+
+            if( resObj.result != "undefined" && resObj.result == "fail" ){
+                console.log( "requestPoiInfo() Fail!!!   param: " + jsonStr );
+                if( errFunc ){
+                    errFunc( resObj );
+                }
+                return;
+            }
+
+            if (resObj.length != "undefined") {    // 배열로 받아올 경우
+                if( resObj.length < 1){
+                    errFunc( resObj );
+                    return;
+                }
+                for( idx in resObj ){
+                    var poiObj = resObj[idx];
+                    recvFunc( poiObj );
+                    break;                  // 여러개 받아오더라도 하나만 처리하도록 한다.
+                }
+            }
+            else{
+                 recvFunc( resObj );
+            }
+
+        });
+    }
+
+    function reqeustAndShowContents( searchParam , completeCallback ){
+        var jsonStr = JSON.stringify( searchParam );
+
+        url = "http://13.124.86.217:8082?" + jsonStr;
+        console.log( url );
         httpRequest("POST", url, function( http ){
             var resObj = JSON.parse( http.responseText );
+            if( resObj.length < 1 ){
+                if( completeCallback )
+                    completeCallback( resObj );
+                return;
+            }
 
             if( resObj.result != "undefined" && resObj.result == "fail" ){
                 $('#receiveMsg').append( resObj.error + "\r\n" );
             }
             else {
                 $('#receiveMsg').append( "<br><table>");
-                var chapterStart =  "<td width = \"110\">&nbsp&nbsp";
+                var chapterStart =  "<td width = \"120\">&nbsp&nbsp";
                 var contentStart = "<td>";
                 var endString = "</td>";
 
@@ -523,7 +594,9 @@
             $('#receiveMsg').append( "<br></table >");
             $('#receiveMsg').append( "<br>" );
 
-        } );
+            completeCallback( resObj );
+
+        } );    // end of httpRequest
     }
 
 
