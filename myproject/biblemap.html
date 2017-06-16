@@ -212,15 +212,6 @@
     };
 
 
-    var view = new ol.View({
-        center: [3942321.454123089,3792452.570684223],
-        maxZoom : 18,
-        minZoom : 4,
-        zoom: 8
-
-    });
-
-
     var wmsDemLayer = createLayer( new ol.source.Stamen( { layer: 'terrain-background' }) ) ;
 
     wmsDemLayer.set( 'id', 1, false );
@@ -231,36 +222,16 @@
     wmsOsmLayer.set( 'id', 2, false );
     wmsOsmLayer.set( 'visibleRange', { max : 18, min : 13 }   );
 
-    /*
-    var wmsCycleLayer = createLayer( new ol.source.OSM({
-            url : 'https://{a-c}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey=bc6eff89a9cc457995e03c54c19e24d5'   // Open Cycle Map
-        }));
-
-    wmsCycleLayer.set( 'id', 2, false );
-    wmsCycleLayer.set( 'visibleRange', { max : 18, min : 13 }   );
-    */
-
-    var scaleLineControl = new ol.control.ScaleLine();
-    scaleLineControl.setUnits("metric");
+                                                  //function createView( center, maxZoom, minZoom, firstZoom ) {
+    var bibleMapManager = new MapManager( overlay, 'map', createView( [3942321.454123089, 3792452.570684223], 18, 4, 8 ) );
 
 
-    var bibleMap = new ol.Map({
-        // layers: [ wmsDemLayer, wmsCycleLayer ],
-        layers: [ wmsDemLayer, wmsOsmLayer ],
-        overlays: [overlay],
-        target: 'map',
-        controls: ol.control.defaults({
-                attribution : false,
-                attributionOptions:  ({    // @type {olx.control.AttributionOptions}
-                    collapsible: false
-                }) }).
-        extend([ new ol.control.FullScreen({
-            source: 'fullscreen'
-        }), scaleLineControl]),
-        view: view
-    });
+    // var layerManager = new LayerManager();
+    var layerManager = bibleMapManager.getLayerManager();
+    var bibleMap = bibleMapManager.getMap();
 
-    var layerManager = new LayerManager();
+    bibleMap.addLayer( wmsDemLayer );
+    bibleMap.addLayer( wmsOsmLayer );
 
     ///////////////////////////////////////
 
@@ -276,6 +247,7 @@
     ///////////////////////////////////////////////////////////////
 
     bibleMap.on('precompose', function(evt) {
+
         var zoom = bibleMap.getView().getZoom();
         $("#mouse-position").html( "zoom level : " + zoom ); // + zoom;
 
@@ -295,36 +267,52 @@
         } );
     });
 
-    var clickedPos = null;
+
+    var clickedPos = [0, 0];
     var selectedFeatures = null;
 
-    bibleMap.on('click', function(evt) {
+    bibleMapManager.clickEvent( function(evt){
         clickedPos = evt.coordinate;
-        /*
-         var layers = bibleMap.getLayers();
-
-         layers.forEach( function(layer){
-         console.log( layer.get('id') );
-         } );
-         */
+        console.log( "clickEvent!!!" + clickedPos );
     });
 
-    bibleMap.on('singleclick', function(evt) {
-        clickedPos = evt.coordinate;
-        //  var hdms = ol.coordinate.toStringHDMS(ol.proj.transform(
-//                coordinate, 'EPSG:3857', 'EPSG:4326'));
-
-        if( selectedFeatures )
+    bibleMapManager.singleClickEvent( function(evt){
+        if ( selectedFeatures ) {
             selectedFeatures.clear();
+
+        }
+
+        clickedPos = evt.coordinate;
+
     });
 
 
-    var selectClick = new ol.interaction.Select({
-        // layers: [ layer명 ]
-        condition: ol.events.condition.click
+    bibleMapManager.selectFeatureEvent( function(e){
+        // var len = e.target.getFeatures().getLength();
+        var selLen = e.selected.length;
+        if( selLen < 1 )
+            return;
+
+        selectedFeatures = e.target.getFeatures();
+
+        var feature = e.selected[0];    // 첫번째 걸린 것만 가져오기로 하자
+        var posName = feature.get("name");
+        var pos = layerManager.getPoiByName(posName);
+        var layer = feature.getLayer( bibleMap );
+        var id = layer.get("id");
+        if( id > 1) {   // 전세계 폴리곤 경계가 아닌 경우 검색 단어에 대한 성경검색 요청
+            requestBibleByWord(posName, function( ){
+                requestPoiContentAndShow( pos, posName, content, overlay );
+            });
+        } else {        // 전세계 폴리곤 경계라면...
+            posName = "<현재 국가><br>" + "&nbsp" + posName;
+            content.innerHTML = posName;
+            // var clickedPos = bibleMapManager.getClickedPos();
+            overlay.setPosition( clickedPos );
+        }
+
     });
 
-    bibleMap.addInteraction( selectClick );
 
     function requestPoiContentAndShow( pos, posName, popup, overlay ) {
         var youtube = "";
@@ -343,32 +331,11 @@
         });
     }
 
-    selectClick.on('select', function(e) {
-        var len = e.target.getFeatures().getLength();
-        var selLen = e.selected.length;
-        selectedFeatures = e.target.getFeatures();
-
-        if( selLen > 0 ){
-            var feature = e.selected[0];
-            var posName = feature.get("name");
-            var pos = layerManager.getPoiByName(posName);
-            var layer = feature.getLayer( bibleMap );
-            var id = layer.get("id");
-            if( id > 1) {   // 전세계 폴리곤 경계가 아닌 경우 검색 단어에 대한 성경검색 요청
-                requestBibleByWord(posName, function( ){
-                    requestPoiContentAndShow( pos, posName, content, overlay );
-                });
-            } else {        // 전세계 폴리곤 경계라면...
-                posName = "<현재 국가><br>" + "&nbsp" + posName;
-                content.innerHTML = posName;
-                overlay.setPosition( clickedPos );
-            }
-        }
-    });
 
     closer.onclick = function() {
         overlay.setPosition(undefined);
         closer.blur();
+        content.innerHTML = "";
         return false;
     };
 
@@ -408,24 +375,28 @@
 
     function moveToPlaceByWord( word ){
         var pos = layerManager.getPoiByName( word );
+        if( pos == null )
+            return;
+
         if( word == "예루살렘"){
             pos.zoomIn = 13;
         }
 
-        if( pos ) {
-            requestPoiContentAndShow( pos, word, content, overlay );
-            var curZoom = bibleMap.getView().getZoom();
+        requestPoiContentAndShow( pos, word, content, overlay );
+        var curZoom = bibleMap.getView().getZoom();
 
-            if( pos.zoomIn <= (curZoom +2) && pos.zoomIn >= (curZoom-2) ){
-                moveTo( view, [pos.x, pos.y], pos.zoomIn );
-            }
-            else {
-                flyTo(view, [pos.x, pos.y], pos.zoomIn, function (complete) {
-                    if (complete == true) {
-                    }
-                });
-            }
+        var view = bibleMap.getView();
+
+        if( pos.zoomIn <= (curZoom +2) && pos.zoomIn >= (curZoom-2) ){
+            moveTo( view, [pos.x, pos.y], pos.zoomIn );
         }
+        else {
+            flyTo(view, [pos.x, pos.y], pos.zoomIn, function (complete) {
+                if (complete == true) {
+                }
+            });
+        }
+
     }
 
 
@@ -478,7 +449,6 @@
     }
 
     function requestPoiInfo( poiName, recvFunc,  errFunc){
-
         var searchParam = {
             type: "Poi",     // book, chapter, paragraph 등으로 구성된 검색
             option: {}
@@ -550,29 +520,24 @@
                 if (resObj.length != "undefined") {    // 배열로 받아올 경우
                     for (idx in resObj) {
                         if( searchParam.type == "Word" ){
-                            // var strConvText = makeStrongWordInText(  searchParam.option.content.$regex, resObj[idx].content, '#9C1AC8'  );
                             if( examinRightWordinText( searchParam.option.content.$regex, resObj[idx].content ) == true ){
                                 var strConvText = makeStrongInText( layerManager, searchParam.option.content.$regex, resObj[idx].content );
                                 appendReceiveMsg( chapterStart, endString, resObj[idx], contentStart, strConvText );
                             }
                         }else {
                             var strConvText = makeStrongWordOfLocation( layerManager, resObj[idx].content );
-                            // $('#receiveMsg').append(resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "<br>" + spaceStr + strConvText + "<br>");
                             appendReceiveMsg( chapterStart, endString, resObj[idx], contentStart, strConvText );
                         }
                     }
                 } else {        // 수신받은 데이터가 배열이 아니고 하나만 있을 경우
                     if( searchParam.type == "Word" ){
                         if( examinRightWordinText( searchParam.option.content.$regex, resObj.content ) == true ) {
-                            // var strConvText = makeStrongWordInText(  searchParam.option.content.$regex, resObj[idx].content, '#9C1AC8'  );
-                            var strConvText = makeStrongInText( layerManager, searchParam.option.content.$regex, resObj.content);
-                            // $('#receiveMsg').append(resObj[idx].title + " " + resObj[idx].chapter + ":" + resObj[idx].paragraph + "<br>" + spaceStr + strConvText + "<br>");
-                            appendReceiveMsg( chapterStart, endString, resObj, contentStart, strConvText );
+                             var strConvText = makeStrongInText( layerManager, searchParam.option.content.$regex, resObj.content);
+                             appendReceiveMsg( chapterStart, endString, resObj, contentStart, strConvText );
                         }
                     } else {
                         var strConvText = makeStrongWordOfLocation( layerManager, resObj.content );
-                        // $('#receiveMsg').append(resObj.title + " " + resObj.chapter + ":" + resObj.paragraph + "<br>" + spaceStr + strConvText + "<br>");
-                        appendReceiveMsg( chapterStart, endString, resObj, contentStart, strConvText );
+                         appendReceiveMsg( chapterStart, endString, resObj, contentStart, strConvText );
                     }
                 }
             }

@@ -189,7 +189,7 @@ function createLayer( source  ) {
     return terrLayer;
 }
 
- function createView( center, maxZoom, minZoom, baseZoom ) {
+ function createView( center, maxZoom, minZoom, firstZoom ) {
      var view = new ol.View({
          // center: [3942321.454123089, 3792452.570684223],
          center: center,
@@ -198,26 +198,24 @@ function createLayer( source  ) {
          // minZoom: 4,
          minZoom: minZoom,
          // zoom: 8
-         zoom: baseZoom
+         zoom: firstZoom
      });
 
      return view;
  }
 
+
 function MapManager( overlay, targetMap, view ){
 
-    this. scaleLineControl = new ol.control.ScaleLine();
-    scaleLineControl.setUnits("metric");
+    this.scaleLineControl = new ol.control.ScaleLine();
+    this.scaleLineControl.setUnits("metric");
 
     this.layerManager = new LayerManager();
 
     this.view = view;
 
     this.map = new ol.Map({
-        // layers: [ wmsDemLayer, wmsCycleLayer ],
-        // layers: [ wmsDemLayer, wmsOsmLayer ],
         overlays: [overlay],
-        // target: 'map',
         target: targetMap,      // taret: 'map'
         controls: ol.control.defaults({
             attribution : false,
@@ -226,26 +224,50 @@ function MapManager( overlay, targetMap, view ){
             }) }).
         extend([ new ol.control.FullScreen({
             source: 'fullscreen'
-        }), scaleLineControl]),
+        }), this.scaleLineControl]),
         view: this.view
     });
 
+    this.selectClick = new ol.interaction.Select({
+        // layers: [ layer명 ]
+        condition: ol.events.condition.click
+    });
 
-    function getMap(){
+    this.map.addInteraction( this.selectClick );
+
+
+    this.getMap = function(){
         return this.map;
-    }
+    };
 
 
-    function getLayerManager(){
+    this.getLayerManager = function(){
         return this.layerManager;
-    }
+    };
 
-    function createLayer( source ){
-        var layer = new ol.layer.Tile({
-            source: source
+    this.getSelectClick = function(){
+        return this.selectClick;
+    };
+
+    this.clickEvent = function( callback ) {
+        this.map.on('click', function (evt) {
+            callback( evt );
         });
+    };
 
-        this.map.addLayer( layer );
-    }
+    this.singleClickEvent = function( callback ) {
+        this.map.on('singleclick', function (evt) {
+            callback( evt );
+        });
+    };
 
+
+    this.selectFeatureEvent = function( callback ){
+
+        this.selectClick.on('select', function(e) {
+            callback( e );
+        });
+    };
+
+    return this;
 }
