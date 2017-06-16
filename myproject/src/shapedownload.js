@@ -99,7 +99,7 @@ function genLayerFromWkt( wkt, attrs, bTransform, format, paramProp ) {
 }
 
 
-function ShapeFileDownload( url, layerId, style, layerContainer, wholeCompleteCallback ) {
+function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompleteCallback ) {
     var theLayer = this;
     var shpURL = url+'.shp';
     var dbfURL = url+'.dbf';
@@ -296,7 +296,7 @@ function ShapeFileDownload( url, layerId, style, layerContainer, wholeCompleteCa
         layerContainer.layers.push( shapeLayer );
 
         if( layerContainer.totalCount <= layerContainer.layers.length ){
-            wholeCompleteCallback( layerContainer );
+            wholeCompleteCallback( map, layerContainer );
         }
 
     };   // end of callback

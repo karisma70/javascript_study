@@ -2,6 +2,8 @@
  * Created by Administrator on 2017-06-06.
  */
 
+
+
  var bibleMapLayers = [
      { url : 'biblemap/110m-admin-0-countries', order: 1, style: {
              visibleRange : { max : 16, min : 1 },
@@ -160,3 +162,90 @@ function isExistStringPropInObj( obj, prop ) {
     return result;
 }
 
+
+ function addAllLayersToMap( map, layerContainer ){
+     layerContainer.layers.sort( function( layerA, layerB ){
+         var aID = layerA.get( 'id' );
+         var bID = layerB.get( 'id' );
+         if( aID < bID )
+             return -11;
+         if( aID > bID )
+             return 1;
+         return 0;
+     } );
+
+     for( idx in layerContainer.layers ){
+         console.log( "Inserted Layer ID : " + layerContainer.layers[idx].get( 'id'));
+         map.addLayer(  layerContainer.layers[ idx ] );
+     }
+ }
+
+
+function createLayer( source  ) {
+    var terrLayer = new ol.layer.Tile({
+     source: source
+    });
+
+    return terrLayer;
+}
+
+ function createView( center, maxZoom, minZoom, baseZoom ) {
+     var view = new ol.View({
+         // center: [3942321.454123089, 3792452.570684223],
+         center: center,
+         // maxZoom: 18,
+         maxZoom : maxZoom,
+         // minZoom: 4,
+         minZoom: minZoom,
+         // zoom: 8
+         zoom: baseZoom
+     });
+
+     return view;
+ }
+
+function MapManager( overlay, targetMap, view ){
+
+    this. scaleLineControl = new ol.control.ScaleLine();
+    scaleLineControl.setUnits("metric");
+
+    this.layerManager = new LayerManager();
+
+    this.view = view;
+
+    this.map = new ol.Map({
+        // layers: [ wmsDemLayer, wmsCycleLayer ],
+        // layers: [ wmsDemLayer, wmsOsmLayer ],
+        overlays: [overlay],
+        // target: 'map',
+        target: targetMap,      // taret: 'map'
+        controls: ol.control.defaults({
+            attribution : false,
+            attributionOptions:  ({    // @type {olx.control.AttributionOptions}
+                collapsible: false
+            }) }).
+        extend([ new ol.control.FullScreen({
+            source: 'fullscreen'
+        }), scaleLineControl]),
+        view: this.view
+    });
+
+
+    function getMap(){
+        return this.map;
+    }
+
+
+    function getLayerManager(){
+        return this.layerManager;
+    }
+
+    function createLayer( source ){
+        var layer = new ol.layer.Tile({
+            source: source
+        });
+
+        this.map.addLayer( layer );
+    }
+
+}

@@ -212,29 +212,6 @@
     };
 
 
-
-    var wmsLayer1 = new ol.layer.Tile({
-        source: new ol.source.Stamen({
-            layer: 'terrain-background'
-        })
-    });
-
-    wmsLayer1.set( 'id', 1, false );
-    wmsLayer1.set( 'visibleRange', { max : 13, min : 1 }   );
-
-    var wmsLayer2 = new ol.layer.Tile({
-        source: new ol.source.OSM({
-            // attributions: [
-            //    'All maps © <a href="https://www.opencyclemap.org/">OpenCycleMap</a>',
-            //     ol.source.OSM.ATTRIBUTION
-            // ],
-            url : 'https://{a-c}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey=bc6eff89a9cc457995e03c54c19e24d5'   // Open Cycle Map
-        })
-    });
-
-    wmsLayer2.set( 'id', 2, false );
-    wmsLayer2.set( 'visibleRange', { max : 18, min : 13 }   );
-
     var view = new ol.View({
         center: [3942321.454123089,3792452.570684223],
         maxZoom : 18,
@@ -243,19 +220,33 @@
 
     });
 
+
+    var wmsDemLayer = createLayer( new ol.source.Stamen( { layer: 'terrain-background' }) ) ;
+
+    wmsDemLayer.set( 'id', 1, false );
+    wmsDemLayer.set( 'visibleRange', { max : 13, min : 1 }   );
+
+    var wmsOsmLayer = createLayer(  new ol.source.OSM() );
+
+    wmsOsmLayer.set( 'id', 2, false );
+    wmsOsmLayer.set( 'visibleRange', { max : 18, min : 13 }   );
+
+    /*
+    var wmsCycleLayer = createLayer( new ol.source.OSM({
+            url : 'https://{a-c}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey=bc6eff89a9cc457995e03c54c19e24d5'   // Open Cycle Map
+        }));
+
+    wmsCycleLayer.set( 'id', 2, false );
+    wmsCycleLayer.set( 'visibleRange', { max : 18, min : 13 }   );
+    */
+
     var scaleLineControl = new ol.control.ScaleLine();
     scaleLineControl.setUnits("metric");
 
-    var raster = new ol.layer.Tile({
-        source: new ol.source.OSM()
-    });
 
-    raster.set( 'id', 2, false );
-    raster.set( 'visibleRange', { max : 18, min : 13 }   );
-
-    var map = new ol.Map({
-        // layers: [ wmsLayer1, wmsLayer2 ],
-        layers: [ wmsLayer1, raster ],
+    var bibleMap = new ol.Map({
+        // layers: [ wmsDemLayer, wmsCycleLayer ],
+        layers: [ wmsDemLayer, wmsOsmLayer ],
         overlays: [overlay],
         target: 'map',
         controls: ol.control.defaults({
@@ -271,27 +262,12 @@
 
     var layerManager = new LayerManager();
 
-    function addAllLayersToMap( layerContainer ){
-        layerContainer.layers.sort( function( layerA, layerB ){
-            var aID = layerA.get( 'id' );
-            var bID = layerB.get( 'id' );
-            if( aID < bID )
-                return -11;
-            if( aID > bID )
-                return 1;
-            return 0;
-        } );
-
-        for( idx in layerContainer.layers ){
-            console.log( "Inserted Layer ID : " + layerContainer.layers[idx].get( 'id'));
-            map.addLayer(  layerContainer.layers[ idx ] );
-        }
-    }
+    ///////////////////////////////////////
 
     (function(){
         for( idx in bibleMapLayers ){
             var layer = bibleMapLayers[idx];
-            new ShapeFileDownload( layer.url, layer.order, layer.style, layerManager.getLayerContainer(), addAllLayersToMap );
+            new ShapeFileDownload( bibleMap, layer.url, layer.order, layer.style, layerManager.getLayerContainer(), addAllLayersToMap );
         }
     }());
 
@@ -299,11 +275,11 @@
 
     ///////////////////////////////////////////////////////////////
 
-    map.on('precompose', function(evt) {
-        var zoom = map.getView().getZoom();
+    bibleMap.on('precompose', function(evt) {
+        var zoom = bibleMap.getView().getZoom();
         $("#mouse-position").html( "zoom level : " + zoom ); // + zoom;
 
-        var layers = map.getLayers();
+        var layers = bibleMap.getLayers();
 
         layers.forEach( function(layer){
             var visibleRange = layer.get('visibleRange');
@@ -322,10 +298,10 @@
     var clickedPos = null;
     var selectedFeatures = null;
 
-    map.on('click', function(evt) {
+    bibleMap.on('click', function(evt) {
         clickedPos = evt.coordinate;
         /*
-         var layers = map.getLayers();
+         var layers = bibleMap.getLayers();
 
          layers.forEach( function(layer){
          console.log( layer.get('id') );
@@ -333,7 +309,7 @@
          */
     });
 
-    map.on('singleclick', function(evt) {
+    bibleMap.on('singleclick', function(evt) {
         clickedPos = evt.coordinate;
         //  var hdms = ol.coordinate.toStringHDMS(ol.proj.transform(
 //                coordinate, 'EPSG:3857', 'EPSG:4326'));
@@ -348,7 +324,7 @@
         condition: ol.events.condition.click
     });
 
-    map.addInteraction( selectClick );
+    bibleMap.addInteraction( selectClick );
 
     function requestPoiContentAndShow( pos, posName, popup, overlay ) {
         var youtube = "";
@@ -376,7 +352,7 @@
             var feature = e.selected[0];
             var posName = feature.get("name");
             var pos = layerManager.getPoiByName(posName);
-            var layer = feature.getLayer(map);
+            var layer = feature.getLayer( bibleMap );
             var id = layer.get("id");
             if( id > 1) {   // 전세계 폴리곤 경계가 아닌 경우 검색 단어에 대한 성경검색 요청
                 requestBibleByWord(posName, function( ){
@@ -400,32 +376,34 @@
 
         if( bibleWordSearch.place.value == "" ){
             alert ("Please insert place! for search!");
-        }else{
-            var placeWord = bibleWordSearch.place.value;
-            placeWord = removeSpaceInWord( placeWord );
-            // placeWord = placeWord.replace(/^\s*|\s*$/g, ''); // 좌우 공백 제거
-            $('#receiveMsg').empty();
-
-            var searchParam = {
-                type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
-                option: {}
-            };
-            searchParam.option.content= { $regex : placeWord };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
-
-            reqeustAndShowContents( searchParam, function( param, resObj ){
-                if( resObj.length < 1 ) {
-                    var placeWord = param.option.content.$regex;
-                    var orgName = layerManager.getPoiByName(placeWord).orgName;
-                    param.option.content = {$regex: orgName};
-
-                    reqeustAndShowContents( param, function( param, resObj ){
-                        moveToPlaceByWord( param.option.content.$regex );
-                    } );
-                } else {
-                    moveToPlaceByWord( param.option.content.$regex );
-                }
-            } );
+            return;
         }
+
+        var placeWord = bibleWordSearch.place.value;
+        placeWord = removeSpaceInWord( placeWord );
+        // placeWord = placeWord.replace(/^\s*|\s*$/g, ''); // 좌우 공백 제거
+        $('#receiveMsg').empty();
+
+        var searchParam = {
+            type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
+            option: {}
+        };
+        searchParam.option.content= { $regex : placeWord };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
+
+        reqeustAndShowContents( searchParam, function( param, resObj ){
+            if( resObj.length < 1 ) {
+                var placeWord = param.option.content.$regex;
+                var orgName = layerManager.getPoiByName(placeWord).orgName;
+                param.option.content = {$regex: orgName};
+
+                reqeustAndShowContents( param, function( param, resObj ){
+                    moveToPlaceByWord( param.option.content.$regex );
+                } );
+            } else {
+                moveToPlaceByWord( param.option.content.$regex );
+            }
+        } );
+
     }
 
     function moveToPlaceByWord( word ){
@@ -436,26 +414,18 @@
 
         if( pos ) {
             requestPoiContentAndShow( pos, word, content, overlay );
-            var curZoom = map.getView().getZoom();
+            var curZoom = bibleMap.getView().getZoom();
 
             if( pos.zoomIn <= (curZoom +2) && pos.zoomIn >= (curZoom-2) ){
                 moveTo( view, [pos.x, pos.y], pos.zoomIn );
-                // content.innerHTML = word;
-//                requestPoiContentAndShow( pos, word, content, overlay );
-                // overlay.setPosition( [pos.x, pos.y]);
             }
             else {
                 flyTo(view, [pos.x, pos.y], pos.zoomIn, function (complete) {
                     if (complete == true) {
-                        // content.innerHTML = word;
-  //                      requestPoiContentAndShow( pos, word, content, overlay );
-                   //      overlay.setPosition( [pos.x, pos.y]);
                     }
                 });
             }
         }
-
-
     }
 
 
