@@ -8,7 +8,7 @@ function examinRightWordinText( strWord, strText ){
         return false;
     }
 
-    if( strPos < 1 && strText.substring(strPos-1, strPos) != " " ){
+    if( strText.substring(strPos-1, strPos) != " " ){
         return false;
     }
     return true;

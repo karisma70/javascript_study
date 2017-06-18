@@ -11,16 +11,11 @@
              lineStroke : {  color: [183, 181, 181], width : 2, opacity: 0.01  },
              //textStroke : { prop: 'Name2', align: 'center', baseline: 'middle', font : 'normal 17px 돋움', color: '#BBDBF5', outlineColor : 'black', outlineWidth : 3 }}
             // textStroke : { prop: 'Name2', align: 'center', baseline: 'middle', font : 'Normal 17px Arial', color: "#6E6E6E" }}
-                textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'bold 15px 돋움', color: '#5C5C5C', outlineColor : 'white', outlineWidth : 2 }}
+             textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 14px 굴림', color: '#747374', outlineColor : 'white', outlineWidth : 1  }}
      },
-     { url: 'biblemap/israel_pale/river_polyline',  order: 2, style: {
-             visibleRange : { max : 16,  min : 8 },
-             fillColor : 'rgba(0, 0, 255, 0.01)',
-             lineStroke : {  color: [134, 211, 249], width : 2, opacity: 0.001  }    }
-     },
-     { url: 'biblemap/abraham_move',  order: 3, style: {
+     { url: 'biblemap/abraham_move',  order: 2, style: {
          visibleRange : { max : 16 , min : 9 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "black", outlineWidth : 3  } }
+         textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "#313132", outlineWidth : 3  } }
      },
      { url: 'biblemap/jesus_move',  order: 3, style: {
              visibleRange : { max : 16 , min : 11 },
@@ -28,28 +23,28 @@
      },
      { url : 'biblemap/nature_poi_7_poi',  order: 4, style: {
          visibleRange : { max : 16 , min : 7 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "black", outlineWidth : 3  } }
+         textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "#636364", outlineWidth : 3  } }
      },
-     { url : 'biblemap/AD_level_7_poi',  order: 4, style: {
+     { url : 'biblemap/AD_level_7_poi',  order: 5, style: {
          visibleRange : { max : 16 , min : 7 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "black", outlineWidth : 3  } }
+         textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "#636364", outlineWidth : 3  } }
      },
-     { url : 'biblemap/AD_level_8_poi',  order: 5, style: {
+     { url : 'biblemap/AD_level_8_poi',  order: 6, style: {
          visibleRange : { max : 16 , min : 8 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "black", outlineWidth : 3  } }
+         textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "#49494A", outlineWidth : 3  } }
      },
-     { url: 'biblemap/AD_israel_admin_poi',  order: 6, style: {
+     { url: 'biblemap/AD_israel_admin_poi',  order: 7, style: {
          visibleRange : { max : 16 , min : 7 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'normal 13px 돋움', color: 'white', outlineColor : '#4C4B4B', outlineWidth : 4  }}
+         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'normal 13px 돋움', color: 'white', outlineColor : '#636364', outlineWidth : 4  }}
      },
      {
-         url: 'biblemap/AD_admin_poi',  order: 6, style: {
+         url: 'biblemap/AD_admin_poi',  order: 8, style: {
          visibleRange : { max : 16 , min : 6 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'normal 13px 돋움', color: 'white', outlineColor : '#4C4B4B', outlineWidth : 4  }}
+         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 15px 굴림', color: '#105602', outlineColor : 'white', outlineWidth : 2  }}
      },
-     { url: 'biblemap/BC_admin_poi',  order: 7, style: {
+     { url: 'biblemap/BC_admin_poi',  order: 9, style: {
          visibleRange : { max : 16 , min : 7 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'normal 13px 돋움', color: 'white', outlineColor : '#4C4B4B', outlineWidth : 4  }}
+         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 14px 굴림', color: '#033078', outlineColor : 'white', outlineWidth : 2  }}
      }
 
  ];
@@ -58,7 +53,7 @@
  function LayerManager( ){
      this.layerContainer = {
          layers : [],
-         totalCount : 10,
+         totalCount : 9,
          poiLayer : {}
      };
  }
@@ -92,8 +87,8 @@ function flyTo( view, location, zoomIn, done) {
 
     // zoomIn += 1;
 
-    // if( zoomIn < 11 )
-      //   zoomIn = 11;
+    if( zoomIn < 7 )
+         zoomIn = 7;
 
     function callback(complete) {
         --parts;
@@ -214,6 +209,8 @@ function MapManager( overlay, targetMap, view ){
 
     this.view = view;
 
+    this.clickedPos = null;
+
     this.map = new ol.Map({
         overlays: [overlay],
         target: targetMap,      // taret: 'map'
@@ -263,7 +260,6 @@ function MapManager( overlay, targetMap, view ){
 
 
     this.selectFeatureEvent = function( callback ){
-
         this.selectClick.on('select', function(e) {
             callback( e );
         });

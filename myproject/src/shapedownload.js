@@ -74,6 +74,7 @@ function genLayerFromWkt( wkt, attrs, bTransform, format, style ) {
 }
 */
 
+
 function genLayerFromWkt( wkt, attrs, bTransform, format, paramProp ) {
 
     var feature = {};
@@ -125,7 +126,7 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
             console.log( "download Shape_point ");
         }
 
-        var createTextStyle = function( feature, resolution ){
+        var createTextStyleOfFeature = function( feature, resolution ){
             var textString = feature.get('name');
             if (textString) {
                 return new ol.style.Text({
@@ -147,7 +148,7 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
             }
         }
 
-        function pointStyleFunction(feature, resolution) {
+        function createPointStyleOfFeature(feature, resolution) {
             return new ol.style.Style({
                 /*
                 image: new ol.style.Circle({
@@ -156,21 +157,23 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
                     stroke: new ol.style.Stroke({color: 'red', width: 1})
                 }),
                 */
-                text: createTextStyle(feature, resolution )
+                text: createTextStyleOfFeature(feature, resolution )
             });
         }
 
-        function polygonStyleFunction(feature, resolution ){
+        function createPolygonStyleOfFeature(feature, resolution ){
+            var color = feature.get('color');
             return new ol.style.Style( {
                 stroke: new ol.style.Stroke( {
-                    color: style.lineStroke.color,
-                    opacity : style.lineStroke.opacity,
-                    width: style.lineStroke.width
+                    color: paramStyle.lineStroke.color,
+                    opacity : paramStyle.lineStroke.opacity,
+                    width: paramStyle.lineStroke.width
                 } ),
                 fill: new ol.style.Fill({
-                    color: style.fillColor
+                    // color: paramStyle.fillColor
+                    color: feature.get('color')
                 }),
-                text : createTextStyle( feature, resolution )
+                text : createTextStyleOfFeature( feature, resolution )
             });
         }
 
@@ -190,7 +193,7 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
 
             // turn shapefile geometry into WKT
             // points are easy!
-            if (shpFile.header.shapeType == ShpType.SHAPE_POINT) {
+            if (shpFile.header.shapeType == ShpType.SHAPE_POINT) {      //  POINT
                 var wkt = 'POINT(' + record.shape.x + ' ' + record.shape.y + ')';
 
                 var orgName = "";
@@ -233,7 +236,7 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
             }
 
             // lines: not too hard--
-            else if (shpFile.header.shapeType == ShpType.SHAPE_POLYLINE) {
+            else if (shpFile.header.shapeType == ShpType.SHAPE_POLYLINE) {      // POLYLINE
                 // prepopulate the first point
                 var points = [];//record.shape.rings[0].x + ' ' + record.shape.rings[0].y];
                 var pointsLen = record.shape.rings[0].length;
@@ -248,11 +251,13 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
                 }else{
                     feature = genLayerFromWkt(wkt, attrs, bTransform, format, null );
                 }
+
+                feature.setProperties( { 'color': paramStyle.fillColor });
                 features.push( feature );
             }
 
             // polygons: donuts
-            else if (shpFile.header.shapeType == ShpType.SHAPE_POLYGON) {
+            else if (shpFile.header.shapeType == ShpType.SHAPE_POLYGON) {       // POLYGON
                 var ringsLen = record.shape.rings.length;
                 var wktOuter = [];
                 for (var j = 0; j < ringsLen; j++) {
@@ -269,23 +274,24 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
 
                 var wkt = 'POLYGON(' + wktOuter.join(', ') + ')';
                 var feature = genLayerFromWkt( wkt, attrs, bTransform, format, style.textStroke.prop );
+                feature.setProperties( { 'color': paramStyle.fillColor });
                 features.push( feature );
             }
         }  // end of  for (var i = 0; i < recsLen; i++) {
 
-        var styleFunction;
+        var createStyleFunction;
 
         if (shpFile.header.shapeType == ShpType.SHAPE_POLYGON || shpFile.header.shapeType == ShpType.SHAPE_POLYLINE ) {
-            styleFunction = polygonStyleFunction;
+            createStyleFunction = createPolygonStyleOfFeature;
         }else {
-            styleFunction = pointStyleFunction;
+            createStyleFunction = createPointStyleOfFeature;
         }
 
         var shapeLayer = new ol.layer.Vector({
             source: new ol.source.Vector({
                 features: features
             }),
-            style: styleFunction
+            style: createStyleFunction
         });
 
         shapeLayer.set( 'id', layerId, false );
