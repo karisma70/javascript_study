@@ -3,46 +3,105 @@
  */
 
 
+     // Iran, SaudiArabia , Turkey
+
 
  var bibleMapLayers = [
      { url : 'biblemap/110m-admin-0-countries', order: 1, style: {
              visibleRange : { max : 16, min : 1 },
              fillColor : 'rgba( 255, 255, 255, 0.001)',
-             lineStroke : {  color: [183, 181, 181], width : 2, opacity: 0.01  },
+             lineStroke : {  color: [174, 122, 40], width : 1, opacity: 0.01  },
              //textStroke : { prop: 'Name2', align: 'center', baseline: 'middle', font : 'normal 17px 돋움', color: '#BBDBF5', outlineColor : 'black', outlineWidth : 3 }}
             // textStroke : { prop: 'Name2', align: 'center', baseline: 'middle', font : 'Normal 17px Arial', color: "#6E6E6E" }}
              textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 14px 굴림', color: '#747374', outlineColor : 'white', outlineWidth : 1  }}
      },
-     { url: 'biblemap/abraham_move',  order: 2, style: {
+
+     { url : 'biblemap/iran/Iran_AL2', order: 2, style: {
+         visibleRange : { max : 16, min : 1 },
+         fillColor : 'rgba( 255, 255, 255, 0.001)',
+         lineStroke : {  color: [174, 122, 40], width : 1, opacity: 0.01  },
+         //textStroke : { prop: 'Name2', align: 'center', baseline: 'middle', font : 'normal 17px 돋움', color: '#BBDBF5', outlineColor : 'black', outlineWidth : 3 }}
+         // textStroke : { prop: 'Name2', align: 'center', baseline: 'middle', font : 'Normal 17px Arial', color: "#6E6E6E" }}
+         textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 14px 굴림', color: '#747374', outlineColor : 'white', outlineWidth : 1  }}
+     },
+
+     { url : 'biblemap/saudiarabia/Saudi_Arabia_AL2', order: 3, style: {
+         visibleRange : { max : 16, min : 1 },
+         fillColor : 'rgba( 255, 255, 255, 0.001)',
+         lineStroke : {  color: [174, 122, 40], width : 1, opacity: 0.01  },
+         //textStroke : { prop: 'Name2', align: 'center', baseline: 'middle', font : 'normal 17px 돋움', color: '#BBDBF5', outlineColor : 'black', outlineWidth : 3 }}
+         // textStroke : { prop: 'Name2', align: 'center', baseline: 'middle', font : 'Normal 17px Arial', color: "#6E6E6E" }}
+         textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 14px 굴림', color: '#747374', outlineColor : 'white', outlineWidth : 1  }}
+     },
+
+     { url : 'biblemap/turkey/Turkey_AL2', order: 4, style: {
+         visibleRange : { max : 16, min : 1 },
+         fillColor : 'rgba( 255, 255, 255, 0.001)',
+         lineStroke : {  color: [174, 122, 40], width : 1, opacity: 0.01  },
+         //textStroke : { prop: 'Name2', align: 'center', baseline: 'middle', font : 'normal 17px 돋움', color: '#BBDBF5', outlineColor : 'black', outlineWidth : 3 }}
+         // textStroke : { prop: 'Name2', align: 'center', baseline: 'middle', font : 'Normal 17px Arial', color: "#6E6E6E" }}
+         textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 14px 굴림', color: '#747374', outlineColor : 'white', outlineWidth : 1  }}
+     },
+
+         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+     { url : 'biblemap/History_12Sect', order: 5, style: {
+         historyShow : 'false',
+         visibleRange : { max : 16, min : 8 },
+         fillColor : 'rgba( 255, 255, 255, 0.001)',
+         lineStroke : {  color: [255, 255, 255], width : 0, opacity: 0.01  },
+         textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
+     },
+     */
+
+     { url : 'biblemap/History_BC12', order: 6, style: {
+         historyShow : 'false',
+         visibleRange : { max : 16, min : 7 },
+         fillColor : 'rgba( 255, 255, 255, 0.001)',
+         lineStroke : {  color: [255, 255, 255], width : 0, opacity: 0.01  },
+         textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
+     },
+
+
+     /*
+     { url : 'biblemap/History_12Sect_poi', order: 18, style: {
+         visibleRange : { max : 16 , min : 8 },
+         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 15px 굴림', color: '#105602', outlineColor : 'white', outlineWidth : 2  }}
+     },
+     */
+
+     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+     { url: 'biblemap/abraham_move',  order: 10, style: {
          visibleRange : { max : 16 , min : 9 },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "#313132", outlineWidth : 3  } }
      },
-     { url: 'biblemap/jesus_move',  order: 3, style: {
+     { url: 'biblemap/jesus_move',  order: 11, style: {
              visibleRange : { max : 16 , min : 11 },
              textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "black", outlineWidth : 3  }}
      },
-     { url : 'biblemap/nature_poi_7_poi',  order: 4, style: {
+     { url : 'biblemap/nature_poi_7_poi',  order: 12, style: {
          visibleRange : { max : 16 , min : 7 },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "#636364", outlineWidth : 3  } }
      },
-     { url : 'biblemap/AD_level_7_poi',  order: 5, style: {
+     { url : 'biblemap/AD_level_7_poi',  order: 13, style: {
          visibleRange : { max : 16 , min : 7 },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "#636364", outlineWidth : 3  } }
      },
-     { url : 'biblemap/AD_level_8_poi',  order: 6, style: {
+     { url : 'biblemap/AD_level_8_poi',  order: 14, style: {
          visibleRange : { max : 16 , min : 8 },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "#49494A", outlineWidth : 3  } }
      },
-     { url: 'biblemap/AD_israel_admin_poi',  order: 7, style: {
+     { url: 'biblemap/AD_israel_admin_poi',  order: 15, style: {
          visibleRange : { max : 16 , min : 7 },
          textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'normal 13px 돋움', color: 'white', outlineColor : '#636364', outlineWidth : 4  }}
      },
      {
-         url: 'biblemap/AD_admin_poi',  order: 8, style: {
+         url: 'biblemap/AD_admin_poi',  order: 16, style: {
          visibleRange : { max : 16 , min : 6 },
          textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 15px 굴림', color: '#105602', outlineColor : 'white', outlineWidth : 2  }}
      },
-     { url: 'biblemap/BC_admin_poi',  order: 9, style: {
+     { url: 'biblemap/BC_admin_poi',  order: 17, style: {
          visibleRange : { max : 16 , min : 7 },
          textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 14px 굴림', color: '#033078', outlineColor : 'white', outlineWidth : 2  }}
      }
@@ -50,10 +109,71 @@
  ];
 
 
+ var createTextStyleOfFeature = function( feature, resolution ){
+
+     var featureStyle = feature.get('style');
+
+     var textString = feature.get('name');
+     if (textString) {
+         return new ol.style.Text({
+             textAlign: featureStyle.textStroke.align,
+             textBaseline: featureStyle.textStroke.baseline,
+             font: featureStyle.textStroke.font,
+             text: feature.get('name'),
+             fill: new ol.style.Fill({color: featureStyle.textStroke.color}),
+             stroke: new ol.style.Stroke({
+                 color: featureStyle.textStroke.outlineColor,
+                 width: featureStyle.textStroke.outlineWidth
+             }),
+             offsetX: 0,
+             offsetY: 5,
+             rotation: 0
+         });
+     } else {
+         return null;
+     }
+ }
+
+ function createPointStyleOfFeature(feature, resolution) {
+     return new ol.style.Style({
+         /*
+          image: new ol.style.Circle({
+          radius: 3,
+          fill: new ol.style.Fill({color: 'rgba(255, 0, 0, 0.1)'}),
+          stroke: new ol.style.Stroke({color: 'red', width: 1})
+          }),
+          */
+         text: createTextStyleOfFeature(feature, resolution )
+     });
+ }
+
+ function createPolygonStyleOfFeature(feature, resolution ){
+
+     var featureStyle = feature.get('style');
+     var strokeStyle = null;
+
+     if( featureStyle.lineStroke.width > 0 ) {
+         strokeStyle = new ol.style.Stroke({
+             color: featureStyle.lineStroke.color,
+             opacity: featureStyle.lineStroke.opacity,
+             width: featureStyle.lineStroke.width
+         });
+     }
+
+     return new ol.style.Style( {
+         stroke: strokeStyle,
+         fill: new ol.style.Fill({
+             color: featureStyle.fillColor
+         }),
+         text : createTextStyleOfFeature( feature, resolution )
+     });
+ }
+
+
  function LayerManager( ){
      this.layerContainer = {
          layers : [],
-         totalCount : 9,
+         totalCount : 15,
          poiLayer : {}
      };
  }

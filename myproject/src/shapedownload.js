@@ -49,8 +49,7 @@ function convertUTF8String( strLabel ) {
     return textLabel;
 }
 
-/*
-function genLayerFromWkt( wkt, attrs, bTransform, format, style ) {
+function genLayerFromWkt( wkt, attrs, bTransform, format, label ) {
 
     var feature = {};
 
@@ -64,35 +63,10 @@ function genLayerFromWkt( wkt, attrs, bTransform, format, style ) {
         feature = format.readFeature(wkt);
     }
 
-    if( typeof style.textStroke !== "undefined" && typeof style.textStroke.prop !== "undefined" ) {
-        var strLabel = attrs.values[style.textStroke.prop].toString();
-        var textLabel = convertUTF8String( strLabel );
-        feature.setProperties({'name': textLabel });
-    }
-
-    return feature;
-}
-*/
-
-
-function genLayerFromWkt( wkt, attrs, bTransform, format, paramProp ) {
-
-    var feature = {};
-
-    if (bTransform == true) {
-        feature = format.readFeature(wkt, {
-            dataProjection: 'EPSG:4326',
-            featureProjection: 'EPSG:3857'
-        });
-    }
-    else {
-        feature = format.readFeature(wkt);
-    }
-
-    if( paramProp ) {
+    if( label ) {
         var wktProp = { };
-        var strLabel = attrs.values[paramProp].toString();
-        wktProp[paramProp] = convertUTF8String(strLabel);
+        var strLabel = attrs.values[label].toString();
+        wktProp[label] = convertUTF8String(strLabel);
         feature.setProperties( wktProp );
     }
 
@@ -112,7 +86,7 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
         alert('failed to load ' + theLayer.dbfURL + ", errCode : " + errCode  );
     };
 
-    var completeCallback = function( shpFile, style,  dbfFile ){       // callback Function
+    var completeCallback = function( shpFile, layerId, style,  dbfFile ){       // callback Function
 
         var paramStyle = style;
 
@@ -126,56 +100,6 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
             console.log( "download Shape_point ");
         }
 
-        var createTextStyleOfFeature = function( feature, resolution ){
-            var textString = feature.get('name');
-            if (textString) {
-                return new ol.style.Text({
-                    textAlign: paramStyle.textStroke.align,
-                    textBaseline: paramStyle.textStroke.baseline,
-                    font: paramStyle.textStroke.font,
-                    text: feature.get('name'),
-                    fill: new ol.style.Fill({color: paramStyle.textStroke.color}),
-                    stroke: new ol.style.Stroke({
-                        color: paramStyle.textStroke.outlineColor,
-                        width: paramStyle.textStroke.outlineWidth
-                    }),
-                    offsetX: 0,
-                    offsetY: 5,
-                    rotation: 0
-                });
-            } else {
-                return null;
-            }
-        }
-
-        function createPointStyleOfFeature(feature, resolution) {
-            return new ol.style.Style({
-                /*
-                image: new ol.style.Circle({
-                    radius: 3,
-                    fill: new ol.style.Fill({color: 'rgba(255, 0, 0, 0.1)'}),
-                    stroke: new ol.style.Stroke({color: 'red', width: 1})
-                }),
-                */
-                text: createTextStyleOfFeature(feature, resolution )
-            });
-        }
-
-        function createPolygonStyleOfFeature(feature, resolution ){
-            var color = feature.get('color');
-            return new ol.style.Style( {
-                stroke: new ol.style.Stroke( {
-                    color: paramStyle.lineStroke.color,
-                    opacity : paramStyle.lineStroke.opacity,
-                    width: paramStyle.lineStroke.width
-                } ),
-                fill: new ol.style.Fill({
-                    // color: paramStyle.fillColor
-                    color: feature.get('color')
-                }),
-                text : createTextStyleOfFeature( feature, resolution )
-            });
-        }
 
         var bTransform = false;
         if( shpFile.header.boundsXY.width < 1000 ){
@@ -183,7 +107,6 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
         }
 
         var format = new ol.format.WKT();
-        var feature = {};
         var features = [];
 
         var recsLen = shpFile.records.length;
@@ -198,46 +121,46 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
 
                 var orgName = "";
 
-                for( prop in attrs.values ){
-                    if( isExistStringPropInObj( attrs.values, prop ) == false)
+                for( label in attrs.values ){
+                    if( isExistStringPropInObj( attrs.values, label ) == false)
                         continue;
 
-                    if( prop == 'id')
+                    if( label == 'id')
                         continue;
 
-                    var strLabel = attrs.values[prop].toString();
+                    var strLabel = attrs.values[label].toString();
                     strLabel = removeSpaceInWord(strLabel);
                     if( strLabel == "")
                         continue;
 
-                    var feature = genLayerFromWkt(wkt, attrs, bTransform, format, prop );
+                    var feature = genLayerFromWkt(wkt, attrs, bTransform, format, label );
+                    feature.setProperties( { 'style': paramStyle } );
                     features.push(feature);
 
                     // var textString = feature.get(style.textStroke.prop);
-                    var textString = feature.get( prop );
+                    var textString = feature.get( label );
                     if (textString) {
 
-                        if( prop == "name2" || prop == "name3" ){
-                            console.log( url + ">>" + prop + ": " + textString  );
+                        if( label == "name2" || label == "name3" ){
+                            console.log( url + ">>" + label + ": " + textString  );
                         }
 
-                        if( prop == "name" )
+                        if( label == "name" )
                             orgName = textString;
 
                         layerContainer.poiLayer[textString] = {
                             orgName : orgName,
                             x: record.shape.x,
                             y: record.shape.y,
-                            zoomIn: style.visibleRange.min
+                            zoomIn: paramStyle.visibleRange.min
                         };
                     }
 
                 } // end of for( prop in attrs.values )
             }
 
-            // lines: not too hard--
+
             else if (shpFile.header.shapeType == ShpType.SHAPE_POLYLINE) {      // POLYLINE
-                // prepopulate the first point
                 var points = [];//record.shape.rings[0].x + ' ' + record.shape.rings[0].y];
                 var pointsLen = record.shape.rings[0].length;
                 for (var j = 0; j < pointsLen; j++) {
@@ -246,13 +169,12 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
 
                 var wkt = 'LINESTRING(' + points.join(', ') + ')';
                 var feature = null;
-                if( typeof style.textStroke !== "undefined" && typeof style.textStroke.prop !== "undefined" ) {
-                    feature = genLayerFromWkt(wkt, attrs, bTransform, format, style.textStroke.prop);
+                if( typeof paramStyle.textStroke !== "undefined" && typeof paramStyle.textStroke.prop !== "undefined" ) {
+                    feature = genLayerFromWkt(wkt, attrs, bTransform, format, paramStyle.textStroke.prop);
                 }else{
                     feature = genLayerFromWkt(wkt, attrs, bTransform, format, null );
                 }
-
-                feature.setProperties( { 'color': paramStyle.fillColor });
+                feature.setProperties( { 'style': paramStyle } );
                 features.push( feature );
             }
 
@@ -272,10 +194,27 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
                     wktOuter.push('(' + wktInner.join(', ') + ')');
                 }
 
+                if( layerId == 5 ){
+                    console.log( "layer id : 5");
+                }
                 var wkt = 'POLYGON(' + wktOuter.join(', ') + ')';
-                var feature = genLayerFromWkt( wkt, attrs, bTransform, format, style.textStroke.prop );
-                feature.setProperties( { 'color': paramStyle.fillColor });
+                var feature = genLayerFromWkt( wkt, attrs, bTransform, format, paramStyle.textStroke.prop );
+
+                if( attrs.values['color']) {
+                    var strColor = attrs.values['color'].toString();
+                    strColor = removeSpaceInWord( strColor );
+                    if( strColor != "" ) {
+                        var extendStyle = copyObject( paramStyle );
+                        extendStyle.fillColor = strColor;
+                        feature.setProperties({'style': extendStyle});
+                    }
+                }
+
+                if( feature.get('style') == null ) {
+                    feature.setProperties({'style': paramStyle});
+                }
                 features.push( feature );
+
             }
         }  // end of  for (var i = 0; i < recsLen; i++) {
 
@@ -296,14 +235,22 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
 
         shapeLayer.set( 'id', layerId, false );
         shapeLayer.set( 'visibleRange', style.visibleRange );
+        if( style.historyShow )
+            shapeLayer.set( 'historyShow', style.historyShow );
         console.log( url + ",   id  : " + layerId );
 
 
         layerContainer.layers.push( shapeLayer );
 
+        /*
         if( layerContainer.totalCount <= layerContainer.layers.length ){
             wholeCompleteCallback( map, layerContainer );
         }
+        */
+
+        map.addLayer(  shapeLayer );
+        shapeLayer.setZIndex( layerId );
+
 
     };   // end of callback
 
@@ -312,7 +259,7 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
         console.log('got data for ' + theLayer.shpURL + ', parsing shapefile');
         theLayer.shpFile = new ShpFile(binFile);
         if (theLayer.dbfFile ){
-            completeCallback( theLayer.shpFile, style, theLayer.dbfFile );
+            completeCallback( theLayer.shpFile, layerId, style, theLayer.dbfFile );
         }
     };
 
@@ -322,7 +269,7 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
 
         theLayer.dbfFile = new DbfFile(binFile);
         if (theLayer.shpFile) {
-            completeCallback( theLayer.shpFile, style, theLayer.dbfFile );
+            completeCallback( theLayer.shpFile, layerId, style, theLayer.dbfFile );
         }
     };
 

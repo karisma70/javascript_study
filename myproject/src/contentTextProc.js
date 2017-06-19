@@ -108,3 +108,20 @@ function makeStrongInText( LayerManager, searchWord, strText ) {
     return retStrText;
 }
 
+
+function copyObject( obj ){
+    if( obj == null || typeof(obj) != 'object'){
+        return;
+    }
+
+    var copyObj = obj.constructor();
+
+    for( var attr in obj ){
+        if( obj.hasOwnProperty( attr )){
+            copyObj[attr] = obj[attr];
+        }
+    }
+
+    return copyObj;
+}
+
