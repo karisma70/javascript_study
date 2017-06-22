@@ -88,8 +88,14 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
 
     var completeCallback = function( shpFile, layerId, style,  dbfFile ){       // callback Function
 
+        // debug
+        if( layerId == 9 ){
+            console.log( "debug!!@!");
+        }
+
         var paramStyle = style;
 
+        /*
         if ( shpFile.header.shapeType == ShpType.SHAPE_POLYGON ){
             console.log( "download Shape_polygon ");
         }
@@ -99,7 +105,7 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
         if ( shpFile.header.shapeType == ShpType.SHAPE_POINT ){
             console.log( "download Shape_point ");
         }
-
+        */
 
         var bTransform = false;
         if( shpFile.header.boundsXY.width < 1000 ){
@@ -109,10 +115,34 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
         var format = new ol.format.WKT();
         var features = [];
 
+        /*
+        if( shpFile.records.length != dbfFile.records.length ){
+            alert( url + " File is shape Error!!!" + "shape File Records : " + shpFile.records.length + ", dbf File Records :  " + dbfFile.records.length );
+            return;
+        }
+        */
+
+        if( shpFile.records.length != dbfFile.records.length ){
+            console.log( "Critial shapefile Error!!  id: " + layerId + ", shape records: " + shpFile.records.length + ", dbf records: " + dbfFile.records.length );
+        }
+
         var recsLen = shpFile.records.length;
+
         for (var i = 0; i < recsLen; i++) {
             var record = shpFile.records[i];
             var attrs = dbfFile.records[i];
+            if( attrs == null ){
+                if( i < 1 ){
+                    alert( url + " File is shape Error!!!" + "shape File Records : " + shpFile.records.length + ", dbf File Records :  " + dbfFile.records.length );
+                    return;
+                }else{
+                    attrs = dbfFile.records[i-1];
+                    if( attrs == null ){
+                        alert( url + " File is shape Error!!!" + "shape File Records : " + shpFile.records.length + ", dbf File Records :  " + dbfFile.records.length );
+                        return;
+                    }
+                }
+            }
 
             // turn shapefile geometry into WKT
             // points are easy!
@@ -242,11 +272,10 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
 
         layerContainer.layers.push( shapeLayer );
 
-        /*
+
         if( layerContainer.totalCount <= layerContainer.layers.length ){
             wholeCompleteCallback( map, layerContainer );
         }
-        */
 
         map.addLayer(  shapeLayer );
         shapeLayer.setZIndex( layerId );

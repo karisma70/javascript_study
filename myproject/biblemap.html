@@ -156,9 +156,9 @@
             <input type="button" value="검색" style="font-size:1.0em;" onclick="moveToPlace()">
         </form>
         <br>
-        &nbsp&nbsp<input id="historyAdmin" type ="range" style = "width:150px" min = "0" max = "4" value = "0" onchange="changeHistoryAdmin(this.value)" >
+        &nbsp&nbsp<input id="historyAdmin" type ="range" style = "width:150px" min = "0" max = "6" value = "6" onchange="changeHistoryAdmin(this.value)" >
         <br>
-        &nbsp&nbsp<span id ="range">초기 구약시대</span>
+        &nbsp&nbsp<span id ="range" style="font-size:0.8em">현재의 국가</span>
         <br>
         <div id = "mouse-position">Mouse Move </div>
     </div>
@@ -174,36 +174,76 @@
 
 <script>
 
-    var strArray = [ "초기 구약시대",  "12지파 시대", "다윗과 솔로몬 시대",  "북이스라엘과 남유다", "BC6C 강대국들" ];
-
     function currentHistoryAdminString( newValue ){
+        var strArray = [ "약속의 땅 가나안",  "출애굽 후 12지파", "사사 시대(BC 12C)", "사울왕 시대 이스라엘", "다윗왕 시대 이스라엘", "북이스라엘과 남유다", "현재의 국가" ];
+
         document.getElementById("range").innerHTML = strArray[ newValue ];
     }
 
-    var flag = 0;
+    function changeHistoryAdmin( newValue ){
+        currentHistoryAdminString( newValue );
 
-    var historyAdmin = document.getElementById("historyAdmin");
-    if( historyAdmin.addEventListener ) {
-        historyAdmin.addEventListener( "mousedown", function(){
-            flag = 1;
-        }, false );
-        historyAdmin.addEventListener( "mouseup", function(){
-            flag = 0;
-        }, false );
+        closer.onclick();
 
-        historyAdmin.addEventListener( "mousemove", function(){
-            if( flag == 1 ){
-                console.log( "drag!!!" +  historyAdmin.value );
-                currentHistoryAdminString( historyAdmin.value );
+        var view = bibleMapManager.getView();
+        if( view.getZoom() < 7 ) {
+            view.setCenter([3942321.454123089, 3792452.570684223]);
+            view.setZoom(7);
+        }
+
+        for (idx in layerManager.layerContainer.layers) {
+            var layer = layerManager.layerContainer.layers[idx];
+            if (layer.get('historyShow')) {
+                layer.set('historyShow', 'false');
             }
-        }, false);
-    }
+        }
 
+        var historyArray = [5, 6, 7, 8, 9, 10, [ 1, 2, 3, 4 ] ];
+
+        function showHistoryLayer( showId ) {
+            for (idx in layerManager.layerContainer.layers) {
+                var layer = layerManager.layerContainer.layers[idx];
+                var id = layer.get('id');
+                if (showId.length) {
+                    for (hID in showId) {
+                        var sSubId = showId[hID];
+                        if (id == sSubId) {
+                            if (layer.get('historyShow')) {
+                                layer.set('historyShow', 'true');
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    if (id == showId) {
+                        if (layer.get('historyShow')) {
+                            layer.set('historyShow', 'true');
+                            break;
+                        } else {
+                            alert(" historyArray[" + newValue + "] : " + historyArray[newValue] + ", layerID : " + id + "  has not property historyShow!!!");
+                        }
+                    }
+                }
+            }
+        }
+
+        showHistoryLayer( historyArray[newValue]);
+
+        for( idx in layerManager.layerContainer.layers ) {
+            var layer = layerManager.layerContainer.layers[idx];
+            var id = layer.get('id');
+            if (layer.get('historyShow')) {
+                console.log( "ID : " + id + ", historyShow : " + layer.get('historyShow') );
+            }
+        }
+
+    }
 
 
     bibleSearch.title.value ="출애굽기";
     bibleSearch.chapter.value = 14;
     bibleWordSearch.place.value = "예루살렘";
+
 
     var container = document.getElementById('popup');
     var content = document.getElementById('popup-content');
@@ -251,10 +291,22 @@
     };
 
 
-    var wmsDemLayer = createLayer( new ol.source.Stamen( { layer: 'terrain-background' }) ) ;
+    // var wmsDemLayer = createLayer( new ol.source.Stamen( { layer: 'terrain-background' }) ) ;
+
+    var wmsDemLayer = new ol.layer.Tile({
+        visible: false,
+        preload: Infinity,
+        source: new ol.source.BingMaps({
+            key: 'Aj2EBKlpTb_8cxuPEs0OHBBoiplb0HYYaOb8DVHTyCK7dduQSzMTv1i9gb4WwnP2',
+            imagerySet: "Aerial"
+            // use maxZoom 19 to see stretched tiles instead of the BingMaps
+            // "no photos at this zoom level" tiles
+            // maxZoom: 19
+        })
+    })
 
     wmsDemLayer.set( 'id', 1, false );
-    wmsDemLayer.set( 'visibleRange', { max : 13, min : 1 }   );
+    wmsDemLayer.set( 'visibleRange', { max : 18, min : 1 }   );
 
     var wmsOsmLayer = createLayer(  new ol.source.OSM() );
 
@@ -270,43 +322,43 @@
     var bibleMap = bibleMapManager.getMap();
 
     bibleMap.addLayer( wmsDemLayer );
-    bibleMap.addLayer( wmsOsmLayer );
+   //  bibleMap.addLayer( wmsOsmLayer );
 
     ///////////////////////////////////////
 
     (function(){
+        var flag = 0;
+
+        var historyAdmin = document.getElementById("historyAdmin");
+        if( historyAdmin.addEventListener ) {
+            historyAdmin.addEventListener( "mousedown", function(){
+                flag = 1;
+            }, false );
+            historyAdmin.addEventListener( "mouseup", function(){
+                flag = 0;
+            }, false );
+
+            historyAdmin.addEventListener( "mousemove", function(){
+                if( flag == 1 ){
+                    currentHistoryAdminString( historyAdmin.value );
+                }
+            }, false);
+        }
+
+
         for( idx in bibleMapLayers ){
             var layer = bibleMapLayers[idx];
-            new ShapeFileDownload( bibleMap, layer.url, layer.order, layer.style, layerManager.getLayerContainer(), addAllLayersToMap );
+            // new ShapeFileDownload( bibleMap, layer.url, layer.order, layer.style, layerManager.getLayerContainer(), addAllLayersToMap );
+            new ShapeFileDownload( bibleMap, layer.url, layer.order, layer.style, layerManager.getLayerContainer(), function( ){
+                requestBibleByChapter();
+                changeHistoryAdmin( historyAdmin.value );
+            } );
         }
     }());
 
-    requestBibleByChapter();
+    // requestBibleByChapter();
 
 
-    function changeHistoryAdmin( newValue ){
-        currentHistoryAdminString( newValue );
-
-        var historyArray = [ -1, 5, 10, 11, 12 ];
-
-        for( idx in layerManager.layerContainer.layers ){
-            var  layer = layerManager.layerContainer.layers[idx];
-            var id = layer.get('id');
-            if( id == historyArray[newValue] ) {
-                if (layer.get('historyShow')) {
-                    console.log("id : " + id + ", " + "historyShow : " + layer.get('historyShow'));
-                    layer.set('historyShow', 'true');
-                } else {
-                    alert(" historyArray["+ newValue+"] : " +  historyArray[newValue] + ", layerID : " + id + "  has not property historyShow!!!" );
-                }
-            } else{
-                if( layer.get('historyShow')){
-                    layer.set('historyShow', 'false');
-                }
-            }
-
-        }
-    }
 
     ///////////////////////////////////////////////////////////////
 
@@ -322,7 +374,16 @@
             if( typeof visibleRange !== "undefined") {
 
                 if ( visibleRange.min <= zoom && zoom <= visibleRange.max ){
-                    layer.setVisible( true );
+                    var historyMap = layer.get('historyShow');
+                    if( historyMap ){
+                        if( historyMap == 'true' )
+                            layer.setVisible( true );
+                        else
+                            layer.setVisible( false );
+                    }
+                    else {
+                        layer.setVisible( true );
+                    }
                 }
                 else {
                     layer.setVisible( false );
@@ -362,7 +423,7 @@
         var pos = layerManager.getPoiByName(posName);
         var layer = feature.getLayer( bibleMap );
         var id = layer.get("id");
-        if( id >= 10 ) {   // 전세계 폴리곤 경계가 아닌 경우 검색 단어에 대한 성경검색 요청
+        if( id >= 15 ) {   // 전세계 폴리곤 경계가 아닌 경우 검색 단어에 대한 성경검색 요청
             requestBibleByWord(posName, function( ){
                 requestPoiContentAndShow( pos, posName, content, overlay );
             });
