@@ -284,38 +284,11 @@
     };
 
 
-    // var wmsDemLayer = createLayer( new ol.source.Stamen( { layer: 'terrain-background' }) ) ;
+  //  var bibleMapManager = new MapManager( overlay, 'map', createView( [3942321.454123089, 3792452.570684223], 18, 4, 8 ) );
+    var bibleMapManager = createMapManager( overlay, 'map' );
 
-    var wmsDemLayer = new ol.layer.Tile({
-        visible: false,
-        preload: Infinity,
-        source: new ol.source.BingMaps({
-            key: 'Aj2EBKlpTb_8cxuPEs0OHBBoiplb0HYYaOb8DVHTyCK7dduQSzMTv1i9gb4WwnP2',
-            imagerySet: "Aerial"
-            // use maxZoom 19 to see stretched tiles instead of the BingMaps
-            // "no photos at this zoom level" tiles
-            // maxZoom: 19
-        })
-    })
-
-    wmsDemLayer.set( 'id', 1, false );
-    wmsDemLayer.set( 'visibleRange', { max : 18, min : 1 }   );
-
-    var wmsOsmLayer = createLayer(  new ol.source.OSM() );
-
-    wmsOsmLayer.set( 'id', 2, false );
-    wmsOsmLayer.set( 'visibleRange', { max : 18, min : 13 }   );
-
-                                                  //function createView( center, maxZoom, minZoom, firstZoom ) {
-    var bibleMapManager = new MapManager( overlay, 'map', createView( [3942321.454123089, 3792452.570684223], 18, 4, 8 ) );
-
-
-    // var layerManager = new LayerManager();
     var layerManager = bibleMapManager.getLayerManager();
     var bibleMap = bibleMapManager.getMap();
-
-    bibleMap.addLayer( wmsDemLayer );
-   //  bibleMap.addLayer( wmsOsmLayer );
 
     ///////////////////////////////////////
 
@@ -349,10 +322,6 @@
             } );
         }
     }());
-
-    // requestBibleByChapter();
-
-
 
     ///////////////////////////////////////////////////////////////
 
@@ -527,7 +496,6 @@
         var frameState = event.frameState;
         vectorContext.setStyle( moveLineStyle );
 
-        // var features = flightsSource.getFeatures();
         var features = pathVector.getFeatures();
         for (var i = 0; i < features.length; i++) {
             var feature = features[i];
@@ -555,64 +523,24 @@
         bibleMap.render();
     };
 
-
-    bibleMap.on('precompose', function(evt) {
-
-        var zoom = bibleMap.getView().getZoom();
-        // $("#mouse-position").html( "zoom level : " + zoom ); // + zoom;
-        $("#zoomLevel").html( "zoom level : " + zoom ); // + zoom;
-
-        var layers = bibleMap.getLayers();
-
-        layers.forEach( function(layer){
-            var visibleRange = layer.get('visibleRange');
-            if( typeof visibleRange !== "undefined") {
-
-                if ( visibleRange.min <= zoom && zoom <= visibleRange.max ){
-                    var historyMap = layer.get('historyShow');
-                    if( historyMap ){
-                        if( historyMap == 'true' )
-                            layer.setVisible( true );
-                        else
-                            layer.setVisible( false );
-                    }
-                    else {
-                        layer.setVisible( true );
-                    }
-                }
-                else {
-                    layer.setVisible( false );
-                }
-            }
-        } );
+    bibleMapManager.mapEventPrecompose( function(evt){
+        var zoom = bibleMapManager.getView().getZoom();
+        $("#zoomLevel").html("zoom level : " + zoom); // + zoom;
     });
 
 
-    var clickedPos = [0, 0];
-    var selectedFeatures = null;
-
     bibleMapManager.clickEvent( function(evt){
-        clickedPos = evt.coordinate;
-        console.log( "clickEvent!!!" + clickedPos );
+        var clickedPos = evt.coordinate;
         $("#mousePosition").html( "Pos X: " + clickedPos[0] + ", Y:" + clickedPos[1] ); // + zoom;
     });
 
     bibleMapManager.singleClickEvent( function(evt){
-        if ( selectedFeatures ) {
-            selectedFeatures.clear();
-
-        }
-        clickedPos = evt.coordinate;
     });
 
-
     bibleMapManager.selectFeatureEvent( function(e){
-        // var len = e.target.getFeatures().getLength();
         var selLen = e.selected.length;
         if( selLen < 1 )
             return;
-
-        selectedFeatures = e.target.getFeatures();
 
         var feature = e.selected[0];    // 첫번째 걸린 것만 가져오기로 하자
         var posName = feature.get("name");
@@ -630,30 +558,10 @@
                 requestBibleByWord(posName, null );
             }
             content.innerHTML = posName;
-            // var clickedPos = bibleMapManager.getClickedPos();
-            overlay.setPosition( clickedPos );
+            overlay.setPosition( bibleMapManager.getClickecPos() );
         }
 
     });
-
-
-    function requestPoiContentAndShow( pos, posName, popup, overlay ) {
-        var youtube = "";
-        requestPoiInfo(pos.orgName, function (poiObj) {
-            if (poiObj.hasOwnProperty("youtube")) {
-                youtube = poiObj["youtube"];
-            }
-            if (youtube != "") {
-                popup.innerHTML = posName + "<br><iframe width=\"320\" height=\"240\" src=\"" + youtube + "\" frameborder = \"0\" allowfullscreen></iframe>";
-            } else
-                popup.innerHTML = posName;
-            overlay.setPosition( [pos.x, pos.y] );
-        }, function () {
-            popup.innerHTML = posName;
-            overlay.setPosition( [pos.x, pos.y] );
-        });
-    }
-
 
     closer.onclick = function() {
         overlay.setPosition(undefined);
@@ -663,7 +571,6 @@
     };
 
     function moveToPlace(){
-
         if( bibleWordSearch.place.value == "" ){
             alert ("Please insert place! for search!");
             return;
@@ -771,46 +678,6 @@
         reqeustAndShowContents( searchParam, null );
     }
 
-    function requestPoiInfo( poiName, recvFunc,  errFunc){
-        var searchParam = {
-            type: "Poi",     // book, chapter, paragraph 등으로 구성된 검색
-            option: {}
-        };
-
-        searchParam.option["name"] = poiName;
-
-        var jsonStr = JSON.stringify( searchParam );
-
-        url = "http://13.124.86.217:8082?" + jsonStr;
-        console.log( url );
-        httpRequest("POST", url, function( http ) {
-            var resObj = JSON.parse( http.responseText );
-
-            if( resObj.result != "undefined" && resObj.result == "fail" ){
-                console.log( "requestPoiInfo() Fail!!!   param: " + jsonStr );
-                if( errFunc ){
-                    errFunc( resObj );
-                }
-                return;
-            }
-
-            if (resObj.length != "undefined") {    // 배열로 받아올 경우
-                if( resObj.length < 1){
-                    errFunc( resObj );
-                    return;
-                }
-                for( idx in resObj ){
-                    var poiObj = resObj[idx];
-                    recvFunc( poiObj );
-                    break;                  // 여러개 받아오더라도 하나만 처리하도록 한다.
-                }
-            }
-            else{
-                 recvFunc( resObj );
-            }
-
-        });
-    }
 
     function reqeustAndShowContents( searchParam , completeCallback ){
         var jsonStr = JSON.stringify( searchParam );

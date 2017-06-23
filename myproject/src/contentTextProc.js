@@ -128,3 +128,62 @@ function copyObject( obj ){
     return copyObj;
 }
 
+
+function requestPoiInfo( poiName, recvFunc,  errFunc){
+    var searchParam = {
+        type: "Poi",     // book, chapter, paragraph 등으로 구성된 검색
+        option: {}
+    };
+
+    searchParam.option["name"] = poiName;
+
+    var jsonStr = JSON.stringify( searchParam );
+
+    url = "http://13.124.86.217:8082?" + jsonStr;
+    console.log( url );
+    httpRequest("POST", url, function( http ) {
+        var resObj = JSON.parse( http.responseText );
+
+        if( resObj.result != "undefined" && resObj.result == "fail" ){
+            console.log( "requestPoiInfo() Fail!!!   param: " + jsonStr );
+            if( errFunc ){
+                errFunc( resObj );
+            }
+            return;
+        }
+
+        if (resObj.length != "undefined") {    // 배열로 받아올 경우
+            if( resObj.length < 1){
+                errFunc( resObj );
+                return;
+            }
+            for( idx in resObj ){
+                var poiObj = resObj[idx];
+                recvFunc( poiObj );
+                break;                  // 여러개 받아오더라도 하나만 처리하도록 한다.
+            }
+        }
+        else{
+            recvFunc( resObj );
+        }
+
+    });
+}
+
+
+function requestPoiContentAndShow( pos, posName, popup, overlay ) {
+    var youtube = "";
+    requestPoiInfo(pos.orgName, function (poiObj) {
+        if (poiObj.hasOwnProperty("youtube")) {
+            youtube = poiObj["youtube"];
+        }
+        if (youtube != "") {
+            popup.innerHTML = posName + "<br><iframe width=\"320\" height=\"240\" src=\"" + youtube + "\" frameborder = \"0\" allowfullscreen></iframe>";
+        } else
+            popup.innerHTML = posName;
+        overlay.setPosition( [pos.x, pos.y] );
+    }, function () {
+        popup.innerHTML = posName;
+        overlay.setPosition( [pos.x, pos.y] );
+    });
+}

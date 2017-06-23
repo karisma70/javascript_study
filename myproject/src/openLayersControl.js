@@ -357,75 +357,162 @@ function createLayer( source  ) {
      return view;
  }
 
+ var createMapManager = (function() {
 
-function MapManager( overlay, targetMap, view ){
+     var bibleMap = null;
+     var clickedPos = [0, 0];
+     var selectedFeatures = null;
 
-    this.scaleLineControl = new ol.control.ScaleLine();
-    this.scaleLineControl.setUnits("metric");
+     function MapManager(overlay, targetMap, view) {
 
-    this.layerManager = new LayerManager();
+         this.scaleLineControl = new ol.control.ScaleLine();
+         this.scaleLineControl.setUnits("metric");
 
-    this.view = view;
+         this.layerManager = new LayerManager();
 
-    this.clickedPos = null;
+         this.view = view;
 
-    this.map = new ol.Map({
-        overlays: [overlay],
-        target: targetMap,      // taret: 'map'
-        controls: ol.control.defaults({
-            attribution : false,
-            attributionOptions:  ({    // @type {olx.control.AttributionOptions}
-                collapsible: false
-            }) }).
-        extend([ new ol.control.FullScreen({
-            source: 'fullscreen'
-        }), this.scaleLineControl]),
-        view: this.view
-    });
+         this.clickedPos = null;
 
-    this.selectClick = new ol.interaction.Select({
-        // layers: [ layer명 ]
-        condition: ol.events.condition.click
-    });
+         this.map = new ol.Map({
+             overlays: [overlay],
+             target: targetMap,      // taret: 'map'
+             controls: ol.control.defaults({
+                 attribution: false,
+                 attributionOptions: ({    // @type {olx.control.AttributionOptions}
+                     collapsible: false
+                 })
+             }).extend([new ol.control.FullScreen({
+                 source: 'fullscreen'
+             }), this.scaleLineControl]),
+             view: this.view
+         });
 
-    this.map.addInteraction( this.selectClick );
+         bibleMap = this.map;
+
+         InitWmsLayer(this.map);
+
+         function InitWmsLayer(bibleMap) {
+             // var wmsDemLayer = createLayer( new ol.source.Stamen( { layer: 'terrain-background' }) ) ;
+             var wmsDemLayer = new ol.layer.Tile({
+                 visible: false,
+                 preload: Infinity,
+                 source: new ol.source.BingMaps({
+                     key: 'Aj2EBKlpTb_8cxuPEs0OHBBoiplb0HYYaOb8DVHTyCK7dduQSzMTv1i9gb4WwnP2',
+                     imagerySet: "Aerial"
+                     // use maxZoom 19 to see stretched tiles instead of the BingMaps
+                     // "no photos at this zoom level" tiles
+                     // maxZoom: 19
+                 })
+             })
+
+             wmsDemLayer.set('id', 1, false);
+             wmsDemLayer.set('visibleRange', {max: 18, min: 1});
+             bibleMap.addLayer(wmsDemLayer);
+
+             /*
+              var wmsOsmLayer = createLayer(  new ol.source.OSM() );
+
+              wmsOsmLayer.set( 'id', 2, false );
+              wmsOsmLayer.set( 'visibleRange', { max : 18, min : 13 }   );
+
+              bibleMap.addLayer( wmsOsmLayer );
+              */
+         }
+
+         this.mapEventPrecompose = function (callBack) {
+             this.map.on('precompose', function (evt) {
+                 if( bibleMap == null )
+                     return;
+
+                 var zoom = bibleMap.getView().getZoom();
+                 var layers = bibleMap.getLayers();
+
+                 layers.forEach(function (layer) {
+                     var visibleRange = layer.get('visibleRange');
+                     if (typeof visibleRange !== "undefined") {
+
+                         if (visibleRange.min <= zoom && zoom <= visibleRange.max) {
+                             var historyMap = layer.get('historyShow');
+                             if (historyMap) {
+                                 if (historyMap == 'true')
+                                     layer.setVisible(true);
+                                 else
+                                     layer.setVisible(false);
+                             }
+                             else {
+                                 layer.setVisible(true);
+                             }
+                         }
+                         else {
+                             layer.setVisible(false);
+                         }
+                     }
+                 });
+
+                 callBack(evt);
+             });
+         };
+
+         this.selectClick = new ol.interaction.Select({
+             // layers: [ layer명 ]
+             condition: ol.events.condition.click
+         });
+
+         this.map.addInteraction(this.selectClick);
 
 
-    this.getMap = function(){
-        return this.map;
-    };
+         this.getMap = function () {
+             return this.map;
+         };
 
-    this.getView = function(){
-        return this.view;
-    }
+         this.getView = function () {
+             return this.view;
+         };
+
+         this.getClickecPos = function(){
+             return clickedPos;
+         }
+
+         this.getLayerManager = function () {
+             return this.layerManager;
+         };
+
+         this.getSelectClick = function () {
+             return this.selectClick;
+         };
+
+         this.clickEvent = function (callback) {
+             this.map.on('click', function (evt) {
+                 clickedPos = evt.coordinate;
+                 callback(evt);
+             });
+         };
+
+         this.singleClickEvent = function (callback) {
+             this.map.on('singleclick', function (evt) {
+                 if ( selectedFeatures ) {
+                     selectedFeatures.clear();
+                 }
+                 clickedPos = evt.coordinate;
+                 callback(evt);
+             });
+         };
 
 
-    this.getLayerManager = function(){
-        return this.layerManager;
-    };
+         this.selectFeatureEvent = function (callback) {
+             this.selectClick.on('select', function (evt) {
+                 selectedFeatures = evt.target.getFeatures();
+                 callback(evt);
+             });
+         };
 
-    this.getSelectClick = function(){
-        return this.selectClick;
-    };
+         return this;
+     }
 
-    this.clickEvent = function( callback ) {
-        this.map.on('click', function (evt) {
-            callback( evt );
-        });
-    };
+     return function( overlay, cssMap ){
+         // new MapManager( overlay, 'map', createView( [3942321.454123089, 3792452.570684223], 18, 4, 8 ) );
+         return new MapManager( overlay, cssMap, createView( [3942321.454123089, 3792452.570684223], 18, 4, 8 ) );
+     }
 
-    this.singleClickEvent = function( callback ) {
-        this.map.on('singleclick', function (evt) {
-            callback( evt );
-        });
-    };
-
-
-    this.selectFeatureEvent = function( callback ){
-        this.selectClick.on('select', function(e) {
-            callback( e );
-        });
-    };
-
-    return this;
-}
+ }());
