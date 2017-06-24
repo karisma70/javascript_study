@@ -16,6 +16,7 @@
     <script type="text/javascript" src="src/shapedownload.js"></script>
     <script type="text/javascript" src="src/openLayersControl.js"></script>
     <script type="text/javascript" src="src/contentTextProc.js"></script>
+    <script type="text/javascript" src="src/routePlay.js"></script>
     <script type = "text/javascript" src = "httpRequest.js"></script>
 
     <script src="openLayers_v4.1.1/ol.js"></script>
@@ -161,7 +162,8 @@
         <br>
         &nbsp&nbsp<span id ="range" style="font-size:0.8em">현재의 국가</span>
         <br>
-        &nbsp&nbsp<input id="showMoveingPath" type ="button" value="GO" onclick="pathAction();" >
+        &nbsp&nbsp<input id="showMovingPath" type ="button" value="GO" onclick="pathAction();" >
+        &nbsp&nbsp<input id="hideMovingPath" type ="button" value="Stop" onclick="pathHide();" >
         <br>
         <div id = "zoomLevel">ZoomLevel</div>
         <div id = "mousePosition">MousePos</div>
@@ -326,16 +328,6 @@
     ///////////////////////////////////////////////////////////////
 
 
-    var moveLineStyle = new ol.style.Style({
-        stroke: new ol.style.Stroke({
-            color: '#EAE911',
-            width: 4
-        })
-    });
-
-    var pathVector;
-    var pathMovingLayer = null;
-
     var abrahamMove = [
         [ 5210168.288408965, 3512234.424990766 ],    // 우르
         [ 4943864.492357921, 3848826.46340424 ],
@@ -351,177 +343,22 @@
         [ 3871265.486645929, 3663182.6405192106 ] //  브엘세바
     ];
 
+    var routeMove;
+
     function pathAction() {
-
-        if( pathMovingLayer ){
-            bibleMap.removeLayer( pathMovingLayer );
-            pathMovingLayer = null;
+        // routePlay( bibleMap, abrahamMove );
+        if( routeMove ){
+            routeMove.stop();
         }
-
-        var addLater = function(feature, timeout) {
-            window.setTimeout(function() {
-                var timeVal = new Date().getTime();
-                feature.set('start', timeVal );
-                console.log( "start time : " + timeVal );
-                pathVector.addFeature(feature);
-            }, timeout);
-        };
-
-        function initPath() {
-            var pathArray = [];
-            var moveArray = abrahamMove;
-            for (var i = 0; i < moveArray.length - 1; i++) {
-                var from = moveArray[i];
-                var to = moveArray[i + 1];
-
-                var pointArray = [];
-                pointArray.push(from);
-                pointArray.push(to);
-
-                var tempLine = new ol.geom.LineString(pointArray);
-                tempLine.transform(ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'));     // 경위도로 변환
-                var coord = tempLine.getCoordinates();
-
-                // create an arc circle between the two locations
-                var arcGenerator = new arc.GreatCircle(
-                        // {x: from[0], y: from[1]},
-                        // {x: to[0], y: to[1]});
-                        {x: coord[0][0], y: coord[0][1]},
-                        {x: coord[1][0], y: coord[1][1]});
-
-                var arcLine = arcGenerator.Arc(100, {offset: 10});
-                if (arcLine.geometries.length === 1) {
-                    var tempArray = arcLine.geometries[0].coords;
-                    for( var j = 0 ; j < tempArray.length; j ++ ) {
-                        pathArray.push( tempArray[j] );
-                    }
-                }
-            }
-
-            var line = new ol.geom.LineString( pathArray );
-            line.transform(ol.proj.get('EPSG:4326'), ol.proj.get('EPSG:3857'));
-            var feature = new ol.Feature({
-                geometry: line,
-                finished: false
-            });
-            // addLater(feature, i * 50);
-            addLater(feature, 0 );
-
-            bibleMap.on('postcompose', animateFlights);
-        }
-
-        pathVector = new ol.source.Vector({
-            wrapX: false,
-            loader: initPath
-        });
-
-        pathMovingLayer = new ol.layer.Vector({
-            source : pathVector,
-            style: function (feature) {
-                // if the animation is still active for a feature, do not
-                // render the feature with the layer style
-                if (feature.get('finished')) {
-                    return moveLineStyle;
-                } else {
-                    return null;
-                }
-            }
-        });
-
-        bibleMap.addLayer( pathMovingLayer );
-        pathMovingLayer.setZIndex( 100 );
-
-        //////////////////////////////////////////////////////
+        routeMove = new RouteMoveProcess( bibleMap, abrahamMove );
+        routeMove.play();
     }
 
-    function pathArrowDraw( footPrintsArray )
-    {
-        var pathArrowStyleFunction = function(feature) {
-            var geometry = feature.getGeometry();
-            var styles = [
-                // linestring
-                new ol.style.Style({
-                    stroke: new ol.style.Stroke({
-                        color: '#ffcc33',
-                        width: 3
-                    })
-                })
-            ];
-
-            geometry.forEachSegment(function(start, end) {
-                var dx = end[0] - start[0];
-                var dy = end[1] - start[1];
-                var rotation = Math.atan2(dy, dx);
-                // arrows
-                styles.push(new ol.style.Style({
-                    geometry: new ol.geom.Point(end),
-                    image: new ol.style.Icon({
-                        //  src: 'https://openlayers.org/en/v4.2.0/examples/data/arrow.png',
-                        src: 'image/arrow.png',
-                        anchor: [0.75, 0.5],
-                        rotateWithView: true,
-                        rotation: -rotation
-                    })
-                }));
-            });
-
-            return styles;
-        };
-
-        var featureLine = new ol.Feature({
-            geometry: new ol.geom.LineString( footPrintsArray )
-        });
-
-        var sourceLine = new ol.source.Vector({
-            features: [featureLine]
-        });
-
-        // var coords = featureLine.getGeometry().getCoordinates();
-
-        var pathArrowLayer = new ol.layer.Vector({
-            source: sourceLine,
-            style: pathArrowStyleFunction
-        });
-
-        pathArrowLayer.setVisible( true );
-
-        bibleMap.addLayer( pathArrowLayer );
-        pathArrowLayer.setZIndex( 19 );
-    }
-
-
-    var pointsPerMs = 0.1;
-    var animateFlights = function(event) {
-        var vectorContext = event.vectorContext;
-        var frameState = event.frameState;
-        vectorContext.setStyle( moveLineStyle );
-
-        var features = pathVector.getFeatures();
-        for (var i = 0; i < features.length; i++) {
-            var feature = features[i];
-            if (!feature.get('finished')) {
-                // only draw the lines for which the animation has not finished yet
-                var coords = feature.getGeometry().getCoordinates();
-                var elapsedTime = frameState.time - feature.get('start');
-                var elapsedPoints = elapsedTime * pointsPerMs;
-
-                if (elapsedPoints >= coords.length) {
-                    feature.set('finished', true);
-                    console.log( "complete!!!");
-                    pathMovingLayer.setZIndex( 18 );
-                    pathArrowDraw( abrahamMove );
-                }
-
-                var maxIndex = Math.min(elapsedPoints, coords.length);
-                var currentLine = new ol.geom.LineString(coords.slice(0, maxIndex));
-
-                // directly draw the line with the vector context
-                vectorContext.drawGeometry(currentLine);
-            }
+    function pathHide(){
+        if( routeMove ){
+            routeMove.stop();
         }
-        // tell OpenLayers to continue the animation
-        bibleMap.render();
-    };
+    }
 
     bibleMapManager.mapEventPrecompose( function(evt){
         var zoom = bibleMapManager.getView().getZoom();
@@ -544,6 +381,9 @@
 
         var feature = e.selected[0];    // 첫번째 걸린 것만 가져오기로 하자
         var posName = feature.get("name");
+        if( posName == null )
+            return;
+
         var pos = layerManager.getPoiByName(posName);
         var layer = feature.getLayer( bibleMap );
         var id = layer.get("id");
