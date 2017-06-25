@@ -17,6 +17,7 @@
     <script type="text/javascript" src="src/openLayersControl.js"></script>
     <script type="text/javascript" src="src/contentTextProc.js"></script>
     <script type="text/javascript" src="src/routePlay.js"></script>
+    <script type="text/javascript" src="src/trajectoryData.js"></script>
     <script type = "text/javascript" src = "httpRequest.js"></script>
 
     <script src="openLayers_v4.1.1/ol.js"></script>
@@ -162,8 +163,16 @@
         <br>
         &nbsp&nbsp<span id ="range" style="font-size:0.8em">현재의 국가</span>
         <br>
-        &nbsp&nbsp<input id="showMovingPath" type ="button" value="GO" onclick="pathAction();" >
-        &nbsp&nbsp<input id="hideMovingPath" type ="button" value="Stop" onclick="pathHide();" >
+        <br>
+        &nbsp<select id="movePath" style="height:1.7em; font-size:0.8em;" >
+        <option>아브라함의 이동</option><option>애굽 탈출</option><option>레위기</option><option>민수기</option><option>신명기</option>
+        </select>
+        &nbsp&nbsp<input id="showMovingPath" type ="button" value="GO" onclick="pathAction()" >
+        &nbsp<input id="hideMovingPath" type ="button" value="Stop" onclick="pathHide()" >
+        <br>
+        <br>
+        &nbsp&nbsp<input id="createTrajectory" type ="button" value="생성" onclick="createTrajectory()" >
+        &nbsp&nbsp<input id="delTrajectory" type ="button" value="삭제" onclick="delTrajectory()" >
         <br>
         <div id = "zoomLevel">ZoomLevel</div>
         <div id = "mousePosition">MousePos</div>
@@ -224,7 +233,7 @@
                             layer.set('historyShow', 'true');
                             break;
                         } else {
-                            alert(" historyArray[" + newValue + "] : " + historyArray[newValue] + ", layerID : " + id + "  has not property historyShow!!!");
+                            alert(" historyArray[" + showId + "] : " + historyArray[showId] + ", layerID : " + id + "  has not property historyShow!!!");
                         }
                     }
                 }
@@ -288,7 +297,7 @@
 
   //  var bibleMapManager = new MapManager( overlay, 'map', createView( [3942321.454123089, 3792452.570684223], 18, 4, 8 ) );
     var bibleMapManager = createMapManager( overlay, 'map' );
-
+    var trajectoryData = new TrajectoryData();
     var layerManager = bibleMapManager.getLayerManager();
     var bibleMap = bibleMapManager.getMap();
 
@@ -327,30 +336,41 @@
 
     ///////////////////////////////////////////////////////////////
 
-
-    var abrahamMove = [
-        [ 5210168.288408965, 3512234.424990766 ],    // 우르
-        [ 4943864.492357921, 3848826.46340424 ],
-        [ 4709015.316651448, 4087561.021558499 ],
-        [ 4585493.0789426025, 4452012.772422214 ], //   하란
-        [ 4229602.275246828, 4418991.976203019 ], //    갈그미스
-        [ 4157445.7205456216, 4299138.715851862 ],
-        [ 4130539.886589241, 4173170.4932378978 ],
-        [ 4128093.9016841175, 4006843.5196893574 ],
-        [ 4036369.467741915, 3959146.8140394087 ],
-        [ 3958097.9507778944, 3894328.214053579 ],
-        [ 3939753.063989454, 3797711.810301118 ],
-        [ 3871265.486645929, 3663182.6405192106 ] //  브엘세바
-    ];
-
     var routeMove;
 
-    function pathAction() {
-        // routePlay( bibleMap, abrahamMove );
+    /*
+    aySelect = document.getElementById('daySelect');
+    myOption = document.createElement("option");
+    myOption.text = "Hello World";
+    myOption.value = "Hello World";
+    daySelect.appendChild(myOption);
+    */
+
+    function pathAction( ) {
         if( routeMove ){
             routeMove.stop();
         }
-        routeMove = new RouteMoveProcess( bibleMap, abrahamMove );
+
+        // var movePath = document.getElementById('movePath').value;
+        var movePath = $( "#movePath" ).val();
+        var index = 0;
+
+        if( movePath == '아브라함의 이동')
+            index = 0;
+        else
+            index = 1;
+
+        var trajectoryArray = trajectoryData.getTrajectory( index );
+        if( trajectoryArray == null )
+            return;
+
+        routeMove = new RouteMoveProcess( bibleMap, trajectoryArray );
+
+        var extent = trajectoryData.getExtent( index );
+
+        var view = bibleMap.getView();
+        view.fit( extent, bibleMap.getSize() );
+
         routeMove.play();
     }
 
@@ -358,6 +378,23 @@
         if( routeMove ){
             routeMove.stop();
         }
+    }
+
+    function createTrajectory() {
+        bibleMapManager.addInteraction(function (vertices) {
+            console.log("------------------------");
+            console.log("[")
+            for (var idx = 0; idx < vertices.length; idx++) {
+                var pos = vertices[idx];
+                console.log( "[" + pos + "],");
+            }
+            console.log("]")
+            console.log("------------------------");
+        });
+    }
+
+    function delTrajectory(){
+        bibleMapManager.removeInteraction();
     }
 
     bibleMapManager.mapEventPrecompose( function(evt){

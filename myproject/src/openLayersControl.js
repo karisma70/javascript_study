@@ -362,6 +362,10 @@ function createLayer( source  ) {
      var bibleMap = null;
      var clickedPos = [0, 0];
      var selectedFeatures = null;
+     var interactionStyleCallback = null;
+
+     var tempLineLayer = null;
+     var tempLineInteract = null;
 
      function MapManager(overlay, targetMap, view) {
 
@@ -369,10 +373,7 @@ function createLayer( source  ) {
          this.scaleLineControl.setUnits("metric");
 
          this.layerManager = new LayerManager();
-
          this.view = view;
-
-         this.clickedPos = null;
 
          this.map = new ol.Map({
              overlays: [overlay],
@@ -388,11 +389,14 @@ function createLayer( source  ) {
              view: this.view
          });
 
+         var zoomSlider = new ol.control.ZoomSlider();
+         this.map.addControl( zoomSlider );
+
          bibleMap = this.map;
 
          InitWmsLayer(this.map);
 
-         function InitWmsLayer(bibleMap) {
+         function InitWmsLayer( paramMap) {
              // var wmsDemLayer = createLayer( new ol.source.Stamen( { layer: 'terrain-background' }) ) ;
              var wmsDemLayer = new ol.layer.Tile({
                  visible: false,
@@ -408,7 +412,7 @@ function createLayer( source  ) {
 
              wmsDemLayer.set('id', 1, false);
              wmsDemLayer.set('visibleRange', {max: 18, min: 1});
-             bibleMap.addLayer(wmsDemLayer);
+             paramMap.addLayer(wmsDemLayer);
 
              /*
               var wmsOsmLayer = createLayer(  new ol.source.OSM() );
@@ -416,7 +420,7 @@ function createLayer( source  ) {
               wmsOsmLayer.set( 'id', 2, false );
               wmsOsmLayer.set( 'visibleRange', { max : 18, min : 13 }   );
 
-              bibleMap.addLayer( wmsOsmLayer );
+              paramMap.addLayer( wmsOsmLayer );
               */
          }
 
@@ -507,11 +511,84 @@ function createLayer( source  ) {
              });
          };
 
+         this.addInteraction = function( callback ){
+
+             this.removeInteraction();
+
+             interactionStyleCallback = callback;
+
+             var tempLineStyleFunction = function(feature) {
+                 var geometry = feature.getGeometry();
+                 var styles = [
+                     // linestring
+                     new ol.style.Style({
+                         stroke: new ol.style.Stroke({
+                             color: '#9F25B2',
+                             width: 3
+                         })
+                     })
+                 ];
+
+                 var vertices = geometry.getCoordinates();
+
+                 interactionStyleCallback( vertices );
+
+                 /*
+                 geometry.forEachSegment(function(start, end) {
+                     var dx = end[0] - start[0];
+                     var dy = end[1] - start[1];
+                     var rotation = Math.atan2(dy, dx);
+                     // arrows
+                     styles.push(new ol.style.Style({
+                         geometry: new ol.geom.Point(end),
+                         image: new ol.style.Icon({
+                             //  src: 'https://openlayers.org/en/v4.2.0/examples/data/arrow.png',
+                             src: 'image/arrow.png',
+                             anchor: [0.75, 0.5],
+                             rotateWithView: true,
+                             rotation: -rotation
+                         })
+                     }));
+                 });
+                 */
+
+                 return styles;
+             };
+
+
+             var tempVtr = new ol.source.Vector();
+
+             tempLineLayer = new ol.layer.Vector({
+                 source: tempVtr,
+                 style: tempLineStyleFunction
+             });
+
+             this.map.addLayer( tempLineLayer );
+
+             tempLineInteract = new ol.interaction.Draw({
+                 source: tempVtr,
+                 type: /** @type {ol.geom.GeometryType} */ ('LineString')
+             });
+
+             this.map.addInteraction( tempLineInteract );
+         };
+
+         this.removeInteraction = function(){
+             if( tempLineLayer ) {
+                 this.map.removeLayer( tempLineLayer);
+                 tempLineLayer = null;
+             }
+             if( tempLineInteract ) {
+                 this.map.removeInteraction( tempLineInteract);
+                 tempLineInteract = null;
+                 this.map.render();
+             }
+         };
+
          return this;
-     }
+     } // end of function MapManager(overlay, targetMap, view) {
 
      return function( overlay, cssMap ){
-         // new MapManager( overlay, 'map', createView( [3942321.454123089, 3792452.570684223], 18, 4, 8 ) );
          return new MapManager( overlay, cssMap, createView( [3942321.454123089, 3792452.570684223], 18, 4, 8 ) );
      }
 
