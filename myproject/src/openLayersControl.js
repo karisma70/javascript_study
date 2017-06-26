@@ -146,6 +146,15 @@
 
  ];
 
+ function getDistance( x1, y1, x2, y2){
+
+     var distX = Math.abs( x2 - x1 );
+     var distY = Math.abs( y2 - y1 );
+
+     var distance = Math.sqrt( (distX * distX) + (distY * distY) );
+
+     return distance;
+ }
 
  var createTextStyleOfFeature = function( feature, resolution ){
 
@@ -279,9 +288,7 @@ function flyTo( view, location, zoomIn, done) {
 }
 
 function moveTo( view, location, zoomIn, done ) {
-    zoomIn += 1;
-
-    if( zoomIn < 10 )
+      if( zoomIn < 10 )
         zoomIn = 10;
 
     var parts = 2;

@@ -165,10 +165,10 @@
         <br>
         <br>
         &nbsp<select id="movePath" style="height:1.7em; font-size:0.8em;" >
-        <option>아브라함의 이동</option><option>애굽 탈출</option><option>레위기</option><option>민수기</option><option>신명기</option>
+        <!-- <option>아브라함의 이동</option><option>애굽 탈출</option><option>레위기</option><option>민수기</option><option>신명기</option> -->
         </select>
-        &nbsp&nbsp<input id="showMovingPath" type ="button" value="GO" onclick="pathAction()" >
-        &nbsp<input id="hideMovingPath" type ="button" value="Stop" onclick="pathHide()" >
+        &nbsp<input id="showMovingPath" type ="button" style="font-size:0.8em;" value="GO" onclick="pathAction()" >
+        &nbsp<input id="hideMovingPath" type ="button" style="font-size:0.8em;" value="Stop" onclick="pathHide()" >
         <br>
         <br>
         &nbsp&nbsp<input id="createTrajectory" type ="button" value="생성" onclick="createTrajectory()" >
@@ -301,6 +301,18 @@
     var layerManager = bibleMapManager.getLayerManager();
     var bibleMap = bibleMapManager.getMap();
 
+
+    var selPath = document.getElementById('movePath');
+    var count = trajectoryData.getCount();
+    for( var idx = 0; idx < count; idx ++  ) {
+        var path = document.createElement("option");
+        var obj = trajectoryData.getTrajectoryByValue(idx);
+        path.text = obj.name;
+        path.value = obj.value;
+        selPath.appendChild( path );
+    }
+
+
     ///////////////////////////////////////
 
     (function(){
@@ -338,13 +350,6 @@
 
     var routeMove;
 
-    /*
-    aySelect = document.getElementById('daySelect');
-    myOption = document.createElement("option");
-    myOption.text = "Hello World";
-    myOption.value = "Hello World";
-    daySelect.appendChild(myOption);
-    */
 
     function pathAction( ) {
         if( routeMove ){
@@ -353,18 +358,13 @@
 
         // var movePath = document.getElementById('movePath').value;
         var movePath = $( "#movePath" ).val();
-        var index = 0;
+        var index = Number( movePath);
 
-        if( movePath == '아브라함의 이동')
-            index = 0;
-        else
-            index = 1;
-
-        var trajectoryArray = trajectoryData.getTrajectory( index );
+        var trajectoryArray = trajectoryData.getTrajectoryByValue( index );
         if( trajectoryArray == null )
             return;
 
-        routeMove = new RouteMoveProcess( bibleMap, trajectoryArray );
+        routeMove = new RouteMoveProcess( bibleMap, trajectoryArray.data );
 
         var extent = trajectoryData.getExtent( index );
 
@@ -485,15 +485,37 @@
         if( pos == null )
             return;
 
+
         if( word == "예루살렘"){
-            pos.zoomIn = 13;
+            pos.zoomIn = 14;
         }
 
         requestPoiContentAndShow( pos, word, content, overlay );
         var curZoom = bibleMap.getView().getZoom();
 
         var view = bibleMap.getView();
+        var center = view.getCenter();
+        var curExtent = view.calculateExtent(bibleMap.getSize());
 
+        var extentLength = getDistance( curExtent[0], curExtent[1], curExtent[2], curExtent[3]);
+        var moveDistance = getDistance( center[0], center[1], pos.x, pos.y );
+
+        // if( distance < 68000 )
+        if( moveDistance < extentLength ) {
+            if( curZoom > pos.zoomIn )
+                moveTo(view, [pos.x, pos.y], curZoom );
+            else
+                moveTo(view, [pos.x, pos.y], pos.zoomIn);
+        }
+        else {
+            flyTo(view, [pos.x, pos.y], pos.zoomIn, function (complete) {
+                if (complete == true) {
+                }
+            });
+            console.log( "flyTo() !!!!" );
+        }
+
+       /*
         if( pos.zoomIn <= (curZoom +2) && pos.zoomIn >= (curZoom-2) ){
             moveTo( view, [pos.x, pos.y], pos.zoomIn );
         }
@@ -503,6 +525,7 @@
                 }
             });
         }
+        */
 
     }
 
