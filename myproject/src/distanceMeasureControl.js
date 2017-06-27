@@ -63,8 +63,7 @@ function DistanceMeasureControl( cssClass ){
         measureBtn.addEventListener('click', this.switchMeasureDistance, false);
 
         var element = document.createElement( 'div');
-        var className = this.cssClass + '  ol-unselectable ol-control';
-        element.className = className;
+        element.className = 'measure-distance ol-unselectable ol-control';
         element.appendChild( measureBtn );
 
         ol.control.Control.call( this, {
