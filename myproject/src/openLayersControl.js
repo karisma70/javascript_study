@@ -156,6 +156,26 @@
      return distance;
  }
 
+ function makeDistanceObj( dist  ){
+     var bIsKm = false;
+     var realDist = 0;
+     var distString = '';
+     if( dist >= 1000){
+         realDist = ( Math.round( dist/1000*100) / 100 );
+         bIsKm = true;
+         distString = realDist + ' km';
+     }else{
+         realDist = Math.round(dist);
+         distString = realDist + ' m';
+     }
+     return {
+         distance : realDist,
+         IsKm : bIsKm,
+         distString : distString
+     };
+ }
+
+
  var createTextStyleOfFeature = function( feature, resolution ){
 
      var featureStyle = feature.get('style');
@@ -375,7 +395,6 @@ function createLayer( source  ) {
      var tempLineInteract = null;
 
      function MapManager(overlay, targetMap, view) {
-
          this.scaleLineControl = new ol.control.ScaleLine();
          this.scaleLineControl.setUnits("metric");
 
@@ -392,12 +411,13 @@ function createLayer( source  ) {
                  })
              }).extend([new ol.control.FullScreen({
                  source: 'fullscreen'
-             }), this.scaleLineControl]),
+             //}), this.scaleLineControl, extendEvent ]),
+             }), this.scaleLineControl ]),
              view: this.view
          });
 
-         var zoomSlider = new ol.control.ZoomSlider();
-         this.map.addControl( zoomSlider );
+         // var zoomSlider = new ol.control.ZoomSlider();
+         // this.map.addControl( zoomSlider );
 
          bibleMap = this.map;
 
@@ -473,6 +493,15 @@ function createLayer( source  ) {
          this.map.addInteraction(this.selectClick);
 
 
+         this.addSelectInteraction = function(){
+             this.map.addInteraction(this.selectClick);
+         };
+
+         this.removeSelectInteraction = function(){
+             this.map.removeInteraction(this.selectClick);
+         };
+
+
          this.getMap = function () {
              return this.map;
          };
@@ -518,9 +547,9 @@ function createLayer( source  ) {
              });
          };
 
-         this.addInteraction = function( callback ){
+         this.addTrajectoryInteraction = function( callback ){
 
-             this.removeInteraction();
+             this.removeTrajectoryInteraction();
 
              interactionStyleCallback = callback;
 
@@ -580,7 +609,7 @@ function createLayer( source  ) {
              this.map.addInteraction( tempLineInteract );
          };
 
-         this.removeInteraction = function(){
+         this.removeTrajectoryInteraction = function(){
              if( tempLineLayer ) {
                  this.map.removeLayer( tempLineLayer);
                  tempLineLayer = null;
