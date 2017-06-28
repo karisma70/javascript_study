@@ -15,32 +15,7 @@
         textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 12px arial', color: '#2581D8', outlineColor : '#CECBCB', outlineWidth : 3  }}
      },
 
-     { url : 'biblemap/iran/Iran_AL2', order: 2, style: {
-         historyShow : 'false',
-         visibleRange : { max : 16, min : 1 },
-         fillColor : 'rgba( 255, 255, 255, 0.001)',
-         lineStroke : {  color: [174, 122, 40], width : 1, opacity: 0.01  },
-         textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 12px arial', color: '#2581D8', outlineColor : '#ffffff', outlineWidth : 3  }}
-     },
-
-     { url : 'biblemap/saudiarabia/Saudi_Arabia_AL2', order: 3, style: {
-         historyShow : 'false',
-         visibleRange : { max : 16, min : 1 },
-         fillColor : 'rgba( 255, 255, 255, 0.001)',
-         lineStroke : {  color: [174, 122, 40], width : 1, opacity: 0.01  },
-         textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 12px arial', color: '#2581D8', outlineColor : '#ffffff', outlineWidth : 3  }}
-     },
-
-     { url : 'biblemap/turkey/Turkey_AL2', order: 4, style: {
-         historyShow : 'false',
-         visibleRange : { max : 16, min : 1 },
-         fillColor : 'rgba( 255, 255, 255, 0.001)',
-         lineStroke : {  color: [174, 122, 40], width : 1, opacity: 0.01  },
-         textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 12px arial', color: '#2581D8', outlineColor : '#ffffff', outlineWidth : 3  }}
-     },
-
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
      { url : 'biblemap/history/History_promise_canaan', order: 5, style: {
          historyShow : 'false',
@@ -61,7 +36,7 @@
 
      { url : 'biblemap/history/History_BC12', order: 7, style: {
          historyShow : 'false',
-         visibleRange : { max : 16, min : 7 },
+         visibleRange : { max : 16, min : 6 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
          lineStroke : {  color: [255, 255, 255], width : 0, opacity: 0.01  },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
@@ -104,7 +79,7 @@
 
      { url : 'biblemap/history/History_12Sect_poi', order: 28, style: {
          visibleRange : { max : 16 , min : 9 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 12px 굴림', color: '#105602', outlineColor : 'white', outlineWidth : 3  }}
+         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 12px arial', color: '#105602', outlineColor : 'white', outlineWidth : 3  }}
      },
 
 
@@ -137,11 +112,11 @@
      {
          url: 'biblemap/AD_admin_poi',  order: 26, style: {
          visibleRange : { max : 16 , min : 4 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 13px arial', color: '#105602', outlineColor : 'white', outlineWidth : 3  }}
+         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 13px arial', color: '#105602', outlineColor : 'white', outlineWidth : 2  }}
      },
      { url: 'biblemap/BC_admin_poi',  order: 27, style: {
          visibleRange : { max : 16 , min : 6 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 13px arial', color: '#033078', outlineColor : 'white', outlineWidth : 3  }}
+         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 13px arial', color: '#033078', outlineColor : 'white', outlineWidth : 2  }}
      }
 
  ];

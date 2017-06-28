@@ -95,7 +95,7 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray ){
     };
 
     drawMoving = function (event) {
-        var pointsPerMs = 0.3;
+        var pointsPerMs = 0.2;
 
         var vectorContext = event.vectorContext;
         var frameState = event.frameState;
