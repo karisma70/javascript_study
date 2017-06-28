@@ -162,10 +162,8 @@
             <input type="button" value="검색" onclick="requestBibleByChapter()">
         </form>
         <br>
-        <form name="bibleWordSearch" style="font-size:0.8em;" accept-charset="utf-8">
-            &nbsp<input type="text" name="place" size="12" style="font-size:1.0em;"> 지명
-            <input type="button" value="검색" style="font-size:1.0em;" onclick="moveToPlace()">
-        </form>
+           &nbsp<input type="text" id ="place" size="12" style="font-size:0.8em;"> 지명
+            <input type="button" value="검색" style="font-size:0.8em;" onclick="moveToPlace()">
         <br>
         &nbsp&nbsp<input id="historyAdmin" type ="range" style = "width:150px" min = "0" max = "6" value = "6" onchange="changeHistoryAdmin(this.value)" >
         <br>
@@ -254,7 +252,7 @@
 
     bibleSearch.title.value ="출애굽기";
     bibleSearch.chapter.value = 14;
-    bibleWordSearch.place.value = "예루살렘";
+    place.value = "예루살렘";
 
 
     var container = document.getElementById('popup');
@@ -442,12 +440,12 @@
     };
 
     function moveToPlace(){
-        if( bibleWordSearch.place.value == "" ){
+        if( place.value == "" ){
             alert ("Please insert place! for search!");
             return;
         }
 
-        var placeWord = bibleWordSearch.place.value;
+        var placeWord = place.value;
         placeWord = removeSpaceInWord( placeWord );
         // placeWord = placeWord.replace(/^\s*|\s*$/g, ''); // 좌우 공백 제거
         $('#receiveMsg').empty();
@@ -519,7 +517,7 @@
             option: {}
         };
 
-        bibleWordSearch.place.value =  word;
+        place.value =  word;
 
         var searchWord = word;
         searchParam.option.content= { $regex : searchWord };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
