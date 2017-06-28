@@ -6,6 +6,35 @@
  */
 
 
+function stringToUTF8(str) {
+	// TODO(user): Use native implementations if/when available
+	var out = [], p = 0;
+	for (var i = 0; i < str.length; i++) {
+		var c = str.charCodeAt(i);
+		if (c < 128) {
+			out[p++] = c;
+		} else if (c < 2048) {
+			out[p++] = (c >> 6) | 192;
+			out[p++] = (c & 63) | 128;
+		} else if (
+			((c & 0xFC00) == 0xD800) && (i + 1) < str.length &&
+			((str.charCodeAt(i + 1) & 0xFC00) == 0xDC00)) {
+			// Surrogate Pair
+			c = 0x10000 + ((c & 0x03FF) << 10) + (str.charCodeAt(++i) & 0x03FF);
+			out[p++] = (c >> 18) | 240;
+			out[p++] = ((c >> 12) & 63) | 128;
+			out[p++] = ((c >> 6) & 63) | 128;
+			out[p++] = (c & 63) | 128;
+		} else {
+			out[p++] = (c >> 12) | 224;
+			out[p++] = ((c >> 6) & 63) | 128;
+			out[p++] = (c & 63) | 128;
+		}
+	}
+	return out;
+};
+
+
 var BinaryFile = function(strData, iDataOffset, iDataLength) {
 	var data = strData;
 	var dataOffset = iDataOffset || 0;
@@ -79,6 +108,7 @@ var BinaryFile = function(strData, iDataOffset, iDataLength) {
 		for (var i=iOffset,j=0;i<iOffset+iLength;i++,j++) {
 			aStr[j] = String.fromCharCode(this.getByteAt(i));
 		}
+
 		return aStr.join("");
 	}
 
@@ -161,7 +191,7 @@ var BinaryAjax = (function() {
 							oHTTP.fileSize = iFileSize || oHTTP.getResponseHeader("Content-Length");
 							fncCallback(oHTTP);
 						} else {
-							if (fncError) fncError();
+							if (fncError) fncError( oHTTP.status );
 						}
 						oHTTP = null;
 					};
@@ -177,7 +207,7 @@ var BinaryAjax = (function() {
 								};
 								fncCallback(oRes);
 							} else {
-								if (fncError) fncError();
+								if (fncError) fncError( oHTTP.status );
 							}
 							oHTTP = null;
 						}
