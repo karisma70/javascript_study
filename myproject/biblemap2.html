@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Bible Map</title>
+    <link rel="stylesheet" href="https://openlayers.org/en/v4.1.1/css/ol.css" type="text/css;">
+    <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+    <script src="https://api.mapbox.com/mapbox.js/plugins/arc.js/v0.1.0/arc.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+    <script type="text/javascript" src="lib/binaryajax.js"></script>
+    <script type="text/javascript" src="src/binarywrapper.js"></script>
+    <script type="text/javascript" src="src/shapefile.js"></script>
+    <script type="text/javascript" src="src/dbf.js"></script>
+    <script type="text/javascript" src="src/shapedownload.js"></script>
+    <script type="text/javascript" src="src/contentTextProc.js"></script>
+    <script type="text/javascript" src="src/routePlay.js"></script>
+    <script type="text/javascript" src="src/trajectoryData.js"></script>
+    <script type="text/javascript" src="src/distanceMeasureControl.js"></script>
+    <script type = "text/javascript" src = "httpRequest.js"></script>
+
+    <script src="openLayers_v4.1.1/ol.js"></script>
+    <script type="text/javascript" src="src/openLayersControl.js"></script>
+    <style type ="text/css">
+    * {
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        <!-- font-size: 12px; -->
+    }
+    .wrapperDiv {
+        width: 100%;
+        height: 65%;
+    }
+    .map {
+        background-color: #fcf8e3;
+        border:1px solid grey;
+        position: absolute;
+        width: auto;
+        height: 65%;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        left: 0px;
+        margin-right: 200px;
+        overflow: auto;
+    }
+    .sidepanel {
+        /* background-color: #dff0d8;  */
+        border:1px solid grey;
+        position: absolute;
+        top: 0;
+        right: 0px;
+        width: 200px;
+        height: 65%;
+    }
+    footer{
+        top: 10px;
+        height: 32%;
+        /* background: #ccc;  */
+    /* border:1px solid grey; */
+    }
+
+    .fullscreen:-moz-full-screen {
+        height: 100%;
+    }
+    .fullscreen:-webkit-full-screen {
+        height: 100%;
+    }
+    .fullscreen:-ms-fullscreen {
+        height: 100%;
+    }
+
+    .fullscreen:fullscreen {
+        height: 100%;
+    }
+
+    .fullscreen {
+        margin-bottom: 10px;
+        width: 100%;
+        height: 400px;
+    }
+
+    .ol-rotate {
+        top: 3em;
+    }
+
+    .ol-popup {
+        position: absolute;
+        background-color: white;
+        -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+        filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid #cccccc;
+        bottom: 12px;
+        left: -50px;
+        min-width: 120px;
+        font-size:0.8em;
+    }
+    .ol-popup:after, .ol-popup:before {
+        top: 100%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+    .ol-popup:after {
+        border-top-color: white;
+        border-width: 10px;
+        left: 48px;
+        margin-left: -10px;
+    }
+    .ol-popup:before {
+        border-top-color: #cccccc;
+        border-width: 11px;
+        left: 48px;
+        margin-left: -11px;
+    }
+    .ol-popup-closer {
+        text-decoration: none;
+        position: absolute;
+        top: 2px;
+        right: 8px;
+    }
+    .ol-popup-closer:after {
+        content: "✖";
+    }
+    .measure-distance {
+        top: 65px;
+        left: .5em;
+    }
+    .ol-touch .measure-distance {
+        top: 80px;
+    }
+
+</style>
+</head>
+<body>
+<div class="wrapperDiv">
+
+    <div id="map" class="map"></div>
+        화면 가득 채우기<br />(창크기를 조절해 보세요.)
+    </div>
+
+    <div class="sidepanel">
+        <form name="bibleSearch" style="font-size:12px;" accept-charset="utf-8">
+            <br>
+            &nbsp<select name="title" style="height:1.7em; font-size:1.0em;" value="창세기">
+            <option>창세기</option><option>출애굽기</option><option>레위기</option><option>민수기</option><option>신명기</option>
+            <option>여호수아</option><option>사사기</option><option>룻기</option><option>사무엘상</option><option>사무엘하</option>
+            <option>열왕기상</option><option>열왕기하</option><option>역대상</option><option>역대하</option><option>에스라</option>
+            <option>느헤미야</option><option>에스더</option><option>욥기</option><option>시편</option><option>잠언</option>
+            <option>전도서</option>아가<option>이사야</option><option>예레미야</option><option>예레미야애가</option>
+            <option>에스겔</option><option>다니엘</option><option>호세아</option><option>요엘</option><option>아모스</option>
+            <option>오바댜</option><option>요나</option><option>미가</option><option>나훔</option><option>하박국</option>
+            <option>스바냐</option><option>학개</option><option>스가랴</option><option>말라기</option><option>마태복음</option>
+            <option>마가복음</option><option>누가복음</option><option>요한복음</option><option>사도행전</option><option>로마서</option>
+            <option>고린도전서</option><option>고린도후서</option><option>갈라디아서</option><option>에베소서</option><option>빌립보서</option>
+            <option>골로새서</option><option>데살로니가전서</option><option>데살로니가후서</option><option>디모데전서</option><option>디모데후서</option>
+            <option>디도서</option><option>빌레몬서</option><option>히브리서</option><option>야고보서</option><option>베드로전서</option>
+            <option>베드로후서</option><option>요한1서</option><option>요한2서</option><option>요한3서</option><option>유다서</option>
+            <option>요한계시록</option>
+        </select>
+            <br>
+            &nbsp<input type="text" name="chapter" size="2"  style="font-size:1.0em;" value="14"> 장
+            <input type="button" value="검색" style="font-size:12px;" onclick="requestBibleByChapter()">
+        </form>
+        <br>
+        &nbsp<input type="text" id ="place" size="12" style="font-size:12px;" value="예루살렘"><input type="button" value="검색" style="font-size:12px;" onclick="moveToPlace()">
+        <br>
+        &nbsp&nbsp<input id="historyAdmin" type ="range" style = "font-size:12px; width:150px" min = "0" max = "6" value = "6" onchange="changeHistoryAdmin(this.value)" >
+        <br>
+        &nbsp&nbsp<span id ="range" style="font-size:0.8em">현재의 국가</span>
+        <br>
+        <br>
+        &nbsp<select id="movePath" style="height:1.7em; font-size:12px;" ></select>
+        <br>
+        &nbsp<input id="showMovingPath" type ="button" style="font-size:12px;" value="GO" onclick="pathAction()" >
+        &nbsp<input id="hideMovingPath" type ="button" style="font-size:12px;" value="Off" onclick="pathHide()" >
+        <br>
+        <br>
+        &nbsp&nbsp<input id="createTrajectory" type ="button" value="생성" onclick="createTrajectory()" >
+        &nbsp&nbsp<input id="delTrajectory" type ="button" value="삭제" onclick="delTrajectory()" >
+        <br>
+    </div>
+</div>
+
+<footer id ="receiveMsg" style="position: relative; top: 10px; overflow-y:scroll; line-height: 150%; font-size:12px; font-family: 돋움체; clear: both;">
+</footer>
+
+<div id="popup" class="ol-popup" style="font-szie:1.8em">
+    <a href="#" id="popup-closer" class="ol-popup-closer" style="font-szie:1.8em"></a>
+    <div id="popup-content" style="font-szie:1.8em"></div>
+</div>
+
+<script>
+
+    function currentHistoryAdminString( newValue ){
+        var strArray = [ "약속의 땅 가나안",  "출애굽 후 12지파", "사사 시대(BC 12C)", "사울왕 시대 이스라엘", "다윗왕 시대 이스라엘", "북이스라엘과 남유다", "현재의 국가" ];
+
+        document.getElementById("range").innerHTML = strArray[ newValue ];
+    }
+
+    function changeHistoryAdmin( newValue ){
+        currentHistoryAdminString( newValue );
+
+        var view = bibleMapManager.getView();
+        if( view.getZoom() < 7 ) {
+            view.setCenter([3942321.454123089, 3792452.570684223]);
+            view.setZoom(7);
+        }
+
+        for (idx in layerManager.layerContainer.layers) {
+            var layer = layerManager.layerContainer.layers[idx];
+            if (layer.get('historyShow')) {
+                layer.set('historyShow', 'false');
+            }
+        }
+
+        var historyArray = [5, 6, 7, 8, 9, 10, [ 1, 2, 3, 4 ] ];
+
+        function showHistoryLayer( showId ) {
+            for (idx in layerManager.layerContainer.layers) {
+                var layer = layerManager.layerContainer.layers[idx];
+                var id = layer.get('id');
+                if (showId.length) {
+                    for (hID in showId) {
+                        var sSubId = showId[hID];
+                        if (id == sSubId) {
+                            if (layer.get('historyShow')) {
+                                layer.set('historyShow', 'true');
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    if (id == showId) {
+                        if (layer.get('historyShow')) {
+                            layer.set('historyShow', 'true');
+                            break;
+                        } else {
+                            alert(" historyArray[" + showId + "] : " + historyArray[showId] + ", layerID : " + id + "  has not property historyShow!!!");
+                        }
+                    }
+                }
+            }
+        }
+
+        showHistoryLayer( historyArray[newValue]);
+    }
+
+    /*
+    bibleSearch.title.value ="출애굽기";
+    bibleSearch.chapter.value = 14;
+    place.value = "예루살렘";
+    */
+
+
+    var container = document.getElementById('popup');
+    var content = document.getElementById('popup-content');
+    var closer = document.getElementById('popup-closer');
+
+    var overlay = createOverlay( container );    // container
+
+    var measureBtn = document.createElement('button');
+
+    var MeasureDistanceEvent = function( opt_options ) {
+
+        var options = opt_options || {};
+        measureBtn.innerHTML = 'M';
+
+        var element = document.createElement( 'div');
+        element.className = 'measure-distance ol-unselectable ol-control';
+        element.appendChild( measureBtn );
+
+        ol.control.Control.call( this, {
+            element: element,
+            target: options.target
+        });
+    };
+    ol.inherits( MeasureDistanceEvent, ol.control.Control );
+
+
+    var bibleMapManager = createMapManager( overlay, 'map' );
+    var trajectoryData = new TrajectoryData();
+    var layerManager = bibleMapManager.getLayerManager();
+    var bibleMap = bibleMapManager.getMap();
+
+    var measureEvent = new MeasureDistanceEvent();
+    bibleMap.addControl( measureEvent );
+
+    var measureDistance = new DistanceMeasureControl( bibleMapManager );
+    measureBtn.addEventListener('click', measureDistance.toggleMeasureDistance, false);
+
+
+    var selPath = document.getElementById('movePath');
+    var count = trajectoryData.getCount();
+    for( var idx = 0; idx < count; idx ++  ) {
+        var path = document.createElement("option");
+        var obj = trajectoryData.getTrajectoryByValue(idx);
+        path.text = obj.name;
+        path.value = obj.value;
+        selPath.appendChild( path );
+    }
+
+
+    ///////////////////////////////////////
+
+    (function(){
+        var flag = 0;
+
+        var historyAdmin = document.getElementById("historyAdmin");
+        if( historyAdmin.addEventListener ) {
+            historyAdmin.addEventListener( "mousedown", function(){
+                flag = 1;
+            }, false );
+            historyAdmin.addEventListener( "mouseup", function(){
+                flag = 0;
+            }, false );
+
+            historyAdmin.addEventListener( "mousemove", function(){
+                if( flag == 1 ){
+                    currentHistoryAdminString( historyAdmin.value );
+                }
+            }, false);
+        }
+
+        layerManager.layerContainer.totalCount = bibleMapLayers.length;
+
+        for( idx in bibleMapLayers ){
+            var layer = bibleMapLayers[idx];
+            new ShapeFileDownload( bibleMap, layer.url, layer.order, layer.style, layerManager.getLayerContainer(), function( ){
+                requestBibleByChapter();
+                changeHistoryAdmin( historyAdmin.value );
+            } );
+        }
+    }());
+
+    ///////////////////////////////////////////////////////////////
+
+    var routeMove;
+
+
+    function pathAction( ) {
+        measureDistance.removeMeasureDraw();
+
+        if( routeMove ){
+            routeMove.stop();
+        }
+
+        // var movePath = document.getElementById('movePath').value;
+        var movePath = $( "#movePath" ).val();
+        var index = Number( movePath);
+
+        var trajectoryArray = trajectoryData.getTrajectoryByValue( index );
+        if( trajectoryArray == null )
+            return;
+
+        routeMove = new RouteMoveProcess( bibleMap, trajectoryArray.data );
+
+        var extent = trajectoryData.getExtent( index );
+
+        var view = bibleMap.getView();
+        view.fit( extent, bibleMap.getSize() );
+
+        routeMove.play();
+    }
+
+    function pathHide(){
+        if( routeMove ){
+            routeMove.stop();
+        }
+    }
+
+    function createTrajectory() {
+
+        bibleMapManager.addTrajectoryInteraction(function (vertices) {
+            console.log("------------------------");
+            console.log("[");
+            for (var idx = 0; idx < vertices.length; idx++) {
+                var pos = vertices[idx];
+                console.log( "[" + pos + "],");
+            }
+            console.log("]");
+            console.log("------------------------");
+        });
+    }
+
+    function delTrajectory(){
+        bibleMapManager.removeTrajectoryInteraction();
+    }
+
+    bibleMapManager.mapEventPrecompose( function(evt){
+        var zoom = bibleMapManager.getView().getZoom();
+        $("#zoomLevel").html("zoom level : " + zoom); // + zoom;
+    });
+
+
+    bibleMapManager.clickEvent( function(evt){
+        var clickedPos = evt.coordinate;
+        $("#mousePosition").html( "Pos X: " + clickedPos[0] + ", Y:" + clickedPos[1] ); // + zoom;
+    });
+
+    bibleMapManager.singleClickEvent( function(evt){
+    });
+
+    bibleMapManager.selectFeatureEvent( function(e){
+        var selLen = e.selected.length;
+        if( selLen < 1 )
+            return;
+
+        var feature = e.selected[0];    // 첫번째 걸린 것만 가져오기로 하자
+        var posName = feature.get("name");
+        if( posName == null )
+            return;
+
+        var pos = layerManager.getPoiByName(posName);
+        var layer = feature.getLayer( bibleMap );
+        var id = layer.get("id");
+        if( id >= 15 ) {   // 전세계 폴리곤 경계가 아닌 경우 검색 단어에 대한 성경검색 요청
+            requestBibleByWord(posName, function( ){
+                requestPoiContentAndShow( pos, posName, content, overlay );
+            });
+        } else {        // 전세계 폴리곤 경계라면...
+            if( id < 5 ) {
+                posName = "<현재 국가><br>" + "&nbsp" + posName;
+            } else{
+                requestBibleByWord(posName, null );
+            }
+            content.innerHTML = posName;
+            overlay.setPosition( bibleMapManager.getClickecPos() );
+        }
+
+    });
+
+    closer.onclick = function() {
+        overlay.setPosition(undefined);
+        closer.blur();
+        content.innerHTML = "";
+        return false;
+    };
+
+    function moveToPlace(){
+        if( place.value == "" ){
+            alert ("Please insert place! for search!");
+            return;
+        }
+
+        var placeWord = place.value;
+        placeWord = removeSpaceInWord( placeWord );
+        // placeWord = placeWord.replace(/^\s*|\s*$/g, ''); // 좌우 공백 제거
+        $('#receiveMsg').empty();
+
+        var searchParam = {
+            type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
+            option: {}
+        };
+        searchParam.option.content= { $regex : placeWord };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
+
+        reqeustAndShowContents( searchParam, function( param, resObj ){
+            if( resObj.length < 1 ) {
+                var placeWord = param.option.content.$regex;
+                var orgName = layerManager.getPoiByName(placeWord).orgName;
+                param.option.content = {$regex: orgName};
+
+                reqeustAndShowContents( param, function( param, resObj ){
+                    moveToPlaceByWord( param.option.content.$regex );
+                } );
+            } else {
+                moveToPlaceByWord( param.option.content.$regex );
+            }
+        } );
+
+    }
+
+    function moveToPlaceByWord( word ){
+        var pos = layerManager.getPoiByName( word );
+        if( pos == null )
+            return;
+
+
+        if( word == "예루살렘"){
+            pos.zoomIn = 14;
+        }
+
+        requestPoiContentAndShow( pos, word, content, overlay );
+        var curZoom = bibleMap.getView().getZoom();
+
+        var view = bibleMap.getView();
+        var center = view.getCenter();
+        var curExtent = view.calculateExtent(bibleMap.getSize());
+
+        var extentLength = getDistance( curExtent[0], curExtent[1], curExtent[2], curExtent[3]);
+        var moveDistance = getDistance( center[0], center[1], pos.x, pos.y );
+
+        // if( distance < 68000 )
+        if( moveDistance < extentLength ) {
+            if( curZoom > pos.zoomIn )
+                moveTo(view, [pos.x, pos.y], curZoom );
+            else
+                moveTo(view, [pos.x, pos.y], pos.zoomIn);
+        }
+        else {
+            flyTo(view, [pos.x, pos.y], pos.zoomIn, function (complete) {
+                if (complete == true) {
+                }
+            });
+            console.log( "flyTo() !!!!" );
+        }
+
+    }
+
+
+    function requestBibleByWord( word, competeCallback ){
+        $('#receiveMsg').empty();
+        var searchParam = {
+            type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
+            option: {}
+        };
+
+        place.value =  word;
+
+        var searchWord = word;
+        searchParam.option.content= { $regex : searchWord };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
+        reqeustAndShowContents( searchParam, competeCallback );
+    }
+
+    function requestBibleByChapter(){
+        $('#receiveMsg').empty();
+        var searchParam = {
+            type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
+            option: {}
+        };
+
+        function consistSearchOpt( obj ){
+            searchParam.option[obj.name] = obj.value;
+        }
+
+        if( bibleSearch.title.value == "" ){
+            alert ("Please insert title!!");
+            return;
+        } else {
+            consistSearchOpt( bibleSearch.title  );
+        }
+
+        if( bibleSearch.chapter.value == "" ){
+            alert ("Please insert chapter!!");
+            return;
+        } else {
+            consistSearchOpt( bibleSearch.chapter );
+        }
+
+        /*
+         if( bibleSearch.paragraph.value != "" ){
+         consistSearchOpt( bibleSearch.paragraph );
+         }*/
+
+        reqeustAndShowContents( searchParam, null );
+    }
+
+
+    function reqeustAndShowContents( searchParam , completeCallback ){
+        var jsonStr = JSON.stringify( searchParam );
+
+        url = "http://13.124.86.217:8082?" + jsonStr;
+        console.log( url );
+        httpRequest("POST", url, function( http ){
+            var resObj = JSON.parse( http.responseText );
+            if( resObj.length < 1 ){
+                if( completeCallback )
+                    completeCallback( searchParam, resObj );
+                return;
+            }
+
+            if( resObj.result != "undefined" && resObj.result == "fail" ){
+                $('#receiveMsg').append( resObj.error + "\r\n" );
+            }
+            else {
+                $('#receiveMsg').append( "<table>");
+                var chapterStart =  "<td width = \"120\">&nbsp&nbsp";
+                var contentStart = "<td>";
+                var endString = "</td>";
+
+                function appendReceiveMsg( chapterStart, endString, resObj, contentStart, strContent ){
+                    $('#receiveMsg').append( "<tr>");
+                    $('#receiveMsg').append( chapterStart + "<strong>" + resObj.title + " " + resObj.chapter + ":" + resObj.paragraph +"</strong>"+ endString + contentStart + strContent + endString );
+                    $('#receiveMsg').append( "</tr>");
+                }
+
+                if (resObj.length != "undefined") {    // 배열로 받아올 경우
+                    for (idx in resObj) {
+                        if( searchParam.type == "Word" ){
+                            if( examinRightWordinText( searchParam.option.content.$regex, resObj[idx].content ) == true ){
+                                var strConvText = makeStrongInText( layerManager, searchParam.option.content.$regex, resObj[idx].content );
+                                appendReceiveMsg( chapterStart, endString, resObj[idx], contentStart, strConvText );
+                            }
+                        }else {
+                            var strConvText = makeStrongWordOfLocation( layerManager, resObj[idx].content );
+                            appendReceiveMsg( chapterStart, endString, resObj[idx], contentStart, strConvText );
+                        }
+                    }
+                } else {        // 수신받은 데이터가 배열이 아니고 하나만 있을 경우
+                    if( searchParam.type == "Word" ){
+                        if( examinRightWordinText( searchParam.option.content.$regex, resObj.content ) == true ) {
+                            var strConvText = makeStrongInText( layerManager, searchParam.option.content.$regex, resObj.content);
+                            appendReceiveMsg( chapterStart, endString, resObj, contentStart, strConvText );
+                        }
+                    } else {
+                        var strConvText = makeStrongWordOfLocation( layerManager, resObj.content );
+                        appendReceiveMsg( chapterStart, endString, resObj, contentStart, strConvText );
+                    }
+                }
+            }
+            $('#receiveMsg').append( "<br></table >");
+            $('#receiveMsg').append( "<br>" );
+
+            if( completeCallback )
+                completeCallback( searchParam, resObj );
+
+        } );    // end of httpRequest
+    }
+
+
+</script>
+
+</body>
+</html>
