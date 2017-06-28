@@ -8,13 +8,11 @@
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
     <script src="https://api.mapbox.com/mapbox.js/plugins/arc.js/v0.1.0/arc.js"></script>
     <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
-
     <script type="text/javascript" src="lib/binaryajax.js"></script>
     <script type="text/javascript" src="src/binarywrapper.js"></script>
     <script type="text/javascript" src="src/shapefile.js"></script>
     <script type="text/javascript" src="src/dbf.js"></script>
     <script type="text/javascript" src="src/shapedownload.js"></script>
-    <script type="text/javascript" src="src/openLayersControl.js"></script>
     <script type="text/javascript" src="src/contentTextProc.js"></script>
     <script type="text/javascript" src="src/routePlay.js"></script>
     <script type="text/javascript" src="src/trajectoryData.js"></script>
@@ -22,6 +20,8 @@
     <script type = "text/javascript" src = "httpRequest.js"></script>
 
     <script src="openLayers_v4.1.1/ol.js"></script>
+    <script type="text/javascript" src="src/openLayersControl.js"></script>
+
     <style>
         table { border-spacing: 2px;
         }
@@ -280,45 +280,6 @@
         });
     };
     ol.inherits( MeasureDistanceEvent, ol.control.Control );
-
-
-    ol.Feature.prototype.getLayer = function(map) {
-        var this_ = this, layer_, layersToLookFor = [];
-        /**
-         * Populates array layersToLookFor with only
-         * layers that have features
-         */
-        var check = function(layer){
-            var source = layer.getSource();
-            if(source instanceof ol.source.Vector){
-                var features = source.getFeatures();
-                if(features.length > 0){
-                    layersToLookFor.push({
-                        layer: layer,
-                        features: features
-                    });
-                }
-            }
-        };
-        //loop through map layers
-        map.getLayers().forEach(function(layer){
-            if (layer instanceof ol.layer.Group) {
-                layer.getLayers().forEach(check);
-            } else {
-                check(layer);
-            }
-        });
-        layersToLookFor.forEach(function(obj){
-            var found = obj.features.some(function(feature){
-                return this_ === feature;
-            });
-            if(found){
-                //this is the layer we want
-                layer_ = obj.layer;
-            }
-        });
-        return layer_;
-    };
 
 
     var bibleMapManager = createMapManager( overlay, 'map' );
