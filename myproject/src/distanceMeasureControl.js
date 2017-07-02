@@ -16,6 +16,15 @@ function DistanceMeasureControl( paramMapManager ){
 
     source = new ol.source.Vector({wrapX: false});
 
+    function removeSourceFeatures() {
+
+        var features = source.getFeatures();
+        for (var i = 0; i < features.length; i++) {
+            var feature = features[i];
+            source.removeFeature(feature);
+        }
+    }
+
     this.vector = new ol.layer.Vector({
         source: source,
         style: new ol.style.Style( {
@@ -123,8 +132,9 @@ function DistanceMeasureControl( paramMapManager ){
                     width: 3
                 })
             }),
+
             geometryFunction: function (coords, geom) {
-                if (!geom) {
+                if (!geom  ) {
                     geom = new ol.geom.LineString(null);
                 }
                 geom.setCoordinates(coords);
@@ -139,14 +149,20 @@ function DistanceMeasureControl( paramMapManager ){
             measureGeom = null;
             coordString = "";
 
+            removeSourceFeatures();
+            map.render();
+        });
+
+        map.on('click', function(evt){
+
             var features = source.getFeatures();
-            for (var i = 0; i < features.length; i++) {
-                var feature = features[i];
-                source.removeFeature( feature );
+            if( features.length > 0 ) {
+                coordString = "";
+                measureGeom = null;
+                removeSourceFeatures();
+                map.render();
             }
 
-            map.render();
-            console.log( "dblClick!!!");
         });
 
         map.on('postcompose', function(event){
