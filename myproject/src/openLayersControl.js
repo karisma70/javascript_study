@@ -17,7 +17,7 @@
 
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-     { url : 'biblemap/history/History_promise_canaan', order: 5, style: {
+     { url : 'biblemap/history/History_promise_canaan2', order: 5, style: {
          historyShow : 'false',
          visibleRange : { max : 16, min : 6 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
@@ -52,7 +52,7 @@
 
      { url : 'biblemap/history/History_david_king', order: 9, style: {
          historyShow : 'false',
-         visibleRange : { max : 16, min : 7 },
+         visibleRange : { max : 16, min : 6 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
          lineStroke : {  color: [255, 255, 255], width : 0, opacity: 0.01  },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
@@ -65,15 +65,6 @@
          lineStroke : {  color: [255, 255, 255], width : 0, opacity: 0.01  },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
      },
-
-     { url : 'biblemap/history/History_divideIsrael', order: 11, style: {
-         historyShow : 'false',
-         visibleRange : { max : 16, min : 7 },
-         fillColor : 'rgba( 255, 255, 255, 0.001)',
-         lineStroke : {  color: [255, 255, 255], width : 0, opacity: 0.01  },
-         textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
-     },
-
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

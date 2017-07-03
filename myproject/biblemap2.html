@@ -66,24 +66,26 @@
     /* border:1px solid grey; */
     }
 
-    .fullscreen:-moz-full-screen {
+    .fullscreenCss:-moz-full-screen {
         height: 100%;
     }
-    .fullscreen:-webkit-full-screen {
+    .fullscreenCss:-webkit-full-screen {
         height: 100%;
     }
-    .fullscreen:-ms-fullscreen {
-        height: 100%;
-    }
-
-    .fullscreen:fullscreen {
+    .fullscreenCss:-ms-fullscreen {
         height: 100%;
     }
 
-    .fullscreen {
-        margin-bottom: 10px;
+    .fullscreenCss:fullscreen {
+        height: 100%;
+    }
+
+    .fullscreenCss {
+        /* margin-bottom: 10px;
         width: 100%;
-        height: 400px;
+        height: 400px;  */
+        width: 100%;
+        height: 65%;
     }
 
     .ol-rotate {
@@ -100,7 +102,7 @@
         border: 1px solid #cccccc;
         bottom: 12px;
         left: -50px;
-        min-width: 120px;
+        min-width: 130px;
         font-size:0.8em;
     }
     .ol-popup:after, .ol-popup:before {
@@ -144,16 +146,15 @@
 </style>
 </head>
 <body>
-<div class="wrapperDiv">
+<div id="fullscreenMap" class = "fullscreenCss">
 
     <div id="map" class="map"></div>
-        화면 가득 채우기<br />(창크기를 조절해 보세요.)
     </div>
 
     <div class="sidepanel">
-        <form name="bibleSearch" style="font-size:12px;" accept-charset="utf-8">
+        <form name="bibleSearch" style="font-size:12px; height: 70px" accept-charset="utf-8">
             <br>
-            &nbsp성경 <select name="title" style="height:1.7em; font-size:1.0em;" value="창세기">
+            &nbsp&nbsp&nbsp&nbsp<select name="title" style="height:1.7em; font-size:1.0em;" value="창세기">
             <option>창세기</option><option>출애굽기</option><option>레위기</option><option>민수기</option><option>신명기</option>
             <option>여호수아</option><option>사사기</option><option>룻기</option><option>사무엘상</option><option>사무엘하</option>
             <option>열왕기상</option><option>열왕기하</option><option>역대상</option><option>역대하</option><option>에스라</option>
@@ -170,18 +171,25 @@
             <option>요한계시록</option>
         </select>
             <br>
-            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="number" name="chapter" style="width: 4em; font-size:1.0em;" value="14"> 장
+            &nbsp&nbsp&nbsp&nbsp<input type="number" name="chapter" style="width: 4em; font-size:1.0em;" value="14"> 장
             <input type="button" value="검색" style="font-size:12px;" onclick="requestBibleByChapter()">
         </form>
+        <div name="bibleWord" style="height:30px;">
+            <!-- <img src="image/word_search2.png" style="width:20px; height:22px; vertical-align:middle" ><input type="text" id ="word" size="12" style="font-size:12px;" value="바울"><input type="button" value="검색" style="font-size:12px;" onclick="searchBibleWord()"> -->
+            &nbsp&nbsp<span style="font-size:12px;">단어</span>&nbsp<input type="text" id ="word" size="12" style="font-size:12px;" value="바울"><input type="image" src="image/word_search2.png" style="width:23px; height:24px; vertical-align:middle"  onclick="searchBibleWord()">
+            <br>
+            <!-- <img src="image/place_search2.png" style="width:22px; height:21px; vertical-align:middle" ><input type="text" id ="place" size="12" style="font-size:12px;" value="예루살렘"><input type="button" value="검색" style="font-size:12px;" onclick="moveToPlace()"> -->
+            &nbsp&nbsp<span style="font-size:12px;">지명</span>&nbsp<input type="text" id ="place" size="12" style="font-size:12px;" value="예루살렘"><input type="image" src="image/place_search2.png" style="width:23px; height:24px; vertical-align:middle"  onclick="moveToPlace()">
         <br>
-        <!-- &nbsp<input type="text" id ="place" size="12" style="font-size:12px;" value="예루살렘"><input type="button" value="검색" style="font-size:12px;" onclick="moveToPlace()"> -->
-        &nbsp<input type="text" id ="place" size="12" style="font-size:12px;" value="비시디아 안디옥"><input type="button" value="검색" style="font-size:12px;" onclick="moveToPlace()">
+        </div>
         <br>
         <br>
-        &nbsp&nbsp<input id="historyAdmin" type ="range" style = "font-size:12px; width:160px" min = "0" max = "6" value = "6" onchange="changeHistoryAdmin(this.value)" >
-        &nbsp&nbsp<span id ="range" style="font-size:0.8em">현재의 국가</span>
-        <br>
-        <br>
+        <div name ="historyBar" style="margin-left:10px; width: 170px; height: 80px; border: 1px solid #A7A4A4;">
+            &nbsp<span style="font-size:13px">[ 시대별 경계 영역 ]</span>
+            &nbsp&nbsp&nbsp<input id="historyAdmin" type ="range" style = "font-size:12px; width:160px" min = "0" max = "6" value = "6" onchange="changeHistoryAdmin(this.value)" >
+            &nbsp&nbsp&nbsp<span id ="range" style="font-size:0.8em">현재의 국가</span>
+        </div>
+         <br>
         &nbsp<select id="movePath" style="height:1.7em; font-size:12px;" ></select>
         <br>
         &nbsp<input id="showMovingPath" type ="button" style="font-size:12px;" value="Play" onclick="pathAction()" >
@@ -200,6 +208,11 @@
 
 <script>
 
+    var word = document.getElementById("word");
+    word.addEventListener("change", function(e){
+        searchBibleWord();
+    });
+
     var place = document.getElementById("place");
     place.addEventListener("change", function(e){
         moveToPlace();
@@ -215,12 +228,6 @@
     function changeHistoryAdmin( newValue ){
         currentHistoryAdminString( newValue );
 
-        var view = bibleMapManager.getView();
-        if( view.getZoom() < 7 ) {
-            view.setCenter([3942321.454123089, 3792452.570684223]);
-            view.setZoom(7);
-        }
-
         for (idx in layerManager.layerContainer.layers) {
             var layer = layerManager.layerContainer.layers[idx];
             if (layer.get('historyShow')) {
@@ -234,7 +241,7 @@
             for (idx in layerManager.layerContainer.layers) {
                 var layer = layerManager.layerContainer.layers[idx];
                 var id = layer.get('id');
-                if (showId.length) {
+                if (showId.length) {    // 현재의 국가는 4개의 레이어를 한꺼번에 켜고 꺼야 한다.
                     for (hID in showId) {
                         var sSubId = showId[hID];
                         if (id == sSubId) {
@@ -248,6 +255,9 @@
                     if (id == showId) {
                         if (layer.get('historyShow')) {
                             layer.set('historyShow', 'true');
+                            var extent = layer.getSource().getExtent();
+                            var view = bibleMap.getView();
+                            view.fit( extent, bibleMap.getSize() );
                             break;
                         } else {
                             alert(" historyArray[" + showId + "] : " + historyArray[showId] + ", layerID : " + id + "  has not property historyShow!!!");
@@ -259,12 +269,6 @@
 
         showHistoryLayer( historyArray[newValue]);
     }
-
-    /*
-    bibleSearch.title.value ="출애굽기";
-    bibleSearch.chapter.value = 14;
-    place.value = "예루살렘";
-    */
 
 
     var container = document.getElementById('popup');
@@ -452,12 +456,47 @@
         return false;
     };
 
+    function searchBibleWord(){
+        if( word.value == "" ){
+            alert ("Please insert word for search!");
+            return;
+        }
+
+        var searchWord = word.value;
+        searchWord = removeSpaceInWord( searchWord );
+        // placeWord = placeWord.replace(/^\s*|\s*$/g, ''); // 좌우 공백 제거
+        $('#receiveMsg').empty();
+
+        var searchParam = {
+            type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
+            option: {}
+        };
+        searchParam.option.content= { $regex : searchWord };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
+
+        reqeustAndShowContents( searchParam, function( param, resObj ){
+            if( resObj.length < 1 ) {
+                console.log( "검색결과가 없어서 재검색!!!")
+                var placeWord = param.option.content.$regex;
+                var orgName = layerManager.getPoiByName(placeWord).orgName;
+                param.option.content = {$regex: orgName};
+
+                reqeustAndShowContents( param, function( param, resObj ){
+                    // moveToPlaceByWord( param.option.content.$regex );
+                } );
+            } else {
+                // moveToPlaceByWord( param.option.content.$regex );
+            }
+        } );
+
+    }
+
     function moveToPlace(){
         if( place.value == "" ){
             alert ("Please insert place! for search!");
             return;
         }
 
+        /*
         var placeWord = place.value;
         placeWord = removeSpaceInWord( placeWord );
         // placeWord = placeWord.replace(/^\s*|\s*$/g, ''); // 좌우 공백 제거
@@ -483,7 +522,9 @@
                 moveToPlaceByWord( param.option.content.$regex );
             }
         } );
+        */
 
+        moveToPlaceByWord( place.value );
     }
 
     function moveToPlaceByWord( word ){
@@ -531,7 +572,7 @@
             option: {}
         };
 
-        place.value =  word;
+        // place.value =  word;
 
         var searchWord = word;
         searchParam.option.content= { $regex : searchWord };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
