@@ -36,21 +36,17 @@ function makeStrongWordInText( LayerManager, strWord, strText, color ) {
         return strText;
     }
 
-    if( strWord == "안디옥"){
-        console.log( "....... ");
-    }
-
     if( strPos > 0 && strText.substring(strPos-1, strPos) != "<" && strText.substring(strPos-1, strPos) != " " ){
         return strText;
     }
 
     var firstFoundedPos = strText.indexOf("\')");       // 이미 검색된 결과가 있으면 그냥 리턴
-    if( firstFoundedPos == (strPos +3) ) {
+    if( firstFoundedPos == (strPos +strWord.length) ) {
         var tempStrText = strText.substring( firstFoundedPos + 4, strText.length);
 
         strPos = tempStrText.indexOf(strWord );
         var secondFoundedPos = tempStrText.indexOf("</a>");
-        if( secondFoundedPos == (strPos +3)){
+        if( secondFoundedPos == (strPos +strWord.length)){
             return strText;
         }
     }
