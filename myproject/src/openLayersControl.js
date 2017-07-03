@@ -421,10 +421,11 @@ function createLayer( source  ) {
                  attributionOptions: ({    // @type {olx.control.AttributionOptions}
                      collapsible: false
                  })
-             }).extend([new ol.control.FullScreen({
-                 source: 'fullscreen'
+             }).extend([ /*new ol.control.FullScreen({
+                 source: 'fullscreenMap'
              //}), this.scaleLineControl, extendEvent ]),
-             }), this.scaleLineControl ]),
+             }), */
+             this.scaleLineControl ]),
              view: this.view
          });
 
