@@ -36,8 +36,23 @@ function makeStrongWordInText( LayerManager, strWord, strText, color ) {
         return strText;
     }
 
+    if( strWord == "안디옥"){
+        console.log( "....... ");
+    }
+
     if( strPos > 0 && strText.substring(strPos-1, strPos) != "<" && strText.substring(strPos-1, strPos) != " " ){
         return strText;
+    }
+
+    var firstFoundedPos = strText.indexOf("\')");       // 이미 검색된 결과가 있으면 그냥 리턴
+    if( firstFoundedPos == (strPos +3) ) {
+        var tempStrText = strText.substring( firstFoundedPos + 4, strText.length);
+
+        strPos = tempStrText.indexOf(strWord );
+        var secondFoundedPos = tempStrText.indexOf("</a>");
+        if( secondFoundedPos == (strPos +3)){
+            return strText;
+        }
     }
 
     var posStart = '<a href=' + '"javascript:moveToPlaceByWord( \'' + strWord + '\')\"  style=\"text-decoration:none; font-weight:bold; color:' + color + '\" >';
@@ -81,6 +96,8 @@ function makeStrongWordOfLocation( LayerManager, strText ) {
     return retStrText;
 }
 
+
+
 function makeStrongInText( LayerManager, searchWord, strText ) {
     var layerContainer = LayerManager.getLayerContainer();
 
@@ -90,16 +107,18 @@ function makeStrongInText( LayerManager, searchWord, strText ) {
     var retStrText = strText;
     var boolFind = false;
 
-    for ( pos in layerContainer.poiLayer) {
-        if (layerContainer.poiLayer.hasOwnProperty( pos ) && typeof layerContainer.poiLayer[ pos ] === "object") {
+
+    for( var order in layerContainer.poiWords ){
+        var place = layerContainer.poiWords[order].text;
+        if (layerContainer.poiLayer.hasOwnProperty( place ) && typeof layerContainer.poiLayer[ place ] === "object") {
             var color = "";
-            if( pos == searchWord ) {
+            if( place == searchWord ) {
                 boolFind = true;
                 color = "#B404AE";  // 핑크색 , //  텍스트 내에 검색어와 지명이 일치할때
-                retStrText = makeStrongWordInText( LayerManager, pos, retStrText, color );
-            } else {
+                retStrText = makeStrongWordInText(LayerManager, place, retStrText, color);
+            }else{
                 color = "#0D63DB";  // 군청색, //  텍스트 내에 지명이 있을때 군청색
-                retStrText = makeStrongWordInText( LayerManager, pos, retStrText, color );
+                retStrText = makeStrongWordInText( LayerManager, place, retStrText, color );
             }
         }
     }
@@ -109,6 +128,24 @@ function makeStrongInText( LayerManager, searchWord, strText ) {
     }
 
     return retStrText;
+}
+
+
+function sortPoiWordsArray( layerContainer ){
+    layerContainer.poiWords.sort( function( poiA, poiB ){
+        var aLen = poiA['length'] ;
+        var bLen = poiB['length'];
+        if( aLen < bLen )
+            return 1;
+        if( aLen > bLen )
+            return -1;
+        return 0;
+    } );
+
+    for( idx in layerContainer.poiWords ){
+        var poiWord =  layerContainer.poiWords[idx];
+        console.log( "[poi] " + poiWord.text + ": " + poiWord.length );
+    }
 }
 
 

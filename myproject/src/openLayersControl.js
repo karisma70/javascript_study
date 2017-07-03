@@ -252,7 +252,8 @@
      this.layerContainer = {
          layers : [],
          totalCount : 0,
-         poiLayer : {}
+         poiLayer : {},
+         poiWords : []
      };
  }
 
@@ -359,7 +360,7 @@ function isExistStringPropInObj( obj, prop ) {
          var aID = layerA.get( 'id' );
          var bID = layerB.get( 'id' );
          if( aID < bID )
-             return -11;
+             return -1;
          if( aID > bID )
              return 1;
          return 0;

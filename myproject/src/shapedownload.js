@@ -178,12 +178,21 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
                         if( label == "name" )
                             orgName = textString;
 
-                        layerContainer.poiLayer[textString] = {
-                            orgName : orgName,
-                            x: record.shape.x,
-                            y: record.shape.y,
-                            zoomIn: paramStyle.visibleRange.min
-                        };
+                        if( layerContainer.poiLayer.hasOwnProperty( textString ) == false ) {
+                            layerContainer.poiLayer[textString] = {
+                                orgName: orgName,
+                                x: record.shape.x,
+                                y: record.shape.y,
+                                zoomIn: paramStyle.visibleRange.min
+                            };
+
+                            var poiObj = {
+                                text: textString,
+                                length: textString.length
+                            };
+
+                            layerContainer.poiWords.push(poiObj);
+                        }
                     }
 
                 } // end of for( prop in attrs.values )
