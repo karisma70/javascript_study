@@ -35,10 +35,11 @@ function DistanceMeasureControl( paramMapManager ){
         })
     });
 
-    map.addLayer( this.vector );
-
-    map.addControl( new ol.control.MousePosition(
+    var mousePosControl = new ol.control.MousePosition(
         {
+            className : 'myMousePos',
+            element: null,
+            target: null,
             // projection : 'EPSG:4326',
             coordinateFormat : function( coordinate ){
 
@@ -69,8 +70,11 @@ function DistanceMeasureControl( paramMapManager ){
 
             }
         }
-    ) );
 
+
+    );
+
+    map.addLayer( this.vector );
 
     this.removeMeasureDraw = function(){
         if( measureDraw ){
@@ -84,12 +88,14 @@ function DistanceMeasureControl( paramMapManager ){
             mapManager.removeSelectInteraction();
             coordString = '';
             addInteraction();
+            map.addControl( mousePosControl );
         }
         else {
             mapManager.addSelectInteraction();
             map.removeInteraction( measureDraw );
             measureDraw = null;
             coordString = '';
+            map.removeControl( mousePosControl );
         }
     };
 
