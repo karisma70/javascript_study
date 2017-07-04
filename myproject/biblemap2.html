@@ -52,7 +52,9 @@
     }
     .sidepanel {
         /* background-color: #dff0d8;  */
-        border:1px solid grey;
+        border:1px solid;
+        border-color: rgb( 54, 19, 253);
+        /* background-color: rgb(240, 238, 255); */
         position: absolute;
         top: 0;
         right: 0px;
@@ -152,6 +154,7 @@
     </div>
 
     <div class="sidepanel">
+        <div name="logo" style="height:50px; background-color:rgb( 54, 19, 253);"><a href="http://www.facebook.com/biblemap" target="_blank"><img src="image/sidebar.png" style="width:200px; height:50px; vertical-align:middle" ></a></div>
         <form name="bibleSearch" style="font-size:12px; height: 70px" accept-charset="utf-8">
             <br>
             &nbsp&nbsp&nbsp&nbsp<select name="title" style="height:1.7em; font-size:1.0em;" value="창세기">
@@ -458,7 +461,6 @@
 
     function searchBibleWord(){
         if( word.value == "" ){
-            alert ("Please insert word for search!");
             return;
         }
 
@@ -492,7 +494,6 @@
 
     function moveToPlace(){
         if( place.value == "" ){
-            alert ("Please insert place! for search!");
             return;
         }
 
@@ -666,7 +667,6 @@
                 }
             }
             $('#receiveMsg').append( "<br></table >");
-            $('#receiveMsg').append( "<br>" );
 
             if( completeCallback )
                 completeCallback( searchParam, resObj );

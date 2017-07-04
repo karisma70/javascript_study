@@ -44,7 +44,7 @@
 
      { url : 'biblemap/history/History_saul_king', order: 8, style: {
          historyShow : 'false',
-         visibleRange : { max : 16, min : 7 },
+         visibleRange : { max : 16, min : 6 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
          lineStroke : {  color: [255, 255, 255], width : 0, opacity: 0.01  },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
@@ -358,7 +358,7 @@ function isExistStringPropInObj( obj, prop ) {
      } );
 
      for( idx in layerContainer.layers ){
-         console.log( "Inserted Layer ID : " + layerContainer.layers[idx].get( 'id'));
+         // console.log( "Inserted Layer ID : " + layerContainer.layers[idx].get( 'id'));
          map.addLayer(  layerContainer.layers[ idx ] );
      }
  }
@@ -429,6 +429,7 @@ function createLayer( source  ) {
 
          function InitWmsLayer( paramMap) {
              // var wmsDemLayer = createLayer( new ol.source.Stamen( { layer: 'terrain-background' }) ) ;
+
              var wmsDemLayer = new ol.layer.Tile({
                  visible: false,
                  preload: Infinity,
@@ -439,7 +440,8 @@ function createLayer( source  ) {
                      // "no photos at this zoom level" tiles
                      // maxZoom: 19
                  })
-             })
+             });
+
 
              wmsDemLayer.set('id', 1, false);
              wmsDemLayer.set('visibleRange', {max: 18, min: 1});
