@@ -206,6 +206,7 @@
         &nbsp<input id="showMovingPath" type ="button" style="font-size:12px;" value="Play" onclick="pathAction()" >
         &nbsp<input id="hideMovingPath" type ="button" style="font-size:12px;" value="Off" onclick="pathHide()" >
         <br>
+        <div name="dummy" style="position:absolute; left: 0px; bottom: 21px; width:200px; height: 15px; background-color:rgb( 228, 233, 252 );" ></div>
         <div name="licenseNotice" style="position:absolute; left: 0px; bottom: 0px; width:200px; background-color:rgb( 142, 162, 240 );" >&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span style="color: rgb(255, 255, 255); font-size:11px;" onclick="showLicenseNotice()" >License notice</span></div>
     </div>
     <div id ="receiveMsg" class="bottomDiv" style="position: relative; top: 10px; overflow-y:scroll; line-height: 150%; font-size:0.9em; font-family: "굴림체;" clear: both;">
@@ -222,7 +223,7 @@
 <script>
 
     function showLicenseNotice(){
-        window.open("src/licenseNotice.html", "notice of license", "width=300, height=200, top=0, left=0, location=no, directories=no,resizable=no,status=no,toolbar=no,menubar=no, scrollbars=yes" );
+        window.open("src/licenseNotice.html", "notice of license", "width=300, height=250, top=0, left=0, location=no, directories=no,resizable=no,status=no,toolbar=no,menubar=no, scrollbars=yes" );
     }
 
     var word = document.getElementById("word");

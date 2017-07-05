@@ -81,7 +81,7 @@ var TrajectoryData = function(){
             ]
         },
         {
-           name : "바벨론으로 끌려감",
+           name : "바벨론으로 끌려가는 이스라엘",
            value : 2,
             extent: [],
            data :
