@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type ="text/css">
+        * {
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-size: 12px;
+        }
+        .wrapperDiv {
+            width: 100%;
+            height: 65%;
+        }
+        .leftDiv {
+            background-color: #fcf8e3;
+            border:1px solid grey;
+            position: absolute;
+            width: auto;
+            height: 65%;
+            top: 0px;
+            right: 0px;
+            bottom: 0px;
+            left: 0px;
+            margin-right: 200px;
+            overflow: auto;
+        }
+        .rightDiv {
+            background-color: #dff0d8;
+            border:1px solid grey;
+            position: absolute;
+            top: 0;
+            right: 0px;
+            width: 200px;
+            height: 65%;
+        }
+        footer{
+            top: 10px;
+            height: 35%;
+            background: #ccc;
+            border:1px solid grey;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapperDiv">
+
+    <div class="leftDiv">
+        화면 가득 채우기<br />(창크기를 조절해 보세요.)
+    </div>
+
+    <div class="rightDiv">
+        가로 100px 고정
+    </div>
+
+</div>
+
+<footer>
+    <p>footer</p>
+</footer>
+
+</body>
+</html>
