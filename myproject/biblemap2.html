@@ -203,8 +203,11 @@
          <br>
         &nbsp<select id="movePath" style="height:1.7em; font-size:12px;" ></select>
         <br>
-        &nbsp<input id="showMovingPath" type ="button" style="font-size:12px;" value="Play" onclick="pathAction()" >
-        &nbsp<input id="hideMovingPath" type ="button" style="font-size:12px;" value="Off" onclick="pathHide()" >
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        <input type="image" src="image/trajectory_play.png" style="width:23px; height:24px; vertical-align:middle"  onclick="pathAction()">
+        <!-- <input id="showMovingPath" type ="button" style="font-size:12px;" value="Play" onclick="pathAction()" > -->
+        <input type="image" src="image/trajectory_stop.png" style="width:23px; height:24px; vertical-align:middle"  onclick="pathHide()">
+        <!-- &nbsp<input id="hideMovingPath" type ="button" style="font-size:12px;" value="Off" onclick="pathHide()" > -->
         <br>
         <div name="dummy" style="position:absolute; left: 0px; bottom: 21px; width:200px; height: 15px; background-color:rgb( 228, 233, 252 );" ></div>
         <div name="licenseNotice" style="position:absolute; left: 0px; bottom: 0px; width:200px; background-color:rgb( 142, 162, 240 );" >&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span style="color: rgb(255, 255, 255); font-size:11px;" onclick="showLicenseNotice()" >License notice</span></div>
@@ -324,12 +327,6 @@
     var trajectoryData = new TrajectoryData();
     var layerManager = bibleMapManager.getLayerManager();
     var bibleMap = bibleMapManager.getMap();
-
-    var fullScreenCtrl = new ol.control.FullScreen({
-        source: 'fullscreenMap'
-    });
-
-    bibleMap.addControl( fullScreenCtrl );
 
     var measureEvent = new MeasureDistanceEvent();
     bibleMap.addControl( measureEvent );
