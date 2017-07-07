@@ -90,22 +90,10 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
 
         // debug
         if( layerId == 9 ){
-            console.log( "debug!!@!");
+            Console.log( "debug!!@!");
         }
 
         var paramStyle = style;
-
-        /*
-        if ( shpFile.header.shapeType == ShpType.SHAPE_POLYGON ){
-            console.log( "download Shape_polygon ");
-        }
-        if ( shpFile.header.shapeType == ShpType.SHAPE_POLYLINE ){
-            console.log( "download Shape_polyline ");
-        }
-        if ( shpFile.header.shapeType == ShpType.SHAPE_POINT ){
-            console.log( "download Shape_point ");
-        }
-        */
 
         var bTransform = false;
         if( shpFile.header.boundsXY.width < 1000 ){
@@ -123,7 +111,7 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
         */
 
         if( shpFile.records.length != dbfFile.records.length ){
-            console.log( "Critial shapefile Error!!  id: " + layerId + ", shape records: " + shpFile.records.length + ", dbf records: " + dbfFile.records.length );
+            Console.log( "Critial shapefile Error!!  id: " + layerId + ", shape records: " + shpFile.records.length + ", dbf records: " + dbfFile.records.length );
         }
 
         var recsLen = shpFile.records.length;
@@ -172,7 +160,7 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
                     if (textString) {
 
                         if( label == "name2" || label == "name3" ){
-                            console.log( url + ">>" + label + ": " + textString  );
+                            Console.log( url + ">>" + label + ": " + textString  );
                         }
 
                         if( label == "name" )
@@ -234,7 +222,7 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
                 }
 
                 if( layerId == 5 ){
-                    console.log( "layer id : 5");
+                    Console.log( "layer id : 5");
                 }
                 var wkt = 'POLYGON(' + wktOuter.join(', ') + ')';
                 var feature = genLayerFromWkt( wkt, attrs, bTransform, format, paramStyle.textStroke.prop );
@@ -276,7 +264,7 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
         shapeLayer.set( 'visibleRange', style.visibleRange );
         if( style.historyShow )
             shapeLayer.set( 'historyShow', style.historyShow );
-        console.log( url + ",   id  : " + layerId );
+        Console.log( url + ",   id  : " + layerId );
 
 
         layerContainer.layers.push( shapeLayer );
@@ -294,7 +282,7 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
 
     var onShpComplete = function (oHTTP) {
         var binFile = oHTTP.binaryResponse;
-        console.log('got data for ' + theLayer.shpURL + ', parsing shapefile');
+        Console.log('got data for ' + theLayer.shpURL + ', parsing shapefile');
         theLayer.shpFile = new ShpFile(binFile);
         if (theLayer.dbfFile ){
             completeCallback( theLayer.shpFile, layerId, style, theLayer.dbfFile );
@@ -303,7 +291,7 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
 
     var onDbfComplete = function (oHTTP) {
         var binFile = oHTTP.binaryResponse;
-        console.log('got data for ' + theLayer.dbfURL + ', parsing dbf file');
+        Console.log('got data for ' + theLayer.dbfURL + ', parsing dbf file');
 
         theLayer.dbfFile = new DbfFile(binFile);
         if (theLayer.shpFile) {

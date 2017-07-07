@@ -8,9 +8,13 @@ function ShpFile(binFile) {
     this.header = new ShpHeader(src);
 
     var t2 = new Date().getTime();
-    if (window.console && window.console.log) console.log('parsed header in ' + (t2-t1) + ' ms');    
+    // if (window.console && window.console.log) console.log('parsed header in ' + (t2-t1) + ' ms');
+    if (window.Console && window.Console.log)
+        Console.log('parsed header in ' + (t2-t1) + ' ms');
         
-    if (window.console && window.console.log) console.log('got header, parsing records');
+    //if (window.console && window.console.log) console.log('got header, parsing records');
+    if (window.Console && window.Console.log)
+        Console.log('got header, parsing records');
 
     t1 = new Date().getTime();
     this.records = [];
@@ -27,7 +31,9 @@ function ShpFile(binFile) {
     }
 
     t2 = new Date().getTime();
-    if (window.console && window.console.log) console.log('parsed records in ' + (t2-t1) + ' ms');    
+    //if (window.console && window.console.log) console.log('parsed records in ' + (t2-t1) + ' ms');
+    if (window.Console && window.Console.log)
+        Console.log('parsed records in ' + (t2-t1) + ' ms');
 
 }
 

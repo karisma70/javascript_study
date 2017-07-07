@@ -66,7 +66,7 @@ var httpRequest = (function(){
 
         if( typeof( xmlhttp.abort ) != "undefined"){
             xmlhttp.abort = function(){
-                console.log( "abort!!!");
+                Console.log( "abort!!!");
             }
         }
 
@@ -78,7 +78,7 @@ var httpRequest = (function(){
 
         if( typeof( xmlhttp.timeout ) != "undefined"){
             xmlhttp.error = function(){
-                console.log( "timeout !!!");
+                Console.log( "timeout !!!");
             }
         }
 
@@ -92,9 +92,6 @@ var httpRequest = (function(){
                 xmlhttp.open(method, url, true );
         }
 
-        // if ( xmlhttp.overrideMimeType)       // 사용자 정의 파일 다운로드시
-           //  xmlhttp.overrideMimeType('text/plain; charset=x-user-defined');
-
         if( method == "POST") {
             xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xmlhttp.send( urlArray[1] );
@@ -103,7 +100,9 @@ var httpRequest = (function(){
         }
     }
 
-    return function( method, url, callback ){
+    return function( method, jsonStr, callback ){
+        var url = "http://13.124.86.217:8082?" + jsonStr;
+        Console.log( url );
         requestData( method, url, callback );
         /*
         requestData( "HEAD", url, function (http) {

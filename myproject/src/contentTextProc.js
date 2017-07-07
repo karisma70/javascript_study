@@ -2,6 +2,8 @@
  * Created by Administrator on 2017-06-13.
  */
 
+
+
 function examinRightWordinText( strWord, strText ){
     var strPos = strText.indexOf(strWord);
     if( strPos == -1 ){
@@ -16,11 +18,6 @@ function examinRightWordinText( strWord, strText ){
     }
     return true;
 }
-
-function removeSpaceInWord( strText){
-    strText = strText.replace(/^\s*|\s*$/g, '');
-    return strText;
-} // 좌우 공백 제거
 
 
 // 검색어이긴 하지만 지도 데이터에 없을때 보라색
@@ -140,27 +137,9 @@ function sortPoiWordsArray( layerContainer ){
 
     for( idx in layerContainer.poiWords ){
         var poiWord =  layerContainer.poiWords[idx];
-        console.log( "[poi] " + poiWord.text + ": " + poiWord.length );
+        Console.log( "[poi] " + poiWord.text + ": " + poiWord.length );
     }
 }
-
-
-function copyObject( obj ){
-    if( obj == null || typeof(obj) != 'object'){
-        return;
-    }
-
-    var copyObj = obj.constructor();
-
-    for( var attr in obj ){
-        if( obj.hasOwnProperty( attr )){
-            copyObj[attr] = obj[attr];
-        }
-    }
-
-    return copyObj;
-}
-
 
 function requestPoiInfo( poiName, recvFunc,  errFunc){
     var searchParam = {
@@ -172,13 +151,13 @@ function requestPoiInfo( poiName, recvFunc,  errFunc){
 
     var jsonStr = JSON.stringify( searchParam );
 
-    url = "http://13.124.86.217:8082?" + jsonStr;
-    console.log( url );
-    httpRequest("POST", url, function( http ) {
+    // url = "http://13.124.86.217:8082?" + jsonStr;
+    // Console.log( url );
+    httpRequest("POST", jsonStr, function( http ) {
         var resObj = JSON.parse( http.responseText );
 
         if( resObj.result != "undefined" && resObj.result == "fail" ){
-            console.log( "requestPoiInfo() Fail!!!   param: " + jsonStr );
+            Console.log( "requestPoiInfo() Fail!!!   param: " + jsonStr );
             if( errFunc ){
                 errFunc( resObj );
             }

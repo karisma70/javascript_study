@@ -81,7 +81,7 @@ var TrajectoryData = function(){
             ]
         },
         {
-           name : "바벨론으로 끌려가는 이스라엘",
+           name : "이스라엘 바벨론 포로경로",
            value : 2,
             extent: [],
            data :

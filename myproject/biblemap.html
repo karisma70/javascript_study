@@ -8,16 +8,17 @@
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
     <script src="https://api.mapbox.com/mapbox.js/plugins/arc.js/v0.1.0/arc.js"></script>
     <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+    <script type="text/javascript" src="src/common.js"></script>
     <script type="text/javascript" src="lib/binaryajax.js"></script>
     <script type="text/javascript" src="src/binarywrapper.js"></script>
-    <script type="text/javascript" src="src/shapefile.js"></script>
-    <script type="text/javascript" src="src/dbf.js"></script>
-    <script type="text/javascript" src="src/shapedownload.js"></script>
+    <script type="text/javascript" src="src/GMDFileReader.js"></script>
+    <script type="text/javascript" src="src/propertyDB.js"></script>
+    <script type="text/javascript" src="src/GMDFileDownload.js"></script>
     <script type="text/javascript" src="src/contentTextProc.js"></script>
     <script type="text/javascript" src="src/routePlay.js"></script>
     <script type="text/javascript" src="src/trajectoryData.js"></script>
     <script type="text/javascript" src="src/distanceMeasureControl.js"></script>
-    <script type = "text/javascript" src = "httpRequest.js"></script>
+    <script type = "text/javascript" src = "src/httpRequest.js"></script>
 
     <script src="openLayers_v4.1.1/ol.js"></script>
     <script type="text/javascript" src="src/openLayersControl.js"></script>
@@ -284,6 +285,12 @@
     var trajectoryData = new TrajectoryData();
     var layerManager = bibleMapManager.getLayerManager();
     var bibleMap = bibleMapManager.getMap();
+
+    var fullScreenCtrl = new ol.control.FullScreen({
+        source: 'fullscreen'
+    });
+
+    bibleMap.addControl( fullScreenCtrl );
 
     var measureEvent = new MeasureDistanceEvent();
     bibleMap.addControl( measureEvent );
@@ -561,9 +568,9 @@
     function reqeustAndShowContents( searchParam , completeCallback ){
         var jsonStr = JSON.stringify( searchParam );
 
-        url = "http://13.124.86.217:8082?" + jsonStr;
-        console.log( url );
-        httpRequest("POST", url, function( http ){
+        // url = "http://13.124.86.217:8082?" + jsonStr;
+        // console.log( url );
+        httpRequest("POST", jsonStr, function( http ){
             var resObj = JSON.parse( http.responseText );
             if( resObj.length < 1 ){
                 if( completeCallback )
