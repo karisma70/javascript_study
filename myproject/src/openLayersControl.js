@@ -7,7 +7,7 @@
 
 
  var bibleMapLayers = [
-     { url : 'biblemap/110m-admin-0-countries', order: 1, style: {
+     { url : 'mapdata/110m-admin-0-countries', order: 1, style: {
         historyShow : 'false',
         visibleRange : { max : 16, min : 1 },
         fillColor : 'rgba( 255, 255, 255, 0.001)',
@@ -17,7 +17,7 @@
 
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-     { url : 'biblemap/history/History_promise_canaan2', order: 5, style: {
+     { url : 'mapdata/history/History_promise_canaan2', order: 5, style: {
          historyShow : 'false',
          visibleRange : { max : 16, min : 6 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
@@ -25,7 +25,7 @@
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
      },
 
-     { url : 'biblemap/history/History_12Sect', order: 6, style: {
+     { url : 'mapdata/history/History_12Sect', order: 6, style: {
          historyShow : 'false',
          visibleRange : { max : 16, min : 7 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
@@ -34,7 +34,7 @@
      },
 
 
-     { url : 'biblemap/history/History_BC12', order: 7, style: {
+     { url : 'mapdata/history/History_BC12', order: 7, style: {
          historyShow : 'false',
          visibleRange : { max : 16, min : 6 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
@@ -42,7 +42,7 @@
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
      },
 
-     { url : 'biblemap/history/History_saul_king', order: 8, style: {
+     { url : 'mapdata/history/History_saul_king', order: 8, style: {
          historyShow : 'false',
          visibleRange : { max : 16, min : 6 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
@@ -50,7 +50,7 @@
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
      },
 
-     { url : 'biblemap/history/History_david_king', order: 9, style: {
+     { url : 'mapdata/history/History_david_king', order: 9, style: {
          historyShow : 'false',
          visibleRange : { max : 16, min : 6 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
@@ -58,7 +58,7 @@
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
      },
 
-     { url : 'biblemap/history/History_divideIsrael', order: 10, style: {
+     { url : 'mapdata/history/History_divideIsrael', order: 10, style: {
          historyShow : 'false',
          visibleRange : { max : 16, min : 7 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
@@ -68,7 +68,7 @@
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-     { url : 'biblemap/history/History_12Sect_poi', order: 28, style: {
+     { url : 'mapdata/history/History_12Sect_poi', order: 28, style: {
          visibleRange : { max : 16 , min : 9 },
          textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 12px arial', color: '#105602', outlineColor : 'white', outlineWidth : 3  }}
      },
@@ -76,36 +76,36 @@
 
      ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-     { url: 'biblemap/abraham_move',  order: 20, style: {
+     { url: 'mapdata/abraham_move',  order: 20, style: {
          visibleRange : { max : 16 , min : 10 },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "#313132", outlineWidth : 3  } }
      },
-     { url: 'biblemap/jesus_move',  order: 21, style: {
+     { url: 'mapdata/jesus_move',  order: 21, style: {
              visibleRange : { max : 16 , min : 11 },
              textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "black", outlineWidth : 3  }}
      },
-     { url : 'biblemap/nature_poi_7_poi',  order: 22, style: {
+     { url : 'mapdata/nature_poi_7_poi',  order: 22, style: {
          visibleRange : { max : 16 , min : 7 },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "#636364", outlineWidth : 3  } }
      },
-     { url : 'biblemap/AD_level_7_poi',  order: 23, style: {
+     { url : 'mapdata/AD_level_7_poi',  order: 23, style: {
          visibleRange : { max : 16 , min : 7 },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "#636364", outlineWidth : 3  } }
      },
-     { url : 'biblemap/AD_level_8_poi',  order: 24, style: {
+     { url : 'mapdata/AD_level_8_poi',  order: 24, style: {
          visibleRange : { max : 16 , min : 9 },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "#49494A", outlineWidth : 3  } }
      },
-     { url: 'biblemap/AD_israel_admin_poi',  order: 25, style: {
+     { url: 'mapdata/AD_israel_admin_poi',  order: 25, style: {
          visibleRange : { max : 16 , min : 7 },
          textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'normal 13px 돋움', color: 'white', outlineColor : '#636364', outlineWidth : 3  }}
      },
      {
-         url: 'biblemap/AD_admin_poi',  order: 26, style: {
+         url: 'mapdata/AD_admin_poi',  order: 26, style: {
          visibleRange : { max : 16 , min : 4 },
          textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 13px arial', color: '#105602', outlineColor : 'white', outlineWidth : 2  }}
      },
-     { url: 'biblemap/BC_admin_poi',  order: 27, style: {
+     { url: 'mapdata/BC_admin_poi',  order: 27, style: {
          visibleRange : { max : 16 , min : 6 },
          textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 13px arial', color: '#033078', outlineColor : 'white', outlineWidth : 2  }}
      }
