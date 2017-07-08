@@ -7,19 +7,19 @@
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
     <script src="https://api.mapbox.com/mapbox.js/plugins/arc.js/v0.1.0/arc.js"></script>
     <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
-    <script type="text/javascript" src="src/common.js"></script>
-    <script type="text/javascript" src="lib/binaryajax.js"></script>
-    <script type="text/javascript" src="src/binarywrapper.js"></script>
-    <script type="text/javascript" src="src/GMDFileReader.js"></script>
-    <script type="text/javascript" src="src/propertyDB.js"></script>
-    <script type="text/javascript" src="src/GMDFileDownload.js"></script>
-    <script type="text/javascript" src="src/contentTextProc.js"></script>
-    <script type="text/javascript" src="src/routePlay.js"></script>
-    <script type="text/javascript" src="src/trajectoryData.js"></script>
-    <script type="text/javascript" src="src/distanceMeasureControl.js"></script>
-    <script type="text/javascript" src="src/httpRequest.js"></script>
-    <script type="text/javascript" src="openLayers_v4.1.1/ol.js"></script>
-    <script type="text/javascript" src="src/openLayersControl.js"></script>
+    <script type="text/javascript" src="biblemap/src/common.js"></script>
+    <script type="text/javascript" src="biblemap/lib/binaryajax.js"></script>
+    <script type="text/javascript" src="biblemap/src/binarywrapper.js"></script>
+    <script type="text/javascript" src="biblemap/src/GMDFileReader.js"></script>
+    <script type="text/javascript" src="biblemap/src/propertyDB.js"></script>
+    <script type="text/javascript" src="biblemap/src/GMDFileDownload.js"></script>
+    <script type="text/javascript" src="biblemap/src/contentTextProc.js"></script>
+    <script type="text/javascript" src="biblemap/src/routePlay.js"></script>
+    <script type="text/javascript" src="biblemap/src/trajectoryData.js"></script>
+    <script type="text/javascript" src="biblemap/src/distanceMeasureControl.js"></script>
+    <script type="text/javascript" src="biblemap/src/httpRequest.js"></script>
+    <script type="text/javascript" src="biblemap/openLayers_v4.1.1/ol.js"></script>
+    <script type="text/javascript" src="biblemap/src/openLayersControl.js"></script>
 
     <style type ="text/css">
         *{   margin: 0;padding: 0;
@@ -142,7 +142,7 @@
 <body>
 <div id ="wrapperDiv" class="wrapperDiv">
     <div id ="sidebar">
-        <div name="logo" style="height:27px; background-color:rgb( 70, 177, 228 );"><a href="http://www.facebook.com/biblemap" target="_blank" style="text-decoration:none"><img src="image/biblemap_logo.png" style="width:27px; height:27px; vertical-align:middle" >
+        <div name="logo" style="height:27px; background-color:rgb( 70, 177, 228 );"><a href="http://www.facebook.com/biblemap" target="_blank" style="text-decoration:none"><img src="biblemap/image/biblemap_logo.png" style="width:27px; height:27px; vertical-align:middle" >
             &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span style="font-size:10pt; font-weight:bold; color:white;text-align:center;">성서지도</span></a></div>
         <div name ="dummy2" style="left: 0px; top: 50px; width:200px; height: 13px; background-color:rgb( 201, 233, 248  );" ></div>
         <div name ="bibleSearch" style="font-size:12px; height: 70px" accept-charset="utf-8">
@@ -167,14 +167,14 @@
             &nbsp&nbsp&nbsp&nbsp<input type="number" class="chapterNum" id ="bibleChapter" style="width: 4em; font-size:1.0em;" value="14"> 장
             <!-- <input type="button" value="검색" style="font-size:12px;" onclick="requestBibleByChapter()"> -->
             <!-- <button type="button" onclick="requestBibleByChapter()" ><img src="image/bible_search_btn.png" style="width:23px; height:24px; vertical-align:middle"></button> -->
-            <input type="image" src="image/bible_search_btn.png" style="width:21px; height:22px; vertical-align:middle"  onclick="requestBibleByChapter()">
+            <input type="image" src="biblemap/image/bible_search_btn.png" style="width:21px; height:22px; vertical-align:middle" onclick="requestBibleByChapter()">
         </div>
         <div name="bibleWord" style="height:30px;">
             <!-- <img src="image/word_search2.png" style="width:20px; height:22px; vertical-align:middle" ><input type="text" id ="word" size="12" style="font-size:12px;" value="바울"><input type="button" value="검색" style="font-size:12px;" onclick="searchBibleWord()"> -->
-            &nbsp&nbsp<span style="font-size:12px;">단어</span>&nbsp<input type="text" id ="word" size="12" style="font-size:12px;" value="바울"><input type="image" src="image/word_search2.png" style="width:23px; height:24px; vertical-align:middle"  onclick="searchBibleWord()">
+            &nbsp&nbsp<span style="font-size:12px;">단어</span>&nbsp<input type="text" id ="word" size="12" style="font-size:12px;" value="바울"><input type="image" src="biblemap/image/word_search2.png" style="width:23px; height:24px; vertical-align:middle" onclick="searchBibleWord()">
             <br>
             <!-- <img src="image/place_search2.png" style="width:22px; height:21px; vertical-align:middle" ><input type="text" id ="place" size="12" style="font-size:12px;" value="예루살렘"><input type="button" value="검색" style="font-size:12px;" onclick="moveToPlace()"> -->
-            &nbsp&nbsp<span style="font-size:12px;">지명</span>&nbsp<input type="text" id ="place" size="12" style="font-size:12px;" value="예루살렘"><input type="image" src="image/place_search2.png" style="width:23px; height:24px; vertical-align:middle"  onclick="moveToPlace()">
+            &nbsp&nbsp<span style="font-size:12px;">지명</span>&nbsp<input type="text" id ="place" size="12" style="font-size:12px;" value="예루살렘"><input type="image" src="biblemap/image/place_search2.png" style="width:23px; height:24px; vertical-align:middle" onclick="moveToPlace()">
             <br>
         </div>
         <br>
@@ -189,9 +189,9 @@
         &nbsp&nbsp&nbsp<select id="movePath" style="height:1.7em; font-size:12px;" ></select>
         <br>
         &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-        <input type="image" src="image/trajectory_play.png" style="left: 150px; width:20px; height:20px; vertical-align:middle"  onclick="pathAction()">
+        <input type="image" src="biblemap/image/trajectory_play.png" style="left: 150px; width:20px; height:20px; vertical-align:middle" onclick="pathAction()">
         <!-- <input id="showMovingPath" type ="button" style="font-size:12px;" value="Play" onclick="pathAction()" > -->
-        <input type="image" src="image/trajectory_stop.png" style="width:20px; height:20px; vertical-align:middle"  onclick="pathHide()">
+        <input type="image" src="biblemap/image/trajectory_stop.png" style="width:20px; height:20px; vertical-align:middle" onclick="pathHide()">
         <!-- &nbsp<input id="hideMovingPath" type ="button" style="font-size:12px;" value="Off" onclick="pathHide()" > -->
         <br>
         <div id ="dummy" style="position:absolute; left: 0px; top: 50px; width:200px; height: 15px; background-color:rgb( 201, 233, 248  );" ></div>
