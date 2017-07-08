@@ -7,7 +7,7 @@
 
 
  var bibleMapLayers = [
-     { url : 'mapdata/110m-admin-0-countries', order: 1, style: {
+     { url : 'biblemap/mapdata/110m-admin-0-countries', order: 1, style: {
         historyShow : 'false',
         visibleRange : { max : 16, min : 1 },
         fillColor : 'rgba( 255, 255, 255, 0.001)',
@@ -17,7 +17,7 @@
 
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-     { url : 'mapdata/history/History_promise_canaan2', order: 5, style: {
+     { url : 'biblemap/mapdata/history/History_promise_canaan2', order: 5, style: {
          historyShow : 'false',
          visibleRange : { max : 16, min : 6 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
@@ -25,7 +25,7 @@
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
      },
 
-     { url : 'mapdata/history/History_12Sect', order: 6, style: {
+     { url : 'biblemap/mapdata/history/History_12Sect', order: 6, style: {
          historyShow : 'false',
          visibleRange : { max : 16, min : 7 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
@@ -34,7 +34,7 @@
      },
 
 
-     { url : 'mapdata/history/History_BC12', order: 7, style: {
+     { url : 'biblemap/mapdata/history/History_BC12', order: 7, style: {
          historyShow : 'false',
          visibleRange : { max : 16, min : 6 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
@@ -42,7 +42,7 @@
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
      },
 
-     { url : 'mapdata/history/History_saul_king', order: 8, style: {
+     { url : 'biblemap/mapdata/history/History_saul_king', order: 8, style: {
          historyShow : 'false',
          visibleRange : { max : 16, min : 6 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
@@ -50,7 +50,7 @@
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
      },
 
-     { url : 'mapdata/history/History_david_king', order: 9, style: {
+     { url : 'biblemap/mapdata/history/History_david_king', order: 9, style: {
          historyShow : 'false',
          visibleRange : { max : 16, min : 6 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
@@ -58,17 +58,18 @@
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
      },
 
-     { url : 'mapdata/history/History_divideIsrael', order: 10, style: {
+     { url : 'biblemap/mapdata/history/History_divideIsrael', order: 10, style: {
          historyShow : 'false',
          visibleRange : { max : 16, min : 7 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
          lineStroke : {  color: [255, 255, 255], width : 0, opacity: 0.01  },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
      },
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-     { url : 'mapdata/history/History_12Sect_poi', order: 28, style: {
+     { url : 'biblemap/mapdata/history/History_12Sect_poi', order: 28, style: {
          visibleRange : { max : 16 , min : 9 },
          textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 12px arial', color: '#105602', outlineColor : 'white', outlineWidth : 3  }}
      },
@@ -76,36 +77,36 @@
 
      ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-     { url: 'mapdata/abraham_move',  order: 20, style: {
+     { url: 'biblemap/mapdata/abraham_move',  order: 20, style: {
          visibleRange : { max : 16 , min : 10 },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "#313132", outlineWidth : 3  } }
      },
-     { url: 'mapdata/jesus_move',  order: 21, style: {
+     { url: 'biblemap/mapdata/jesus_move',  order: 21, style: {
              visibleRange : { max : 16 , min : 11 },
              textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "black", outlineWidth : 3  }}
      },
-     { url : 'mapdata/nature_poi_7_poi',  order: 22, style: {
+     { url : 'biblemap/mapdata/nature_poi_7_poi',  order: 22, style: {
          visibleRange : { max : 16 , min : 7 },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "#636364", outlineWidth : 3  } }
      },
-     { url : 'mapdata/AD_level_7_poi',  order: 23, style: {
+     { url : 'biblemap/mapdata/AD_level_7_poi',  order: 23, style: {
          visibleRange : { max : 16 , min : 7 },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "#636364", outlineWidth : 3  } }
      },
-     { url : 'mapdata/AD_level_8_poi',  order: 24, style: {
+     { url : 'biblemap/mapdata/AD_level_8_poi',  order: 24, style: {
          visibleRange : { max : 16 , min : 9 },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "#49494A", outlineWidth : 3  } }
      },
-     { url: 'mapdata/AD_israel_admin_poi',  order: 25, style: {
+     { url: 'biblemap/mapdata/AD_israel_admin_poi',  order: 25, style: {
          visibleRange : { max : 16 , min : 7 },
          textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'normal 13px 돋움', color: 'white', outlineColor : '#636364', outlineWidth : 3  }}
      },
      {
-         url: 'mapdata/AD_admin_poi',  order: 26, style: {
+         url: 'biblemap/mapdata/AD_admin_poi',  order: 26, style: {
          visibleRange : { max : 16 , min : 4 },
          textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 13px arial', color: '#105602', outlineColor : 'white', outlineWidth : 2  }}
      },
-     { url: 'mapdata/BC_admin_poi',  order: 27, style: {
+     { url: 'biblemap/mapdata/BC_admin_poi',  order: 27, style: {
          visibleRange : { max : 16 , min : 6 },
          textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 13px arial', color: '#033078', outlineColor : 'white', outlineWidth : 2  }}
      }
