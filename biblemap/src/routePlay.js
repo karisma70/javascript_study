@@ -197,6 +197,15 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray ){
     };
 
     this.stop = function(){
+
+        if( pathVector){
+            var features = pathVector.getFeatures();
+            for (var i = 0; i < features.length; i++) {
+                var feature = features[i];
+                feature.set('finished', true);
+            }
+        }
+
         if( pathMovingLayer ){
             bibleMap.removeLayer( pathMovingLayer );
             pathMovingLayer = null;
