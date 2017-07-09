@@ -5,16 +5,8 @@
     <title>Bible 검색 예제</title>
     <script type = "text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
-    <script type = "text/javascript" src = "httpRequest.js"></script>
-    <link rel="STYLESHEET" type="text/css" href="css/public.css">
-    <style type = "text/css">
-        div.editable {
-            width: 600px;
-            height: 600px;
-            border: 1px solid #ccc;
-            padding: 5px;
-        }
-    </style>
+    <script type = "text/javascript" src = "../biblemap/src/httpRequest.js"></script>
+    <link rel="STYLESHEET" type="text/css" href="../biblemap/css/public.css">
 </head>
 <body>
 <form name="bibleSearch" accept-charset="utf-8">
@@ -31,15 +23,15 @@
 <br>
 <!-- <textarea id = "receiveMsg" name = "comment" cols = "80" rows = "50"></textarea> -->
 <div id = "receiveMsg" ></div>
-
 <script>
 
     function reqeustAndShowContents( searchParam ){
         var jsonStr = JSON.stringify( searchParam );
         console.log( "send param : " + jsonStr );
 
-        url = "http://13.124.86.217:8082?" + jsonStr;
-        httpRequest("POST", url, function( http ){
+      //  url = "http://13.124.86.217:8082?" + jsonStr;
+        // httpRequest("POST", url, function( http ){
+        httpRequest("POST", jsonStr, function( http ){
             var resObj = JSON.parse( http.responseText );
 
             if( resObj.result != "undefined" && resObj.result == "fail" ){

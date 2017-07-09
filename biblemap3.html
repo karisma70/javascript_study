@@ -52,17 +52,27 @@
             background-color: #fcf8e3;
             border:1px solid grey;
         }
+        /*
         .footer{
             position: fixed;
             top: 65%;
             height: 34%;
             width: 100%;
             background: white;
-
         }
-        #receiveMsg{
+
+        #footer{
             position: absolute;
             height: 100%;
+            width: 100%;
+            background: white;
+        }
+        */
+
+        #footer {
+            position: absolute;
+            top: 65%;
+            height: 34%;
             width: 100%;
             background: white;
         }
@@ -125,10 +135,10 @@
             var sidebarHeight = sidebar.getBoundingClientRect().height;
             var dummy  = document.getElementById('dummy');
             var licenseNotice = document.getElementById('licenseNotice');
-            var receiveMsg = document.getElementById('receiveMsg');
+            var footer = document.getElementById('footer');
             dummy.style.top = (sidebarHeight - 30) + 'px';
             licenseNotice.style.top = (sidebarHeight - 16) + 'px';
-            receiveMsg.style.top = 5 + 'px';
+            footer.style.top =  ( licenseNotice.style.top + 30 )+ 'px';
         }
 
         window.onload = function(){
@@ -200,14 +210,16 @@
 
     <div id="map" class="mapview">
     </div>
+    <div id ="footer" style="position:absolute; overflow-y:scroll; line-height: 150%; font-size:12px; font-family: 굴림체; clear: both;"></div>
+    <!--
     <div class="footer" >
-        <div id ="receiveMsg" style="position:absolute; overflow-y:scroll; line-height: 150%; font-size:12px; font-family: 굴림체; clear: both;"></div>
-    </div>
+        <div id ="footer" style="position:absolute; overflow-y:scroll; line-height: 150%; font-size:12px; font-family: 굴림체; clear: both;"></div>
+    </div> -->
 </div>
 
-<div id="popup" class="ol-popup" style="font-size:1.8em">
-    <a href="#" id="popup-closer" class="ol-popup-closer" style="font-size:1.8em"></a>
-    <div id="popup-content" style="font-size:1.8em"></div>
+<div id="popup" class="ol-popup" >
+    <a href="#" id="popup-closer" class="ol-popup-closer" style="font-size:12px;"></a>
+    <div id="popup-content" style="font-size:1.1em"></div>
 </div>
 
 <script>
@@ -458,7 +470,7 @@
         var searchWord = word.value;
         searchWord = removeSpaceInWord( searchWord );
         // placeWord = placeWord.replace(/^\s*|\s*$/g, ''); // 좌우 공백 제거
-        $('#receiveMsg').empty();
+        $('#footer').empty();
 
         var searchParam = {
             type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
@@ -527,7 +539,7 @@
 
 
     function requestBibleByWord( word, competeCallback ){
-        $('#receiveMsg').empty();
+        $('#footer').empty();
         var searchParam = {
             type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
             option: {}
@@ -541,7 +553,7 @@
     }
 
     function requestBibleByChapter(){
-        $('#receiveMsg').empty();
+        $('#footer').empty();
         var searchParam = {
             type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
             option: {}
@@ -613,18 +625,18 @@
             }
 
             if( resObj.result != "undefined" && resObj.result == "fail" ){
-                $('#receiveMsg').append( resObj.error + "\r\n" );
+                $('#footer').append( resObj.error + "\r\n" );
             }
             else {
-                $('#receiveMsg').append( "<table>");
+                $('#footer').append( "<table>");
                 var chapterStart =  "<td width = \"135\">&nbsp&nbsp";
                 var contentStart = "<td>";
                 var endString = "</td>";
 
                 function appendReceiveMsg( chapterStart, endString, resObj, contentStart, strContent ){
-                    $('#receiveMsg').append( "<tr>");
-                    $('#receiveMsg').append( chapterStart + "<strong>" + resObj.title + " " + resObj.chapter + ":" + resObj.paragraph +"</strong>"+ endString + contentStart + strContent + endString );
-                    $('#receiveMsg').append( "</tr>");
+                    $('#footer').append( "<tr>");
+                    $('#footer').append( chapterStart + "<strong>" + resObj.title + " " + resObj.chapter + ":" + resObj.paragraph +"</strong>"+ endString + contentStart + strContent + endString );
+                    $('#footer').append( "</tr>");
                 }
 
                 if (resObj.length != "undefined") {    // 배열로 받아올 경우
@@ -651,7 +663,7 @@
                     }
                 }
             }
-            $('#receiveMsg').append( "<br></table >");
+            $('#footer').append( "<br></table >");
 
             if( completeCallback )
                 completeCallback( searchParam, resObj );
