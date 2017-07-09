@@ -20,7 +20,6 @@
     <script type="text/javascript" src="biblemap/src/httpRequest.js"></script>
     <script type="text/javascript" src="biblemap/openLayers_v4.1.1/ol.js"></script>
     <script type="text/javascript" src="biblemap/src/openLayersControl.js"></script>
-
     <style type ="text/css">
         *{   margin: 0;padding: 0;
             -moz-box-sizing: border-box;
@@ -33,48 +32,31 @@
             height: 100%;
             font-size: 12px;
         }
-
         .wrapperDiv{
-            overflow:hidden;
+            /* overflow:hidden; */
+            /* border:1px solid red; */
             height: 100%;
         }
         #sidebar{
             width: 200px;
-            height: 65%;
             float:left;
         }
         .mapview{
-            width : 100%;
-            height: 65%;
+            /*width : 100%;
+            height: 80%; */
             float: left;
-            margin-right: -200px;
-            padding-right: 200px;
+            /* margin-right: -200px;
+            padding-right: 200px; */
             background-color: #fcf8e3;
             border:1px solid grey;
         }
-        /*
-        .footer{
-            position: fixed;
-            top: 65%;
-            height: 34%;
-            width: 100%;
-            background: white;
-        }
-
         #footer{
             position: absolute;
-            height: 100%;
+            /* top: 65%;
+            height: 34%; */
             width: 100%;
             background: white;
-        }
-        */
-
-        #footer {
-            position: absolute;
-            top: 65%;
-            height: 34%;
-            width: 100%;
-            background: white;
+            /* border:1px solid black;  */
         }
 
         .ol-popup {
@@ -129,29 +111,10 @@
         }
 
     </style>
-    <script>
-        function adjustSidebarBottom(){
-            var sidebar = document.getElementById('sidebar');
-            var sidebarHeight = sidebar.getBoundingClientRect().height;
-            var dummy  = document.getElementById('dummy');
-            var licenseNotice = document.getElementById('licenseNotice');
-            var footer = document.getElementById('footer');
-            dummy.style.top = (sidebarHeight - 30) + 'px';
-            licenseNotice.style.top = (sidebarHeight - 16) + 'px';
-            footer.style.top =  ( licenseNotice.style.top + 30 )+ 'px';
-        }
-
-        window.onload = function(){
-            adjustSidebarBottom();
-        };
-
-        window.onresize = adjustSidebarBottom;
-
-    </script>
 </head>
 <body>
-<div id ="wrapperDiv" class="wrapperDiv">
-    <div id ="sidebar">
+<div class="wrapperDiv">
+    <div id="sidebar" style="position:absolute;">
         <div name="logo" style="height:27px; background-color:rgb( 70, 177, 228 );"><a href="http://www.facebook.com/biblemap" target="_blank" style="text-decoration:none"><img src="biblemap/image/biblemap_logo.png" style="width:27px; height:27px; vertical-align:middle" >
             &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span style="font-size:10pt; font-weight:bold; color:white;text-align:center;">성서지도</span></a></div>
         <div name ="dummy2" style="left: 0px; top: 50px; width:200px; height: 13px; background-color:rgb( 201, 233, 248  );" ></div>
@@ -208,23 +171,146 @@
         <div id ="licenseNotice" style="position:absolute; left: 0px; top:0px; width:200px; background-color:rgb(70, 177, 228 );" >&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span style="color: rgb(255, 255, 255); font-size:11px;" onclick="showLicenseNotice()" >License notice</span></div>
     </div>
 
-    <div id="map" class="mapview">
+    <div id="map" class="mapview" style="position:absolute;">
     </div>
-    <div id ="footer" style="position:absolute; overflow-y:scroll; line-height: 150%; font: 12px 굴림체; clear: both;"></div>
-    <!--
-    <div class="footer" >
-        <div id ="footer" style="position:absolute; overflow-y:scroll; line-height: 150%; font-size:12px; font-family: 굴림체; clear: both;"></div>
-    </div> -->
+    <div id ="footer" style="overflow-y:scroll; line-height: 200%; font: 12px 굴림체; clear: both;">
+        <p>waiting.....</p>
+    </div>
+    <img src="biblemap/image/hideBible.png" id="footerToggle" name="img" style="position:absolute; width:50px; height:12px;" onclick="toggleScrMap()">
 </div>
 
 <div id="popup" class="ol-popup" >
     <a href="#" id="popup-closer" class="ol-popup-closer" style="font-size:12px;"></a>
-    <div id="popup-content" style="font-size:1.1em"></div>
+    <div id="popup-content" style="font-weight:bold; font-size:1.1em; text-align:center;"></div>
 </div>
 
 <script>
+
+
+    var adjustScrDiv = (function(){
+
+        var bIsFullScr = 'false';
+
+        function fullScrMap(){
+            var sidebar = document.getElementById('sidebar');
+
+            var mapview = document.getElementById('map');
+            var footer = document.getElementById('footer');
+
+            var toggleBtn = document.getElementById("footerToggle");
+            toggleBtn.style.left = ( window.innerWidth * 0.5 ) + "px";
+            toggleBtn.style.top = (window.innerHeight - 13)+ "px";
+
+            $("#footer").hide();
+
+            sidebar.style.bottom = 0 + 'px';
+
+            var dummy  = document.getElementById('dummy');
+            var licenseNotice = document.getElementById('licenseNotice');
+
+            dummy.style.top = (window.innerHeight - 30) + 'px';
+            licenseNotice.style.top = (window.innerHeight - 16) + 'px';
+
+            mapview.style.left = 200+'px';
+            mapview.style.right = 0 + 'px';
+            mapview.style.bottom = 0 + 'px';
+
+            bibleMap.updateSize();
+        }
+
+        function normalScrMap(){
+            var sidebar = document.getElementById('sidebar');
+            var mapview = document.getElementById('map');
+            var footer = document.getElementById('footer');
+            var toggleBtn = document.getElementById("footerToggle");
+
+            var mapHeight = window.innerHeight * 0.65;
+
+            $("#footer").show();
+            footer.style.top = mapHeight + 5 + 'px';
+            footer.style.bottom = 0 + 'px';
+
+            var footerTop = footer.getBoundingClientRect().top;
+
+            toggleBtn.style.left = ( window.innerWidth * 0.5 ) + "px";
+            toggleBtn.style.top = (footerTop -15) + "px";
+
+            sidebar.style.top = 0;
+            sidebar.style.bottom = ( window.innerHeight - mapHeight ) + 'px';
+            mapview.style.left = 200+'px';
+            mapview.style.right = 0 + 'px';
+            mapview.style.top = 0;
+            mapview.style.bottom = ( window.innerHeight- mapHeight ) + 'px';
+
+            var dummy  = document.getElementById('dummy');
+            var licenseNotice = document.getElementById('licenseNotice');
+            var sidebarHeight = sidebar.getBoundingClientRect().height;
+            dummy.style.top = (sidebarHeight - 30) + 'px';
+            licenseNotice.style.top = (sidebarHeight - 16) + 'px';
+
+            bibleMap.updateSize();
+        }
+
+        function showScrMap( ){
+
+            var img1 = "biblemap/image/hideBible.png";
+            var img2 = "biblemap/image/showBible.png";
+
+            var toggleBtn = document.getElementById("footerToggle");
+
+            if( bIsFullScr == 'false' ) {
+                adjustScrDiv.normalScrMap();
+                toggleBtn.src = img1;
+            }
+            else{
+                adjustScrDiv.fullScrMap();
+                toggleBtn.src = img2;
+            }
+        }
+
+        function toggleScrMap( ){
+
+            if( bIsFullScr == 'false'){
+                bIsFullScr = 'true';
+            }
+            else{
+                bIsFullScr = 'false';
+            }
+            showScrMap();
+
+        }
+
+        function setIsFullScr( setVal ){
+            bIsFullScr = setVal;
+            showScrMap();
+        }
+
+        return {
+            fullScrMap : fullScrMap,
+            normalScrMap : normalScrMap,
+            showScrMap : showScrMap,
+            toggleScrMap : toggleScrMap,
+            setIsFullScr : setIsFullScr
+        };
+
+
+    }());
+
+    function toggleScrMap(){
+        adjustScrDiv.toggleScrMap();
+    }
+
+    window.onload = function(){
+        adjustScrDiv.normalScrMap();
+        downloadGeometries();
+    };
+
+    window.onresize = function(){
+        adjustScrDiv.showScrMap();
+    };
+
     function showLicenseNotice(){
-        window.open("src/licenseNotice.html", "notice of license", "width=300, height=250, top=0, left=0, location=no, directories=no,resizable=no,status=no,toolbar=no,menubar=no, scrollbars=yes" );
+        window.open("biblemap/src/licenseNotice.html", "notice of license", "width=300, height=250, top=0, left=0, location=no, directories=no,resizable=no,status=no,toolbar=no,menubar=no, scrollbars=yes" );
     }
 
     var word = document.getElementById("word");
@@ -345,7 +431,7 @@
 
     ///////////////////////////////////////
 
-    (function(){
+    var downloadGeometries = function(){
         var flag = 0;
 
         var historyAdmin = document.getElementById("historyAdmin");
@@ -374,7 +460,7 @@
                 sortPoiWordsArray( layerManager.getLayerContainer() );
             } );
         }
-    }());
+    };
 
     ///////////////////////////////////////////////////////////////
 
@@ -382,6 +468,9 @@
 
 
     function pathAction( ) {
+
+        adjustScrDiv.setIsFullScr("true");
+
         measureDistance.removeMeasureDraw();
 
         if( routeMove ){
@@ -466,6 +555,8 @@
         if( word.value == "" ){
             return;
         }
+
+        adjustScrDiv.setIsFullScr("false");
 
         var searchWord = word.value;
         searchWord = removeSpaceInWord( searchWord );
@@ -607,7 +698,9 @@
          consistSearchOpt( bibleSearch.paragraph );
          }*/
 
-        reqeustAndShowContents( searchParam, null );
+        reqeustAndShowContents( searchParam, function(){
+            adjustScrDiv.setIsFullScr("false");
+        } );
     }
 
 
@@ -672,6 +765,5 @@
     }
 
 </script>
-
 </body>
 </html>
