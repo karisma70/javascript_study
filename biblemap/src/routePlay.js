@@ -220,6 +220,3 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray ){
 
 }
 
-
-
-// }());

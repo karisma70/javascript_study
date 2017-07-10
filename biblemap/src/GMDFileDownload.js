@@ -90,7 +90,7 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
 
         // debug
         if( layerId == 9 ){
-            Console.log( "debug!!@!");
+            ConsoleLog( "debug!!@!");
         }
 
         var paramStyle = style;
@@ -111,7 +111,7 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
         */
 
         if( shpFile.records.length != dbfFile.records.length ){
-            Console.log( "Critial shapefile Error!!  id: " + layerId + ", shape records: " + shpFile.records.length + ", dbf records: " + dbfFile.records.length );
+            ConsoleLog( "Critial shapefile Error!!  id: " + layerId + ", shape records: " + shpFile.records.length + ", dbf records: " + dbfFile.records.length );
         }
 
         var recsLen = shpFile.records.length;
@@ -160,7 +160,7 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
                     if (textString) {
 
                         if( label == "name2" || label == "name3" ){
-                            Console.log( url + ">>" + label + ": " + textString  );
+                            ConsoleLog( url + ">>" + label + ": " + textString  );
                         }
 
                         if( label == "name" )
@@ -222,7 +222,7 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
                 }
 
                 if( layerId == 5 ){
-                    Console.log( "layer id : 5");
+                    ConsoleLog( "layer id : 5");
                 }
                 var wkt = 'POLYGON(' + wktOuter.join(', ') + ')';
                 var feature = genLayerFromWkt( wkt, attrs, bTransform, format, paramStyle.textStroke.prop );
@@ -264,7 +264,7 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
         shapeLayer.set( 'visibleRange', style.visibleRange );
         if( style.historyShow )
             shapeLayer.set( 'historyShow', style.historyShow );
-        Console.log( url + ",   id  : " + layerId );
+        ConsoleLog( url + ",   id  : " + layerId );
 
 
         layerContainer.layers.push( shapeLayer );
@@ -282,7 +282,7 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
 
     var onShpComplete = function (oHTTP) {
         var binFile = oHTTP.binaryResponse;
-        Console.log('got data for ' + theLayer.shpURL + ', parsing shapefile');
+        ConsoleLog('got data for ' + theLayer.shpURL + ', parsing shapefile');
         theLayer.shpFile = new ShpFile(binFile);
         if (theLayer.dbfFile ){
             completeCallback( theLayer.shpFile, layerId, style, theLayer.dbfFile );
@@ -291,7 +291,7 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
 
     var onDbfComplete = function (oHTTP) {
         var binFile = oHTTP.binaryResponse;
-        Console.log('got data for ' + theLayer.dbfURL + ', parsing dbf file');
+        ConsoleLog('got data for ' + theLayer.dbfURL + ', parsing dbf file');
 
         theLayer.dbfFile = new DbfFile(binFile);
         if (theLayer.shpFile) {

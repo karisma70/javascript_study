@@ -137,7 +137,8 @@ function sortPoiWordsArray( layerContainer ){
 
     for( idx in layerContainer.poiWords ){
         var poiWord =  layerContainer.poiWords[idx];
-        Console.log( "[poi] " + poiWord.text + ": " + poiWord.length );
+        // Console.log( "[poi] " + poiWord.text + ": " + poiWord.length );
+        ConsoleLog( "[poi] " + poiWord.text + ": " + poiWord.length );
     }
 }
 
@@ -157,7 +158,8 @@ function requestPoiInfo( poiName, recvFunc,  errFunc){
         var resObj = JSON.parse( http.responseText );
 
         if( resObj.result != "undefined" && resObj.result == "fail" ){
-            Console.log( "requestPoiInfo() Fail!!!   param: " + jsonStr );
+            // Console.log( "requestPoiInfo() Fail!!!   param: " + jsonStr );
+            ConsoleLog("requestPoiInfo() Fail!!!   param: " + jsonStr );
             if( errFunc ){
                 errFunc( resObj );
             }

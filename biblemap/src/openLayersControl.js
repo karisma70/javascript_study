@@ -12,7 +12,8 @@
         visibleRange : { max : 16, min : 1 },
         fillColor : 'rgba( 255, 255, 255, 0.001)',
         lineStroke : {  color: [174, 122, 40], width : 1, opacity: 0.01  },
-        textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 12px arial', color: '#2581D8', outlineColor : '#CECBCB', outlineWidth : 3  }}
+        //textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 12px arial', color: '#2581D8', outlineColor : '#CECBCB', outlineWidth : 3  }}
+         textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 12px arial', color: '#F1EEEE', outlineColor : '#2581D8', outlineWidth : 2  }}
      },
 
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +72,8 @@
 
      { url : 'biblemap/mapdata/history/History_12Sect_poi', order: 28, style: {
          visibleRange : { max : 16 , min : 9 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 12px arial', color: '#105602', outlineColor : 'white', outlineWidth : 3  }}
+         //textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 12px arial', color: '#105602', outlineColor : 'white', outlineWidth : 3  }}
+         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 12px arial', color: '#E7E5E5', outlineColor : '#105602', outlineWidth : 4  }}
      },
 
 
@@ -104,11 +106,11 @@
      {
          url: 'biblemap/mapdata/AD_admin_poi',  order: 26, style: {
          visibleRange : { max : 16 , min : 4 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 13px arial', color: '#105602', outlineColor : 'white', outlineWidth : 2  }}
+         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#105602', outlineWidth : 4  }}
      },
      { url: 'biblemap/mapdata/BC_admin_poi',  order: 27, style: {
          visibleRange : { max : 16 , min : 6 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 13px arial', color: '#033078', outlineColor : 'white', outlineWidth : 2  }}
+         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#033078', outlineWidth : 4  }}
      }
 
  ];
@@ -325,7 +327,8 @@ function moveTo( view, location, zoomIn, done ) {
         }
         if (parts === 0 || !complete) {
             called = true;
-            done(complete);
+            if( done )
+                done(complete);
         }
     }
 

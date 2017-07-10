@@ -56,6 +56,7 @@
             height: 34%; */
             width: 100%;
             background: white;
+            font-family: '새굴림';
             /* border:1px solid black;  */
         }
 
@@ -109,18 +110,30 @@
         .ol-touch .measure-distance {
             top: 80px;
         }
+        .button {
+            vertical-align: top;
+            line-height: 1px;
+            font-size: 11px;
+            color: white;
+            height: 20px;
+            width: 30px;
+            border:0;
+            outline: 0;
+            background-color: rgb(70, 177, 228 );
+        }
+
 
     </style>
 </head>
 <body>
 <div class="wrapperDiv">
     <div id="sidebar" style="position:absolute;">
-        <div name="logo" style="height:27px; background-color:rgb( 70, 177, 228 );"><a href="http://www.facebook.com/biblemap" target="_blank" style="text-decoration:none"><img src="biblemap/image/biblemap_logo.png" style="width:27px; height:27px; vertical-align:middle" >
-            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span style="font-size:10pt; font-weight:bold; color:white;text-align:center;">성서지도</span></a></div>
-        <div name ="dummy2" style="left: 0px; top: 50px; width:200px; height: 13px; background-color:rgb( 201, 233, 248  );" ></div>
-        <div name ="bibleSearch" style="font-size:12px; height: 70px" accept-charset="utf-8">
+        <div id="logo" style="height:27px; background-color:rgb( 70, 177, 228 );"><a href="http://www.facebook.com/biblemap" target="_blank" style="text-decoration:none"><img src="biblemap/image/biblemap_logo.png" style="width:27px; height:27px; vertical-align:middle" >
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:10pt; font-weight:bold; color:white;text-align:center;">성서지도</span></a></div>
+        <div id ="dummy2" style="left: 0px; top: 50px; width:200px; height: 13px; background-color:rgb( 201, 233, 248  );" ></div>
+        <div id ="bibleSearch" style="font-size:12px; height: 70px">
             <br>
-            &nbsp&nbsp&nbsp&nbsp<select id ="bibleTitle" style="height:1.7em; font-size:1.0em;" value="창세기">
+            &nbsp;&nbsp;&nbsp;&nbsp;<select id ="bibleTitle" style="height:1.7em; font-size:1.0em;" value="창세기">
             <option>창세기</option><option>출애굽기</option><option>레위기</option><option>민수기</option><option>신명기</option>
             <option>여호수아</option><option>사사기</option><option>룻기</option><option>사무엘상</option><option>사무엘하</option>
             <option>열왕기상</option><option>열왕기하</option><option>역대상</option><option>역대하</option><option>에스라</option>
@@ -136,56 +149,60 @@
             <option>베드로후서</option><option>요한1서</option><option>요한2서</option><option>요한3서</option><option>유다서</option>
             <option>요한계시록</option>
         </select>
-            <br>
-            &nbsp&nbsp&nbsp&nbsp<input type="number" class="chapterNum" id ="bibleChapter" style="width: 4em; font-size:1.0em;" value="14"> 장
-            <!-- <input type="button" value="검색" style="font-size:12px;" onclick="requestBibleByChapter()"> -->
+            <div style="height: 2px"></div>
+            &nbsp;&nbsp;&nbsp;&nbsp;<input type="number" class="chapterNum" id ="bibleChapter" style="width: 4em; font-size:1.0em;" value="14"> 장
+            &nbsp;&nbsp;<input type="button" class="button" value="검색" onclick="requestBibleByChapter()">
             <!-- <button type="button" onclick="requestBibleByChapter()" ><img src="image/bible_search_btn.png" style="width:23px; height:24px; vertical-align:middle"></button> -->
-            <input type="image" src="biblemap/image/bible_search_btn.png" style="width:21px; height:22px; vertical-align:middle" onclick="requestBibleByChapter()">
+            <!-- <input type="image" src="biblemap/image/bible_search_btn.png" style="width:21px; height:22px; vertical-align:middle" onclick="requestBibleByChapter()"> -->
         </div>
         <div name="bibleWord" style="height:30px;">
             <!-- <img src="image/word_search2.png" style="width:20px; height:22px; vertical-align:middle" ><input type="text" id ="word" size="12" style="font-size:12px;" value="바울"><input type="button" value="검색" style="font-size:12px;" onclick="searchBibleWord()"> -->
-            &nbsp&nbsp<span style="font-size:12px;">단어</span>&nbsp<input type="text" id ="word" size="12" style="font-size:12px;" value="바울"><input type="image" src="biblemap/image/word_search2.png" style="width:23px; height:24px; vertical-align:middle" onclick="searchBibleWord()">
-            <br>
+            &nbsp;&nbsp;<span style="font-size:12px;">단어</span>&nbsp;<input type="text" id ="word" size="12" style="font-size:12px;" value="바울">
+            <input type="button" class="button" value="검색" onclick="searchBibleWord()">
+            <!-- <input type="image" src="biblemap/image/word_search2.png" style="width:23px; height:24px; vertical-align:middle" onclick="searchBibleWord()"> -->
+            <div style="height: 2px"></div>
             <!-- <img src="image/place_search2.png" style="width:22px; height:21px; vertical-align:middle" ><input type="text" id ="place" size="12" style="font-size:12px;" value="예루살렘"><input type="button" value="검색" style="font-size:12px;" onclick="moveToPlace()"> -->
-            &nbsp&nbsp<span style="font-size:12px;">지명</span>&nbsp<input type="text" id ="place" size="12" style="font-size:12px;" value="예루살렘"><input type="image" src="biblemap/image/place_search2.png" style="width:23px; height:24px; vertical-align:middle" onclick="moveToPlace()">
+            &nbsp;&nbsp;<span style="font-size:12px;">지명</span>&nbsp;<input type="text" id ="place" size="12" style="font-size:12px;" value="예루살렘">
+            <input type="button" class="button" value="검색" onclick="moveToPlace()">
+            <!-- <input type="image" src="biblemap/image/place_search2.png" style="width:23px; height:24px; vertical-align:middle" onclick="moveToPlace()">  -->
             <br>
         </div>
         <br>
         <br>
         <div name ="historyBar" style="margin-left:10px; width: 170px; height: 90px; border: 1px solid #A7A4A4;">
             <br>
-            &nbsp<span style="font-size:13px">[ 시대별 경계 영역 ]</span>
-            <input id="historyAdmin" type ="range" style = "font-size:12px; width:150px" min = "0" max = "6" value = "6" onchange="changeHistoryAdmin(this.value)" >
-            &nbsp&nbsp&nbsp<span id ="range" style="font-size:12px;">현재의 국가</span>
+            &nbsp;&nbsp;<span style="font-size:13px">[ 시대별 경계 영역 ]</span>
+            <input id="historyAdmin" type ="range" style = "position:fixed; top: 210px; left: 20px; width:150px; font-size:12px;" min = "0" max = "6" value = "6" onchange="changeHistoryAdmin(this.value)" >
+            &nbsp;&nbsp;&nbsp;<span id ="range" style="position:fixed; left: 20px; top: 230px; font-size:12px;">현재의 국가</span>
         </div>
         <br>
-        &nbsp&nbsp&nbsp<select id="movePath" style="height:1.7em; font-size:12px;" ></select>
+        &nbsp;&nbsp;&nbsp;<select id="movePath" style="height:1.7em; font-size:12px;" ></select>
         <br>
-        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <input type="image" src="biblemap/image/trajectory_play.png" style="left: 150px; width:20px; height:20px; vertical-align:middle" onclick="pathAction()">
         <!-- <input id="showMovingPath" type ="button" style="font-size:12px;" value="Play" onclick="pathAction()" > -->
         <input type="image" src="biblemap/image/trajectory_stop.png" style="width:20px; height:20px; vertical-align:middle" onclick="pathHide()">
-        <!-- &nbsp<input id="hideMovingPath" type ="button" style="font-size:12px;" value="Off" onclick="pathHide()" > -->
+        <!-- &nbsp;<input id="hideMovingPath" type ="button" style="font-size:12px;" value="Off" onclick="pathHide()" > -->
         <br>
         <div id ="dummy" style="position:absolute; left: 0px; top: 50px; width:200px; height: 15px; background-color:rgb( 201, 233, 248  );" ></div>
-        <div id ="licenseNotice" style="position:absolute; left: 0px; top:0px; width:200px; background-color:rgb(70, 177, 228 );" >&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span style="color: rgb(255, 255, 255); font-size:11px;" onclick="showLicenseNotice()" >License notice</span></div>
+        <div id ="licenseNotice" style="position:absolute; left: 0px; top:0px; width:200px; background-color:rgb(70, 177, 228 );" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: rgb(255, 255, 255); font-size:11px;" onclick="showLicenseNotice()" >License notice</span></div>
     </div>
 
     <div id="map" class="mapview" style="position:absolute;">
     </div>
-    <div id ="footer" style="overflow-y:scroll; line-height: 200%; font: 12px 굴림체; clear: both;">
+    <div id ="footer" style="overflow-y:scroll; line-height: 170%; font-size:14px ; clear: both;">
         <p>waiting.....</p>
     </div>
     <img src="biblemap/image/hideBible.png" id="footerToggle" name="img" style="position:absolute; width:50px; height:12px;" onclick="toggleScrMap()">
 </div>
 
-<div id="popup" class="ol-popup" >
+<div id="popup" class="ol-popup" style="font-size:1.1em;">
     <a href="#" id="popup-closer" class="ol-popup-closer" style="font-size:12px;"></a>
-    <div id="popup-content" style="font-weight:bold; font-size:1.1em; text-align:center;"></div>
+    <div id="popup-content" style="font-size:1.1em; text-align:center;"></div>
 </div>
 
 <script>
-
+    setDebug(false);
 
     var adjustScrDiv = (function(){
 
@@ -352,7 +369,7 @@
                 var layer = layerManager.layerContainer.layers[idx];
                 var id = layer.get('id');
                 if (showId.length) {    // 현재의 국가는 4개의 레이어를 한꺼번에 켜고 꺼야 한다.
-                    for (hID in showId) {
+                    for ( var hID in showId) {
                         var sSubId = showId[hID];
                         if (id == sSubId) {
                             if (layer.get('historyShow')) {
@@ -462,6 +479,7 @@
         }
     };
 
+
     ///////////////////////////////////////////////////////////////
 
     var routeMove;
@@ -534,7 +552,7 @@
             });
         } else {        // 전세계 폴리곤 경계라면...
             if( id < 5 ) {
-                posName = "<현재 국가><br>" + "&nbsp" + posName;
+                posName = "< 현재 국가 ><br>" + "&nbsp;" + posName;
             } else{
                 requestBibleByWord(posName, null );
             }
@@ -562,6 +580,7 @@
         searchWord = removeSpaceInWord( searchWord );
         // placeWord = placeWord.replace(/^\s*|\s*$/g, ''); // 좌우 공백 제거
         $('#footer').empty();
+        $('#footer').append("Waiting....");
 
         var searchParam = {
             type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
@@ -571,7 +590,7 @@
 
         reqeustAndShowContents( searchParam, function( param, resObj ){
             if( resObj.length < 1 ) {
-                Console.log( "검색결과가 없어서 재검색!!!");
+                ConsoleLog( "검색결과가 없어서 재검색!!!");
                 var placeWord = param.option.content.$regex;
                 var orgName = layerManager.getPoiByName(placeWord).orgName;
                 param.option.content = {$regex: orgName};
@@ -631,6 +650,8 @@
 
     function requestBibleByWord( word, competeCallback ){
         $('#footer').empty();
+        $('#footer').append("Waiting....");
+
         var searchParam = {
             type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
             option: {}
@@ -645,6 +666,8 @@
 
     function requestBibleByChapter(){
         $('#footer').empty();
+        $('#footer').append("Waiting....");
+
         var searchParam = {
             type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
             option: {}
@@ -678,14 +701,12 @@
 
 
         if( bibleTitle.value == "" ){
-            alert ("Please insert title!!");
             return;
         } else {
             consistSearchOpt( "title", bibleTitle  );
         }
 
         if( bibleChapter.value == "" ){
-            alert ("Please insert chapter!!");
             return;
         } else {
             consistSearchOpt( "chapter", bibleChapter );
@@ -705,11 +726,14 @@
 
 
     function reqeustAndShowContents( searchParam , completeCallback ){
+
         var jsonStr = JSON.stringify( searchParam );
 
         // url = "http://13.124.86.217:8082?" + jsonStr;
 
         httpRequest("POST", jsonStr, function( http ){
+            $('#footer').empty();
+
             var resObj = JSON.parse( http.responseText );
             if( resObj.length < 1 ){
                 if( completeCallback )
@@ -722,7 +746,7 @@
             }
             else {
                 $('#footer').append( "<table>");
-                var chapterStart =  "<td width = \"135\">&nbsp&nbsp";
+                var chapterStart =  "<td width = \"135\">&nbsp;&nbsp;";
                 var contentStart = "<td>";
                 var endString = "</td>";
 

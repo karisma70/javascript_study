@@ -66,7 +66,7 @@ var httpRequest = (function(){
 
         if( typeof( xmlhttp.abort ) != "undefined"){
             xmlhttp.abort = function(){
-                Console.log( "abort!!!");
+                ConsoleLog( "abort!!!");
             }
         }
 
@@ -78,7 +78,7 @@ var httpRequest = (function(){
 
         if( typeof( xmlhttp.timeout ) != "undefined"){
             xmlhttp.error = function(){
-                Console.log( "timeout !!!");
+                ConsoleLog( "timeout !!!");
             }
         }
 
@@ -102,7 +102,7 @@ var httpRequest = (function(){
 
     return function( method, jsonStr, callback ){
         var url = "http://13.124.86.217:8082?" + jsonStr;
-        Console.log( url );
+        ConsoleLog( url );
         requestData( method, url, callback );
         /*
         requestData( "HEAD", url, function (http) {

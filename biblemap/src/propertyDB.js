@@ -10,8 +10,8 @@ function DbfFile(binFile) {
 
     var t2 = new Date().getTime();
     //if (window.console && window.console.log) console.log('parsed dbf header in ' + (t2-t1) + ' ms');
-    if(window.Console && window.Console.log)
-        Console.log('parsed dbf header in ' + (t2-t1) + ' ms');
+    if(window.ConsoleLog)
+        ConsoleLog('parsed dbf header in ' + (t2-t1) + ' ms');
 
 
     t1 = new Date().getTime();    
@@ -25,8 +25,8 @@ function DbfFile(binFile) {
 
     t2 = new Date().getTime();
     // if (window.console && window.console.log) console.log('parsed dbf records in ' + (t2-t1) + ' ms');
-    if (window.Console && window.Console.log)
-        Console.log('parsed dbf records in ' + (t2-t1) + ' ms');
+    if (window.ConsoleLog)
+        ConsoleLog('parsed dbf records in ' + (t2-t1) + ' ms');
     
 }
 DbfFile.prototype.getRecord = function(index) {
@@ -39,7 +39,7 @@ DbfFile.prototype.getRecord = function(index) {
     this.src.bigEndian = false;
 
     return new DbfRecord(this.src, this.header);
-}
+};
 
 
 function DbfHeader(src) {

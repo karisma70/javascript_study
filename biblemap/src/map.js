@@ -8,11 +8,11 @@ function Map(id, layers) {
   if (!parent.style.position) parent.style.position = 'relative';
 
   if( parent.width ){
-    Console.log( parent.width );
+    ConsoleLog( parent.width );
   }
 
   for (var i = 0; i < layers.length; i++) {
-    Console.log('creating canvas...');
+    ConsoleLog('creating canvas...');
 
     var layer = layers[i];
 

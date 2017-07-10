@@ -23,33 +23,26 @@ function copyObject( obj ){
     return copyObj;
 }
 
-function ConsoleLog( ){
-    this.IsDebug = true;
+(function() {
+    var IsDebug = true;
 
-    this.setDebug = function( setVal ){
-        this.IsDebug = setVal;
-    };
-    this.getDebug = function(){
-        return this.IsDebug;
-    };
-
-    this.wrap = function( func, wrapper ){
-        return function() {
+    function wrap(func, wrapper) {             // 2.
+        return function () {
             var args = [func].concat(Array.prototype.slice.call(arguments));
             return wrapper.apply(this, args);
+        };
+    }
+
+    window.ConsoleLog = wrap( console.log, function (func_with_args) {         // 1.
+        if (IsDebug == true) {
+            // return func_with_args.apply(this, Array.prototype.slice.call(arguments, 1));
+            console.log( Array.prototype.slice.call(arguments, 1));
         }
+    });
+
+    window.setDebug = function (setVal) {
+        IsDebug = setVal;
     };
+}());
 
-    this.log =  this.wrap( console.log, function( func_with_args ){
-        if( this.IsDebug == true)
-            return func_with_args.apply( this, Array.prototype.slice.call( arguments, 1));
-        else
-            return null;
-    } );
 
-    return this;
-}
-
-window.Console = new ConsoleLog();
-
-Console.setDebug( true );
