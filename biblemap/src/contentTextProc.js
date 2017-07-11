@@ -135,11 +135,12 @@ function sortPoiWordsArray( layerContainer ){
         return 0;
     } );
 
+    /*
     for( idx in layerContainer.poiWords ){
         var poiWord =  layerContainer.poiWords[idx];
-        // Console.log( "[poi] " + poiWord.text + ": " + poiWord.length );
         ConsoleLog( "[poi] " + poiWord.text + ": " + poiWord.length );
     }
+    */
 }
 
 function requestPoiInfo( poiName, recvFunc,  errFunc){

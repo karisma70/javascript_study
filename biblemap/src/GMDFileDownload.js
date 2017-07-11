@@ -88,11 +88,6 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
 
     var completeCallback = function( shpFile, layerId, style,  dbfFile ){       // callback Function
 
-        // debug
-        if( layerId == 9 ){
-            ConsoleLog( "debug!!@!");
-        }
-
         var paramStyle = style;
 
         var bTransform = false;
@@ -221,9 +216,6 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
                     wktOuter.push('(' + wktInner.join(', ') + ')');
                 }
 
-                if( layerId == 5 ){
-                    ConsoleLog( "layer id : 5");
-                }
                 var wkt = 'POLYGON(' + wktOuter.join(', ') + ')';
                 var feature = genLayerFromWkt( wkt, attrs, bTransform, format, paramStyle.textStroke.prop );
 
@@ -264,11 +256,8 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
         shapeLayer.set( 'visibleRange', style.visibleRange );
         if( style.historyShow )
             shapeLayer.set( 'historyShow', style.historyShow );
-        ConsoleLog( url + ",   id  : " + layerId );
-
 
         layerContainer.layers.push( shapeLayer );
-
 
         if( layerContainer.totalCount <= layerContainer.layers.length ){
             wholeCompleteCallback( map, layerContainer );

@@ -65,13 +65,20 @@
             background-color: white;
             -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
             filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
-            padding: 15px;
+            /* padding: 15px;
             border-radius: 10px;
             border: 1px solid #cccccc;
             bottom: 12px;
             left: -50px;
             min-width: 130px;
-            font-size:12px;
+            font-size:12px; */
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #cccccc;
+            bottom: 7px;
+            left: -50px;
+            min-width: 110px;
+            /*font-size:12px; */
         }
         .ol-popup:after, .ol-popup:before {
             top: 100%;
@@ -119,7 +126,13 @@
             width: 30px;
             border:0;
             outline: 0;
-            background-color: rgb(70, 177, 228 );
+            background-color: rgb(66, 133, 244 );
+        }
+        .dummy {
+
+            width:200px;
+            height: 15px;
+            background-color:rgb( 199, 219, 252  );
         }
 
 
@@ -128,9 +141,9 @@
 <body>
 <div class="wrapperDiv">
     <div id="sidebar" style="position:absolute;">
-        <div id="logo" style="height:27px; background-color:rgb( 70, 177, 228 );"><a href="http://www.facebook.com/biblemap" target="_blank" style="text-decoration:none"><img src="biblemap/image/biblemap_logo.png" style="width:27px; height:27px; vertical-align:middle" >
+        <div id="logo" style="height:27px; background-color:rgb( 66, 133, 244 );"><a href="http://www.facebook.com/biblemap" target="_blank" style="text-decoration:none"><img src="biblemap/image/biblemap_logo.png" style="width:27px; height:27px; vertical-align:middle" >
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:10pt; font-weight:bold; color:white;text-align:center;">성서지도</span></a></div>
-        <div id ="dummy2" style="left: 0px; top: 50px; width:200px; height: 13px; background-color:rgb( 201, 233, 248  );" ></div>
+        <div id ="dummy2" class="dummy" ></div>
         <div id ="bibleSearch" style="font-size:12px; height: 70px">
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;<select id ="bibleTitle" style="height:1.7em; font-size:1.0em;" value="창세기">
@@ -169,11 +182,11 @@
         </div>
         <br>
         <br>
-        <div name ="historyBar" style="margin-left:10px; width: 170px; height: 90px; border: 1px solid #A7A4A4;">
+        <div name ="historyBar" style="margin-left:10px; width: 170px; height: 80px; border: 1px solid #A7A4A4;">
             <br>
-            &nbsp;&nbsp;<span style="font-size:13px">[ 시대별 경계 영역 ]</span>
-            <input id="historyAdmin" type ="range" style = "position:fixed; top: 210px; left: 20px; width:150px; font-size:12px;" min = "0" max = "6" value = "6" onchange="changeHistoryAdmin(this.value)" >
-            &nbsp;&nbsp;&nbsp;<span id ="range" style="position:fixed; left: 20px; top: 230px; font-size:12px;">현재의 국가</span>
+            <div style="position: absolute; width: 168px; height: 20px; left: 11px; top: 180px; text-align:center; color:black">시대별 경계 영역</div>
+            <input id="historyAdmin" type ="range" style = "position:fixed; top: 200px; left: 20px; width:150px; font-size:12px;" min = "0" max = "6" value = "6" onchange="changeHistoryAdmin(this.value)" >
+            &nbsp;&nbsp;&nbsp;<span id ="range" style="position:fixed; left: 20px; top: 220px; font-size:12px;">현재의 국가</span>
         </div>
         <br>
         &nbsp;&nbsp;&nbsp;<select id="movePath" style="height:1.7em; font-size:12px;" ></select>
@@ -184,8 +197,8 @@
         <input type="image" src="biblemap/image/trajectory_stop.png" style="width:20px; height:20px; vertical-align:middle" onclick="pathHide()">
         <!-- &nbsp;<input id="hideMovingPath" type ="button" style="font-size:12px;" value="Off" onclick="pathHide()" > -->
         <br>
-        <div id ="dummy" style="position:absolute; left: 0px; top: 50px; width:200px; height: 15px; background-color:rgb( 201, 233, 248  );" ></div>
-        <div id ="licenseNotice" style="position:absolute; left: 0px; top:0px; width:200px; background-color:rgb(70, 177, 228 );" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: rgb(255, 255, 255); font-size:11px;" onclick="showLicenseNotice()" >License notice</span></div>
+        <div id ="dummy" class = "dummy" style="position: absolute; top:54px;"></div>
+        <div id ="licenseNotice" style="position:absolute; left: 0px; top:0px; width:200px; background-color:rgb(66, 133, 244 );" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: rgb(255, 255, 255); font-size:11px;" onclick="showLicenseNotice()" >License notice</span></div>
     </div>
 
     <div id="map" class="mapview" style="position:absolute;">
@@ -197,12 +210,12 @@
 </div>
 
 <div id="popup" class="ol-popup" style="font-size:1.1em;">
-    <a href="#" id="popup-closer" class="ol-popup-closer" style="font-size:12px;"></a>
-    <div id="popup-content" style="font-size:1.1em; text-align:center;"></div>
+    <a href="#" id="popup-closer" class="ol-popup-closer" ></a>
+    <div id="popup-content" style="text-align:center;"></div>
 </div>
 
 <script>
-    setDebug(false);
+    setDebug(true);
 
     var adjustScrDiv = (function(){
 
@@ -487,6 +500,8 @@
 
     function pathAction( ) {
 
+        closer.onclick();
+
         adjustScrDiv.setIsFullScr("true");
 
         measureDistance.removeMeasureDraw();
@@ -503,7 +518,7 @@
         if( trajectoryArray == null )
             return;
 
-        routeMove = new RouteMoveProcess( bibleMap, trajectoryArray.data );
+        routeMove = new RouteMoveProcess( bibleMap, trajectoryArray.data, layerManager.getLayerContainer().poiLayer, content, overlay );
 
         var extent = trajectoryData.getExtent( index );
 
@@ -514,6 +529,9 @@
     }
 
     function pathHide(){
+
+        closer.onclick();
+
         if( routeMove ){
             routeMove.stop();
         }

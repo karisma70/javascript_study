@@ -125,6 +125,14 @@
      return distance;
  }
 
+ function IsWithinTolerance( x1, y1, x2, y2, tolerance ){
+     var dist = getDistance( x1, y1, x2, y2 );
+     if( dist < tolerance ) {
+         return true;
+     }
+     return false;
+ }
+
  function makeDistanceObj( dist  ){
      var bIsKm = false;
      var realDist = 0;
@@ -257,7 +265,11 @@
 
  LayerManager.prototype.getLayerContainer = function(){
      return this.layerContainer;
- }
+ };
+
+ LayerManager.prototype.getPoiWords = function(){
+     return this.layerContainer.poiWords;
+ };
 
 
  function createOverlay( divID ){    // container

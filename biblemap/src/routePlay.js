@@ -3,18 +3,6 @@
  */
 
 
-/*
-var routePlay = (function(){
-
-    var bibleMap;
-    var trajectoryArray;
-    var moveLineStyle;
-    var pathVector;
-
-    var pathMovingLayer;
-    var pathArrowLayer;
-    */
-
 function CreatePathArrowLayer( trajectoryArray ) {
 
     var pathArrowStyleFunction = function (feature) {
@@ -73,7 +61,7 @@ function CreatePathArrowLayer( trajectoryArray ) {
 }  // end of this.pathArrowDraw
 
 
-function RouteMoveProcess( paramMap, paramTrajectoryArray ){
+function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramPopup, paramOverlay ){
 
     var moveLineStyle = new ol.style.Style({
         stroke: new ol.style.Stroke({
@@ -81,11 +69,17 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray ){
             width: 3   })
     });
 
+    var poiLayer = paramPoiLayer;
+
     var bibleMap = paramMap;
     var trajectoryArray = paramTrajectoryArray;
     var pathVector = null;
     var pathMovingLayer = null;
     var pathArrowLayer = null;
+    var popupPoiArray = [];
+    var bIsShowedPopup = false;
+    var popupWnd = paramPopup;
+    var overlayWnd = paramOverlay;
 
     addLater = function (feature) {
         var timeVal = new Date().getTime();
@@ -107,6 +101,9 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray ){
             if (!feature.get('finished')) {
                 // only draw the lines for which the animation has not finished yet
                 var coords = feature.getGeometry().getCoordinates();
+
+               // getPoiOfTrajectory( coords )
+
                 var elapsedTime = frameState.time - feature.get('start');
                 var elapsedPoints = elapsedTime * pointsPerMs;
 
@@ -124,6 +121,35 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray ){
                 var maxIndex = Math.min(elapsedPoints, coords.length);
                 if( maxIndex > 0 ) {
                     var currentLine = new ol.geom.LineString(coords.slice(0, maxIndex));
+                    var curCoord = coords.slice(maxIndex-1, maxIndex)[0];
+
+                    var minDistance = 999999999;
+                    var detectPoi = null;
+                    if( maxIndex > 2 && bIsShowedPopup == false ){
+                        for( var idx in popupPoiArray ){
+                            var temp = popupPoiArray[idx];
+                            var dist = getDistance( temp.trjX, temp.trjY, curCoord[0], curCoord[1] );
+                            if( dist < minDistance ){
+                                minDistance = dist;
+                                detectPoi = temp;
+                            }
+                        }
+                        popupWnd.innerHTML = detectPoi.orgName;
+                        overlayWnd.setPosition( [detectPoi.trjX, detectPoi.trjY] );
+                        bIsShowedPopup = true;
+                    }
+                    else {
+                        for (var idx in popupPoiArray) {
+                            var popupPoi = popupPoiArray[idx];
+                            if (IsWithinTolerance(curCoord[0], curCoord[1], popupPoi.trjX, popupPoi.trjY, 2500) == true) {
+                                ConsoleLog("X: " + popupPoi.trjX + ", Y: " + popupPoi.trjY + ",name: " + popupPoi.orgName);
+                                popupWnd.innerHTML = popupPoi.orgName;
+                                overlayWnd.setPosition(curCoord);
+                                bIsShowedPopup = true;
+                            }
+                        }
+                    }
+
                     vectorContext.drawGeometry(currentLine);
                 }
             }
@@ -132,12 +158,38 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray ){
         bibleMap.render();
     }; // end of   this.drawMoving
 
+    function IsWithinToleranceOfPoi( trjX, trjY ) {
+        for (var prop in poiLayer) {
+            if (poiLayer.hasOwnProperty(prop) && typeof poiLayer[prop] === "object") {
+                var obj = poiLayer[prop];
+
+                if (IsWithinTolerance( trjX, trjY, obj.x, obj.y, 500) == true) {
+                    obj.trjX = trjX;
+                    obj.trjY = trjY;
+                    return obj;
+                }
+            }
+        }
+
+    }
+
     initPath = function () {
+        popupPoiArray = [];
         var pathArray = [];
         var moveArray = trajectoryArray;   // abrahamMove
         for (var i = 0; i < moveArray.length - 1; i++) {
             var from = moveArray[i];
             var to = moveArray[i + 1];
+            var poi = null;
+
+            if( i == 0 )
+                poi = IsWithinToleranceOfPoi(from[0], from[1]);
+            else
+                poi = IsWithinToleranceOfPoi( to[0], to[1] );
+
+            if( poi != null ){
+                popupPoiArray.push( poi );
+            }
 
             var pointArray = [];
             pointArray.push(from);
