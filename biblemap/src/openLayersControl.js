@@ -125,6 +125,12 @@
      return distance;
  }
 
+ function getDistanceArr( pos1, pos2 ){
+
+     return getDistance( pos1[0], pos1[1], pos2[0], pos2[1] );
+ }
+
+
  function IsWithinTolerance( x1, y1, x2, y2, tolerance ){
      var dist = getDistance( x1, y1, x2, y2 );
      if( dist < tolerance ) {

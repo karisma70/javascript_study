@@ -58,8 +58,10 @@ function DistanceMeasureControl( paramMapManager ){
                         }
                     }
 
-                    var distObj = makeDistanceObj(distance);
-                    coordString = distObj.distString;
+                    // var distObj = makeDistanceObj(distance);
+                    // coordString = distObj.distString;
+                    coordString = distance + "";
+
 
                     //console.log("<<-------------- distance : " + distObj.distString);
                 }

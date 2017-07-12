@@ -12,31 +12,58 @@ function CreatePathArrowLayer( trajectoryArray ) {
             new ol.style.Style({
                 stroke: new ol.style.Stroke({
                     color: '#ffcc33',
-                    width: 1
+                    width: 3
                 })
-            }),
+            })
+            /*,
             new ol.style.Style({
                 stroke: new ol.style.Stroke({
                     color: [0, 0, 127, 0.15],
                     width: 2
                 })
-            })
+            }) */
         ];
 
+
+        var vtIdx = 0;
+        var vtCount = geometry.getCoordinates().length;
+        var basePos = null;
+
         geometry.forEachSegment(function (start, end) {
+
             var dx = end[0] - start[0];
             var dy = end[1] - start[1];
             var rotation = Math.atan2(dy, dx);
             // arrows
-            styles.push(new ol.style.Style({
-                geometry: new ol.geom.Point(end),
-                image: new ol.style.Icon({
-                    src: 'biblemap/image/arrow.png',
-                    anchor: [0.75, 0.5],
-                    rotateWithView: true,
-                    rotation: -rotation
-                })
-            }));
+
+            if( vtIdx == 0 ) {
+                styles.push(new ol.style.Style({
+                    geometry: new ol.geom.Point(end),
+                    image: new ol.style.Icon({
+                        src: 'biblemap/image/arrow.png',
+                        anchor: [0.75, 0.5],
+                        rotateWithView: true,
+                        rotation: -rotation
+                    })
+                }));
+                basePos = copyObject( end );
+            }else{
+                var distance = getDistanceArr( basePos, end );
+                if( distance > 100000 || (vtCount - 2) <= vtIdx ){
+                    styles.push(new ol.style.Style({
+                        geometry: new ol.geom.Point(end),
+                        image: new ol.style.Icon({
+                            src: 'biblemap/image/arrow.png',
+                            anchor: [0.75, 0.5],
+                            rotateWithView: true,
+                            rotation: -rotation
+                        })
+                    }));
+                    basePos = copyObject( end );
+                }
+            }
+
+            vtIdx ++;
         });
 
         return styles;
@@ -116,6 +143,11 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramP
                     bibleMap.addLayer( pathArrowLayer );
                     pathArrowLayer.setZIndex(19);
 
+                    if( pathMovingLayer ){
+                        bibleMap.removeLayer( pathMovingLayer );
+                        pathMovingLayer = null;
+                    }
+
                 }
 
                 var maxIndex = Math.min(elapsedPoints, coords.length);
@@ -141,7 +173,7 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramP
                     else {
                         for (var idx in popupPoiArray) {
                             var popupPoi = popupPoiArray[idx];
-                            if (IsWithinTolerance(curCoord[0], curCoord[1], popupPoi.trjX, popupPoi.trjY, 2500) == true) {
+                            if (IsWithinTolerance(curCoord[0], curCoord[1], popupPoi.trjX, popupPoi.trjY, 4000) == true) {
                                 ConsoleLog("X: " + popupPoi.trjX + ", Y: " + popupPoi.trjY + ",name: " + popupPoi.orgName);
                                 popupWnd.innerHTML = popupPoi.orgName;
                                 overlayWnd.setPosition(curCoord);
@@ -177,6 +209,16 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramP
         popupPoiArray = [];
         var pathArray = [];
         var moveArray = trajectoryArray;   // abrahamMove
+        var totDist = 0;
+
+        for (var i = 0; i < moveArray.length - 1; i++) {
+            var from = moveArray[i];
+            var to = moveArray[i + 1];
+
+            var dist = getDistance( from[0], from[1], to[0], to[1] );
+            totDist += dist;
+        }
+
         for (var i = 0; i < moveArray.length - 1; i++) {
             var from = moveArray[i];
             var to = moveArray[i + 1];
@@ -195,6 +237,10 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramP
             pointArray.push(from);
             pointArray.push(to);
 
+            var dist = getDistance( from[0], from[1], to[0], to[1] );
+            var divCount = ( dist / totDist ) * 3000 ;
+            var offsetVal = divCount / 10;
+
             var tempLine = new ol.geom.LineString(pointArray);
             tempLine.transform(ol.proj.get('EPSG:3857'), ol.proj.get('EPSG:4326'));     // 경위도로 변환
             var coord = tempLine.getCoordinates();
@@ -204,7 +250,8 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramP
                 {x: coord[0][0], y: coord[0][1]},
                 {x: coord[1][0], y: coord[1][1]});
 
-            var arcLine = arcGenerator.Arc(100, {offset: 10});
+             //var arcLine = arcGenerator.Arc(100, {offset: 10});
+            var arcLine = arcGenerator.Arc( divCount, {offset: offsetVal });
             if (arcLine.geometries.length === 1) {
                 var tempArray = arcLine.geometries[0].coords;
                 for (var j = 0; j < tempArray.length; j++) {
