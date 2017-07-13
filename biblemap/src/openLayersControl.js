@@ -540,7 +540,7 @@ function createLayer( source  ) {
 
          this.getClickecPos = function(){
              return clickedPos;
-         }
+         };
 
          this.getLayerManager = function () {
              return this.layerManager;
