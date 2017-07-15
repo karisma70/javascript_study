@@ -179,22 +179,7 @@
         <div id ="dummy2" class="dummy" ></div>
         <div id ="bibleSearch" style="font-size:12px; height: 70px">
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;<select id ="bibleTitle" name="bibleTitle" style="height:1.7em; font-size:1.0em;" value="창세기">
-            <option>창세기</option><option>출애굽기</option><option>레위기</option><option>민수기</option><option>신명기</option>
-            <option>여호수아</option><option>사사기</option><option>룻기</option><option>사무엘상</option><option>사무엘하</option>
-            <option>열왕기상</option><option>열왕기하</option><option>역대상</option><option>역대하</option><option>에스라</option>
-            <option>느헤미야</option><option>에스더</option><option>욥기</option><option>시편</option><option>잠언</option>
-            <option>전도서</option>아가<option>이사야</option><option>예레미야</option><option>예레미야애가</option>
-            <option>에스겔</option><option>다니엘</option><option>호세아</option><option>요엘</option><option>아모스</option>
-            <option>오바댜</option><option>요나</option><option>미가</option><option>나훔</option><option>하박국</option>
-            <option>스바냐</option><option>학개</option><option>스가랴</option><option>말라기</option><option>마태복음</option>
-            <option>마가복음</option><option>누가복음</option><option>요한복음</option><option>사도행전</option><option>로마서</option>
-            <option>고린도전서</option><option>고린도후서</option><option>갈라디아서</option><option>에베소서</option><option>빌립보서</option>
-            <option>골로새서</option><option>데살로니가전서</option><option>데살로니가후서</option><option>디모데전서</option><option>디모데후서</option>
-            <option>디도서</option><option>빌레몬서</option><option>히브리서</option><option>야고보서</option><option>베드로전서</option>
-            <option>베드로후서</option><option>요한1서</option><option>요한2서</option><option>요한3서</option><option>유다서</option>
-            <option>요한계시록</option>
-        </select>
+            &nbsp;&nbsp;&nbsp;&nbsp;<select id ="bibleTitle" name="bibleTitle" style="height:1.7em; font-size:1.0em;" ></select>
             <div style="height: 2px"></div>
             &nbsp;&nbsp;&nbsp;&nbsp;<input type="number" class="chapterNum" id ="bibleChapter" style="width: 4em; font-size:1.0em;" value="14"> 장
             &nbsp;&nbsp;<input type="button" class="button" value="검색" onclick="searchBibleChapter()">
@@ -248,9 +233,8 @@
 </div>
 
 <script>
-    setDebug(false);
+    setDebug( false );
 
-    getSearchWordsFromStorage();
 
     var adjustScrDiv = (function(){
 
@@ -366,9 +350,11 @@
     }
 
     window.onload = function(){
+        ConsoleLog( "window.onload ======================> ")
         adjustScrDiv.normalScrMap();
         // getSearchWordsFromStorage();
         downloadGeometries();
+        ConsoleLog( "window.onload <====================== ")
     };
 
     window.onresize = function(){
@@ -379,7 +365,7 @@
 
         var Obj = {
             'bibleTitle' : bibleTitle.value,
-            'bibleChapter' : bibleChapter.value,
+            'bibleChapter' : bibleChapter.value.toString(),
             'bibleWord' : bibleWord.value,
             'biblePlace' : biblePlace.value
         };
@@ -398,28 +384,29 @@
         if( Obj ) {
             if( Obj.hasOwnProperty('bibleTitle' ) && typeof( Obj['bibleTitle'] ) == "string")
                 strText = Obj['bibleTitle'];
-                if( strText == "")
-                    strText = "창세기";
+            if( strText == "")
+                strText = "1";
 
-                $( "#bibleTitle" ).val( strText );
+            $( "#bibleTitle" ).val( strText );
+            strText = "";
 
-                // bibleTitle.value = "창세기";
-                // bibleTitle.value = strTitle;
-                // bibleTitle.value = $.extent( {}, Obj['bibleTitle']);
             if( Obj.hasOwnProperty('bibleChapter' ) && typeof( Obj['bibleChapter'] ) == "string")
                 // bibleChapter.value = Obj['bibleChapter'];
-                 strText = Obj['bibleChapter'];
-                 if( strText == "" ){
-                    strText = "14";
-                 }
-                 $("#bibleChapter").val( strText );
-            if( Obj.hasOwnProperty('bibleWord' ) && typeof( Obj['bibleWord'] ) == "string")
+                strText = Obj['bibleChapter'];
+             if( strText == "" ){
+                strText = "14";
+             }
+             $("#bibleChapter").val( strText );
+             strText = "";
 
+            if( Obj.hasOwnProperty('bibleWord' ) && typeof( Obj['bibleWord'] ) == "string")
                  strText = Obj['bibleWord'];
-                if( strText == ""){
-                    strText = "바울";
-                }
-                $("#bibleWord").val( strText );
+            if( strText == ""){
+                strText = "바울";
+            }
+
+            $("#bibleWord").val( strText );
+            strText = "";
 
             if( Obj.hasOwnProperty('biblePlace' ) && typeof( Obj['biblePlace'] ) == "string")
 
@@ -436,6 +423,20 @@
         window.open("biblemap/src/licenseNotice.html", "notice of license", "width=300, height=250, top=0, left=0, location=no, directories=no,resizable=no,status=no,toolbar=no,menubar=no, scrollbars=yes" );
     }
 
+
+    var bibleTitle = document.getElementById('bibleTitle');
+    var bibleChapter = document.getElementById('bibleChapter');
+
+    bibleTitle.addEventListener("change", function(e){
+        bibleChapter.value = "1";
+        searchBibleChapter();
+    });
+
+
+    $('.chapterNum').bind('keyup mouseup', function(){
+        searchBibleChapter();
+    } );
+
     var bibleWord = document.getElementById("bibleWord");
     bibleWord.addEventListener("change", function(e){
         searchBibleWord();
@@ -447,9 +448,7 @@
             }
     );
 
-    $('.chapterNum').bind('keyup mouseup', function(){
-        searchBibleChapter();
-    } );
+
 
 
     function currentHistoryAdminString( newValue ){
@@ -531,6 +530,22 @@
     };
     ol.inherits( MeasureDistanceEvent, ol.control.Control );
 
+    var bibleChapterList = new BibleChapterList();
+
+
+
+    bibleChapterList.requestBibleChapter( function(){
+        for( var order = 1; order <= bibleChapterList.getCount(); order ++  ) {
+            var chapter = document.createElement("option");
+            var obj =  bibleChapterList.getChapterByNumber( order );
+            chapter.text = obj.title;
+            chapter.value = obj.bookNumber;
+            bibleTitle.appendChild( chapter );
+        }
+
+        getSearchWordsFromStorage();
+
+    } );
 
     var bibleMapManager = createMapManager( overlay, 'map' );
     var trajectoryData = new TrajectoryData();
@@ -555,6 +570,7 @@
         path.value = obj.value;
         selPath.appendChild( path );
     }
+
 
 
     ///////////////////////////////////////
@@ -589,6 +605,7 @@
             } );
         }
     };
+
 
 
     ///////////////////////////////////////////////////////////////
@@ -792,8 +809,6 @@
     }
 
     function searchBibleChapter(){
-        $('#footer').empty();
-        $('#footer').append("Waiting....");
 
         var searchParam = {
             type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
@@ -812,14 +827,43 @@
             return;
         } else {
             // consistSearchOpt( "title", bibleTitle  );
-            searchParam.option["title"] = bibleTitle.value;
+            // searchParam.option["title"] = bibleTitle.value;
+            var chapter = bibleChapterList.getChapterByNumber( bibleTitle.value );
+            searchParam.option["title"] = chapter.title;
         }
 
         if( bibleChapter.value == "" ){
             return;
         } else {
             if( bibleChapter.value == 0 ){
-                bibleChapter.value = 1;
+                var chapter = bibleChapterList.getChapterByNumber( parseInt( bibleTitle.value) );
+                if( chapter.bookNumber <= 1) {
+                    bibleChapter.value = "1";
+                    bibleTitle.value = "1";
+                    return;
+                }else {
+                    var beforeChapter = bibleChapterList.getChapterByNumber( chapter.bookNumber -1 );
+                    bibleTitle.value = beforeChapter.bookNumber;
+                    bibleChapter.value = beforeChapter.lastNum;
+                    searchParam.option["title"] = beforeChapter.title;
+                }
+            }else{
+                var chapter = bibleChapterList.getChapterByNumber( parseInt( bibleTitle.value) );
+                if( chapter.lastNum < parseInt( bibleChapter.value) ){
+                    if( ( chapter.lastNum + 1 ) ==  parseInt( bibleChapter.value) ){
+                        var nextChapter = bibleChapterList.getChapterByNumber( chapter.bookNumber +1);
+                        if( nextChapter ) {
+                            bibleTitle.value = nextChapter.bookNumber.toString();
+                            bibleChapter.value = "1";
+                            searchParam.option["title"] = nextChapter.title;
+                        }else{
+                            bibleChapter.value = chapter.lastNum.toString();
+                        }
+                    }else{
+                        bibleChapter.value = chapter.lastNum.toString();
+                    }
+                }
+
             }
 
             // consistSearchOpt( "chapter", bibleChapter );
@@ -827,6 +871,9 @@
         }
 
         saveSearchWordsToStorage();
+
+        $('#footer').empty();
+        $('#footer').append("Waiting....");
 
         reqeustAndShowContents( searchParam, function(){
             adjustScrDiv.setIsFullScr("false");
@@ -842,7 +889,11 @@
             }
         };
 
-        bibleTitle.value = title;
+        var bookNum = bibleChapterList.getBookNumberByName( title );
+        if( bookNum > 0 ) {
+            bibleTitle.value = bookNum.toString();
+        }
+
         bibleChapter.value = chapter;
 
         saveSearchWordsToStorage();
