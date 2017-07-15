@@ -227,9 +227,7 @@ function Tooltip( paramMap, cssClassName ) {
         bibleMap.addOverlay(tooltip);
 
         tooltipElement.innerHTML = text;
-        if( text == "이고니온"){
-            console.log( "이고니온");
-        }
+
 
         tooltipElement.setAttribute("id", text );
         var strID = "#"+text;
