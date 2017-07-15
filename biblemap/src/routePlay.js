@@ -88,13 +88,16 @@ function CreatePathArrowLayer( trajectoryArray ) {
 }  // end of this.pathArrowDraw
 
 
-function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramPopup, paramOverlay ){
+function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramTooltip ){
 
     var moveLineStyle = new ol.style.Style({
         stroke: new ol.style.Stroke({
             color: '#EAE911',
             width: 3   })
     });
+
+    // var tolerancePoiPos = 5000;
+    var tolerancePoiPos = 2000;
 
     var poiLayer = paramPoiLayer;
 
@@ -105,8 +108,10 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramP
     var pathArrowLayer = null;
     var popupPoiArray = [];
     var bIsShowedPopup = false;
-    var popupWnd = paramPopup;
-    var overlayWnd = paramOverlay;
+    // var popupWnd = paramPopup;
+    // var overlayWnd = paramOverlay;
+    var tooltip = paramTooltip;
+    var trjPoi = {};
 
     addLater = function (feature) {
         var timeVal = new Date().getTime();
@@ -157,6 +162,18 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramP
 
                     var minDistance = 999999999;
                     var detectPoi = null;
+                    var find = false;
+
+                    for( var idx in popupPoiArray ){
+                        var temp = popupPoiArray[idx];
+                        var dist = getDistance( temp.trjX, temp.trjY, curCoord[0], curCoord[1] );
+                        if( dist < minDistance ){
+                            minDistance = dist;
+                            detectPoi = temp;
+                            find = true;
+                        }
+                    }
+
                     if( maxIndex > 2 && bIsShowedPopup == false ){
                         for( var idx in popupPoiArray ){
                             var temp = popupPoiArray[idx];
@@ -166,18 +183,31 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramP
                                 detectPoi = temp;
                             }
                         }
-                        popupWnd.innerHTML = detectPoi.orgName;
-                        overlayWnd.setPosition( [detectPoi.trjX, detectPoi.trjY] );
+
+                        if( trjPoi.hasOwnProperty( detectPoi.orgName ) == false && trjPoi[ detectPoi.orgName ] == null) {
+                            tooltip.create( detectPoi.orgName, [detectPoi.x, detectPoi.y]);
+                            trjPoi[ detectPoi.orgName ] = detectPoi;
+                        }else {
+                            ConsoleLog( "Already exist: " + detectPoi.orgName );
+                        }
                         bIsShowedPopup = true;
+
                     }
                     else {
                         for (var idx in popupPoiArray) {
                             var popupPoi = popupPoiArray[idx];
-                            if (IsWithinTolerance(curCoord[0], curCoord[1], popupPoi.trjX, popupPoi.trjY, 4000) == true) {
+                            if (IsWithinTolerance(curCoord[0], curCoord[1], popupPoi.trjX, popupPoi.trjY, tolerancePoiPos ) == true) {
                                 ConsoleLog("X: " + popupPoi.trjX + ", Y: " + popupPoi.trjY + ",name: " + popupPoi.orgName);
-                                popupWnd.innerHTML = popupPoi.orgName;
-                                overlayWnd.setPosition(curCoord);
+
+                                if( trjPoi.hasOwnProperty( popupPoi.orgName ) == false && trjPoi[ detectPoi.orgName ] == null) {
+                                    tooltip.create(popupPoi.orgName, [popupPoi.x, popupPoi.y]);
+                                    trjPoi[ detectPoi.orgName ] = popupPoi;
+                                }else {
+                                    ConsoleLog( "Already exist: " + popupPoi.orgName );
+                                }
+
                                 bIsShowedPopup = true;
+                                break;
                             }
                         }
                     }
@@ -191,18 +221,35 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramP
     }; // end of   this.drawMoving
 
     function IsWithinToleranceOfPoi( trjX, trjY ) {
+
+        var minDist = 9999999;
+        var retObj = null;
+
         for (var prop in poiLayer) {
             if (poiLayer.hasOwnProperty(prop) && typeof poiLayer[prop] === "object") {
+
                 var obj = poiLayer[prop];
 
-                if (IsWithinTolerance( trjX, trjY, obj.x, obj.y, 500) == true) {
+                if (IsWithinTolerance( trjX, trjY, obj.x, obj.y, tolerancePoiPos ) == true) {
                     obj.trjX = trjX;
                     obj.trjY = trjY;
-                    return obj;
+                    var dist = getDistance( trjX, trjY, obj.x, obj.y );
+                    if( dist < minDist ){
+                        minDist = dist;
+                        retObj = obj;
+                        ConsoleLog("Find !!!  >> " + prop + " : " + dist + ", tolerance : " + tolerancePoiPos );
+                    }
                 }
+
+                if( prop == "예루살렘"){
+                    var dist = getDistance( trjX, trjY, obj.x, obj.y );
+                    ConsoleLog("Debug !!!  >> " + prop + " : " + dist + ", tolerance : " + tolerancePoiPos );
+                }
+
             }
         }
 
+        return retObj;
     }
 
     initPath = function () {
@@ -233,9 +280,18 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramP
                 popupPoiArray.push( poi );
             }
 
+            if( i == 0 ) {
+                poi = IsWithinToleranceOfPoi(to[0], to[1]);
+                if( poi != null ){
+                    popupPoiArray.push( poi );
+                }
+            }
+
+
             var pointArray = [];
             pointArray.push(from);
             pointArray.push(to);
+
 
             var dist = getDistance( from[0], from[1], to[0], to[1] );
             var divCount = ( dist / totDist ) * 3000 ;
@@ -296,6 +352,8 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramP
     };
 
     this.stop = function(){
+
+        // tooltip.allRemove();
 
         if( pathVector){
             var features = pathVector.getFeatures();

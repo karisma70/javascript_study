@@ -70,6 +70,40 @@
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+         { url: 'biblemap/mapdata/level_11_poi',  order: 21, style: {
+             visibleRange : { max : 16 , min : 11 },
+             textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "black", outlineWidth : 3  }}
+         },
+
+         { url: 'biblemap/mapdata/level_10_poi',  order: 20, style: {
+             visibleRange : { max : 16 , min : 10 },
+             textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "#313132", outlineWidth : 3  } }
+         },
+
+         { url : 'biblemap/mapdata/level_9_poi',  order: 19, style: {
+             visibleRange : { max : 16 , min : 9 },
+             textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "#49494A", outlineWidth : 3  } }
+         },
+
+         { url : 'biblemap/mapdata/level_7_poi',  order: 18, style: {
+             visibleRange : { max : 16 , min : 7 },
+             textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "#636364", outlineWidth : 3  } }
+         },
+
+         { url: 'biblemap/mapdata/level_6_poi',  order: 27, style: {
+             visibleRange : { max : 16 , min : 6 },
+             textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#033078', outlineWidth : 4  }}
+         },
+         {
+           url: 'biblemap/mapdata/level_4_poi',  order: 26, style: {
+             visibleRange : { max : 16 , min : 4 },
+             textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#105602', outlineWidth : 4  }}
+         }
+
+         /*
+         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
      { url : 'biblemap/mapdata/history/History_12Sect_poi', order: 28, style: {
          visibleRange : { max : 16 , min : 9 },
          //textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 12px arial', color: '#105602', outlineColor : 'white', outlineWidth : 3  }}
@@ -112,6 +146,7 @@
          visibleRange : { max : 16 , min : 6 },
          textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#033078', outlineWidth : 4  }}
      }
+     */
 
  ];
 

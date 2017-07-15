@@ -202,3 +202,59 @@ function requestPoiContentAndShow( pos, posName, popup, overlay ) {
         overlay.setPosition( [pos.x, pos.y] );
     });
 }
+
+
+function Tooltip( paramMap, cssClassName ) {
+    var bibleMap = paramMap;
+
+    var tooltipElement = null;
+    this.tooltipArray = [];
+
+    var zOrder = 0;
+
+    this.create = function(text, coord){
+
+        tooltipElement = document.createElement('div');
+
+        // tooltipElement.className = 'tooltip tooltip-static';
+        tooltipElement.className = cssClassName;
+
+        tooltip = new ol.Overlay({
+            element: tooltipElement,
+            offset: [0, -15],
+            positioning: 'bottom-center'
+        });
+        bibleMap.addOverlay(tooltip);
+
+        tooltipElement.innerHTML = text;
+        if( text == "이고니온"){
+            console.log( "이고니온");
+        }
+
+        tooltipElement.setAttribute("id", text );
+        var strID = "#"+text;
+
+        $(strID).css( "z-index", zOrder.toString() );
+
+        tooltip.setPosition(coord);
+        tooltip.setOffset([0, -7]);
+
+        this.tooltipArray.push( tooltip);
+        zOrder +=10;
+    };
+
+    this.allRemove = function() {
+
+        zOrder = 0;
+
+        if ( tooltipElement) {
+            tooltipElement.parentNode.removeChild( tooltipElement );
+            tooltipElement = null;
+        }
+
+        for (var idx in this.tooltipArray) {
+            var tooltip = this.tooltipArray[idx];
+            bibleMap.removeOverlay(tooltip);
+        }
+    };
+}
