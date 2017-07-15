@@ -100,54 +100,6 @@
              textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#105602', outlineWidth : 4  }}
          }
 
-         /*
-         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-     { url : 'biblemap/mapdata/history/History_12Sect_poi', order: 28, style: {
-         visibleRange : { max : 16 , min : 9 },
-         //textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 12px arial', color: '#105602', outlineColor : 'white', outlineWidth : 3  }}
-         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'bold 12px arial', color: '#E7E5E5', outlineColor : '#105602', outlineWidth : 4  }}
-     },
-
-
-     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-     { url: 'biblemap/mapdata/abraham_move',  order: 20, style: {
-         visibleRange : { max : 16 , min : 10 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "#313132", outlineWidth : 3  } }
-     },
-     { url: 'biblemap/mapdata/jesus_move',  order: 21, style: {
-             visibleRange : { max : 16 , min : 11 },
-             textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "black", outlineWidth : 3  }}
-     },
-     { url : 'biblemap/mapdata/nature_poi_7_poi',  order: 22, style: {
-         visibleRange : { max : 16 , min : 7 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "#636364", outlineWidth : 3  } }
-     },
-     { url : 'biblemap/mapdata/AD_level_7_poi',  order: 23, style: {
-         visibleRange : { max : 16 , min : 7 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "#636364", outlineWidth : 3  } }
-     },
-     { url : 'biblemap/mapdata/AD_level_8_poi',  order: 24, style: {
-         visibleRange : { max : 16 , min : 9 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "#49494A", outlineWidth : 3  } }
-     },
-     { url: 'biblemap/mapdata/AD_israel_admin_poi',  order: 25, style: {
-         visibleRange : { max : 16 , min : 7 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'normal 13px 돋움', color: 'white', outlineColor : '#636364', outlineWidth : 3  }}
-     },
-     {
-         url: 'biblemap/mapdata/AD_admin_poi',  order: 26, style: {
-         visibleRange : { max : 16 , min : 4 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#105602', outlineWidth : 4  }}
-     },
-     { url: 'biblemap/mapdata/BC_admin_poi',  order: 27, style: {
-         visibleRange : { max : 16 , min : 6 },
-         textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#033078', outlineWidth : 4  }}
-     }
-     */
-
  ];
 
  function getDistance( x1, y1, x2, y2){
