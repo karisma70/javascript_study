@@ -302,7 +302,7 @@ var BibleChapterList = function() {
         };
 
         var jsonStr = JSON.stringify( searchParam );
-        console.log( "send param : " + jsonStr );
+        ConsoleLog( "send param : " + jsonStr );
 
         httpRequest("POST", jsonStr, function( http ) {
             var resObj = JSON.parse(http.responseText);
