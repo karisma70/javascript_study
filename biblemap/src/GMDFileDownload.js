@@ -66,8 +66,10 @@ function genLayerFromWkt( wkt, attrs, bTransform, format, label ) {
     if( label ) {
         var wktProp = { };
         var strLabel = attrs.values[label].toString();
-        wktProp[label] = convertUTF8String(strLabel);
-        feature.setProperties( wktProp );
+        if( strLabel ) {
+            wktProp[label] = convertUTF8String(strLabel);
+            feature.setProperties(wktProp);
+        }
     }
 
     return feature;
@@ -134,54 +136,64 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
 
                 var orgName = "";
 
-                for( label in attrs.values ){
-                    if( isExistStringPropInObj( attrs.values, label ) == false)
+                for( attr in attrs.values ) {
+                    if (isExistStringPropInObj(attrs.values, attr) == false)
                         continue;
 
-                    if( label == 'id')
+                    if (attr == 'id')
                         continue;
 
-                    var strLabel = attrs.values[label].toString();
+                    var strLabel = attrs.values[attr].toString();
                     strLabel = removeSpaceInWord(strLabel);
-                    if( strLabel == "")
-                        continue;
-
-                    var feature = genLayerFromWkt(wkt, attrs, bTransform, format, label );
-                    feature.setProperties( { 'style': paramStyle } );
-                    features.push(feature);
-
-                    // var textString = feature.get(style.textStroke.prop);
-                    var textString = feature.get( label );
-                    if (textString) {
-
-                        if( label == "name2" || label == "name3" ){
-                            ConsoleLog( url + ">>" + label + ": " + textString  );
+                    if (strLabel == "") {
+                        if (attr == "label") {
+                            attrs.values[attr] = attrs.values["bible"];
                         }
-
-                        if( label == "name" )
-                            orgName = textString;
-
-                        if( layerContainer.poiLayer.hasOwnProperty( textString ) == false ) {
-                            layerContainer.poiLayer[textString] = {
-                                orgName: orgName,
-                                x: record.shape.x,
-                                y: record.shape.y,
-                                zoomIn: paramStyle.visibleRange.min
-                            };
-
-                            var poiObj = {
-                                text: textString,
-                                length: textString.length
-                            };
-
-                            layerContainer.poiWords.push(poiObj);
-                        }
+                        else
+                            continue;
                     }
 
-                } // end of for( prop in attrs.values )
+                    if (attrs.values[attr].toString() == "") {
+                        ConsoleLog("url : " + url + "attr : " + attr);
+                    }
+
+                    var feature = genLayerFromWkt(wkt, attrs, bTransform, format, attr);
+                    feature.setProperties({'style': paramStyle});
+                    features.push(feature);
+
+                    var textString = feature.get(attr);
+                    if( textString == "" )
+                        continue;
+
+                    if (attr == "search1" || attr == "search2") {
+                        ConsoleLog(url + ">>" + attr + ": " + textString);
+                    }
+
+                    if (attr == "bible")
+                        orgName = textString;                       // 성경내의 텍스트
+                    if (orgName == "") {
+                        //           alert( "bible Search word is null !!!");
+                        ConsoleLog("bible Search word is null !!!" + textString);
+                    }
+
+                    if (layerContainer.poiLayer.hasOwnProperty(textString) == false) {
+                        layerContainer.poiLayer[textString] = {         // 검색어에 넣는다
+                            orgName: orgName,
+                            x: record.shape.x,
+                            y: record.shape.y,
+                            zoomIn: paramStyle.visibleRange.min
+                        };
+
+                        var poiObj = {
+                            text: textString,
+                            length: textString.length
+                        };
+
+                        layerContainer.poiWords.push(poiObj);
+
+                    }
+                }  // end of for( prop in attrs.values )
             }
-
-
             else if (shpFile.header.shapeType == ShpType.SHAPE_POLYLINE) {      // POLYLINE
                 var points = [];//record.shape.rings[0].x + ' ' + record.shape.rings[0].y];
                 var pointsLen = record.shape.rings[0].length;

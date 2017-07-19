@@ -87,6 +87,7 @@ function CreatePathArrowLayer( trajectoryArray ) {
 
 }  // end of this.pathArrowDraw
 
+// var tolerancePoiPos = 2000;
 
 function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramTooltip ){
 
@@ -96,22 +97,17 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramT
             width: 3   })
     });
 
-    // var tolerancePoiPos = 5000;
-    var tolerancePoiPos = 2000;
+    var tolerancePoiPos = 5000;
 
     var poiLayer = paramPoiLayer;
-
     var bibleMap = paramMap;
     var trajectoryArray = paramTrajectoryArray;
     var pathVector = null;
     var pathMovingLayer = null;
     var pathArrowLayer = null;
     var popupPoiArray = [];
-    var bIsShowedPopup = false;
-    // var popupWnd = paramPopup;
-    // var overlayWnd = paramOverlay;
+
     var tooltip = paramTooltip;
-    var trjPoi = {};
 
     addLater = function (feature) {
         var timeVal = new Date().getTime();
@@ -126,15 +122,17 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramT
         var vectorContext = event.vectorContext;
         var frameState = event.frameState;
         vectorContext.setStyle(moveLineStyle);
+        var beforeDetectPoi = null;
 
         var features = pathVector.getFeatures();
-        for (var i = 0; i < features.length; i++) {
+        for (var i = 0; i < features.length; i++) {         // feature의 갯수는 1 이다
             var feature = features[i];
+            if (feature.get('finished'))
+                continue;
+
             if (!feature.get('finished')) {
                 // only draw the lines for which the animation has not finished yet
                 var coords = feature.getGeometry().getCoordinates();
-
-               // getPoiOfTrajectory( coords )
 
                 var elapsedTime = frameState.time - feature.get('start');
                 var elapsedPoints = elapsedTime * pointsPerMs;
@@ -143,84 +141,61 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramT
                     feature.set('finished', true);
                     pathMovingLayer.setZIndex(18);
 
-                    pathArrowLayer = CreatePathArrowLayer( trajectoryArray);
+                    pathArrowLayer = CreatePathArrowLayer(trajectoryArray);
                     pathArrowLayer.setVisible(true);
-                    bibleMap.addLayer( pathArrowLayer );
+                    bibleMap.addLayer(pathArrowLayer);
                     pathArrowLayer.setZIndex(19);
 
-                    if( pathMovingLayer ){
-                        bibleMap.removeLayer( pathMovingLayer );
+                    if (pathMovingLayer) {
+                        bibleMap.removeLayer(pathMovingLayer);
                         pathMovingLayer = null;
                     }
 
                 }
 
                 var maxIndex = Math.min(elapsedPoints, coords.length);
-                if( maxIndex > 0 ) {
-                    var currentLine = new ol.geom.LineString(coords.slice(0, maxIndex));
-                    var curCoord = coords.slice(maxIndex-1, maxIndex)[0];
+                if (maxIndex < 1)
+                    continue;
 
-                    var minDistance = 999999999;
-                    var detectPoi = null;
-                    var find = false;
+                var currentLine = new ol.geom.LineString(coords.slice(0, maxIndex));
+                var curCoord = coords.slice(maxIndex - 1, maxIndex)[0];
 
-                    for( var idx in popupPoiArray ){
-                        var temp = popupPoiArray[idx];
-                        var dist = getDistance( temp.trjX, temp.trjY, curCoord[0], curCoord[1] );
-                        if( dist < minDistance ){
-                            minDistance = dist;
-                            detectPoi = temp;
-                            find = true;
-                        }
+                var minDistance = 999999999;
+                var detectPoi = null;
+                var find = false;
+
+                for (var idx in popupPoiArray) {
+                    var temp = popupPoiArray[idx];
+                    var dist = getDistance(temp.trjX, temp.trjY, curCoord[0], curCoord[1]);
+                    if (dist < minDistance) {
+                        minDistance = dist;
+                        detectPoi = temp;
+                        find = true;
                     }
+                }       // 확보되어 있는 궤적관련 poi리스트 중에서 제일 근거리에 있는 poi를 찾는다
 
-                    if( maxIndex > 2 && bIsShowedPopup == false ){
-                        for( var idx in popupPoiArray ){
-                            var temp = popupPoiArray[idx];
-                            var dist = getDistance( temp.trjX, temp.trjY, curCoord[0], curCoord[1] );
-                            if( dist < minDistance ){
-                                minDistance = dist;
-                                detectPoi = temp;
-                            }
-                        }
-
-                        if( trjPoi.hasOwnProperty( detectPoi.orgName ) == false && trjPoi[ detectPoi.orgName ] == null) {
-                            tooltip.create( detectPoi.orgName, [detectPoi.x, detectPoi.y]);
-                            trjPoi[ detectPoi.orgName ] = detectPoi;
-                        }else {
-                            ConsoleLog( "Already exist: " + detectPoi.orgName );
-                        }
-                        bIsShowedPopup = true;
-
+                if( find == true && detectPoi.orgName == "가이사랴" ){
+                    ConsoleLog( "find!!!! 가이사랴" + ", mindist : " + minDistance );
+                    if (detectPoi != beforeDetectPoi) {
+                        ConsoleLog("It's different with detectPoi and beforeDetectPoi");
                     }
-                    else {
-                        for (var idx in popupPoiArray) {
-                            var popupPoi = popupPoiArray[idx];
-                            if (IsWithinTolerance(curCoord[0], curCoord[1], popupPoi.trjX, popupPoi.trjY, tolerancePoiPos ) == true) {
-                                ConsoleLog("X: " + popupPoi.trjX + ", Y: " + popupPoi.trjY + ",name: " + popupPoi.orgName);
-
-                                if( trjPoi.hasOwnProperty( popupPoi.orgName ) == false && trjPoi[ detectPoi.orgName ] == null) {
-                                    tooltip.create(popupPoi.orgName, [popupPoi.x, popupPoi.y]);
-                                    trjPoi[ detectPoi.orgName ] = popupPoi;
-                                }else {
-                                    ConsoleLog( "Already exist: " + popupPoi.orgName );
-                                }
-
-                                bIsShowedPopup = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    vectorContext.drawGeometry(currentLine);
                 }
+
+                if (find == true && minDistance < ( tolerancePoiPos + 8000)) {
+                    if (detectPoi != beforeDetectPoi) {
+                        tooltip.create(detectPoi.orgName, [detectPoi.x, detectPoi.y]);
+                        beforeDetectPoi = detectPoi;
+                    }
+                }
+
+                vectorContext.drawGeometry(currentLine);
             }
-        }
+        }   // end of for (var i = 0; i < features.length; i++) {
 
         bibleMap.render();
     }; // end of   this.drawMoving
 
-    function IsWithinToleranceOfPoi( trjX, trjY ) {
+    IsWithinToleranceOfPoi = function ( trjX, trjY ) {
 
         var minDist = 9999999;
         var retObj = null;
@@ -373,7 +348,7 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramT
             pathArrowLayer = null;
         }
 
-    }
+    };
 
 }
 

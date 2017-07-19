@@ -22,7 +22,7 @@
     <script type="text/javascript" src="biblemap/src/distanceMeasureControl.js?version=20170716"></script>
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170715"></script>
     <script type="text/javascript" src="biblemap/openLayers_v4.1.1/ol.js"></script>
-    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20170715"></script>
+    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20170716"></script>
     <style type ="text/css">
         *{   margin: 0;padding: 0;
             -moz-box-sizing: border-box;
@@ -233,7 +233,7 @@
 </div>
 
 <script>
-    setDebug( false );
+    setDebug( true );
 
     var dvBibleTitle = document.getElementById('bibleTitle');
     var dvBibleChapter = document.getElementById('bibleChapter');
@@ -665,37 +665,49 @@
     bibleMapManager.singleClickEvent( function(evt){
     });
 
-    bibleMapManager.selectFeatureEvent( function(e){
+    bibleMapManager.selectFeatureEvent( function(e) {
         var selLen = e.selected.length;
-        if( selLen < 1 )
+        if (selLen < 1)
             return;
 
         var feature = e.selected[0];    // 첫번째 걸린 것만 가져오기로 하자
-        var posName = feature.get("name");
-        if( posName == null )
-            return;
-
-        var pos = layerManager.getPoiByName(posName);
-        var layer = feature.getLayer( bibleMap );
+        var layer = feature.getLayer(bibleMap);
         var id = layer.get("id");
-        if( id >= 15 ) {   // 전세계 폴리곤 경계가 아닌 경우 검색 단어에 대한 성경검색 요청
-            requestBibleByWord(posName, function( ){
-                requestPoiContentAndShow( pos, posName, dvPopupContent, popupOverlay );
-            });
-        } else {        // 전세계 폴리곤 경계라면...
-            if( id < 5 ) {
+        var pos = null;
+
+        var posName = feature.get("label");     //  OpenLayersControl.js 내에  createTextStyleOfFeature 함수에서  text: feature.get('label') 으로 설정되어 있음
+        if (posName == null) {
+            posName = feature.get("name");
+            if (posName == null)
+                return;
+            if (id < 5) {          // 전세계 폴리곤 경계라면...
                 posName = "<strong>현재 국가</strong><br>" + "&nbsp;" + posName;
-            } else{
-                requestBibleByWord(posName, null );
+                dvPopupContent.innerHTML = posName;
+                popupOverlay.setPosition(bibleMapManager.getClickecPos());
+            } else {    // 나머지 폴리곤에 정의된 "name" 필드로 검색하도록 한다
+                // pos = layerManager.getPoiByName(posName);
+                // pos = bibleMapManager.getClickecPos();
+                dvPopupContent.innerHTML = posName;
+                popupOverlay.setPosition(bibleMapManager.getClickecPos());
+
+                requestBibleByWord(posName, function () {
+
+                });
+            }
+        } else {
+            pos = layerManager.getPoiByName(posName);
+            var bibleWord = layerManager.getPoiByName(posName).orgName;   // bible 검색을 위한 단어
+            if (bibleWord == null) {
+                ConsoleLog("posName : " + posName + " is not have bible word !!!");
+                return;
             }
 
-            dvPopupContent.innerHTML = posName;
-            popupOverlay.setPosition( bibleMapManager.getClickecPos() );
-
-            /* tooltip.create( posName, bibleMapManager.getClickecPos() );  */
+            requestBibleByWord(bibleWord, function () {
+                requestPoiContentAndShow(pos, bibleWord, dvPopupContent, popupOverlay);
+            });
         }
-
     });
+
 
     dvPopupCloser.onclick = function() {
         popupOverlay.setPosition(undefined);
@@ -722,6 +734,12 @@
             option: {}
         };
         searchParam.option.content= { $regex : searchWord };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
+
+        beforeChapterSearchParam = { type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
+            option: { "title": "",
+                "chapter" : ""
+            }
+        };
 
         reqeustAndShowContents( searchParam, function( param, resObj ){
             if( resObj.length < 1 ) {
@@ -863,9 +881,6 @@
         }
 
         saveSearchWordsToStorage();
-
-        // $('#footer').empty();
-        // $('#footer').append("Waiting....");
 
         if( searchParam.option["title"] == beforeChapterSearchParam.option["title"]
             && searchParam.option["chapter"] == beforeChapterSearchParam.option["chapter"] )

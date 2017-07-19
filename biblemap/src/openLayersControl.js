@@ -68,36 +68,43 @@
      },
 
 
+         { url: 'biblemap/mapdata/history/History_12Sect_poi',  order: 20, style: {
+             visibleRange : { max : 16 , min : 8 },
+             textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#5F0291', outlineWidth : 4  }}
+         },
+
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
          { url: 'biblemap/mapdata/level_11_poi',  order: 21, style: {
              visibleRange : { max : 16 , min : 11 },
-             textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "black", outlineWidth : 3  }}
+             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "black", outlineWidth : 3  }}
          },
 
-         { url: 'biblemap/mapdata/level_10_poi',  order: 20, style: {
+         { url: 'biblemap/mapdata/level_10_poi',  order: 22, style: {
              visibleRange : { max : 16 , min : 10 },
-             textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "#313132", outlineWidth : 3  } }
+             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "#313132", outlineWidth : 3  } }
          },
 
-         { url : 'biblemap/mapdata/level_9_poi',  order: 19, style: {
+         { url : 'biblemap/mapdata/level_9_poi',  order: 23, style: {
              visibleRange : { max : 16 , min : 9 },
-             textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "#49494A", outlineWidth : 3  } }
+             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "#49494A", outlineWidth : 3  } }
          },
 
-         { url : 'biblemap/mapdata/level_7_poi',  order: 18, style: {
+         { url : 'biblemap/mapdata/level_7_poi',  order: 24, style: {
              visibleRange : { max : 16 , min : 7 },
-             textStroke : { prop: 'name', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "#636364", outlineWidth : 3  } }
+             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "#636364", outlineWidth : 3  } }
          },
 
-         { url: 'biblemap/mapdata/level_6_poi',  order: 27, style: {
+         { url: 'biblemap/mapdata/level_6_poi',  order: 25, style: {
              visibleRange : { max : 16 , min : 6 },
-             textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#033078', outlineWidth : 4  }}
+             textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#033078', outlineWidth : 4  }}
          },
+
          {
            url: 'biblemap/mapdata/level_4_poi',  order: 26, style: {
              visibleRange : { max : 16 , min : 4 },
-             textStroke : { prop: 'name', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#105602', outlineWidth : 4  }}
+             textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#105602', outlineWidth : 4  }}
          }
 
  ];
@@ -186,13 +193,15 @@
 
      var featureStyle = feature.get('style');
 
-     var textString = feature.get('name');
+     var textString = feature.get('label');
      if (textString) {
          return new ol.style.Text({
              textAlign: featureStyle.textStroke.align,
              textBaseline: featureStyle.textStroke.baseline,
              font: featureStyle.textStroke.font,
-             text: feature.get('name'),
+             // text: feature.get('name'),
+             // text: feature.get('label'),
+             text : feature.get( featureStyle.textStroke.prop ),
              fill: new ol.style.Fill({color: featureStyle.textStroke.color}),
              stroke: new ol.style.Stroke({
                  color: featureStyle.textStroke.outlineColor,
