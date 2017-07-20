@@ -15,14 +15,15 @@
     <script type="text/javascript" src="biblemap/src/binarywrapper.js?version=20170715"></script>
     <script type="text/javascript" src="biblemap/src/GMDFileReader.js?version=20170715"></script>
     <script type="text/javascript" src="biblemap/src/propertyDB.js?version=20170715"></script>
-    <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170715"></script>
+
     <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20170715"></script>
-    <script type="text/javascript" src="biblemap/src/routePlay.js?version=20170715"></script>
-    <script type="text/javascript" src="biblemap/src/trajectoryData.js?version=20170715"></script>
+    <script type="text/javascript" src="biblemap/src/routePlay.js?version=20170719"></script>
+    <script type="text/javascript" src="biblemap/src/trajectoryData.js?version=20170719"></script>
     <script type="text/javascript" src="biblemap/src/distanceMeasureControl.js?version=20170716"></script>
-    <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170715"></script>
+    <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170719"></script>
     <script type="text/javascript" src="biblemap/openLayers_v4.1.1/ol.js"></script>
-    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20170716"></script>
+    <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170719"></script>
+    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20170719"></script>
     <style type ="text/css">
         *{   margin: 0;padding: 0;
             -moz-box-sizing: border-box;
@@ -174,8 +175,8 @@
 <body>
 <div class="wrapperDiv">
     <div id="sidebar" style="position:absolute;">
-        <div id="logo" style="height:27px; background-color:rgb( 66, 133, 244 );"><a href="http://www.facebook.com/biblemap" target="_blank" style="text-decoration:none"><img src="biblemap/image/biblemap_logo.png" style="width:27px; height:27px; vertical-align:middle" >
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:10pt; font-weight:bold; color:white;text-align:center;">성서지도</span></a></div>
+        <a href="http://www.facebook.com/biblemap" target="_blank" style="text-decoration:none"><div id="logo" style="height:27px; background-color:rgb( 66, 133, 244 );"><img src="biblemap/image/biblemap_logo.png" style="width:27px; height:27px; vertical-align:middle" >
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:10pt; font-weight:bold; color:white;text-align:center;">성서지도</span></div></a>
         <div id ="dummy2" class="dummy" ></div>
         <div id ="bibleSearch" style="font-size:12px; height: 70px">
             <br>
@@ -233,7 +234,7 @@
 </div>
 
 <script>
-    setDebug( true );
+    setDebug( false );
 
     var dvBibleTitle = document.getElementById('bibleTitle');
     var dvBibleChapter = document.getElementById('bibleChapter');
@@ -695,16 +696,22 @@
                 });
             }
         } else {
-            pos = layerManager.getPoiByName(posName);
-            var bibleWord = layerManager.getPoiByName(posName).orgName;   // bible 검색을 위한 단어
-            if (bibleWord == null) {
-                ConsoleLog("posName : " + posName + " is not have bible word !!!");
-                return;
-            }
+            if (id < 5) {          // 전세계 폴리곤 경계라면...
+                posName = "<strong>현재 국가</strong><br>" + "&nbsp;" + posName;
+                dvPopupContent.innerHTML = posName;
+                popupOverlay.setPosition(bibleMapManager.getClickecPos());
+            } else {    // 나머지 폴리곤에 정의된 "name" 필드로 검색하도록 한다
+                pos = layerManager.getPoiByName(posName);
+                var bibleWord = layerManager.getPoiByName(posName).orgName;   // bible 검색을 위한 단어
+                if (bibleWord == null) {
+                    ConsoleLog("posName : " + posName + " is not have bible word !!!");
+                    return;
+                }
 
-            requestBibleByWord(bibleWord, function () {
-                requestPoiContentAndShow(pos, bibleWord, dvPopupContent, popupOverlay);
-            });
+                requestBibleByWord(bibleWord, function () {
+                    requestPoiContentAndShow(pos, bibleWord, dvPopupContent, popupOverlay);
+                });
+            }
         }
     });
 

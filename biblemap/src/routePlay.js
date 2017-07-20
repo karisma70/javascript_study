@@ -97,7 +97,7 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramT
             width: 3   })
     });
 
-    var tolerancePoiPos = 5000;
+    var tolerancePoiPos = 2000;
 
     var poiLayer = paramPoiLayer;
     var bibleMap = paramMap;
@@ -181,7 +181,7 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramT
                     }
                 }
 
-                if (find == true && minDistance < ( tolerancePoiPos + 8000)) {
+                if (find == true && minDistance < ( tolerancePoiPos + 10000)) {
                     if (detectPoi != beforeDetectPoi) {
                         tooltip.create(detectPoi.orgName, [detectPoi.x, detectPoi.y]);
                         beforeDetectPoi = detectPoi;

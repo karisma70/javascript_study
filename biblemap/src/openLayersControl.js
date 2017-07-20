@@ -13,7 +13,7 @@
         fillColor : 'rgba( 255, 255, 255, 0.001)',
         lineStroke : {  color: [174, 122, 40], width : 1, opacity: 0.01  },
         //textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 12px arial', color: '#2581D8', outlineColor : '#CECBCB', outlineWidth : 3  }}
-         textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 12px arial', color: '#F1EEEE', outlineColor : '#2581D8', outlineWidth : 2  }}
+         textStroke : { prop: 'label', align: 'center', baseline: 'middle' , font : 'bold 12px arial', color: '#F1EEEE', outlineColor : '#2581D8', outlineWidth : 2  }}
      },
 
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

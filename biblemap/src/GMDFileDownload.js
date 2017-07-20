@@ -65,7 +65,11 @@ function genLayerFromWkt( wkt, attrs, bTransform, format, label ) {
 
     if( label ) {
         var wktProp = { };
-        var strLabel = attrs.values[label].toString();
+        var strLabel = "";
+        if( attrs.values[label] )
+            strLabel = attrs.values[label].toString();
+        else
+            alert( "genLayersFromWkt Error!!  attr : " + label );
         if( strLabel ) {
             wktProp[label] = convertUTF8String(strLabel);
             feature.setProperties(wktProp);
@@ -143,7 +147,12 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
                     if (attr == 'id')
                         continue;
 
-                    var strLabel = attrs.values[attr].toString();
+                    var strLabel = "";
+                    if(  attrs.values[attr] )
+                        strLabel = attrs.values[attr].toString();
+                    else
+                        alert( "Error!! GMD file download , attr : " + attr  );
+
                     strLabel = removeSpaceInWord(strLabel);
                     if (strLabel == "") {
                         if (attr == "label") {
