@@ -175,7 +175,7 @@
 <body>
 <div class="wrapperDiv">
     <div id="sidebar" style="position:absolute;">
-        <a href="http://www.facebook.com/biblemap" target="_blank" style="text-decoration:none"><div id="logo" style="height:27px; background-color:rgb( 66, 133, 244 );"><img src="biblemap/image/biblemap_logo.png" style="width:27px; height:27px; vertical-align:middle" >
+        <a href="http://blog.naver.com/bible-map" target="_blank" style="text-decoration:none"><div id="logo" style="height:27px; background-color:rgb( 66, 133, 244 );"><img src="biblemap/image/biblemap_logo.png" style="width:27px; height:27px; vertical-align:middle" >
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:10pt; font-weight:bold; color:white;text-align:center;">성서지도</span></div></a>
         <div id ="dummy2" class="dummy" ></div>
         <div id ="bibleSearch" style="font-size:12px; height: 70px">
@@ -671,6 +671,12 @@
         if (selLen < 1)
             return;
 
+        beforeChapterSearchParam = { type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
+            option: { "title": "",
+                "chapter" : ""
+            }
+        };
+
         var feature = e.selected[0];    // 첫번째 걸린 것만 가져오기로 하자
         var layer = feature.getLayer(bibleMap);
         var id = layer.get("id");
@@ -691,6 +697,8 @@
                 dvPopupContent.innerHTML = posName;
                 popupOverlay.setPosition(bibleMapManager.getClickecPos());
 
+                adjustScrDiv.setIsFullScr("false");
+
                 requestBibleByWord(posName, function () {
 
                 });
@@ -707,6 +715,8 @@
                     ConsoleLog("posName : " + posName + " is not have bible word !!!");
                     return;
                 }
+
+                adjustScrDiv.setIsFullScr("false");
 
                 requestBibleByWord(bibleWord, function () {
                     requestPoiContentAndShow(pos, bibleWord, dvPopupContent, popupOverlay);
