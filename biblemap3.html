@@ -683,8 +683,8 @@
         var pos = null;
 
         var posName = feature.get("label");     //  OpenLayersControl.js 내에  createTextStyleOfFeature 함수에서  text: feature.get('label') 으로 설정되어 있음
-        if (posName == null) {
-            posName = feature.get("name");
+        if (posName == null) {      // polygon 레이어를 클릭했을 경우
+            posName = feature.get("name");      // History admin polygon에는 name과 name2 필드가 존재함
             if (posName == null)
                 return;
             if (id < 5) {          // 전세계 폴리곤 경계라면...
@@ -703,7 +703,7 @@
 
                 });
             }
-        } else {
+        } else {        //  poi Layer를 선택했을 경우
             if (id < 5) {          // 전세계 폴리곤 경계라면...
                 posName = "<strong>현재 국가</strong><br>" + "&nbsp;" + posName;
                 dvPopupContent.innerHTML = posName;
@@ -719,7 +719,7 @@
                 adjustScrDiv.setIsFullScr("false");
 
                 requestBibleByWord(bibleWord, function () {
-                    requestPoiContentAndShow(pos, bibleWord, dvPopupContent, popupOverlay);
+                    requestPoiContentAndShow(pos, bibleWord, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
                 });
             }
         }
@@ -957,16 +957,13 @@
             }
             else {
                 $('#footer').append( "<table>");
-                var chapterStart =  "<td width = \"150\">&nbsp;&nbsp;";
-                var contentStart = "<td>";
-                var endString = "</td>";
 
-                function appendReceiveMsg( chapterStart, endString, resObj, contentStart, strContent ){
+                function appendReceiveMsg( resObj, strConvText ){
                     $('#footer').append( "<tr>");
-                    // $('#footer').append( chapterStart + "<strong>" + resObj.title + " " + resObj.chapter + ":" + resObj.paragraph +"</strong>"+ endString + contentStart + strContent + endString );
-                    var strTemp = chapterStart +'<a href= "javascript:requestBibleWithChapter( \'' + resObj.title + '\','+ resObj.chapter +')\" style=\"text-decoration:none; font-weight:bold; color:#464646;\">' + resObj.title + " " + resObj.chapter + ":" + resObj.paragraph +"</a>"+ endString + contentStart + strContent + endString;
-                    $('#footer').append( strTemp );
-                    //$('#footer').append( chapterStart +'<a href= "javascript:moveToPlaceByWord( \'' + resObj.title + '\''+ resObj.chapter +')'+ "<strong>" + resObj.title + " " + resObj.chapter + ":" + resObj.paragraph +"</strong></a>"+ endString + contentStart + strContent + endString );
+                    var strChapterLinkWithBibleContent = "<td width = \"150\">&nbsp;&nbsp;" +'<a href= "javascript:requestBibleWithChapter( \'' + resObj.title + '\','+ resObj.chapter +')\" style=\"text-decoration:none; font-weight:bold; color:#464646;\">'
+                            + resObj.title + " " + resObj.chapter + ":" + resObj.paragraph +"</a>"+ "</td>"
+                            + "<td>" + strConvText + "</td>";
+                    $('#footer').append( strChapterLinkWithBibleContent );
                     $('#footer').append( "</tr>");
                 }
 
@@ -976,7 +973,7 @@
                         if( searchParam.type == "Word" ){
                             if( examinRightWordinText( searchParam.option.content.$regex, resObj[idx].content ) == true ){
                                 var strConvText = makeStrongInText( layerManager, searchParam.option.content.$regex, resObj[idx].content );
-                                appendReceiveMsg( chapterStart, endString, resObj[idx], contentStart, strConvText );
+                                appendReceiveMsg( resObj[idx], strConvText );
                             }
                         }else {
                             var strConvText = "";
@@ -985,7 +982,7 @@
                             else
                                 strConvText = makeStrongWordOfLocation( layerManager, resObj[idx].content );
 
-                            appendReceiveMsg( chapterStart, endString, resObj[idx], contentStart, strConvText );
+                            appendReceiveMsg( resObj[idx], strConvText );
                         }
 
                     }
@@ -993,11 +990,11 @@
                     if( searchParam.type == "Word" ){
                         if( examinRightWordinText( searchParam.option.content.$regex, resObj.content ) == true ) {
                             var strConvText = makeStrongInText( layerManager, searchParam.option.content.$regex, resObj.content);
-                            appendReceiveMsg( chapterStart, endString, resObj, contentStart, strConvText );
+                            appendReceiveMsg( resObj, strConvText );
                         }
                     } else {
                         var strConvText = makeStrongWordOfLocation( layerManager, resObj.content );
-                        appendReceiveMsg( chapterStart, endString, resObj, contentStart, strConvText );
+                        appendReceiveMsg( resObj, strConvText );
                     }
                 }
             }
