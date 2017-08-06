@@ -188,7 +188,7 @@ function requestPoiInfo( poiName, recvFunc,  errFunc){
 
 function requestPoiContentAndShow( pos, posName, popup, overlay ) {
     var youtube = "";
-    requestPoiInfo(pos.orgName, function (poiObj) {
+    requestPoiInfo( posName, function (poiObj) {
         if (poiObj.hasOwnProperty("youtube")) {
             youtube = poiObj["youtube"];
         }

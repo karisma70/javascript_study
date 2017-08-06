@@ -328,8 +328,8 @@ function flyTo( view, location, zoomIn, done) {
 }
 
 function moveTo( view, location, zoomIn, done ) {
-      if( zoomIn < 10 )
-        zoomIn = 10;
+      // if( zoomIn < 10 )
+      //  zoomIn = 10;
 
     var parts = 2;
     var called = false;
