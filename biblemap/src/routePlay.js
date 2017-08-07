@@ -174,16 +174,9 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramT
                     }
                 }       // 확보되어 있는 궤적관련 poi리스트 중에서 제일 근거리에 있는 poi를 찾는다
 
-                if( find == true && detectPoi.orgName == "가이사랴" ){
-                    ConsoleLog( "find!!!! 가이사랴" + ", mindist : " + minDistance );
-                    if (detectPoi != beforeDetectPoi) {
-                        ConsoleLog("It's different with detectPoi and beforeDetectPoi");
-                    }
-                }
-
                 if (find == true && minDistance < ( tolerancePoiPos + 10000)) {
                     if (detectPoi != beforeDetectPoi) {
-                        tooltip.create(detectPoi.orgName, [detectPoi.x, detectPoi.y]);
+                        tooltip.create(detectPoi.biblePlace, [detectPoi.x, detectPoi.y]);
                         beforeDetectPoi = detectPoi;
                     }
                 }

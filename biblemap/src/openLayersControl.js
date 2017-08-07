@@ -7,6 +7,7 @@
 
 
  var bibleMapLayers = [
+     /*
      { url : 'biblemap/mapdata/110m-admin-0-countries', order: 1, style: {
         historyShow : 'false',
         visibleRange : { max : 16, min : 1 },
@@ -72,14 +73,16 @@
              visibleRange : { max : 16 , min : 8 },
              textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#5F0291', outlineWidth : 4  }}
          },
-
+*/
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+     /*
          { url: 'biblemap/mapdata/level_11_poi',  order: 21, style: {
              visibleRange : { max : 16 , min : 11 },
              textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "black", outlineWidth : 3  }}
          },
+
 
          { url: 'biblemap/mapdata/level_10_poi',  order: 22, style: {
              visibleRange : { max : 16 , min : 10 },
@@ -105,6 +108,12 @@
            url: 'biblemap/mapdata/level_4_poi',  order: 26, style: {
              visibleRange : { max : 16 , min : 4 },
              textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#105602', outlineWidth : 4  }}
+         }
+         */
+
+         { url: 'biblemap/mapdata/level_10_poi',  order: 22, style: {
+             visibleRange : { max : 16 , min : 10 },
+             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "#313132", outlineWidth : 3  } }
          }
 
  ];
@@ -257,9 +266,35 @@
          layers : [],
          totalCount : 0,
          poiLayer : {},
-         poiWords : []
+         poiWords : [],
+
+         ///////////////////////
+         poiDictionary: {},    // 단어 지역명 검색
+         poiDicObjects: []
      };
  }
+
+ LayerManager.prototype.insertPoiObj = function( poiObj ){
+     var idx = this.layerContainer.poiDicObjects.length;
+     poiObj.id = idx;
+     this.layerContainer.poiDicObjects.push( poiObj );
+
+     if( poiObj.rangeStr != "" ){
+         ConsoleLog("id: " + poiObj.id + ", label: " + poiObj.biblePlace + ", range : " + poiObj.rangeStr );
+     }
+
+     return poiObj;
+ };
+
+ LayerManager.prototype.getPoiObjById = function( id ){
+     if( id < 0 || id > this.layerContainer.poiDicObjects.length ) {
+         ConsoleLog( "cannot find getPoiObjById(" + id + ")  ===>  length : " + this.layerContainer.poiDicObjects.length );
+         return;
+     }
+
+     return this.layerContainer.poiDicObjects[id];
+ };
+
 
  LayerManager.prototype.getPoiByName = function( name ){
      return this.layerContainer.poiLayer[ name ];

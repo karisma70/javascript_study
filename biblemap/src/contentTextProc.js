@@ -143,7 +143,7 @@ function sortPoiWordsArray( layerContainer ){
     */
 }
 
-function requestPoiInfo( poiName, recvFunc,  errFunc){
+function requestPoiInfo( poiName, recvFunc,  noRecvFunc){
     var searchParam = {
         type: "Poi",     // book, chapter, paragraph 등으로 구성된 검색
         option: {}
@@ -161,15 +161,15 @@ function requestPoiInfo( poiName, recvFunc,  errFunc){
         if( resObj.result != "undefined" && resObj.result == "fail" ){
             // Console.log( "requestPoiInfo() Fail!!!   param: " + jsonStr );
             ConsoleLog("requestPoiInfo() Fail!!!   param: " + jsonStr );
-            if( errFunc ){
-                errFunc( resObj );
+            if( noRecvFunc ){
+                noRecvFunc( resObj );
             }
             return;
         }
 
         if (resObj.length != "undefined") {    // 배열로 받아올 경우
             if( resObj.length < 1){
-                errFunc( resObj );
+                noRecvFunc( resObj );
                 return;
             }
             for( idx in resObj ){
@@ -186,20 +186,20 @@ function requestPoiInfo( poiName, recvFunc,  errFunc){
 }
 
 
-function requestPoiContentAndShow( pos, posName, popup, overlay ) {
+function requestPoiContentAndShow( poiObj, popup, overlay ) {
     var youtube = "";
-    requestPoiInfo( posName, function (poiObj) {
-        if (poiObj.hasOwnProperty("youtube")) {
-            youtube = poiObj["youtube"];
+    requestPoiInfo( poiObj.biblePlace, function ( recvPoiObj) {
+        if ( recvPoiObj.hasOwnProperty("youtube")) {
+            youtube = recvPoiObj["youtube"];
         }
         if (youtube != "") {
-            popup.innerHTML = posName + "<br><iframe width=\"320\" height=\"240\" src=\"" + youtube + "\" frameborder = \"0\" allowfullscreen></iframe>";
+            popup.innerHTML = poiObj.biblePlace + "<br><iframe width=\"320\" height=\"240\" src=\"" + youtube + "\" frameborder = \"0\" allowfullscreen></iframe>";
         } else
-            popup.innerHTML = posName;
-        overlay.setPosition( [pos.x, pos.y] );
+            popup.innerHTML = poiObj.biblePlace;
+        overlay.setPosition( [poiObj.x, poiObj.y] );
     }, function () {
-        popup.innerHTML = posName;
-        overlay.setPosition( [pos.x, pos.y] );
+        popup.innerHTML = poiObj.biblePlace;
+        overlay.setPosition( [poiObj.x, poiObj.y] );
     });
 }
 

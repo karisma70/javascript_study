@@ -191,12 +191,9 @@
             <!-- <img src="image/word_search2.png" style="width:20px; height:22px; vertical-align:middle" ><input type="text" id ="bibleWord" size="12" style="font-size:12px;" value="바울"><input type="button" value="검색" style="font-size:12px;" onclick="searchBibleWord()"> -->
             &nbsp;&nbsp;<span style="font-size:12px;">단어</span>&nbsp;<input type="text" id ="bibleWord" size="12" style="font-size:12px;" value="바울">
             <input type="button" class="button" value="검색" onclick="searchBibleWord()">
-            <!-- <input type="image" src="biblemap/image/word_search2.png" style="width:23px; height:24px; vertical-align:middle" onclick="searchBibleWord()"> -->
             <div style="height: 2px"></div>
-            <!-- <img src="image/place_search2.png" style="width:22px; height:21px; vertical-align:middle" ><input type="text" id ="place" size="12" style="font-size:12px;" value="예루살렘"><input type="button" value="검색" style="font-size:12px;" onclick="moveToPlace()"> -->
             &nbsp;&nbsp;<span style="font-size:12px;">지명</span>&nbsp;<input type="text" id ="biblePlace" size="12" style="font-size:12px;" value="예루살렘">
-            <input type="button" class="button" value="검색" onclick="moveToPlace()">
-            <!-- <input type="image" src="biblemap/image/place_search2.png" style="width:23px; height:24px; vertical-align:middle" onclick="moveToPlace()">  -->
+            <input type="button" class="button" value="검색" onclick="searchBiblePlace()">
             <br>
         </div>
         <br>
@@ -234,7 +231,7 @@
 </div>
 
 <script>
-    setDebug( false );
+    setDebug( true );
 
     var dvBibleTitle = document.getElementById('bibleTitle');
     var dvBibleChapter = document.getElementById('bibleChapter');
@@ -261,9 +258,8 @@
 
     var dvBiblePlace = document.getElementById("biblePlace");
     dvBiblePlace.addEventListener("change", function(e){
-                moveToPlace();
-            }
-    );
+        searchBiblePlace();
+    });
 
     var dvPopupContainer = document.getElementById('popup');
     dvPopupContainer.setAttribute("id", "popupContainer" );
@@ -595,7 +591,7 @@
 
         for( idx in bibleMapLayers ){
             var layer = bibleMapLayers[idx];
-            new ShapeFileDownload( bibleMap, layer.url, layer.order, layer.style, layerManager.getLayerContainer(), function( ){
+            new ShapeFileDownload( bibleMap, layer.url, layer.order, layer.style, layerManager, function( ){
                 searchBibleChapter();
                 changeHistoryAdmin( historyAdmin.value );
                 sortPoiWordsArray( layerManager.getLayerContainer() );
@@ -683,6 +679,8 @@
         var pos = null;
 
         var posName = feature.get("label");     //  OpenLayersControl.js 내에  createTextStyleOfFeature 함수에서  text: feature.get('label') 으로 설정되어 있음
+        var poiID = feature.get("id");     //  OpenLayersControl.js 내에  createTextStyleOfFeature 함수에서  text: feature.get('label') 으로 설정되어 있음
+
         if (posName == null) {      // polygon 레이어를 클릭했을 경우
             posName = feature.get("name");      // History admin polygon에는 name과 name2 필드가 존재함
             if (posName == null)
@@ -709,19 +707,35 @@
                 dvPopupContent.innerHTML = posName;
                 popupOverlay.setPosition(bibleMapManager.getClickecPos());
             } else {    // 나머지 폴리곤에 정의된 "name" 필드로 검색하도록 한다
+
+                /*
+
                 pos = layerManager.getPoiByName(posName);
-                var bibleWord = layerManager.getPoiByName(posName).orgName;   // bible 검색을 위한 단어
-                if (bibleWord == null) {
+                var biblePlace = layerManager.getPoiByName(posName).biblePlace;   // bible 검색을 위한 단어
+                if (biblePlace == null) {
                     ConsoleLog("posName : " + posName + " is not have bible word !!!");
                     return;
                 }
 
                 adjustScrDiv.setIsFullScr("false");
 
-                requestBibleByWord(bibleWord, function () {
+                requestBibleByWord(biblePlace, function () {
                     // requestPoiContentAndShow(pos, bibleWord, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
                     requestPoiContentAndShow(pos, posName, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
                 });
+                */
+
+                var poiObj = layerManager.getPoiObjById( poiID );
+                if( poiObj.rangeArray != null ) {
+                    requestBibleByRange( poiObj, function () {
+                        requestPoiContentAndShow( poiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+                    });
+                }else {
+                    requestBibleByWord( poiObj.biblePlace, function () {
+                        requestPoiContentAndShow( poiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+                    });
+                }
+
             }
         }
     });
@@ -763,8 +777,8 @@
             if( resObj.length < 1 ) {
                 ConsoleLog( "검색결과가 없어서 재검색!!!");
                 var placeWord = param.option.content.$regex;
-                var orgName = layerManager.getPoiByName(placeWord).orgName;
-                param.option.content = {$regex: orgName};
+                var biblePlace = layerManager.getPoiByName(placeWord).biblePlace;
+                param.option.content = {$regex: biblePlace};
 
                 reqeustAndShowContents( param, function( param, resObj ){
                     // moveToPlaceByWord( param.option.content.$regex );
@@ -776,7 +790,7 @@
 
     }
 
-    function moveToPlace(){
+    function searchBiblePlace(){
         if( dvBiblePlace.value == "" ){
             return;
         }
@@ -796,7 +810,8 @@
             pos.zoomIn = 14;
         }
 
-        requestPoiContentAndShow( pos, word, dvPopupContent, popupOverlay );
+     //    requestPoiContentAndShow( pos, word, dvPopupContent, popupOverlay );
+        alert( "requestPoiContentsAndShow  need to repair!!!" );
         var curZoom = bibleMap.getView().getZoom();
 
         var view = bibleMap.getView();
@@ -835,6 +850,27 @@
         searchParam.option.content= { $regex : searchWord };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
         reqeustAndShowContents( searchParam, competeCallback );
     }
+
+    function requestBibleByRange( poiObj, completeCallback ){
+
+        var searchParam = {
+            type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
+            option: {}
+        };
+
+        if( poiObj.rangeArray == null ){
+            return;
+        }
+
+        // var range = JSON.parse( poiObj.rangeStr );
+
+        searchParam.option.title = { $in: poiObj.rangeArray };
+        searchParam.option.content= { $regex : poiObj.biblePlace };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
+
+        // searchParam.option = {  title : {  $in: [ "창세기", "여호수아", "사사기"  ] }, content : { $regex:"숙곳" }};
+        reqeustAndShowContents( searchParam, completeCallback );
+    }
+
 
     function searchBibleChapter(){
 

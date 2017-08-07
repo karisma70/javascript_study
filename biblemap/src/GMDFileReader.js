@@ -23,7 +23,7 @@ function ShpFile(binFile) {
                 this.records.push(new ShpRecord(src));
         }
         catch (e) {
-            if (e.id !== ShpError.ERROR_NODATA) {
+                if (e.id !== ShpError.ERROR_NODATA) {
                 alert(e);
             }
             break;

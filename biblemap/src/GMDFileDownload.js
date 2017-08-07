@@ -37,19 +37,16 @@ function readUTF8String(bytes) {
     return string;
 }
 
-function convertUTF8String( strLabel ) {
-    var textString = readUTF8String(strLabel);
+function convertUTF8String( strText ) {
 
-    var textArr = new Array();
-    textArr = textString.split(' ');
-    var textLabel = textArr[0];
-    if (textArr[1] != '')
-        textLabel += ' ' + textArr[1];
+    var convText = readUTF8String( strText );
 
-    return textLabel;
+    convText = removeSpaceInWord( convText );
+
+    return convText;
 }
 
-function genLayerFromWkt( wkt, attrs, bTransform, format, label ) {
+function createFeatureFromWkt( wkt, attrs, bTransform, format, label ) {
 
     var feature = {};
 
@@ -79,11 +76,61 @@ function genLayerFromWkt( wkt, attrs, bTransform, format, label ) {
     return feature;
 }
 
+function createPoiObj( attrs, shapeRecord, minVisibleLevel ){
+    var biblePlace = "";
+    if( attrs.values["bible"] ) {
+        biblePlace = attrs.values["bible"].toString();
+        biblePlace = convertUTF8String(biblePlace);
+    }
+
+    var poiTitle = "";
+    if( attrs.values["title"]){
+        poiTitle = attrs.values["title"].toString();
+       // poiTitle = removeSpaceInWord( poiTitle );
+        poiTitle = convertUTF8String(poiTitle);
+    }
+
+    var rangeStr = "";
+    var rangeArray = null;
+    if( attrs.values["range"] ){
+        rangeStr = attrs.values["range"].toString();
+        //rangeStr = removeSpaceInWord( rangeStr );
+        //if( rangeStr != "") {
+            rangeStr = convertUTF8String(rangeStr);
+            if( rangeStr != "" )
+                rangeArray = JSON.parse(rangeStr);
+        //}
+    }
+
+    var poiObj = {
+        biblePlace : biblePlace,
+        x: shapeRecord.shape.x,
+        y: shapeRecord.shape.y,
+        zoomIn: minVisibleLevel,
+        title : poiTitle,
+        rangeStr : rangeStr,
+        rangeArray : rangeArray
+    };
+
+    return poiObj;
+}
+
+
+function getStringFromAttrs( attrs, field ) {
+    var strFieldText = attrs.values[field];
+
+    strFieldText = convertUTF8String( strFieldText );
+
+    return strFieldText;
+}
+
 
 function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompleteCallback ) {
     var theLayer = this;
     var shpURL = url+'.shp';
     var dbfURL = url+'.dbf';
+    var layerContainer = layerManager.layerContainer;
+
 
     var onShpFail = function ( errCode ) {
         alert('failed to load ' + theLayer.shpURL + ", errCode : " + errCode  );
@@ -138,13 +185,28 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
             if (shpFile.header.shapeType == ShpType.SHAPE_POINT) {      //  POINT
                 var wkt = 'POINT(' + record.shape.x + ' ' + record.shape.y + ')';
 
+                var poiobj = createPoiObj( attrs, record, paramStyle.visibleRange.min );
+                poiobj = layerManager.insertPoiObj( poiobj );
+                var confirmPoi = layerManager.getPoiObjById( poiobj.id );
+
+                var strText = getStringFromAttrs( attrs, "label" );         // label 필드가 ""인 경우 bible의 필드를 카피하도록 한다.
+                if( strText == "" ){
+                    attrs.values["label"] = attrs.values["bible"];
+                }
+
+                var feature = createFeatureFromWkt(wkt, attrs, bTransform, format, "label" );
+                feature.setProperties({  'id' : poiobj.id,
+                                        'style': paramStyle });
+                //feature.setProperties({'id': poiobj.id });
+                features.push(feature);
+
                 var orgName = "";
 
                 for( attr in attrs.values ) {
                     if (isExistStringPropInObj(attrs.values, attr) == false)
                         continue;
 
-                    if (attr == 'id')
+                    if (attr == 'id' || attr == 'range' || attr == 'title')
                         continue;
 
                     var strLabel = "";
@@ -166,11 +228,8 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
                         ConsoleLog("url : " + url + "attr : " + attr);
                     }
 
-                    var feature = genLayerFromWkt(wkt, attrs, bTransform, format, attr);
-                    feature.setProperties({'style': paramStyle});
-                    features.push(feature);
-
-                    var textString = feature.get(attr);
+                    // var textString = feature.get(attr);
+                    textString =  convertUTF8String( attrs.values[attr].toString() );
                     if( textString == "" )
                         continue;
 
@@ -181,13 +240,12 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
                     if (attr == "bible")
                         orgName = textString;                       // 성경내의 텍스트
                     if (orgName == "") {
-                        //           alert( "bible Search word is null !!!");
                         ConsoleLog("bible Search word is null !!!" + textString);
                     }
 
                     if (layerContainer.poiLayer.hasOwnProperty(textString) == false) {
                         layerContainer.poiLayer[textString] = {         // 검색어에 넣는다
-                            orgName: orgName,
+                            biblePlace : orgName,
                             x: record.shape.x,
                             y: record.shape.y,
                             zoomIn: paramStyle.visibleRange.min
@@ -202,6 +260,12 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
 
                     }
                 }  // end of for( prop in attrs.values )
+
+                /*
+                var feature = createFeatureFromWkt(wkt, attrs, bTransform, format, "label" );
+                feature.setProperties({'style': paramStyle});
+                features.push(feature);
+                */
             }
             else if (shpFile.header.shapeType == ShpType.SHAPE_POLYLINE) {      // POLYLINE
                 var points = [];//record.shape.rings[0].x + ' ' + record.shape.rings[0].y];
@@ -213,9 +277,9 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
                 var wkt = 'LINESTRING(' + points.join(', ') + ')';
                 var feature = null;
                 if( typeof paramStyle.textStroke !== "undefined" && typeof paramStyle.textStroke.prop !== "undefined" ) {
-                    feature = genLayerFromWkt(wkt, attrs, bTransform, format, paramStyle.textStroke.prop);
+                    feature = createFeatureFromWkt(wkt, attrs, bTransform, format, paramStyle.textStroke.prop);
                 }else{
-                    feature = genLayerFromWkt(wkt, attrs, bTransform, format, null );
+                    feature = createFeatureFromWkt(wkt, attrs, bTransform, format, null );
                 }
                 feature.setProperties( { 'style': paramStyle } );
                 features.push( feature );
@@ -238,7 +302,7 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
                 }
 
                 var wkt = 'POLYGON(' + wktOuter.join(', ') + ')';
-                var feature = genLayerFromWkt( wkt, attrs, bTransform, format, paramStyle.textStroke.prop );
+                var feature = createFeatureFromWkt( wkt, attrs, bTransform, format, paramStyle.textStroke.prop );
 
                 if( attrs.values['color']) {
                     var strColor = attrs.values['color'].toString();
