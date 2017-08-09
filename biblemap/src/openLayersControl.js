@@ -7,7 +7,7 @@
 
 
  var bibleMapLayers = [
-     /*
+
      { url : 'biblemap/mapdata/110m-admin-0-countries', order: 1, style: {
         historyShow : 'false',
         visibleRange : { max : 16, min : 1 },
@@ -69,15 +69,15 @@
      },
 
 
-         { url: 'biblemap/mapdata/history/History_12Sect_poi',  order: 20, style: {
-             visibleRange : { max : 16 , min : 8 },
-             textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#5F0291', outlineWidth : 4  }}
-         },
-*/
+     { url: 'biblemap/mapdata/history/History_12Sect_poi',  order: 20, style: {
+         visibleRange : { max : 16 , min : 8 },
+         textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#5F0291', outlineWidth : 4  }}
+     },
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-     /*
+
          { url: 'biblemap/mapdata/level_11_poi',  order: 21, style: {
              visibleRange : { max : 16 , min : 11 },
              textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "black", outlineWidth : 3  }}
@@ -88,6 +88,7 @@
              visibleRange : { max : 16 , min : 10 },
              textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "#313132", outlineWidth : 3  } }
          },
+
 
          { url : 'biblemap/mapdata/level_9_poi',  order: 23, style: {
              visibleRange : { max : 16 , min : 9 },
@@ -109,12 +110,7 @@
              visibleRange : { max : 16 , min : 4 },
              textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#105602', outlineWidth : 4  }}
          }
-         */
 
-         { url: 'biblemap/mapdata/level_10_poi',  order: 22, style: {
-             visibleRange : { max : 16 , min : 10 },
-             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "#313132", outlineWidth : 3  } }
-         }
 
  ];
 
@@ -293,6 +289,41 @@
      }
 
      return this.layerContainer.poiDicObjects[id];
+ };
+
+ LayerManager.prototype.insertPoiObjToDictionary = function( poiObj, searchWord ){
+
+     if( searchWord == "" )
+         return;
+
+     if( this.layerContainer.poiDictionary.hasOwnProperty( searchWord ) == false) {
+         this.layerContainer.poiDictionary[searchWord] = {         // 검색어에 넣는다
+             poiArray : []
+         };
+         this.layerContainer.poiDictionary[searchWord].poiArray.push( poiObj );
+     } else {
+         var poiArray = this.layerContainer.poiDictionary[ searchWord ].poiArray;
+         var bAlreadyExist = false;
+         for( var idx in poiArray ) {
+             var tempPoi = poiArray[idx];
+             if( tempPoi.id == poiObj.id ) {
+                 bAlreadyExist = true;
+                 break;
+             }
+         }
+         if( bAlreadyExist == false ){
+             this.layerContainer.poiDictionary[ searchWord ].poiArray.push( poiObj );
+         }
+     }
+ };
+
+ LayerManager.prototype.getPoiObjArrayFromDictionary = function( searchWord ){
+
+     if( this.layerContainer.poiDictionary.hasOwnProperty( searchWord ) == false) {
+         return null;
+     }
+
+     return this.layerContainer.poiDictionary[searchWord].poiArray;
  };
 
 

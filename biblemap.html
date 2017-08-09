@@ -187,7 +187,7 @@
             <!-- <button type="button" onclick="searchBibleChapter()" ><img src="image/bible_search_btn.png" style="width:23px; height:24px; vertical-align:middle"></button> -->
             <!-- <input type="image" src="biblemap/image/bible_search_btn.png" style="width:21px; height:22px; vertical-align:middle" onclick="searchBibleChapter()"> -->
         </div>
-        <div name="searchWord" style="height:30px;">
+        <div name="searchWord" style="height:80px;">
             <!-- <img src="image/word_search2.png" style="width:20px; height:22px; vertical-align:middle" ><input type="text" id ="bibleWord" size="12" style="font-size:12px;" value="바울"><input type="button" value="검색" style="font-size:12px;" onclick="searchBibleWord()"> -->
             &nbsp;&nbsp;<span style="font-size:12px;">단어</span>&nbsp;<input type="text" id ="bibleWord" size="12" style="font-size:12px;" value="바울">
             <input type="button" class="button" value="검색" onclick="searchBibleWord()">
@@ -195,14 +195,20 @@
             &nbsp;&nbsp;<span style="font-size:12px;">지명</span>&nbsp;<input type="text" id ="biblePlace" size="12" style="font-size:12px;" value="예루살렘">
             <input type="button" class="button" value="검색" onclick="searchBiblePlace()">
             <br>
+            <div style="height: 2px"></div>
+            <div id ="searchedPoiList" rows= "5" style="border:1px solid grey; overflow-y:scroll; margin-left:10px; height: 60px; width: 163px; font-size:13px ; clear: both;"></div>
         </div>
         <br>
         <br>
         <div name ="historyBar" style="margin-left:10px; width: 170px; height: 80px; border: 1px solid #A7A4A4;">
             <br>
-            <div style="position: absolute; width: 168px; height: 20px; left: 11px; top: 180px; text-align:center; color:black">시대별 경계 영역</div>
-            <input id="historyAdmin" type ="range" style = "position:fixed; top: 200px; left: 20px; width:150px; font-size:12px;" min = "0" max = "6" value = "6" onchange="changeHistoryAdmin(this.value)" >
-            &nbsp;&nbsp;&nbsp;<span id ="range" style="position:fixed; left: 20px; top: 220px; font-size:12px; vertical-align:middle;">현재의 국가</span>
+            <!-- <div style="position: absolute; width: 168px; height: 20px; left: 11px; top: 180px; text-align:center; color:black">시대별 경계 영역</div> -->
+            <div style="position: absolute; width: 168px; height: 20px; left: 11px; top: 240px; text-align:center; color:black">시대별 경계 영역</div>
+            <!-- <input id="historyAdmin" type ="range" style = "position:fixed; top: 200px; left: 20px; width:150px; font-size:12px;" min = "0" max = "6" value = "6" onchange="changeHistoryAdmin(this.value)" > -->
+            <input id="historyAdmin" type ="range" style = "position:fixed; top: 260px; left: 20px; width:150px; font-size:12px;" min = "0" max = "6" value = "6" onchange="changeHistoryAdmin(this.value)" >
+            &nbsp;&nbsp;&nbsp;
+            <!-- <span id ="range" style="position:fixed; left: 20px; top: 220px; font-size:12px; vertical-align:middle;">현재의 국가</span> -->
+            <span id ="range" style="position:fixed; left: 20px; top: 280px; font-size:12px; vertical-align:middle;">현재의 국가</span>
         </div>
         <br>
         &nbsp;&nbsp;&nbsp;<select id="movePath" style="height:1.7em; font-size:12px;" ></select>
@@ -797,8 +803,75 @@
 
         saveSearchWordsToStorage();
 
-        moveToPlaceByWord( dvBiblePlace.value );
+        $('#searchedPoiList').empty();
+
+        var poiArray = layerManager.getPoiObjArrayFromDictionary( dvBiblePlace.value );
+        for( var idx in poiArray ){
+            ConsoleLog( "Find POI : " + poiArray[idx].biblePlace + ", title : " +  poiArray[idx].title );
+            if( poiArray[idx].title != "" ){
+                // $('#searchedPoiList').append( '<a href= \"'javascript:requestBibleWithChapter(" poiArray[idx].title "</a><br>" );
+
+                // var stringText = '<a href= "javascript:moveToPlaceByPoiID( ' + poiArray[idx].id + ')\" style=\"text-decoration:none; font-weight:bold; color:#464646;\">' + poiArray[idx].title + '</a><br>';
+                // ConsoleLog( stringText );
+
+                $('#searchedPoiList').append('<a href= "javascript:moveToPlaceByPoiID( ' + poiArray[idx].id + ')\" style=\"text-decoration:none; font-weight:bold; color:#464646;\">' + poiArray[idx].title + '-' + poiArray[idx].biblePlace + '</a><br>' );
+            }
+            else {
+             //   $('#searchedPoiList').append(poiArray[idx].biblePlace);
+                $('#searchedPoiList').append('<a href= "javascript:moveToPlaceByPoiID( ' + poiArray[idx].id + ')\" style=\"text-decoration:none; font-weight:bold; color:#464646;\">' + poiArray[idx].biblePlace + '</a><br>' );
+            }
+        }
+
+        var poiObj = null;
+
+        if( poiArray.length == 1 ){
+            poiObj = poiArray[0];
+            moveToPlaceByPoiID( poiObj.id );
+        }
+
+
+     //  moveToPlaceByWord( dvBiblePlace.value );
     }
+
+
+    function moveToPlaceByPoiID( poiID ){
+        if( poiID == null )
+            return;
+
+        var poiObj = layerManager.getPoiObjById( poiID );
+        moveToPlaceByPoiObj( poiObj );
+    }
+
+
+    function moveToPlaceByPoiObj( poiObj ){
+        if( poiObj == null )
+            return;
+
+        requestPoiContentAndShow( poiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+        var curZoom = bibleMap.getView().getZoom();
+
+        var view = bibleMap.getView();
+        var center = view.getCenter();
+        var curExtent = view.calculateExtent(bibleMap.getSize());
+
+        var extentLength = getDistance( curExtent[0], curExtent[1], curExtent[2], curExtent[3]);
+        var moveDistance = getDistance( center[0], center[1], poiObj.x, poiObj.y );
+
+        if( moveDistance < extentLength ) {
+            if( curZoom > poiObj.zoomIn )
+                moveTo(view, [poiObj.x, poiObj.y], curZoom );
+            else
+                moveTo(view, [poiObj.x, poiObj.y], poiObj.zoomIn);
+        }
+        else {
+            flyTo(view, [poiObj.x, poiObj.y], poiObj.zoomIn, function (complete) {
+                if (complete == true) {
+                }
+            });
+        }
+    }
+
+
 
     function moveToPlaceByWord( word ){
         var pos = layerManager.getPoiByName( word );
@@ -833,8 +906,8 @@
                 }
             });
         }
-
     }
+
 
 
     function requestBibleByWord( word, competeCallback ){

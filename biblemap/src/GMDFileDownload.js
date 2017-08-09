@@ -117,19 +117,24 @@ function createPoiObj( attrs, shapeRecord, minVisibleLevel ){
 
 
 function getStringFromAttrs( attrs, field ) {
-    var strFieldText = attrs.values[field];
 
-    strFieldText = convertUTF8String( strFieldText );
+    if( attrs.values[field] == undefined)
+        return "";
+
+    var strFieldText = attrs.values[field];
+    strFieldText = convertUTF8String(strFieldText);
 
     return strFieldText;
+
 }
 
 
-function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompleteCallback ) {
+function ShapeFileDownload( map, url, layerId, style, paramLayerManager, wholeCompleteCallback ) {
     var theLayer = this;
     var shpURL = url+'.shp';
     var dbfURL = url+'.dbf';
-    var layerContainer = layerManager.layerContainer;
+    var layerManager = paramLayerManager;
+    var layerContainer = paramLayerManager.layerContainer;
 
 
     var onShpFail = function ( errCode ) {
@@ -185,14 +190,22 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
             if (shpFile.header.shapeType == ShpType.SHAPE_POINT) {      //  POINT
                 var wkt = 'POINT(' + record.shape.x + ' ' + record.shape.y + ')';
 
-                var poiobj = createPoiObj( attrs, record, paramStyle.visibleRange.min );
+                var tempStr = removeSpaceInWord( attrs.values["label"]);        // label 필드가 비어있으면 label 필드에 bible 필드의 텍스트를 카피한다
+                if( tempStr == ""){
+                    attrs.values["label"] = attrs.values["bible"];
+                }
+
+                var poiobj = createPoiObj( attrs, record, paramStyle.visibleRange.min );    //  bible, title, range 에 해당하는 필드로 poi 오브젝트를 생성한다
                 poiobj = layerManager.insertPoiObj( poiobj );
                 var confirmPoi = layerManager.getPoiObjById( poiobj.id );
 
+
+                /*
                 var strText = getStringFromAttrs( attrs, "label" );         // label 필드가 ""인 경우 bible의 필드를 카피하도록 한다.
                 if( strText == "" ){
                     attrs.values["label"] = attrs.values["bible"];
-                }
+                } */
+
 
                 var feature = createFeatureFromWkt(wkt, attrs, bTransform, format, "label" );
                 feature.setProperties({  'id' : poiobj.id,
@@ -200,8 +213,18 @@ function ShapeFileDownload( map, url, layerId, style, layerContainer, wholeCompl
                 //feature.setProperties({'id': poiobj.id });
                 features.push(feature);
 
+                var searchWord = getStringFromAttrs( attrs, "bible");
+                layerManager.insertPoiObjToDictionary( poiobj, searchWord );
+                searchWord = getStringFromAttrs( attrs, "label");
+                layerManager.insertPoiObjToDictionary( poiobj, searchWord );
+                searchWord = getStringFromAttrs( attrs, "search1");
+                layerManager.insertPoiObjToDictionary( poiobj, searchWord );
+                searchWord = getStringFromAttrs( attrs, "search2");
+                layerManager.insertPoiObjToDictionary( poiobj, searchWord );
+
                 var orgName = "";
 
+                // bible, label, search1, search2
                 for( attr in attrs.values ) {
                     if (isExistStringPropInObj(attrs.values, attr) == false)
                         continue;

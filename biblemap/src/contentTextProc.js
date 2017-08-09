@@ -187,18 +187,24 @@ function requestPoiInfo( poiName, recvFunc,  noRecvFunc){
 
 
 function requestPoiContentAndShow( poiObj, popup, overlay ) {
+
     var youtube = "";
+    var poiText = poiObj.biblePlace;
+    if( poiObj.title != "")
+        poiText = poiObj.title + "-" + poiObj.biblePlace;
+
     requestPoiInfo( poiObj.biblePlace, function ( recvPoiObj) {
         if ( recvPoiObj.hasOwnProperty("youtube")) {
             youtube = recvPoiObj["youtube"];
         }
+
         if (youtube != "") {
-            popup.innerHTML = poiObj.biblePlace + "<br><iframe width=\"320\" height=\"240\" src=\"" + youtube + "\" frameborder = \"0\" allowfullscreen></iframe>";
+            popup.innerHTML = poiText + "<br><iframe width=\"320\" height=\"240\" src=\"" + youtube + "\" frameborder = \"0\" allowfullscreen></iframe>";
         } else
-            popup.innerHTML = poiObj.biblePlace;
+            popup.innerHTML = poiText;
         overlay.setPosition( [poiObj.x, poiObj.y] );
     }, function () {
-        popup.innerHTML = poiObj.biblePlace;
+        popup.innerHTML = poiText;
         overlay.setPosition( [poiObj.x, poiObj.y] );
     });
 }
