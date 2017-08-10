@@ -196,7 +196,7 @@
             <input type="button" class="button" value="검색" onclick="searchBiblePlace()">
             <br>
             <div style="height: 2px"></div>
-            <div id ="searchedPoiList" rows= "5" style="border:1px solid grey; overflow-y:scroll; margin-left:10px; height: 60px; width: 163px; font-size:13px ; clear: both;"></div>
+            <div id ="searchedPoiList" rows= "5" style="border:1px solid grey; margin-left:10px; height: 60px; width: 163px; font-size:13px ; clear: both;"></div>
         </div>
         <br>
         <br>
@@ -600,7 +600,8 @@
             new ShapeFileDownload( bibleMap, layer.url, layer.order, layer.style, layerManager, function( ){
                 searchBibleChapter();
                 changeHistoryAdmin( historyAdmin.value );
-                sortPoiWordsArray( layerManager.getLayerContainer() );
+                // sortPoiWordsArray( layerManager.getLayerContainer() );
+                layerManager.sortPoiWords();
             } );
         }
     };
@@ -1081,12 +1082,12 @@
                     for ( var idx in resObj) {
                         if( searchParam.type == "Word" ){
                             if( examinRightWordinText( searchParam.option.content.$regex, resObj[idx].content ) == true ){
-                                var strConvText = makeStrongInText( layerManager, searchParam.option.content.$regex, resObj[idx].content );
+                                var strConvText = makeStrongInText( layerManager, searchParam.option.content.$regex, resObj[idx] );
                                 appendReceiveMsg( resObj[idx], strConvText );
                             }
                         }else {
                             var strConvText = "";
-                            strConvText = makeStrongInText( layerManager, dvBibleWord.value, resObj[idx].content );
+                            strConvText = makeStrongInText( layerManager, dvBibleWord.value, resObj[idx] );
                             appendReceiveMsg( resObj[idx], strConvText );
                         }
 
@@ -1094,12 +1095,12 @@
                 } else {        // 수신받은 데이터가 배열이 아니고 하나만 있을 경우
                     if( searchParam.type == "Word" ){
                         if( examinRightWordinText( searchParam.option.content.$regex, resObj.content ) == true ) {
-                            var strConvText = makeStrongInText( layerManager, searchParam.option.content.$regex, resObj.content);
+                            var strConvText = makeStrongInText( layerManager, searchParam.option.content.$regex, resObj );
                             appendReceiveMsg( resObj, strConvText );
                         }
                     } else {
                         // var strConvText = makeStrongWordOfLocation( layerManager, resObj.content );
-                        var strConvText = makeStrongInText( layerManager, "", resObj.content);
+                        var strConvText = makeStrongInText( layerManager, "", resObj );
                         appendReceiveMsg( resObj, strConvText );
                     }
                 }

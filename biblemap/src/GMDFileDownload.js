@@ -215,12 +215,16 @@ function ShapeFileDownload( map, url, layerId, style, paramLayerManager, wholeCo
 
                 var searchWord = getStringFromAttrs( attrs, "bible");
                 layerManager.insertPoiObjToDictionary( poiobj, searchWord );
+                layerManager.insertPoiWord( searchWord );
                 searchWord = getStringFromAttrs( attrs, "label");
                 layerManager.insertPoiObjToDictionary( poiobj, searchWord );
+                layerManager.insertPoiWord( searchWord );
                 searchWord = getStringFromAttrs( attrs, "search1");
                 layerManager.insertPoiObjToDictionary( poiobj, searchWord );
+                layerManager.insertPoiWord( searchWord );
                 searchWord = getStringFromAttrs( attrs, "search2");
                 layerManager.insertPoiObjToDictionary( poiobj, searchWord );
+                layerManager.insertPoiWord( searchWord );
 
                 var orgName = "";
 
@@ -274,12 +278,14 @@ function ShapeFileDownload( map, url, layerId, style, paramLayerManager, wholeCo
                             zoomIn: paramStyle.visibleRange.min
                         };
 
+                        /*
                         var poiObj = {
                             text: textString,
                             length: textString.length
                         };
 
                         layerContainer.poiWords.push(poiObj);
+                        */
 
                     }
                 }  // end of for( prop in attrs.values )

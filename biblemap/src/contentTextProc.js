@@ -24,35 +24,39 @@ function examinRightWordinText( strWord, strText ){
 //  검색어이긴 하지만 지도 데이터에 있을때 군청색
 //  텍스트 내에 지도 데이터가 있을 때 초록색
 // #9C1AC8  - 보라색,  #0D63DB - 군청색 , #238106 초록색
-function makeStrongWordInText( LayerManager, strWord, strText, color ) {
+function makeStrongWordInText( LayerManager, strWord, bibleTitle, bibleText, color ) {
     var strongStart = "<strong><font color='" + color + "'>";
     var strongEnd = "</font></strong>";
 
-    var strPos = strText.indexOf(strWord);
+    var strPos = bibleText.indexOf(strWord);
     if( strPos == -1 ){
-        return strText;
+        return bibleText;
     }
 
-    if( strPos > 0 && strText.substring(strPos-1, strPos) != "<" && strText.substring(strPos-1, strPos) != " " ){
-        return strText;
+    var poiObj = LayerManager.findPoiObjByBibleTitleAndWord( bibleTitle, strWord );
+    if( poiObj == null )
+        return bibleText;
+
+    if( strPos > 0 && bibleText.substring(strPos-1, strPos) != "<" && bibleText.substring(strPos-1, strPos) != " " ){       // 이미 발견된 단어이므로 스킵
+        return bibleText;
     }
 
-    var firstFoundedPos = strText.indexOf("\')");       // 이미 검색된 결과가 있으면 그냥 리턴
+    var firstFoundedPos = bibleText.indexOf("\')");       // 이미 검색된 결과가 있으면 그냥 리턴
     if( firstFoundedPos == (strPos +strWord.length) ) {
-        var tempStrText = strText.substring( firstFoundedPos + 4, strText.length);
+        var tempStrText = bibleText.substring( firstFoundedPos + 4, bibleText.length);
 
         strPos = tempStrText.indexOf(strWord );
         var secondFoundedPos = tempStrText.indexOf("</a>");
         if( secondFoundedPos == (strPos +strWord.length)){
-            return strText;
+            return bibleText;
         }
     }
 
-    var posStart = '<a href=' + '"javascript:moveToPlaceByWord( \'' + strWord + '\')\"  style=\"text-decoration:none; font-weight:bold; color:' + color + '\" >';
+    var posStart = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + poiObj.id + ')\" style=\"text-decoration:none; font-weight:bold; color:' + color + '\" >';
     var posEnd = '</a>';
     var pos = LayerManager.getPoiByName( strWord );
 
-    var strStrong = strText.substring(0, strPos);
+    var strStrong = bibleText.substring(0, strPos);
 
     if( pos )
         strStrong += posStart;
@@ -63,85 +67,49 @@ function makeStrongWordInText( LayerManager, strWord, strText, color ) {
         strStrong += posEnd;
     else
         strStrong += strongEnd;
-    strStrong += makeStrongWordInText(  LayerManager, strWord, strText.substring( strPos + strWord.length, strText.length ), color );
+    strStrong += makeStrongWordInText(  LayerManager, strWord, bibleTitle, bibleText.substring( strPos + strWord.length, bibleText.length ), color );
 
     return strStrong;
 }
 
 
-function makeStrongWordOfLocation( LayerManager, strText ) {
-    var layerContainer = LayerManager.getLayerContainer();
-    var retStrText = strText;
-
-    for (prop in layerContainer.poiLayer) {
-        if (layerContainer.poiLayer.hasOwnProperty(prop) && typeof layerContainer.poiLayer[prop] === "object") {
-            // console.log(prop + " => typeof : " + ( typeof layerContainer.poiLayer[prop] ));
-
-            // 검색어이긴 하지만 지도 데이터에 없을때 보라색
-            //  검색어이긴 하지만 지도 데이터에 있을때 군청색
-            //  텍스트 내에 지도 데이터가 있을 때 초록색
-            // #9C1AC8  - 보라색,  #0D63DB - 군청색 , #238106 초록색
-
-            var color = "#0D63DB";  // 군청색, //  텍스트 내에 지명이 있을때 군청색
-            retStrText = makeStrongWordInText( LayerManager, prop, retStrText, color );
-        }
-    }
-    return retStrText;
-}
-
-
-
-function makeStrongInText( LayerManager, searchWord, strText ) {
+function makeStrongInText( LayerManager, searchWord, recvObj ) {
     var layerContainer = LayerManager.getLayerContainer();
 
-    if( typeof strText === "undefined"){
+    if( typeof recvObj === "undefined"){
         return "";
     }
-    var retStrText = strText;
+
+    if( typeof recvObj.content === "undefined"){
+        return "";
+    }
+
+    var bibleTitle = recvObj.title;
+    var bibleText = recvObj.content;
     var boolFind = false;
 
 
     for( var order in layerContainer.poiWords ){
-        var place = layerContainer.poiWords[order].text;
-        if (layerContainer.poiLayer.hasOwnProperty( place ) && typeof layerContainer.poiLayer[ place ] === "object") {
+        var placeName = layerContainer.poiWords[order].text;
+        if (layerContainer.poiLayer.hasOwnProperty( placeName ) && typeof layerContainer.poiLayer[ placeName ] === "object") {
             var color = "";
-            if( place == searchWord ) {
+            if( placeName == searchWord ) {
                 boolFind = true;
                 color = "#B404AE";  // 핑크색 , //  텍스트 내에 검색어와 지명이 일치할때
-                retStrText = makeStrongWordInText(LayerManager, place, retStrText, color);
             }else{
                 color = "#0D63DB";  // 군청색, //  텍스트 내에 지명이 있을때 군청색
-                retStrText = makeStrongWordInText( LayerManager, place, retStrText, color );
             }
+            bibleText = makeStrongWordInText( LayerManager, placeName, bibleTitle, bibleText, color );
         }
     }
 
     if( boolFind == false){
-        retStrText = makeStrongWordInText( LayerManager, searchWord, retStrText, "#DF0101" );  // 보라색, 검색어이긴 하지만 지도 데이터에 없을때 빨간색
+        bibleText = makeStrongWordInText( LayerManager, searchWord, bibleTitle, bibleText, "#DF0101" );  // 보라색, 검색어이긴 하지만 지도 데이터에 없을때 빨간색
     }
 
-    return retStrText;
+    return bibleText;
 }
 
-
-function sortPoiWordsArray( layerContainer ){
-    layerContainer.poiWords.sort( function( poiA, poiB ){
-        var aLen = poiA['length'] ;
-        var bLen = poiB['length'];
-        if( aLen < bLen )
-            return 1;
-        if( aLen > bLen )
-            return -1;
-        return 0;
-    } );
-
-    /*
-    for( idx in layerContainer.poiWords ){
-        var poiWord =  layerContainer.poiWords[idx];
-        ConsoleLog( "[poi] " + poiWord.text + ": " + poiWord.length );
-    }
-    */
-}
 
 function requestPoiInfo( poiName, recvFunc,  noRecvFunc){
     var searchParam = {
@@ -153,13 +121,10 @@ function requestPoiInfo( poiName, recvFunc,  noRecvFunc){
 
     var jsonStr = JSON.stringify( searchParam );
 
-    // url = "http://13.124.86.217:8082?" + jsonStr;
-    // Console.log( url );
     httpRequest("POST", jsonStr, function( http ) {
         var resObj = JSON.parse( http.responseText );
 
         if( resObj.result != "undefined" && resObj.result == "fail" ){
-            // Console.log( "requestPoiInfo() Fail!!!   param: " + jsonStr );
             ConsoleLog("requestPoiInfo() Fail!!!   param: " + jsonStr );
             if( noRecvFunc ){
                 noRecvFunc( resObj );

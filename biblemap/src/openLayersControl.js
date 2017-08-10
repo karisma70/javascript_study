@@ -262,13 +262,51 @@
          layers : [],
          totalCount : 0,
          poiLayer : {},
-         poiWords : [],
+
 
          ///////////////////////
          poiDictionary: {},    // 단어 지역명 검색
-         poiDicObjects: []
+         poiDicObjects: [],      // 레코드 단위 poi 오브젝트 들을 담아둔 배열
+         poiWords : []          // 단어 검색을 위한 지명 배열
      };
  }
+
+ LayerManager.prototype.insertPoiWord = function( locationName ){
+
+     if( locationName == "" )
+         return;
+
+     var poiWordsArr = this.layerContainer.poiWords;
+
+     for( var idx in poiWordsArr ){
+         var tempWord = poiWordsArr[ idx ];
+         if( tempWord.text == locationName )
+             return;
+     }
+
+     var poiWord = {
+         text: locationName,
+         length: locationName.length
+     };
+
+     this.layerContainer.poiWords.push( poiWord );
+ };
+
+
+ LayerManager.prototype.sortPoiWords = function(){
+
+     this.layerContainer.poiWords.sort( function( poiA, poiB ){
+         var aLen = poiA['length'] ;
+         var bLen = poiB['length'];
+         if( aLen < bLen )
+             return 1;
+         if( aLen > bLen )
+             return -1;
+         return 0;
+     } );
+
+ };
+
 
  LayerManager.prototype.insertPoiObj = function( poiObj ){
      var idx = this.layerContainer.poiDicObjects.length;
@@ -297,6 +335,12 @@
          return;
 
      if( this.layerContainer.poiDictionary.hasOwnProperty( searchWord ) == false) {
+
+         // for Debugging
+         if( searchWord == "숙곳" ){
+             ConsoleLog("Here is 숙곳!!");
+         }
+
          this.layerContainer.poiDictionary[searchWord] = {         // 검색어에 넣는다
              poiArray : []
          };
@@ -317,13 +361,51 @@
      }
  };
 
- LayerManager.prototype.getPoiObjArrayFromDictionary = function( searchWord ){
 
-     if( this.layerContainer.poiDictionary.hasOwnProperty( searchWord ) == false) {
+
+ LayerManager.prototype.getPoiObjArrayFromDictionary = function( poiWord ){
+
+     if( this.layerContainer.poiDictionary.hasOwnProperty( poiWord ) == false) {
          return null;
      }
 
-     return this.layerContainer.poiDictionary[searchWord].poiArray;
+     return this.layerContainer.poiDictionary[poiWord].poiArray;
+ };
+
+ LayerManager.prototype.findPoiObjByBibleTitleAndWord = function( bibleTitle, poiWord ){
+
+     if( this.layerContainer.poiDictionary.hasOwnProperty( poiWord ) == false) {
+         return null;
+     }
+
+     var poiArray = this.layerContainer.poiDictionary[poiWord].poiArray;
+
+     if( poiArray.length > 1 ) {
+         for (var pIdx in poiArray) {
+             var poiObj = poiArray[pIdx];
+             var rangeArray = poiObj.rangeArray;
+             if (rangeArray) {
+                 for (var rIdx in rangeArray) {
+                     if( bibleTitle == rangeArray[rIdx] )
+                        return poiObj;
+                 }
+             }
+         }
+         return null;
+     }else{
+         var poiObj = poiArray[0];
+         var rangeArray = poiObj.rangeArray;
+         if (rangeArray) {
+             for (var rIdx in rangeArray) {
+                 if (bibleTitle == rangeArray[rIdx])
+                     return poiObj;
+             }
+             return null;
+         } else{
+             return poiObj;
+         }
+     }
+
  };
 
 
