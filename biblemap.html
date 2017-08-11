@@ -197,7 +197,7 @@
             <br>
             <div style="height: 2px"></div>
             <!-- <div id ="searchedPoiList" rows= "5" style="border:1px solid grey; margin-left:10px; height: 60px; width: 163px; font-size:13px ; clear: both;"></div>  -->
-            <select id ="searchedPoiList" name="searchedPoiList" size='3' style=" overflow:hidden; border:1px solid grey; margin-left:10px; width: 163px; font-size:12px;" ></select>
+            <select id ="searchedPoiList" name="searchedPoiList" size='3' style="overflow:hidden; margin-left:10px; width: 163px; font-size:12px;" ></select>
         </div>
         <br>
         <br>
@@ -206,7 +206,7 @@
             <!-- <div style="position: absolute; width: 168px; height: 20px; left: 11px; top: 180px; text-align:center; color:black">시대별 경계 영역</div> -->
             <div style="position: absolute; width: 168px; height: 20px; left: 11px; top: 240px; text-align:center; color:black">시대별 경계 영역</div>
             <!-- <input id="historyAdmin" type ="range" style = "position:fixed; top: 200px; left: 20px; width:150px; font-size:12px;" min = "0" max = "6" value = "6" onchange="changeHistoryAdmin(this.value)" > -->
-            <input id="historyAdmin" type ="range" style = "position:fixed; top: 260px; left: 20px; width:150px; font-size:12px;" min = "0" max = "6" value = "6" onclick="changeHistoryAdmin(this.value)" >
+            <input id="historyAdmin" type ="range" style = "position:fixed; top: 260px; left: 20px; width:150px; font-size:12px;" min = "0" max = "6" value = "6" onchange="changeHistoryAdmin(this.value)" onclick="changeHistoryAdmin(this.value)" >
             &nbsp;&nbsp;&nbsp;
             <!-- <span id ="range" style="position:fixed; left: 20px; top: 220px; font-size:12px; vertical-align:middle;">현재의 국가</span> -->
             <span id ="range" style="position:fixed; left: 20px; top: 280px; font-size:12px; vertical-align:middle;">현재의 국가</span>
@@ -222,6 +222,14 @@
         <br>
         <div id ="dummy" class = "dummy" style="position: absolute; top:54px;"></div>
         <div id ="licenseNotice" style="position:absolute; left: 0px; top:0px; width:200px; background-color:rgb(66, 133, 244 );" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: rgb(255, 255, 255); font-size:11px;" onclick="showLicenseNotice()" >License notice</span></div>
+
+        <br>
+        &nbsp&nbsp<input id="createTrajectory" type ="button" value="생성" onclick="createTrajectory()" >
+        &nbsp&nbsp<input id="delTrajectory" type ="button" value="삭제" onclick="delTrajectory()" >
+        <br>
+        <div id = "zoomLevel">ZoomLevel</div>
+        <div id = "mousePosition">MousePos</div>
+
     </div>
 
     <div id="map" class="mapview" style="position:absolute;">
@@ -240,6 +248,25 @@
 
 <script>
     setDebug( true );
+
+    function createTrajectory() {
+
+        bibleMapManager.addTrajectoryInteraction(function (vertices) {
+            console.log("------------------------");
+            console.log("[");
+            for (var idx = 0; idx < vertices.length; idx++) {
+                var pos = vertices[idx];
+                console.log( "[" + pos + "],");
+            }
+            console.log("]");
+            console.log("------------------------");
+        });
+    }
+
+    function delTrajectory(){
+        bibleMapManager.removeTrajectoryInteraction();
+    }
+
 
     var dvBibleTitle = document.getElementById('bibleTitle');
     var dvBibleChapter = document.getElementById('bibleChapter');

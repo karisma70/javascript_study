@@ -173,7 +173,7 @@ function requestPoiContentAndShow( poiObj, popup, overlay ) {
     var youtube = "";
     var poiText = poiObj.biblePlace;
     if( poiObj.title != "")
-        poiText = poiObj.title;
+        poiText += "<br>-------------------<br>" + poiObj.title;
 
     requestPoiInfo( poiObj.biblePlace, function ( recvPoiObj) {
         if ( recvPoiObj.hasOwnProperty("youtube")) {
