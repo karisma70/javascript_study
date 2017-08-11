@@ -173,9 +173,10 @@ function requestPoiContentAndShow( poiObj, popup, overlay ) {
     var youtube = "";
     var poiText = poiObj.biblePlace;
     if( poiObj.title != "")
-        poiText += "<br>-------------------<br>" + poiObj.title;
+        // poiText += "<br><iframe width=\"320\" height=\"200\" frameborder=\"0\" >" + poiObj.title + "</iframe>";
+        poiText += "("+ poiObj.title + ")";
 
-    requestPoiInfo( poiObj.biblePlace, function ( recvPoiObj) {
+            requestPoiInfo( poiObj.biblePlace, function ( recvPoiObj) {
         if ( recvPoiObj.hasOwnProperty("youtube")) {
             youtube = recvPoiObj["youtube"];
         }
