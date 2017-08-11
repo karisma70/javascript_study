@@ -24,7 +24,7 @@ function examinRightWordinText( strWord, strText ){
 //  검색어이긴 하지만 지도 데이터에 있을때 군청색
 //  텍스트 내에 지도 데이터가 있을 때 초록색
 // #9C1AC8  - 보라색,  #0D63DB - 군청색 , #238106 초록색
-function makeStrongWordInText( LayerManager, strWord, bibleTitle, bibleText, color ) {
+function makeStrongWordInText( LayerManager, strWord, bibleTitle, bibleText, color , bIsPlaceName ) {
     var strongStart = "<strong><font color='" + color + "'>";
     var strongEnd = "</font></strong>";
 
@@ -33,9 +33,6 @@ function makeStrongWordInText( LayerManager, strWord, bibleTitle, bibleText, col
         return bibleText;
     }
 
-    var poiObj = LayerManager.findPoiObjByBibleTitleAndWord( bibleTitle, strWord );
-    if( poiObj == null )
-        return bibleText;
 
     if( strPos > 0 && bibleText.substring(strPos-1, strPos) != "<" && bibleText.substring(strPos-1, strPos) != " " ){       // 이미 발견된 단어이므로 스킵
         return bibleText;
@@ -52,21 +49,26 @@ function makeStrongWordInText( LayerManager, strWord, bibleTitle, bibleText, col
         }
     }
 
-    var posStart = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + poiObj.id + ')\" style=\"text-decoration:none; font-weight:bold; color:' + color + '\" >';
-    var posEnd = '</a>';
-    var pos = LayerManager.getPoiByName( strWord );
-
     var strStrong = bibleText.substring(0, strPos);
 
-    if( pos )
+    var poiObj = LayerManager.findPoiObjByBibleTitleAndWord( bibleTitle, strWord );
+    if( poiObj ) {
+        var posStart = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + poiObj.id + ')\" style=\"text-decoration:none; font-weight:bold; color:' + color + '\" >';
+        var posEnd = '</a>';
         strStrong += posStart;
-    else
-        strStrong += strongStart;
+    }
+    else{
+        if( bIsPlaceName == false)
+            strStrong += strongStart;
+    }
+
     strStrong += strWord;
-    if( pos )
+    if( poiObj )
         strStrong += posEnd;
-    else
-        strStrong += strongEnd;
+    else {
+        if( bIsPlaceName == false )
+            strStrong += strongEnd;
+    }
     strStrong += makeStrongWordInText(  LayerManager, strWord, bibleTitle, bibleText.substring( strPos + strWord.length, bibleText.length ), color );
 
     return strStrong;
@@ -89,6 +91,7 @@ function makeStrongInText( LayerManager, searchWord, recvObj ) {
     var boolFind = false;
 
 
+    /*
     for( var order in layerContainer.poiWords ){
         var placeName = layerContainer.poiWords[order].text;
         if (layerContainer.poiLayer.hasOwnProperty( placeName ) && typeof layerContainer.poiLayer[ placeName ] === "object") {
@@ -102,9 +105,23 @@ function makeStrongInText( LayerManager, searchWord, recvObj ) {
             bibleText = makeStrongWordInText( LayerManager, placeName, bibleTitle, bibleText, color );
         }
     }
+    */
+
+    for( var order in layerContainer.poiWords ) {
+        var color = "";
+        var placeName = layerContainer.poiWords[order].text;
+        if( placeName == searchWord ) {
+            boolFind = true;
+            color = "#B404AE";  // 핑크색 , //  텍스트 내에 검색어와 지명이 일치할때
+        }else{
+            color = "#0D63DB";  // 군청색, //  텍스트 내에 지명이 있을때 군청색
+        }
+        bibleText = makeStrongWordInText( LayerManager, placeName, bibleTitle, bibleText, color, true );
+    }
+
 
     if( boolFind == false){
-        bibleText = makeStrongWordInText( LayerManager, searchWord, bibleTitle, bibleText, "#DF0101" );  // 보라색, 검색어이긴 하지만 지도 데이터에 없을때 빨간색
+        bibleText = makeStrongWordInText( LayerManager, searchWord, bibleTitle, bibleText, "#DF0101", false );  // 보라색, 검색어이긴 하지만 지도 데이터에 없을때 빨간색
     }
 
     return bibleText;
@@ -156,7 +173,7 @@ function requestPoiContentAndShow( poiObj, popup, overlay ) {
     var youtube = "";
     var poiText = poiObj.biblePlace;
     if( poiObj.title != "")
-        poiText = poiObj.title + "-" + poiObj.biblePlace;
+        poiText = poiObj.title;
 
     requestPoiInfo( poiObj.biblePlace, function ( recvPoiObj) {
         if ( recvPoiObj.hasOwnProperty("youtube")) {
@@ -209,7 +226,7 @@ function Tooltip( paramMap, cssClassName ) {
         tooltip.setOffset([0, -7]);
 
         this.tooltipArray.push( tooltip);
-        zOrder +=10;
+        zOrder +=1;
     };
 
     this.allRemove = function() {

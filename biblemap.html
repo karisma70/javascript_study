@@ -634,7 +634,9 @@
             return;
 
         //routeMove = new RouteMoveProcess( bibleMap, trajectoryArray.data, layerManager.getLayerContainer().poiLayer, dvPopupContent, popupOverlay );
-        routeMove = new RouteMoveProcess( bibleMap, trajectoryArray.data, layerManager.getLayerContainer().poiLayer, pathTooltip );
+        // routeMove = new RouteMoveProcess( bibleMap, trajectoryArray.data, layerManager.getLayerContainer().poiLayer, pathTooltip );
+        routeMove = new RouteMoveProcess( bibleMap, trajectoryArray.data, layerManager.getPoiObjectArray(), pathTooltip );
+
 
         var extent = trajectoryData.getExtent( index );
 
@@ -714,23 +716,6 @@
                 dvPopupContent.innerHTML = posName;
                 popupOverlay.setPosition(bibleMapManager.getClickecPos());
             } else {    // 나머지 폴리곤에 정의된 "name" 필드로 검색하도록 한다
-
-                /*
-
-                pos = layerManager.getPoiByName(posName);
-                var biblePlace = layerManager.getPoiByName(posName).biblePlace;   // bible 검색을 위한 단어
-                if (biblePlace == null) {
-                    ConsoleLog("posName : " + posName + " is not have bible word !!!");
-                    return;
-                }
-
-                adjustScrDiv.setIsFullScr("false");
-
-                requestBibleByWord(biblePlace, function () {
-                    // requestPoiContentAndShow(pos, bibleWord, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
-                    requestPoiContentAndShow(pos, posName, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
-                });
-                */
 
                 var poiObj = layerManager.getPoiObjById( poiID );
                 if( poiObj.rangeArray != null ) {
@@ -815,7 +800,7 @@
                 // var stringText = '<a href= "javascript:moveToPlaceByPoiID( ' + poiArray[idx].id + ')\" style=\"text-decoration:none; font-weight:bold; color:#464646;\">' + poiArray[idx].title + '</a><br>';
                 // ConsoleLog( stringText );
 
-                $('#searchedPoiList').append('<a href= "javascript:moveToPlaceByPoiID( ' + poiArray[idx].id + ')\" style=\"text-decoration:none; font-weight:bold; color:#464646;\">' + poiArray[idx].title + '-' + poiArray[idx].biblePlace + '</a><br>' );
+                $('#searchedPoiList').append('<a href= "javascript:moveToPlaceByPoiID( ' + poiArray[idx].id + ')\" style=\"text-decoration:none; font-weight:bold; color:#464646;\">' + poiArray[idx].title + '</a><br>' );
             }
             else {
              //   $('#searchedPoiList').append(poiArray[idx].biblePlace);

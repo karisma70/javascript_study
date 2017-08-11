@@ -271,6 +271,11 @@
      };
  }
 
+LayerManager.prototype.getPoiObjectArray = function(){
+    return this.layerContainer.poiDicObjects;
+};
+
+
  LayerManager.prototype.insertPoiWord = function( locationName ){
 
      if( locationName == "" )

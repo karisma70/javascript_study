@@ -89,7 +89,7 @@ function CreatePathArrowLayer( trajectoryArray ) {
 
 // var tolerancePoiPos = 2000;
 
-function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramTooltip ){
+function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiArray, paramTooltip ){
 
     var moveLineStyle = new ol.style.Style({
         stroke: new ol.style.Stroke({
@@ -99,7 +99,7 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramT
 
     var tolerancePoiPos = 2000;
 
-    var poiLayer = paramPoiLayer;
+    var poiArray = paramPoiArray;
     var bibleMap = paramMap;
     var trajectoryArray = paramTrajectoryArray;
     var pathVector = null;
@@ -193,10 +193,10 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramT
         var minDist = 9999999;
         var retObj = null;
 
-        for (var prop in poiLayer) {
-            if (poiLayer.hasOwnProperty(prop) && typeof poiLayer[prop] === "object") {
+        for (var idx in poiArray ) {
+            //if (poiLayer.hasOwnProperty(prop) && typeof poiLayer[prop] === "object") {
 
-                var obj = poiLayer[prop];
+                var obj = poiArray[idx];
 
                 if (IsWithinTolerance( trjX, trjY, obj.x, obj.y, tolerancePoiPos ) == true) {
                     obj.trjX = trjX;
@@ -205,20 +205,15 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiLayer, paramT
                     if( dist < minDist ){
                         minDist = dist;
                         retObj = obj;
-                        ConsoleLog("Find !!!  >> " + prop + " : " + dist + ", tolerance : " + tolerancePoiPos );
+                        ConsoleLog("Find !!!  >> " + obj.biblePlace + " : " + dist + ", tolerance : " + tolerancePoiPos );
                     }
                 }
 
-                if( prop == "예루살렘"){
-                    var dist = getDistance( trjX, trjY, obj.x, obj.y );
-                    ConsoleLog("Debug !!!  >> " + prop + " : " + dist + ", tolerance : " + tolerancePoiPos );
-                }
-
-            }
+            // }
         }
 
         return retObj;
-    }
+    };
 
     initPath = function () {
         popupPoiArray = [];
