@@ -102,7 +102,7 @@ var httpRequest = (function(){
 
     return function( method, jsonStr, callback ){
         // var url = "http://13.124.86.217:8083?" + jsonStr;
-        var url = "http://13.124.86.217:8082?" + jsonStr;
+        var url = "http://13.124.86.217:8083?" + jsonStr;
         ConsoleLog( url );
         requestData( method, url, callback );
         /*

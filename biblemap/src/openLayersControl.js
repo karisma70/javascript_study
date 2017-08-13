@@ -111,7 +111,6 @@
              textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#105602', outlineWidth : 4  }}
          }
 
-
  ];
 
  function getDistance( x1, y1, x2, y2){
