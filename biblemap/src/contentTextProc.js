@@ -51,6 +51,11 @@ function makeStrongWordInText( LayerManager, strWord, bibleTitle, bibleText, col
 
     var strStrong = bibleText.substring(0, strPos);
 
+    // debug
+    if( strWord == "므낫세"){
+        ConsoleLog( "므낫세...");
+    }
+
     var poiObj = LayerManager.findPoiObjByBibleTitleAndWord( bibleTitle, strWord );
     if( poiObj ) {
         var posStart = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + poiObj.id + ')\" style=\"text-decoration:none; font-weight:bold; color:' + color + '\" >';

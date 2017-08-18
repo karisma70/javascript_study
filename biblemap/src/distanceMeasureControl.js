@@ -4,6 +4,9 @@
 
 
 function DistanceMeasureControl( paramMapManager ){
+
+    var wgs84Sphere = new ol.Sphere(6378137);
+
     var mapManager = paramMapManager;
     var map = paramMapManager.getMap();
     var measureDraw = null; // global so we can remove it later
@@ -44,29 +47,26 @@ function DistanceMeasureControl( paramMapManager ){
             coordinateFormat : function( coordinate ){
 
                 mousePos = coordinate;
+                var sourceProj = map.getView().getProjection();
 
                 if( measureGeom && measureGeom.getCoordinates().length > 1 ) {
                     var coordinates = measureGeom.getCoordinates();
 
-                    //console.log("------------------>>");
-                    //console.log("mouseX: " + mousePos[0] + ", mouseY: " + mousePos[1]);
                     var distance = 0;
-                    for (coord in coordinates) {
-                        if (coord > 0) {
-                            distance += getDistance(coordinates[coord][0], coordinates[coord][1], coordinates[coord - 1][0], coordinates[coord - 1][1]);
-                            //      console.log( "x1:" + coordinates[coord][0] + ", y1:" + coordinates[coord][1] + ", x2:"+coordinates[coord - 1][1] + ", y2:"+  coordinates[coord - 1][1] );
-                        }
-                    }
+
+                     for ( var idx in coordinates) {
+                         if ( idx > 0) {
+                             var coord1 = ol.proj.transform( coordinates[idx-1], sourceProj, 'EPSG:4326' );
+                             var coord2 = ol.proj.transform( coordinates[idx], sourceProj, 'EPSG:4326' );
+
+                             distance += wgs84Sphere.haversineDistance( coord1, coord2 );
+                         }
+                     }
 
                     var distObj = makeDistanceObj(distance);
                     coordString = distObj.distString;
-                    // coordString = distance + "";
-
-
-                    //console.log("<<-------------- distance : " + distObj.distString);
                 }
                 else{
-                    // console.log( "not exsit measureGeom!!");
                     coordString = "";
                 }
 
