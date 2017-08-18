@@ -173,6 +173,7 @@ function requestPoiInfo( poiName, recvFunc,  noRecvFunc){
 }
 
 
+/*
 function requestPoiContentAndShow( poiObj, popup, overlay ) {
 
     var youtube = "";
@@ -181,7 +182,7 @@ function requestPoiContentAndShow( poiObj, popup, overlay ) {
         // poiText += "<br><iframe width=\"320\" height=\"200\" frameborder=\"0\" >" + poiObj.title + "</iframe>";
         poiText += "("+ poiObj.title + ")";
 
-            requestPoiInfo( poiObj.biblePlace, function ( recvPoiObj) {
+        requestPoiInfo( poiObj.biblePlace, function ( recvPoiObj) {
         if ( recvPoiObj.hasOwnProperty("youtube")) {
             youtube = recvPoiObj["youtube"];
         }
@@ -196,6 +197,152 @@ function requestPoiContentAndShow( poiObj, popup, overlay ) {
         overlay.setPosition( [poiObj.x, poiObj.y] );
     });
 }
+*/
+
+
+
+function showYoutubeOfPoi( poiObj, overlayObj, popupObj, recvPoiObj ){
+
+    var poiText = poiObj.biblePlace;
+    var youtube = "";
+
+    if ( recvPoiObj.hasOwnProperty("youtube")) {
+        youtube = recvPoiObj["youtube"];
+    }
+}
+
+
+function requestPoiContentAndShow( poiObj, popup, overlay ) {
+
+    var youtube = "";
+    var infoText = "";
+    var poiText = poiObj.biblePlace;
+
+    var youtubeRef = "<a href =\"javascript:showYoutubePoi()\"' >";
+    var youtubeIcon = "<img src=\"biblemap/image/camera-icon3.png\" style=\"width:20px; height:20px; vertical-align:middle;\">";
+
+    var textRef = "<a href =\"javascript:showTextPoi()\"' >";
+    var textIcon = "<img src=\"biblemap/image/text-icon2.png\" style=\"width:18px; height:20px; vertical-align:middle;\">";
+
+    var vertImage = '<br><div style=\"height: 16px; background: url(biblemap/image/horizon-line.png);\"></div>';
+
+    /*
+    if( poiObj.title != "")
+          poiText += "("+ poiObj.title + ")";
+          */
+
+    requestPoiInfo( poiObj.biblePlace, function ( recvPoiObj) {
+        if ( recvPoiObj.hasOwnProperty("youtube")) {
+            youtube = recvPoiObj["youtube"];
+        }
+
+        if ( recvPoiObj.hasOwnProperty("text")) {
+            infoText = recvPoiObj["text"];
+        }
+
+        showBaseInfoPoi();
+
+    }, function () {
+        popup.innerHTML = poiText + " ";
+        showTitlePoi( popup, poiObj.title );
+        overlay.setPosition( [poiObj.x, poiObj.y] );
+    });
+
+    showTitlePoi = function( popup, title ) {
+        if( title == "") {
+            return;
+        }
+        var strLen = ( title.length * 12) + 35;
+        popup.innerHTML += vertImage;
+        popup.innerHTML += '<iframe id=\"contentFrame\" width=\"'+ strLen + '\" height=\"35\" frameborder = \"0\" sandbox=\"allow-scripts allow-same-origin\" src=\"about:blank\"></iframe>';
+
+        var frame = document.getElementById("contentFrame");
+        if( frame ) {
+            var fdoc = frame.contentDocument;
+            var contentString = "<span style=\'font-size:10pt;\'>" + title + "</span>";
+            fdoc.write( contentString );
+        }
+
+    };
+
+
+    showBaseInfoPoi = function(){
+        if (youtube != "") {
+            popup.innerHTML = poiText +" " + youtubeRef + youtubeIcon + "</a>";
+        } else
+            popup.innerHTML = poiText;
+
+        if(infoText != "" ){
+            popup.innerHTML += "" + textRef + textIcon + "</a>";
+        }
+
+        showTitlePoi( popup, poiObj.title );
+
+        /*
+        if( poiObj.title != ""){
+            var strLen = (poiObj.title.length * 10) + 53;
+            popup.innerHTML += vertImage;
+            // popup.innerHTML += "<br>" + poiObj.title + "<br>";
+            popup.innerHTML += '<iframe id=\"contentFrame\" width=\"'+ strLen + '\" height=\"35\" frameborder = \"0\" sandbox=\"allow-scripts allow-same-origin\" src=\"about:blank\"></iframe>';
+
+            var frame = document.getElementById("contentFrame");
+            if( frame ) {
+                var fdoc = frame.contentDocument;
+                var contentString = "<span style=\'font-size:10pt;\'>" + poiObj.title + "</span>";
+                fdoc.write( contentString );
+            }
+        }
+        */
+        // popup.innerHTML += "<iframe width=\"320\" height=\"240\" src=\"" + youtube + "\" frameborder = \"0\" allowfullscreen></iframe>";
+
+        overlay.setPosition( [poiObj.x, poiObj.y] );
+    };
+
+    showYoutubePoi = function() {
+        var scriptRef = "<a href =\"javascript:showBaseInfoPoi()\"' >";
+        var foldIcon = "<img src=\"biblemap/image/fold-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">";
+        popup.innerHTML = poiText + " " + scriptRef + foldIcon + "</a>";
+        if( infoText!= "" ){
+            popup.innerHTML += textRef + textIcon + "</a>";
+        }
+        popup.innerHTML += vertImage;
+        if( poiObj.title != ""){
+            popup.innerHTML += "<br>" + poiObj.title + "<br>";
+        }
+
+        popup.innerHTML += "<iframe width=\"320\" height=\"240\" src=\"" + youtube + "\" frameborder = \"0\" allowfullscreen></iframe>";
+        overlay.setPosition( [poiObj.x, poiObj.y] );
+    };
+
+    showTextPoi = function(){
+        var scriptRef = "<a href =\"javascript:showBaseInfoPoi()\"' >";
+        var foldIcon = "<img src=\"biblemap/image/fold-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">";
+        popup.innerHTML = poiText + " " + scriptRef + foldIcon + "</a>";
+        if( youtube!= "" ){
+            popup.innerHTML += youtubeRef + youtubeIcon + "</a>";
+        }
+
+        popup.innerHTML += vertImage;
+        if( poiObj.title != ""){
+            popup.innerHTML += "<br>" + poiObj.title + "<br>";
+        }
+
+        popup.innerHTML += '<iframe id=\"contentFrame\" width=\"320\" height=\"240\" frameborder = \"0\" sandbox=\"allow-scripts allow-same-origin\" src=\"about:blank\"></iframe>';
+
+        var frame = document.getElementById("contentFrame");
+        if( frame ) {
+            var fdoc = frame.contentDocument;
+            var contentString = "<span style=\'font-size:10pt;\'>" + infoText + "</span>";
+            fdoc.write( contentString );
+        }
+
+
+        overlay.setPosition( [poiObj.x, poiObj.y] );
+    };
+
+
+}
+
 
 
 function Tooltip( paramMap, cssClassName ) {
