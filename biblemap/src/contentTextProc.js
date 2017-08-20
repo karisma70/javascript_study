@@ -133,13 +133,17 @@ function makeStrongInText( LayerManager, searchWord, recvObj ) {
 }
 
 
-function requestPoiInfo( poiName, recvFunc,  noRecvFunc){
+function requestPoiInfo( poiObj, recvFunc,  noRecvFunc){
     var searchParam = {
         type: "Poi",     // book, chapter, paragraph 등으로 구성된 검색
         option: {}
     };
 
-    searchParam.option["name"] = poiName;
+    // searchParam.option["name"] = poiName;
+    searchParam.option["name"] = poiObj.biblePlace;
+    if( poiObj.title != "" ){
+        searchParam.option["title"] = poiObj.title;
+    }
 
     var jsonStr = JSON.stringify( searchParam );
 
@@ -219,19 +223,20 @@ function requestPoiContentAndShow( poiObj, popup, overlay ) {
     var poiText = poiObj.biblePlace;
 
     var youtubeRef = "<a href =\"javascript:showYoutubePoi()\"' >";
-    var youtubeIcon = "<img src=\"biblemap/image/camera-icon3.png\" style=\"width:20px; height:20px; vertical-align:middle;\">";
+    var youtubeIcon = "<img src=\"biblemap/image/camera-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">";
 
     var textRef = "<a href =\"javascript:showTextPoi()\"' >";
-    var textIcon = "<img src=\"biblemap/image/text-icon2.png\" style=\"width:18px; height:20px; vertical-align:middle;\">";
+    var textIcon = "<img src=\"biblemap/image/text-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">";
 
-    var vertImage = '<br><div style=\"height: 16px; background: url(biblemap/image/horizon-line.png);\"></div>';
+    var vertImage = '<div style=\"height: 14px; background: url(biblemap/image/horizon-line.png);\"></div>';
 
     /*
     if( poiObj.title != "")
           poiText += "("+ poiObj.title + ")";
           */
 
-    requestPoiInfo( poiObj.biblePlace, function ( recvPoiObj) {
+    // requestPoiInfo( poiObj.biblePlace, function ( recvPoiObj) {
+    requestPoiInfo( poiObj, function ( recvPoiObj) {
         if ( recvPoiObj.hasOwnProperty("youtube")) {
             youtube = recvPoiObj["youtube"];
         }

@@ -801,7 +801,8 @@ function createLayer( source  ) {
      } // end of function MapManager(overlay, targetMap, view) {
 
      return function( overlay, cssMap ){
-         return new MapManager( overlay, cssMap, createView( [3942321.454123089, 3792452.570684223], 15, 4, 8 ) );
+         // return new MapManager( overlay, cssMap, createView( [3942321.454123089, 3792452.570684223], 15, 4, 8 ) );
+         return new MapManager( overlay, cssMap, createView( [4198844, 3971926], 15, 4, 6 ) );
      }
 
  }());
