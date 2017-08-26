@@ -82,7 +82,7 @@
             border: 1px solid #cccccc;
             bottom: 12px;
             left: -50px;
-            min-width: 130px;
+            min-width: 145px;
 
         }
         .ol-popup:after, .ol-popup:before {
@@ -178,7 +178,7 @@
 <div class="wrapperDiv">
     <div id="sidebar" style="position:absolute;">
         <a href="http://blog.naver.com/bible-map" target="_blank" style="text-decoration:none"><div id="logo" style="height:27px; background-color:rgb( 66, 133, 244 );"><img src="biblemap/image/biblemap_logo.png" style="width:27px; height:27px; vertical-align:middle" >
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:10pt; font-weight:bold; color:white;text-align:center;">성서지도</span></div></a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:10pt; font-weight:bold; color:white;text-align:center;">성경지도</span></div></a>
         <div id ="dummy2" class="dummy" ></div>
         <div id ="bibleSearch" style="font-size:12px; height: 70px">
             <br>
@@ -228,7 +228,9 @@
 
         <!-- <div style="height: 20px; background: url(biblemap/image/horizon-line.png);"></div> -->
         <div id ="dummy" class = "dummy" style="position: absolute; top:54px;"></div>
-        <div id ="licenseNotice" style="position:absolute; left: 0px; top:0px; width:200px; background-color:rgb(66, 133, 244 );" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: rgb(255, 255, 255); font-size:11px;" onclick="showLicenseNotice()" >Notice</span></div>
+        <div id ="licenseNotice" style="position:absolute; left: 0px; top:0px; width:200px; background-color:rgb(66, 133, 244 );" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <span style="color: rgb(255, 255, 255); font-size:11px;" onclick="showLicenseNotice()" >Notice</span>
+        </div>
 
         <!--
         <br>
@@ -792,7 +794,7 @@
         adjustScrDiv.setIsFullScr("false");
 
         var searchWord = dvBibleWord.value;
-        searchWord = removeSpaceInWord( searchWord );
+        searchWord = " "+removeSpaceInWord( searchWord );
         // placeWord = placeWord.replace(/^\s*|\s*$/g, ''); // 좌우 공백 제거
 
         var searchParam = {
@@ -958,7 +960,7 @@
 
         // dvBiblePlace.value =  word;
 
-        var searchWord = word;
+        var searchWord = " " + word;
         searchParam.option.content= { $regex : searchWord };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
         reqeustAndShowContents( searchParam, competeCallback );
     }
@@ -977,7 +979,9 @@
         // var range = JSON.parse( poiObj.rangeStr );
 
         searchParam.option.title = { $in: poiObj.rangeArray };
-        searchParam.option.content= { $regex : poiObj.biblePlace };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
+
+        var searchPlace = " " + poiObj.biblePlace;
+        searchParam.option.content= { $regex : searchPlace };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
 
         // searchParam.option = {  title : {  $in: [ "창세기", "여호수아", "사사기"  ] }, content : { $regex:"숙곳" }};
         reqeustAndShowContents( searchParam, completeCallback );
@@ -1134,10 +1138,11 @@
                 if (resObj.length != "undefined") {    // 배열로 받아올 경우
                     for ( var idx in resObj) {
                         if( searchParam.type == "Word" ){
-                            if( examinRightWordinText( searchParam.option.content.$regex, resObj[idx].content ) == true ){
-                                var strConvText = makeStrongInText( layerManager, searchParam.option.content.$regex, resObj[idx] );
+                           // if( examinRightWordinText( searchParam.option.content.$regex, resObj[idx].content ) == true ){
+                                var searchWord = removeSpaceInWord( searchParam.option.content.$regex );
+                                var strConvText = makeStrongInText( layerManager, searchWord, resObj[idx] );
                                 appendReceiveMsg( resObj[idx], strConvText );
-                            }
+                            // }
                         }else {
                             var strConvText = "";
                             strConvText = makeStrongInText( layerManager, dvBibleWord.value, resObj[idx] );
@@ -1147,10 +1152,11 @@
                     }
                 } else {        // 수신받은 데이터가 배열이 아니고 하나만 있을 경우
                     if( searchParam.type == "Word" ){
-                        if( examinRightWordinText( searchParam.option.content.$regex, resObj.content ) == true ) {
-                            var strConvText = makeStrongInText( layerManager, searchParam.option.content.$regex, resObj );
+                       // if( examinRightWordinText( searchParam.option.content.$regex, resObj.content ) == true ) {
+                            var searchWord = removeSpaceInWord( searchParam.option.content.$regex );
+                            var strConvText = makeStrongInText( layerManager, searchWord, resObj );
                             appendReceiveMsg( resObj, strConvText );
-                        }
+                        // }
                     } else {
                         // var strConvText = makeStrongWordOfLocation( layerManager, resObj.content );
                         var strConvText = makeStrongInText( layerManager, "", resObj );
