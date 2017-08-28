@@ -230,7 +230,7 @@
                 <br>
                 <br>
                 <div name ="historyBar" style="margin-left:0px; width: 170px; height: 34px; border: 1px solid #A7A4A4;">
-                    <input id="historyAdmin" type ="range" style = "margin-left: 10px; top: 5px; width:150px; height: 30px; font-size:12px;" min = "0" max = "6" value = "6" onchange="changeHistoryAdmin(this.value)" onclick="changeHistoryAdmin(this.value)" >
+                    <input id="historyAdmin" type ="range" style = "margin-left: 10px; top: 5px; width:150px; height: 30px; font-size:12px;" min = "0" max = "6" value = "6" onchange="eventHistoryAdmin(this.value)" onclick="eventHistoryAdmin(this.value)" >
                     &nbsp;&nbsp;&nbsp;
                 </div>
                 <br>
@@ -610,8 +610,13 @@
         document.getElementById("historyAdminExplain").innerHTML = strObj.text;
     }
 
-    function changeHistoryAdmin( newValue ){
+    function eventHistoryAdmin( newVal ){
         adjustScrDiv.setIsFullScr("true");
+        changeHistoryAdmin( newVal );
+    }
+
+    function changeHistoryAdmin( newValue ){
+
         currentHistoryAdminString( newValue );
 
         for (idx in layerManager.layerContainer.layers) {
@@ -791,9 +796,16 @@
                 dvPopupContent.innerHTML = posName;
                 popupOverlay.setPosition(bibleMapManager.getClickecPos());
 
+                var poiArray = layerManager.getPoiObjArrayFromDictionary( posName );
+                if( poiArray.length < 2){
+                    var tempPoiObj = poiArray[ 0];
+                    requestPoiContentAndShow( tempPoiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+                }
+/*
                 requestBibleByWord(posName, function () {
                     adjustScrDiv.setIsFullScr("false");
                 });
+                */
             }
         } else {        //  poi Layer를 선택했을 경우
             if (id < 5) {          // 전세계 폴리곤 경계라면...
