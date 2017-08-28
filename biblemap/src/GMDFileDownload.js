@@ -375,7 +375,10 @@ function ShapeFileDownload( map, url, layerId, style, paramLayerManager, wholeCo
 
         if( layerContainer.totalCount <= layerContainer.layers.length ){
             wholeCompleteCallback( map, layerContainer );
+        }else{
+            ConsoleLog( "LayerContainer.totalCount : " + layerContainer.totalCount + ", layers.length: " + layerContainer.layers.length );
         }
+
 
         map.addLayer(  shapeLayer );
         shapeLayer.setZIndex( layerId );

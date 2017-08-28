@@ -6,6 +6,8 @@
     <link rel="shortcut icon" href="http://www.biblemap.or.kr/favicon.ico" type="image/x-icon"/>
     <link rel="icon" href="http://www.biblemap.or.kr/favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="https://openlayers.org/en/v4.1.1/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="expandmenu.css">
+    <meta name="viewport" content="width=device-width">
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
     <!-- <script src="https://api.mapbox.com/mapbox.js/plugins/arc.js/v0.1.0/arc.js"></script> -->
     <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
@@ -16,7 +18,7 @@
     <script type="text/javascript" src="biblemap/src/GMDFileReader.js?version=20170813"></script>
     <script type="text/javascript" src="biblemap/src/propertyDB.js?version=20170813"></script>
 
-    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20170820"></script>
+    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20170828"></script>
     <script type="text/javascript" src="biblemap/src/routePlay.js?version=20170813"></script>
     <script type="text/javascript" src="biblemap/src/trajectoryData.js?version=20170813"></script>
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170813"></script>
@@ -24,6 +26,12 @@
     <script type="text/javascript" src="biblemap/src/distanceMeasureControl.js?version=20170820"></script>
     <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170813"></script>
     <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20170820"></script>
+    <script>document.documentElement.className = "js";</script>
+    <script src="biblemap//vendor/jquery-1.8.1.js"></script>
+    <script src="biblemap//vendor/json2.js"></script>
+    <script src="biblemap//src/jquery.collapse.js"></script>
+    <script src="biblemap//src/jquery.collapse_storage.js"></script>
+    <script src="biblemap//src/jquery.collapse_cookie_storage.js"></script>
     <style type ="text/css">
 
         img {-ms-interpolation-mode:bicubic;}
@@ -84,6 +92,11 @@
             left: -50px;
             min-width: 145px;
 
+            -ms-user-select: none;
+            -moz-user-select: -moz-none;
+            -khtml-user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
         .ol-popup:after, .ol-popup:before {
             top: 100%;
@@ -174,62 +187,81 @@
 
     </style>
 </head>
-<body>
+<!-- <body oncontextmenu="return false" ondragstart="return false" onselectstart="return false"> -->
+
 <div class="wrapperDiv">
-    <div id="sidebar" style="position:absolute;">
-        <a href="http://blog.naver.com/bible-map" target="_blank" style="text-decoration:none"><div id="logo" style="height:27px; background-color:rgb( 66, 133, 244 );"><img src="biblemap/image/biblemap_logo.png" style="width:27px; height:27px; vertical-align:middle" >
+    <div id="sidebar" style="position:absolute; ">
+        <a href="http://blog.naver.com/bible-map" target="_blank" style="text-decoration:none"><div id="logo" style="height:27px; background-color:rgb( 59, 89, 153 );"><img src="biblemap/image/biblemap_logo.png" style="width:27px; height:27px; vertical-align:middle" >
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:10pt; font-weight:bold; color:white;text-align:center;">성경지도</span></div></a>
         <div id ="dummy2" class="dummy" ></div>
-        <div id ="bibleSearch" style="font-size:12px; height: 70px">
-            <br>
-            <select id ="bibleTitle" name="bibleTitle" style="margin-left: 11px; height:1.7em; font-size:12px;" ></select>
-            <div style="height: 2px"></div>
-            <input type="image" src="biblemap/image/left_arrow.jpg?version=20170814" style="position: absolute;  margin-left: 10px; width:18px; height:20px; vertical-align:middle" onclick="decreaseBibleChapter()">
-            <input type="number" class="chapterNum" id ="bibleChapter" style="margin-left: 30px; top: 50px;  width: 3em; height: 20px; font-size:12px;" value="14"> 장
-            <!-- <input type="button" class="button" value="검색" onclick="searchBibleChapter()">  -->
-            <input type="image" src="biblemap/image/right_arrow.jpg?version=20170814" style="position: absolute;  margin-left: 2px;width:18px; height:18px; vertical-align:middle" onclick="increaseBibleChapter()">
-            <!-- <button type="button" onclick="searchBibleChapter()" ><img src="image/bible_search_btn.png" style="width:23px; height:24px; vertical-align:middle"></button> -->
-            <!-- <input type="image" src="biblemap/image/bible_search_btn.png" style="width:21px; height:22px; vertical-align:middle" onclick="searchBibleChapter()"> -->
-        </div>
-        <div name="searchWord" style="height:80px;">
-            <!-- <img src="image/word_search2.png" style="width:20px; height:22px; vertical-align:middle" ><input type="text" id ="bibleWord" size="12" style="font-size:12px;" value="바울"><input type="button" value="검색" style="font-size:12px;" onclick="searchBibleWord()"> -->
-            <span style="margin-left: 10px; font-size:12px;">단어</span>&nbsp;<input type="text" id ="bibleWord" size="12" style="font-size:12px;" value="바울">
-            <input type="button" class="button" value="검색" onclick="searchBibleWord()">
-            <div style="height: 2px"></div>
-            <span style="margin-left: 10px; font-size:12px;">지명</span>&nbsp;<input type="text" id ="biblePlace" size="12" style="font-size:12px;" value="예루살렘">
-            <input type="button" class="button" value="검색" onclick="searchBiblePlace()">
-            <br>
-            <div style="height: 2px"></div>
-            <!-- <div id ="searchedPoiList" rows= "5" style="border:1px solid grey; margin-left:10px; height: 60px; width: 163px; font-size:13px ; clear: both;"></div>  -->
-            <select id ="searchedPoiList" name="searchedPoiList" size='3' style="overflow:hidden; margin-left:10px; width: 163px; font-size:12px;" ></select>
-        </div>
+        <!-- <div id="css3-animated-autoclose" data-collapse> -->
+        <div id="accordion-example" data-collapse="accordion">
+            <h3 class="open">성경검색</h3>
+            <div class="content">
+                <div id ="bibleSearch" style="font-size:12px; height: 60px">
+                    <select id ="bibleTitle" name="bibleTitle" style="margin-left: 11px; height:1.7em; font-size:12px;" ></select>
+                    <div style="height: 2px"></div>
+                    <input type="image" src="biblemap/image/left_arrow.jpg?version=20170814" style="position: absolute;  margin-left: 10px; width:18px; height:20px; vertical-align:middle" onclick="decreaseBibleChapter()">
+                    <input type="number" class="chapterNum" id ="bibleChapter" style="margin-left: 30px; top: 50px;  width: 3em; height: 20px; font-size:12px;" value="14"> 장
+                    <!-- <input type="button" class="button" value="검색" onclick="searchBibleChapter()">  -->
+                    <input type="image" src="biblemap/image/right_arrow.jpg?version=20170814" style="position: absolute;  margin-left: 2px;width:18px; height:18px; vertical-align:middle" onclick="increaseBibleChapter()">
+                    <!-- <button type="button" onclick="searchBibleChapter()" ><img src="image/bible_search_btn.png" style="width:23px; height:24px; vertical-align:middle"></button> -->
+                    <!-- <input type="image" src="biblemap/image/bible_search_btn.png" style="width:21px; height:22px; vertical-align:middle" onclick="searchBibleChapter()"> -->
+                </div>
+                <div name="searchWord" style="height:80px;">
+                    <!-- <img src="image/word_search2.png" style="width:20px; height:22px; vertical-align:middle" ><input type="text" id ="bibleWord" size="12" style="font-size:12px;" value="바울"><input type="button" value="검색" style="font-size:12px;" onclick="searchBibleWord()"> -->
+                    <span style="margin-left: 10px; font-size:12px;">단어</span>&nbsp;<input type="text" id ="bibleWord" size="12" style="font-size:12px;" value="바울">
+                    <input type="button" class="button" value="검색" onclick="searchBibleWord()">
+                    <div style="height: 2px"></div>
+                    <span style="margin-left: 10px; font-size:12px;">지명</span>&nbsp;<input type="text" id ="biblePlace" size="12" style="font-size:12px;" value="예루살렘">
+                    <input type="button" class="button" value="검색" onclick="searchBiblePlace()">
+                    <br>
+                    <div style="height: 2px"></div>
+                    <!-- <div id ="searchedPoiList" rows= "5" style="border:1px solid grey; margin-left:10px; height: 60px; width: 163px; font-size:13px ; clear: both;"></div>  -->
+                    <select id ="searchedPoiList" name="searchedPoiList" size='3' style="overflow:hidden; margin-left:10px; width: 163px; font-size:12px;" ></select>
+                </div>
+                <br>
+                <br>
+                <br>
+            </div>
+            <h3>시대별 경계 영역</h3>
+            <div class="content" style ="background-color:#FFFFFF; height: 250px">
+                <span id ="range" style="margin-left: 20px; font-size:12px; vertical-align:middle;">현재의 국가</span>
+                <br>
+                <br>
+                <div name ="historyBar" style="margin-left:0px; width: 170px; height: 34px; border: 1px solid #A7A4A4;">
+                    <input id="historyAdmin" type ="range" style = "margin-left: 10px; top: 5px; width:150px; height: 30px; font-size:12px;" min = "0" max = "6" value = "6" onchange="changeHistoryAdmin(this.value)" onclick="changeHistoryAdmin(this.value)" >
+                    &nbsp;&nbsp;&nbsp;
+                </div>
+                <br>
+                <div id="historyAdminExplain" style ="overflow-y:scroll; margin-left: 0px; width : 170px; height: 150px; border: 1px solid #A7A4A4;" >
+                </div>
+
+            </div>
+            <h3>주요 이동 경로</h3>
+            <div class="content" style ="background-color:#FFFFFF">
+                <select id="movePath" style="margin-left: 10px; height:1.7em; font-size:12px;" ></select>
+                <br>
+                <div style="height: 2px"></div>
+                <input type="image" src="biblemap/image/trajectory_play.jpg?version=20170813" style="margin-left:120px; left: 50px; width:20px; height:20px; vertical-align:middle" onclick="pathAction()">
+                <!-- <input id="showMovingPath" type ="button" style="font-size:12px;" value="Play" onclick="pathAction()" > -->
+                <input type="image" src="biblemap/image/trajectory_stop.jpg?version=20170813" style="width:20px; height:20px; vertical-align:middle" onclick="pathHide()">
+                <!-- &nbsp;<input id="hideMovingPath" type ="button" style="font-size:12px;" value="Off" onclick="pathHide()" > -->
+                <br>
+            </div>
+        </div>  <!--  <div id="css3-animated-autoclose" data-collapse>  -->
+
         <br>
         <br>
-        <div name ="historyBar" style="margin-left:10px; width: 170px; height: 80px; border: 1px solid #A7A4A4;">
-            <br>
-            <!-- <div style="position: absolute; width: 168px; height: 20px; left: 11px; top: 180px; text-align:center; color:black">시대별 경계 영역</div> -->
-            <div style="position: absolute; width: 168px; height: 20px; left: 11px; top: 240px; text-align:center; color:black">시대별 경계 영역</div>
-            <!-- <input id="historyAdmin" type ="range" style = "position:fixed; top: 200px; left: 20px; width:150px; font-size:12px;" min = "0" max = "6" value = "6" onchange="changeHistoryAdmin(this.value)" > -->
-            <input id="historyAdmin" type ="range" style = "position:fixed; top: 260px; left: 20px; width:150px; font-size:12px;" min = "0" max = "6" value = "6" onchange="changeHistoryAdmin(this.value)" onclick="changeHistoryAdmin(this.value)" >
-            &nbsp;&nbsp;&nbsp;
-            <!-- <span id ="range" style="position:fixed; left: 20px; top: 220px; font-size:12px; vertical-align:middle;">현재의 국가</span> -->
-            <span id ="range" style="position:fixed; left: 20px; top: 280px; font-size:12px; vertical-align:middle;">현재의 국가</span>
-        </div>
+
         <br>
-        <select id="movePath" style="margin-left: 10px; height:1.7em; font-size:12px;" ></select>
-        <br>
-        <div style="height: 2px"></div>
-        <input type="image" src="biblemap/image/trajectory_play.jpg?version=20170813" style="margin-left:120px; left: 50px; width:20px; height:20px; vertical-align:middle" onclick="pathAction()">
-        <!-- <input id="showMovingPath" type ="button" style="font-size:12px;" value="Play" onclick="pathAction()" > -->
-        <input type="image" src="biblemap/image/trajectory_stop.jpg?version=20170813" style="width:20px; height:20px; vertical-align:middle" onclick="pathHide()">
-        <!-- &nbsp;<input id="hideMovingPath" type ="button" style="font-size:12px;" value="Off" onclick="pathHide()" > -->
-        <br>
-       <!--  <div id="horizon-line" style="height: 50px; backgound-image:url('biblemap/image/horizon-line.png'); background-repeat:repeat-y; position: absolute; top:450px;">text</div> -->
+
+        <!--  <div id="horizon-line" style="height: 50px; backgound-image:url('biblemap/image/horizon-line.png'); background-repeat:repeat-y; position: absolute; top:450px;">text</div> -->
 
         <!-- <div style="height: 20px; background: url(biblemap/image/horizon-line.png);"></div> -->
-        <div id ="dummy" class = "dummy" style="position: absolute; top:54px;"></div>
-        <div id ="licenseNotice" style="position:absolute; left: 0px; top:0px; width:200px; background-color:rgb(66, 133, 244 );" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <span style="color: rgb(255, 255, 255); font-size:11px;" onclick="showLicenseNotice()" >Notice</span>
+        <div id ="dummy" class = "dummy" style="position: absolute; top:56px;"></div>
+        <div id ="licenseNotice" style="position:absolute; left: 0px; top:0px; height: 16px; width:200px; background-color:rgb(66, 133, 244 );" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <span style="color: rgb(255, 255, 255); font-size:11px;" onclick="showLicenseNotice()" >   Notice</span>
         </div>
 
         <!--
@@ -244,7 +276,7 @@
 
     <div id="map" class="mapview" style="position:absolute;">
     </div>
-    <div id ="footer" style="overflow-y:scroll; line-height: 170%; font-size:13px ; clear: both;">
+    <div id ="footer" style="overflow-y:scroll; line-height: 180%; font-size:13px ; clear: both;">
         <p>waiting.....</p>
     </div>
     <img src="biblemap/image/hideBible.png" id="footerToggle" name="img" style="position:absolute; width:50px; height:12px;" onclick="toggleScrMap()">
@@ -258,6 +290,18 @@
 
 <script>
     setDebug( false );
+
+    /*
+     $(document).ready(function(){
+     $(document).bind("contextmenu", function(event){event.preventDefault();});
+     //마우스 우클릭 방지
+     $(document).bind("selectstart", function(event){event.preventDefault();});
+     //더블클릭으로 셀선택 방지
+     $(document).bind("dragstart", function(event){event.preventDefault();});
+     //드래그 방지
+     });
+     */
+
 
     function createTrajectory() {
 
@@ -414,6 +458,7 @@
 
             $("#footer").show();
             footer.style.top = mapHeight + 5 + 'px';
+            // footer.style.top = mapHeight +'px';
             footer.style.bottom = 0 + 'px';
 
             var footerTop = footer.getBoundingClientRect().top;
@@ -558,14 +603,15 @@
     }
 
 
-
     function currentHistoryAdminString( newValue ){
-        var strArray = [ "약속의 땅 가나안",  "출애굽 후 12지파", "사사 시대(BC 12C)", "사울왕 시대 이스라엘", "다윗왕 시대 이스라엘", "북이스라엘과 남유다", "현재의 국가" ];
+        var strObj =  getHistoryAdminStringObj( newValue );
 
-        document.getElementById("range").innerHTML = strArray[ newValue ];
+        document.getElementById("range").innerHTML = strObj.title;
+        document.getElementById("historyAdminExplain").innerHTML = strObj.text;
     }
 
     function changeHistoryAdmin( newValue ){
+        adjustScrDiv.setIsFullScr("true");
         currentHistoryAdminString( newValue );
 
         for (idx in layerManager.layerContainer.layers) {
@@ -924,7 +970,7 @@
             pos.zoomIn = 14;
         }
 
-     //    requestPoiContentAndShow( pos, word, dvPopupContent, popupOverlay );
+        //    requestPoiContentAndShow( pos, word, dvPopupContent, popupOverlay );
         alert( "requestPoiContentsAndShow  need to repair!!!" );
         var curZoom = bibleMap.getView().getZoom();
 
@@ -1138,10 +1184,10 @@
                 if (resObj.length != "undefined") {    // 배열로 받아올 경우
                     for ( var idx in resObj) {
                         if( searchParam.type == "Word" ){
-                           // if( examinRightWordinText( searchParam.option.content.$regex, resObj[idx].content ) == true ){
-                                var searchWord = removeSpaceInWord( searchParam.option.content.$regex );
-                                var strConvText = makeStrongInText( layerManager, searchWord, resObj[idx] );
-                                appendReceiveMsg( resObj[idx], strConvText );
+                            // if( examinRightWordinText( searchParam.option.content.$regex, resObj[idx].content ) == true ){
+                            var searchWord = removeSpaceInWord( searchParam.option.content.$regex );
+                            var strConvText = makeStrongInText( layerManager, searchWord, resObj[idx] );
+                            appendReceiveMsg( resObj[idx], strConvText );
                             // }
                         }else {
                             var strConvText = "";
@@ -1152,10 +1198,10 @@
                     }
                 } else {        // 수신받은 데이터가 배열이 아니고 하나만 있을 경우
                     if( searchParam.type == "Word" ){
-                       // if( examinRightWordinText( searchParam.option.content.$regex, resObj.content ) == true ) {
-                            var searchWord = removeSpaceInWord( searchParam.option.content.$regex );
-                            var strConvText = makeStrongInText( layerManager, searchWord, resObj );
-                            appendReceiveMsg( resObj, strConvText );
+                        // if( examinRightWordinText( searchParam.option.content.$regex, resObj.content ) == true ) {
+                        var searchWord = removeSpaceInWord( searchParam.option.content.$regex );
+                        var strConvText = makeStrongInText( layerManager, searchWord, resObj );
+                        appendReceiveMsg( resObj, strConvText );
                         // }
                     } else {
                         // var strConvText = makeStrongWordOfLocation( layerManager, resObj.content );
