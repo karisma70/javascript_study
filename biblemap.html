@@ -264,14 +264,14 @@
             <span style="color: rgb(255, 255, 255); font-size:11px;" onclick="showLicenseNotice()" >   Notice</span>
         </div>
 
-<!--
+        <!--
         <br>
         &nbsp&nbsp<input id="createTrajectory" type ="button" value="생성" onclick="createTrajectory()" >
         &nbsp&nbsp<input id="delTrajectory" type ="button" value="삭제" onclick="delTrajectory()" >
         <br>
         <div id = "zoomLevel">ZoomLevel</div>
         <div id = "mousePosition">MousePos</div>
--->
+        -->
     </div>
 
     <div id="map" class="mapview" style="position:absolute;">
@@ -610,6 +610,7 @@
         document.getElementById("historyAdminExplain").innerHTML = strObj.text;
     }
 
+
     function eventHistoryAdmin( newVal ){
         adjustScrDiv.setIsFullScr("true");
         changeHistoryAdmin( newVal );
@@ -796,16 +797,9 @@
                 dvPopupContent.innerHTML = posName;
                 popupOverlay.setPosition(bibleMapManager.getClickecPos());
 
-                var poiArray = layerManager.getPoiObjArrayFromDictionary( posName );
-                if( poiArray.length < 2){
-                    var tempPoiObj = poiArray[ 0];
-                    requestPoiContentAndShow( tempPoiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
-                }
-/*
                 requestBibleByWord(posName, function () {
                     adjustScrDiv.setIsFullScr("false");
                 });
-                */
             }
         } else {        //  poi Layer를 선택했을 경우
             if (id < 5) {          // 전세계 폴리곤 경계라면...
