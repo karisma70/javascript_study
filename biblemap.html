@@ -32,6 +32,9 @@
     <script src="biblemap//src/jquery.collapse.js"></script>
     <script src="biblemap//src/jquery.collapse_storage.js"></script>
     <script src="biblemap//src/jquery.collapse_cookie_storage.js"></script>
+    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/style.css">
+    <!-- <script type="text/javascript" src="biblemap/js/jquery-1.9.1.min.js"></script> -->
+    <script type="text/javascript" src="biblemap/js/jquery.autocomplete.min.js"></script>
     <style type ="text/css">
 
         img {-ms-interpolation-mode:bicubic;}
@@ -213,7 +216,8 @@
                     <span style="margin-left: 10px; font-size:12px;">단어</span>&nbsp;<input type="text" id ="bibleWord" size="12" style="font-size:12px;" value="바울">
                     <input type="button" class="button" value="검색" onclick="searchBibleWord()">
                     <div style="height: 2px"></div>
-                    <span style="margin-left: 10px; font-size:12px;">지명</span>&nbsp;<input type="text" id ="biblePlace" size="12" style="font-size:12px;" value="예루살렘">
+                    <span style="margin-left: 10px; font-size:12px;">지명</span>
+                    <input type="text" name="currency" class="biginput" id="biblePlace" size="12" style="font-size:12px;" value="예루살렘">
                     <input type="button" class="button" value="검색" onclick="searchBiblePlace()">
                     <br>
                     <div style="height: 2px"></div>
@@ -272,6 +276,9 @@
         <div id = "zoomLevel">ZoomLevel</div>
         <div id = "mousePosition">MousePos</div>
         -->
+        <div>
+        <!-- <input type="text" name="currency" class="biginput" id="autocomplete" size="12" style="font-size:12px;"> -->
+        </div>
     </div>
 
     <div id="map" class="mapview" style="position:absolute;">
@@ -289,18 +296,29 @@
 </div>
 
 <script>
-    setDebug( false );
+    setDebug( true );
 
-    /*
-     $(document).ready(function(){
-     $(document).bind("contextmenu", function(event){event.preventDefault();});
-     //마우스 우클릭 방지
-     $(document).bind("selectstart", function(event){event.preventDefault();});
-     //더블클릭으로 셀선택 방지
-     $(document).bind("dragstart", function(event){event.preventDefault();});
-     //드래그 방지
-     });
-     */
+    function initTextAutoComplete(){
+        var poiWords = layerManager.getPoiWords();
+        var currencies = [];
+
+        for( var idx in poiWords){
+            currencies.push( { value: poiWords[idx].text });
+        }
+
+        $('#biblePlace').autocomplete({
+            lookup: currencies,
+            onSelect: function (suggestion) {
+                // var thehtml = '<strong>Currency Name:</strong> ' + suggestion.value + ' <br> <strong>Symbol:</strong> ' + suggestion.data;
+                // $('#outputcontent').html(thehtml);
+
+                var dvBiblePlace = document.getElementById("biblePlace");
+                dvBiblePlace.value = suggestion.value;
+                searchBiblePlace();
+                console.log( suggestion.value );
+            }
+        });
+    }
 
 
     function createTrajectory() {
@@ -346,9 +364,12 @@
     });
 
     var dvBiblePlace = document.getElementById("biblePlace");
+
+
     dvBiblePlace.addEventListener("change", function(e){
         searchBiblePlace();
     });
+
 
     var dvPopupContainer = document.getElementById('popup');
     dvPopupContainer.setAttribute("id", "popupContainer" );
@@ -694,6 +715,7 @@
                 changeHistoryAdmin( historyAdmin.value );
                 // sortPoiWordsArray( layerManager.getLayerContainer() );
                 layerManager.sortPoiWords();
+                initTextAutoComplete();
             } );
         }
     };
@@ -797,9 +819,16 @@
                 dvPopupContent.innerHTML = posName;
                 popupOverlay.setPosition(bibleMapManager.getClickecPos());
 
+                /*
                 requestBibleByWord(posName, function () {
                     adjustScrDiv.setIsFullScr("false");
                 });
+                */
+                var poiArray = layerManager.getPoiObjArrayFromDictionary( posName );
+                if( poiArray.length < 2){
+                    var tempPoiObj = poiArray[ 0];
+                    requestPoiContentAndShow( tempPoiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+                }
             }
         } else {        //  poi Layer를 선택했을 경우
             if (id < 5) {          // 전세계 폴리곤 경계라면...
@@ -846,8 +875,8 @@
         adjustScrDiv.setIsFullScr("false");
 
         var searchWord = dvBibleWord.value;
-        searchWord = " "+removeSpaceInWord( searchWord );
-        // placeWord = placeWord.replace(/^\s*|\s*$/g, ''); // 좌우 공백 제거
+        // searchWord = " "+removeSpaceInWord( searchWord );
+        searchWord = removeSpaceInWord( searchWord );
 
         var searchParam = {
             type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
@@ -1012,7 +1041,8 @@
 
         // dvBiblePlace.value =  word;
 
-        var searchWord = " " + word;
+       // var searchWord = " " + word;
+        var searchWord = word;
         searchParam.option.content= { $regex : searchWord };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
         reqeustAndShowContents( searchParam, competeCallback );
     }
@@ -1032,7 +1062,8 @@
 
         searchParam.option.title = { $in: poiObj.rangeArray };
 
-        var searchPlace = " " + poiObj.biblePlace;
+        // var searchPlace = " " + poiObj.biblePlace;
+        var searchPlace = poiObj.biblePlace;
         searchParam.option.content= { $regex : searchPlace };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
 
         // searchParam.option = {  title : {  $in: [ "창세기", "여호수아", "사사기"  ] }, content : { $regex:"숙곳" }};
