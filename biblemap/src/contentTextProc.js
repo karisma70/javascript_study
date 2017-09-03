@@ -89,8 +89,18 @@ function makeStrongWordInText( LayerManager, strWord, bibleTitle, bibleText, col
         return bibleText;
     }
 
+    // debug
+    if( strWord == "십"){
+        ConsoleLog( "십...");
+        if( bibleText.indexOf("삼십") > 0 )
+            ConsoleLog( ".......");
+    }
 
-    if( strPos > 0 && bibleText.substring(strPos-1, strPos) != "<" && bibleText.substring(strPos-1, strPos) != " " ){       // 이미 발견된 단어이므로 스킵
+
+   // if( strPos > 0 && bibleText.substring(strPos-1, strPos) != "<" && bibleText.substring(strPos-1, strPos) != " " ){       // 이미 발견된 단어이므로 스킵
+    if( strPos > 0 && bibleText.substring(strPos-1, strPos) != " " )
+        return bibleText;
+    if( strPos > 0 &&  ( bibleText.substring(strPos-1, strPos) == ">" || bibleText.substring( strPos + strWord.length, strPos + strWord.length + 1 ) == "<") ) {       // 이미 발견된 단어이므로 스킵
         return bibleText;
     }
 
@@ -107,10 +117,6 @@ function makeStrongWordInText( LayerManager, strWord, bibleTitle, bibleText, col
 
     var strStrong = bibleText.substring(0, strPos);
 
-    // debug
-    if( strWord == "므낫세"){
-        ConsoleLog( "므낫세...");
-    }
 
     var poiObj = LayerManager.findPoiObjByBibleTitleAndWord( bibleTitle, strWord );
     if( poiObj ) {
@@ -177,6 +183,12 @@ function makeStrongInText( LayerManager, searchWord, recvObj ) {
         }else{
             color = "#0D63DB";  // 군청색, //  텍스트 내에 지명이 있을때 군청색
         }
+
+        // for debug
+        if( placeName == "베들레헴"){
+            ConsoleLog( "====>" + placeName );
+        }
+
         bibleText = makeStrongWordInText( LayerManager, placeName, bibleTitle, bibleText, color, true );
     }
 

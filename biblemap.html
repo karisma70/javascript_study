@@ -18,14 +18,14 @@
     <script type="text/javascript" src="biblemap/src/GMDFileReader.js?version=20170813"></script>
     <script type="text/javascript" src="biblemap/src/propertyDB.js?version=20170813"></script>
 
-    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20170828"></script>
+    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20170902"></script>
     <script type="text/javascript" src="biblemap/src/routePlay.js?version=20170813"></script>
     <script type="text/javascript" src="biblemap/src/trajectoryData.js?version=20170828"></script>
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170829"></script>
     <script type="text/javascript" src="biblemap/openLayers_v4.1.1/ol.js"></script>
     <script type="text/javascript" src="biblemap/src/distanceMeasureControl.js?version=20170820"></script>
-    <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170813"></script>
-    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20170820"></script>
+    <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170831"></script>
+    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20170901"></script>
     <script>document.documentElement.className = "js";</script>
     <script src="biblemap//vendor/jquery-1.8.1.js"></script>
     <script src="biblemap//vendor/json2.js"></script>
@@ -213,11 +213,13 @@
                 </div>
                 <div name="searchWord" style="height:80px;">
                     <!-- <img src="image/word_search2.png" style="width:20px; height:22px; vertical-align:middle" ><input type="text" id ="bibleWord" size="12" style="font-size:12px;" value="바울"><input type="button" value="검색" style="font-size:12px;" onclick="searchBibleWord()"> -->
-                    <span style="margin-left: 10px; font-size:12px;">단어</span>&nbsp;<input type="text" id ="bibleWord" size="12" style="font-size:12px;" value="바울">
+                    <span style="margin-left: 10px; font-size:12px;">단어</span>&nbsp;<input type="text" id ="bibleWord" size="12" style="font-size:12px;" value="바울" onkeypress="if(event.keyCode==13) searchBibleWord();">
                     <input type="button" class="button" value="검색" onclick="searchBibleWord()">
                     <div style="height: 2px"></div>
-                    <span style="margin-left: 10px; font-size:12px;">지명</span>
-                    <input type="text" name="currency" class="biginput" id="biblePlace" size="12" style="font-size:12px;" value="예루살렘">
+                    <span style="margin-left: 10px; font-size:12px;">지명</span>&nbsp;
+                    <!-- <input type="text" name="currency" class="biginput" id="biblePlace" size="12" style="font-size:12px;" value="예루살렘" onkeypress="if(event.keyCode==13)javascript:searchBiblePlac();" onKeyDown="searchBiblePlace()"> -->
+                    <!-- <input type="text" name="currency" class="biginput" id="biblePlace" size="12" style="font-size:12px;" value="예루살렘" onKeyDown="searchBiblePlace()"> -->
+                    <input type="text" name="currency" class="biginput" id="biblePlace" size="12" style="font-size:12px;" value="예루살렘" onkeypress="if(event.keyCode==13) searchBiblePlace();">
                     <input type="button" class="button" value="검색" onclick="searchBiblePlace()">
                     <br>
                     <div style="height: 2px"></div>
@@ -296,15 +298,46 @@
 </div>
 
 <script>
-    setDebug( true );
+    setDebug( false );
+
+    IsExistWord = function( array, word ) {
+        for (var id in array ) {
+            var curObj = array[id];
+            if( curObj.value == word) {
+                return true;
+            }
+        }
+        return false;
+    };
 
     function initTextAutoComplete(){
-        var poiWords = layerManager.getPoiWords();
+
+        /*
+        var poiObjs = layerManager.getPoiObjects();
         var currencies = [];
 
-        for( var idx in poiWords){
-            currencies.push( { value: poiWords[idx].text });
+        for( var idx in poiObjs){
+            var poi = poiObjs[idx];
+
+            if( IsExistWord( currencies,  poi.biblePlace ) == false)
+                currencies.push( { value: poi.biblePlace });
         }
+        */
+
+
+
+        var currencies = [];
+        var poiDic = layerManager.getPoiDictionaryObj();
+
+        for( prop in poiDic ){
+            if( poiDic.hasOwnProperty(prop) && typeof poiDic[prop] === "object" ){
+                if( IsExistWord( currencies,  prop ) == false) {
+                    currencies.push({value: prop});
+                }
+            }
+        }
+
+
 
         $('#biblePlace').autocomplete({
             lookup: currencies,
@@ -359,16 +392,19 @@
     } );
 
     var dvBibleWord = document.getElementById("bibleWord");
+    /*
     dvBibleWord.addEventListener("change", function(e){
         searchBibleWord();
     });
+    */
 
     var dvBiblePlace = document.getElementById("biblePlace");
 
-
+/*
     dvBiblePlace.addEventListener("change", function(e){
         searchBiblePlace();
     });
+    */
 
 
     var dvPopupContainer = document.getElementById('popup');
@@ -710,6 +746,7 @@
 
         for( idx in bibleMapLayers ){
             var layer = bibleMapLayers[idx];
+
             new ShapeFileDownload( bibleMap, layer.url, layer.order, layer.style, layerManager, function( ){
                 searchBibleChapter();
                 changeHistoryAdmin( historyAdmin.value );
@@ -1221,11 +1258,11 @@
                 if (resObj.length != "undefined") {    // 배열로 받아올 경우
                     for ( var idx in resObj) {
                         if( searchParam.type == "Word" ){
-                            // if( examinRightWordinText( searchParam.option.content.$regex, resObj[idx].content ) == true ){
-                            var searchWord = removeSpaceInWord( searchParam.option.content.$regex );
-                            var strConvText = makeStrongInText( layerManager, searchWord, resObj[idx] );
-                            appendReceiveMsg( resObj[idx], strConvText );
-                            // }
+                            if( examinRightWordinText( searchParam.option.content.$regex, resObj[idx].content ) == true ){
+                                var searchWord = removeSpaceInWord( searchParam.option.content.$regex );
+                                var strConvText = makeStrongInText( layerManager, searchWord, resObj[idx] );
+                                appendReceiveMsg( resObj[idx], strConvText );
+                            }
                         }else {
                             var strConvText = "";
                             strConvText = makeStrongInText( layerManager, dvBibleWord.value, resObj[idx] );
@@ -1235,11 +1272,11 @@
                     }
                 } else {        // 수신받은 데이터가 배열이 아니고 하나만 있을 경우
                     if( searchParam.type == "Word" ){
-                        // if( examinRightWordinText( searchParam.option.content.$regex, resObj.content ) == true ) {
-                        var searchWord = removeSpaceInWord( searchParam.option.content.$regex );
-                        var strConvText = makeStrongInText( layerManager, searchWord, resObj );
-                        appendReceiveMsg( resObj, strConvText );
-                        // }
+                        if( examinRightWordinText( searchParam.option.content.$regex, resObj.content ) == true ) {
+                            var searchWord = removeSpaceInWord( searchParam.option.content.$regex );
+                            var strConvText = makeStrongInText( layerManager, searchWord, resObj );
+                            appendReceiveMsg( resObj, strConvText );
+                        }
                     } else {
                         // var strConvText = makeStrongWordOfLocation( layerManager, resObj.content );
                         var strConvText = makeStrongInText( layerManager, "", resObj );

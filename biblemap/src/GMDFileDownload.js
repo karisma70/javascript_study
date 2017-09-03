@@ -129,7 +129,10 @@ function getStringFromAttrs( attrs, field ) {
 }
 
 
-function ShapeFileDownload( map, url, layerId, style, paramLayerManager, wholeCompleteCallback ) {
+function ShapeFileDownload( map, shpUrl, layerId, style, paramLayerManager, wholeCompleteCallback ) {
+
+    var url = "biblemap/downloadmap/" + shpUrl;
+
     var theLayer = this;
     var shpURL = url+'.shp';
     var dbfURL = url+'.dbf';

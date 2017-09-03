@@ -8,7 +8,7 @@
 
  var bibleMapLayers = [
 
-     { url : 'biblemap/mapdata/110m-admin-0-countries', order: 1, style: {
+     { url : '110m-admin-0-countries', order: 1, style: {
         historyShow : 'false',
         visibleRange : { max : 16, min : 1 },
         fillColor : 'rgba( 255, 255, 255, 0.001)',
@@ -19,7 +19,7 @@
 
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-     { url : 'biblemap/mapdata/history/History_promise_canaan2', order: 5, style: {
+     { url : 'history/History_promise_canaan2', order: 5, style: {
          historyShow : 'false',
          visibleRange : { max : 16, min : 6 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
@@ -27,7 +27,7 @@
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
      },
 
-     { url : 'biblemap/mapdata/history/History_12Sect', order: 6, style: {
+     { url : 'history/History_12Sect', order: 6, style: {
          historyShow : 'false',
          visibleRange : { max : 16, min : 7 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
@@ -36,7 +36,7 @@
      },
 
 
-     { url : 'biblemap/mapdata/history/History_BC12', order: 7, style: {
+     { url : 'history/History_BC12', order: 7, style: {
          historyShow : 'false',
          visibleRange : { max : 16, min : 6 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
@@ -44,7 +44,7 @@
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
      },
 
-     { url : 'biblemap/mapdata/history/History_saul_king', order: 8, style: {
+     { url : 'history/History_saul_king', order: 8, style: {
          historyShow : 'false',
          visibleRange : { max : 16, min : 6 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
@@ -52,7 +52,7 @@
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
      },
 
-     { url : 'biblemap/mapdata/history/History_david_king', order: 9, style: {
+     { url : 'history/History_david_king', order: 9, style: {
          historyShow : 'false',
          visibleRange : { max : 16, min : 6 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
@@ -60,7 +60,7 @@
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
      },
 
-     { url : 'biblemap/mapdata/history/History_divideIsrael', order: 10, style: {
+     { url : 'history/History_divideIsrael', order: 10, style: {
          historyShow : 'false',
          visibleRange : { max : 16, min : 7 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
@@ -69,7 +69,7 @@
      },
 
 
-     { url: 'biblemap/mapdata/history/History_12Sect_poi',  order: 20, style: {
+     { url: 'history/History_12Sect_poi',  order: 20, style: {
          visibleRange : { max : 16 , min : 8 },
          textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#5F0291', outlineWidth : 4  }}
      },
@@ -78,35 +78,35 @@
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-         { url: 'biblemap/mapdata/level_11_poi',  order: 21, style: {
+         { url: 'level_11_poi',  order: 21, style: {
              visibleRange : { max : 16 , min : 11 },
              textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "black", outlineWidth : 3  }}
          },
 
 
-         { url: 'biblemap/mapdata/level_10_poi',  order: 22, style: {
+         { url: 'level_10_poi',  order: 22, style: {
              visibleRange : { max : 16 , min : 10 },
              textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "#313132", outlineWidth : 3  } }
          },
 
 
-         { url : 'biblemap/mapdata/level_9_poi',  order: 23, style: {
+         { url : 'level_9_poi',  order: 23, style: {
              visibleRange : { max : 16 , min : 9 },
              textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "#49494A", outlineWidth : 3  } }
          },
 
-         { url : 'biblemap/mapdata/level_7_poi',  order: 24, style: {
+         { url : 'level_7_poi',  order: 24, style: {
              visibleRange : { max : 16 , min : 7 },
              textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "#636364", outlineWidth : 3  } }
          },
 
-         { url: 'biblemap/mapdata/level_6_poi',  order: 25, style: {
+         { url: 'level_6_poi',  order: 25, style: {
              visibleRange : { max : 16 , min : 6 },
              textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#033078', outlineWidth : 4  }}
          },
 
          {
-           url: 'biblemap/mapdata/level_4_poi',  order: 26, style: {
+           url: 'level_4_poi',  order: 26, style: {
              visibleRange : { max : 16 , min : 4 },
              textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#105602', outlineWidth : 4  }}
          }
@@ -424,6 +424,16 @@ LayerManager.prototype.getPoiObjectArray = function(){
  LayerManager.prototype.getPoiWords = function(){
      return this.layerContainer.poiWords;
  };
+
+ LayerManager.prototype.getPoiDictionaryObj = function(){
+     return this.layerContainer.poiDictionary;
+ };
+
+LayerManager.prototype.getPoiObjects = function(){
+    return this.layerContainer.poiDicObjects;
+};
+
+
 
 
  function createOverlay( divID ){    // container
