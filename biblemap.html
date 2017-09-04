@@ -33,6 +33,7 @@
     <script src="biblemap//src/jquery.collapse_storage.js"></script>
     <script src="biblemap//src/jquery.collapse_cookie_storage.js"></script>
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/style.css">
+    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/popup.css">
     <!-- <script type="text/javascript" src="biblemap/js/jquery-1.9.1.min.js"></script> -->
     <script type="text/javascript" src="biblemap/js/jquery.autocomplete.min.js"></script>
     <style type ="text/css">
@@ -69,6 +70,13 @@
             background-color: #fcf8e3;
             border:1px solid grey;
         }
+
+        #poiTextContent {
+            letter-spacing:0px;
+            line-height: 1.8em;
+            font-family: '굴림체';
+        }
+
         #footer{
             position: absolute;
             /* top: 65%;
@@ -297,6 +305,23 @@
     <div id="popup-content" class="ol-popup-content" style="text-align:center; font-size: 13px;"></div>
 </div>
 
+<div id="customPopup" class="pop-layer" style = "width : 550px; height: 580px;" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
+    <div class="pop-container" >
+        <div>
+            <span id ="poiTitle" style="font-size:12pt; text-align:center;">
+           </span>
+        </div>
+        <div style = "overflow-y:scroll; width : 510px; height: 460px;">
+            <span id ="poiTextContent" style="font-size:10pt; text-align:center;">
+           </span>
+            <!--// content-->
+        </div>
+        <div class="btn-r">
+            <a href="#" class="btn-layerClose">Close</a>
+        </div>
+    </div>
+</div>
+
 <script>
     setDebug( false );
 
@@ -406,6 +431,7 @@
     });
     */
 
+    $( '#customPopup' ).css( "z-index", 6000 );
 
     var dvPopupContainer = document.getElementById('popup');
     dvPopupContainer.setAttribute("id", "popupContainer" );
