@@ -18,7 +18,7 @@
     <script type="text/javascript" src="biblemap/src/GMDFileReader.js?version=20170813"></script>
     <script type="text/javascript" src="biblemap/src/propertyDB.js?version=20170813"></script>
 
-    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20170902"></script>
+    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20170903"></script>
     <script type="text/javascript" src="biblemap/src/routePlay.js?version=20170813"></script>
     <script type="text/javascript" src="biblemap/src/trajectoryData.js?version=20170828"></script>
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170829"></script>
@@ -26,16 +26,17 @@
     <script type="text/javascript" src="biblemap/src/distanceMeasureControl.js?version=20170820"></script>
     <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170831"></script>
     <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20170901"></script>
-    <script>document.documentElement.className = "js";</script>
-    <script src="biblemap//vendor/jquery-1.8.1.js"></script>
-    <script src="biblemap//vendor/json2.js"></script>
-    <script src="biblemap//src/jquery.collapse.js"></script>
-    <script src="biblemap//src/jquery.collapse_storage.js"></script>
-    <script src="biblemap//src/jquery.collapse_cookie_storage.js"></script>
+    <script type="text/javascript" src="biblemap/vendor/jquery-1.8.1.js"></script>
+    <script type="text/javascript" src="biblemap/vendor/json2.js"></script>
+    <script type="text/javascript" src="biblemap/src/jquery.collapse.js"></script>
+    <script type="text/javascript" src="biblemap/src/jquery.collapse_storage.js"></script>
+    <script type="text/javascript" src="biblemap/src/jquery.collapse_cookie_storage.js"></script>
+    <link rel="stylesheet" type="text/css" media="all" href="http://fonts.googleapis.com/earlyaccess/nanumgothic.css">
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/style.css">
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/popup.css">
     <!-- <script type="text/javascript" src="biblemap/js/jquery-1.9.1.min.js"></script> -->
     <script type="text/javascript" src="biblemap/js/jquery.autocomplete.min.js"></script>
+
     <style type ="text/css">
 
         img {-ms-interpolation-mode:bicubic;}
@@ -74,7 +75,7 @@
         #poiTextContent {
             letter-spacing:0px;
             line-height: 1.8em;
-            font-family: '굴림체';
+            font-family: 'Nanum Gothic', serif;
         }
 
         #footer{
@@ -239,7 +240,7 @@
                 <br>
             </div>
             <h3>시대별 경계 영역</h3>
-            <div class="content" style ="background-color:#FFFFFF; height: 250px">
+            <div class="content" style ="background-color:#FFFFFF; height: 280px">
                 <span id ="range" style="margin-left: 20px; font-size:12px; vertical-align:middle;">현재의 국가</span>
                 <br>
                 <br>
@@ -249,6 +250,10 @@
                 </div>
                 <br>
                 <div id="historyAdminExplain" style ="overflow-y:scroll; margin-left: 0px; width : 170px; height: 150px; border: 1px solid #A7A4A4;" >
+                </div>
+                <div style="height:5px;"></div>
+                <div>
+                    <input type="image" src="biblemap/image/expand-text-icon.png" style="margin-left: 150px; width:20px; height:20px; vertical-align:middle" onclick="showHistoryAdmin()">
                 </div>
 
             </div>
@@ -270,9 +275,6 @@
 
         <br>
 
-        <!--  <div id="horizon-line" style="height: 50px; backgound-image:url('biblemap/image/horizon-line.png'); background-repeat:repeat-y; position: absolute; top:450px;">text</div> -->
-
-        <!-- <div style="height: 20px; background: url(biblemap/image/horizon-line.png);"></div> -->
         <div id ="dummy" class = "dummy" style="position: absolute; top:56px;"></div>
         <div id ="licenseNotice" style="position:absolute; left: 0px; top:0px; height: 16px; width:200px; background-color:rgb(66, 133, 244 );" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <span style="color: rgb(255, 255, 255); font-size:11px;" onclick="showLicenseNotice()" >   Notice</span>
@@ -305,16 +307,16 @@
     <div id="popup-content" class="ol-popup-content" style="text-align:center; font-size: 13px;"></div>
 </div>
 
+
 <div id="customPopup" class="pop-layer" style = "width : 550px; height: 580px;" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
     <div class="pop-container" >
         <div>
             <span id ="poiTitle" style="font-size:12pt; text-align:center;">
            </span>
         </div>
-        <div style = "overflow-y:scroll; width : 510px; height: 460px;">
-            <span id ="poiTextContent" style="font-size:10pt; text-align:center;">
+        <div id ="contentDiv" style = "overflow-y:scroll; width : 510px; height: 460px;">
+            <span id ="poiTextContent" style="font-size:11pt; text-align:center;">
            </span>
-            <!--// content-->
         </div>
         <div class="btn-r">
             <a href="#" class="btn-layerClose">Close</a>
@@ -322,8 +324,9 @@
     </div>
 </div>
 
+
 <script>
-    setDebug( false );
+    setDebug( true );
 
     IsExistWord = function( array, word ) {
         for (var id in array ) {
@@ -697,6 +700,14 @@
     function eventHistoryAdmin( newVal ){
         adjustScrDiv.setIsFullScr("true");
         changeHistoryAdmin( newVal );
+    }
+
+    function showHistoryAdmin( ){
+        var newVal = document.getElementById("historyAdmin").value;
+
+        var strObj =  getHistoryAdminStringObj( newVal );
+
+        showTextLayerPopup( strObj.title, strObj.text );
     }
 
     function changeHistoryAdmin( newValue ){

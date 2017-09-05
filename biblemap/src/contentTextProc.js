@@ -13,7 +13,11 @@ function getHistoryAdminStringObj( number ) {
         { title: "출애굽 후 12지파",
             text: "출애굽 이후 이스라엘 백성이 가나안 정착을 위해 요단 강을 건너기 전, 모세가 임종이 다가왔을때 요단 동편의 땅을 12지파 중에서 르우벤, 갓, 므낫세 세 지파에게 기업으로 주었다<br>\
             이는 그들이 요단 강 동편에 이르기까지 이들이 앞서서 전쟁에서 승리할 수 있었기 때문이었다 <br>\
-        이 세 지파를 제외한 나머지 9지파에 대한 기업분배는 모세가 죽고 난 후, 여호수아가 요단 강을 건너 가나안 땅의 원주민들과 전쟁하여 5년 후에 이루어졌다 " },
+	    이 세 지파를 제외한 나머지 9지파에 대한 기업분배는 모세가 죽고 난 후, 여호수아가 요단 강을 건너 가나안 땅의 원주민들과 전쟁하여 5년 후에 이루어진다<br>\
+	    인구와 병력이 가장 많았던 유다지파는 가장 넓은 영토를 분배받았고, 그 넓은 영토중에서 가운데 일부를  인원수가 가장 적은 시므온 지파에게 준다<br>\
+	    지도에서 보는 바와 같이 유다지파의 땅이 시므온 지파의 땅을 포함하고 있음을 볼 수 있다 <br>\
+	    다음으로 여호수아가 속한 에브라임 지파는 유다의 북쪽에 위치한 땅을 분배받고, 므낫세의 반지파가 요단강 기준 서쪽에 분배를 받고,  에브라임 지파가 중앙의 땅을 분배 받는다<br>\
+	    이렇게 11지파가 땅을 분배받는 동안 레위 지파는 땅을 분배받지 못하고 48개의 성읍에 흩어져서 이스라엘 백성들에게 하나님의 말씀과 율법을 지키도록 사명을 감당하게 된다<br>" },
 
         /* http://www.subkorea.com/bible/study/bibles/history/history05.html */
         { title: "사사 시대(BC 12C)",
@@ -75,6 +79,24 @@ function examinRightWordinText( strWord, strText ){
     return true;
 }
 
+function IsFindLocationWord( contentText, locationWord ){
+
+    if( locationWord == "시므온"){
+        ConsoleLog( ".....");
+    }
+
+    var addStr = [ " ", "와 ", "과 ", "으로 ", "이라 ", "에 ", "에서 " , "부터 ", "까지 ", "를 ", "을 ", "이 ", "로 ", "의 "  ];
+
+    for( var idx in addStr ){
+        var pos = contentText.indexOf( locationWord + addStr[idx] );
+        if( pos  > -1 ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 
 // 검색어이긴 하지만 지도 데이터에 없을때 보라색
 //  검색어이긴 하지만 지도 데이터에 있을때 군청색
@@ -89,15 +111,6 @@ function makeStrongWordInText( LayerManager, strWord, bibleTitle, bibleText, col
         return bibleText;
     }
 
-    // debug
-    if( strWord == "십"){
-        ConsoleLog( "십...");
-        if( bibleText.indexOf("삼십") > 0 )
-            ConsoleLog( ".......");
-    }
-
-
-   // if( strPos > 0 && bibleText.substring(strPos-1, strPos) != "<" && bibleText.substring(strPos-1, strPos) != " " ){       // 이미 발견된 단어이므로 스킵
     if( strPos > 0 && bibleText.substring(strPos-1, strPos) != " " )
         return bibleText;
     if( strPos > 0 &&  ( bibleText.substring(strPos-1, strPos) == ">" || bibleText.substring( strPos + strWord.length, strPos + strWord.length + 1 ) == "<") ) {       // 이미 발견된 단어이므로 스킵
@@ -117,12 +130,11 @@ function makeStrongWordInText( LayerManager, strWord, bibleTitle, bibleText, col
 
     var strStrong = bibleText.substring(0, strPos);
 
-
     var poiObj = LayerManager.findPoiObjByBibleTitleAndWord( bibleTitle, strWord );
     if( poiObj ) {
-        var posStart = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + poiObj.id + ')\" style=\"text-decoration:none; font-weight:bold; color:' + color + '\" >';
-        var posEnd = '</a>';
-        strStrong += posStart;
+            var posStart = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + poiObj.id + ')\" style=\"text-decoration:none; font-weight:bold; color:' + color + '\" >';
+            var posEnd = '</a>';
+            strStrong += posStart;
     }
     else{
         if( bIsPlaceName == false)
@@ -286,6 +298,8 @@ function showYoutubeOfPoi( poiObj, overlayObj, popupObj, recvPoiObj ){
 
 function layerPopup(el){
 
+    $('#contentDiv').scrollTop(0);
+
     var $el = $(el);		//레이어의 id를 $el 변수에 저장
     var isDim = $el.prev().hasClass('dimBg');	//dimmed 레이어를 감지하기 위한 boolean 변수
 
@@ -315,6 +329,9 @@ function layerPopup(el){
         $('.dim-layer').fadeOut();
         return false;
     });
+
+    $('#contentDiv').scrollTop(0);
+
 }
 
 
@@ -331,7 +348,7 @@ function requestPoiContentAndShow( poiObj, popup, overlay ) {
     var textRef = "<a href =\"javascript:showTextPoi()\"' >";
     var textIcon = "<img src=\"biblemap/image/text-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">";
 
-    var vertImage = '<div style=\"height: 14px; background: url(biblemap/image/horizon-line.png);\"></div>';
+    var lineImage = '<div style=\"height: 14px; background: url(biblemap/image/horizon-line.png);\"></div>';
 
     /*
     if( poiObj.title != "")o
@@ -361,7 +378,7 @@ function requestPoiContentAndShow( poiObj, popup, overlay ) {
             return;
         }
         var strLen = ( title.length * 12) + 35;
-        popup.innerHTML += vertImage;
+        popup.innerHTML += lineImage;
         popup.innerHTML += '<iframe id=\"contentFrame\" width=\"'+ strLen + '\" height=\"35\" frameborder = \"0\" sandbox=\"allow-scripts allow-same-origin\" src=\"about:blank\"></iframe>';
 
         var frame = document.getElementById("contentFrame");
@@ -396,7 +413,7 @@ function requestPoiContentAndShow( poiObj, popup, overlay ) {
         if( infoText!= "" ){
             popup.innerHTML += textRef + textIcon + "</a>";
         }
-        popup.innerHTML += vertImage;
+        popup.innerHTML += lineImage;
         if( poiObj.title != ""){
             popup.innerHTML += "<br>" + poiObj.title + "<br>";
         }
@@ -415,7 +432,7 @@ function requestPoiContentAndShow( poiObj, popup, overlay ) {
             popup.innerHTML += youtubeRef + youtubeIcon + "</a>";
         }
 
-        popup.innerHTML += vertImage;
+        popup.innerHTML += lineImage;
         if( poiObj.title != ""){
             popup.innerHTML += "<br>" + poiObj.title + "<br>";
         }
@@ -438,17 +455,39 @@ function requestPoiContentAndShow( poiObj, popup, overlay ) {
         var popupTitle = document.getElementById( 'poiTitle' );
         popupTitle.innerHTML = "";
         popupTitle.innerHTML += poiText;
-        popupTitle.innerHTML += vertImage;
+        popupTitle.innerHTML += lineImage;
 
         var popupContent = document.getElementById( 'poiTextContent' );
         popupContent.innerHTML = "";
         // popupContent.innerHTML += poiText;
-        // popupContent.innerHTML += vertImage + "<br>";
+        // popupContent.innerHTML += lineImage + "<br>";
         popupContent.innerHTML += '<br>' + infoText;
 
         layerPopup( '#customPopup' );
     };
 }
+
+
+function showTextLayerPopup( title, infoText ){
+
+    var lineImage = '<div style=\"height: 14px; background: url(biblemap/image/horizon-line.png);\"></div>';
+
+    var popupTitle = document.getElementById( 'poiTitle' );
+    popupTitle.innerHTML = "";
+    popupTitle.innerHTML += title;
+    popupTitle.innerHTML += lineImage;
+
+    var popupContent = document.getElementById( 'poiTextContent' );
+    popupContent.innerHTML = "";
+    // popupContent.innerHTML += poiText;
+    // popupContent.innerHTML += lineImage + "<br>";
+    popupContent.innerHTML += '<br>' + infoText;
+
+    layerPopup( '#customPopup' );
+
+}
+
+
 
 
 
