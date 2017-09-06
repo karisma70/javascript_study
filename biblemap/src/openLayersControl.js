@@ -451,13 +451,28 @@ LayerManager.prototype.getPoiObjects = function(){
 function flyTo( view, location, zoomIn, done) {
     var duration = 2000;
     var zoom = view.getZoom();
+    var center = view.getCenter();
     var parts = 2;
     var called = false;
+
+    var dist = getDistance( center[0], center[1], location[0], location[1] );
+    var adjustZoom = dist / 400000;
+    var topZoom = zoom - adjustZoom;
+
+    if( topZoom < 6 )
+        topZoom = 6;
+    if( topZoom > 10  )
+        topZoom = 10;
+
+    // if( topZoom > (zoom -1) )
+     //   topZoom = zoom -1;
+
+    ConsoleLog( "adjustZoom : " + adjustZoom + "topZoom : " + topZoom );
 
     // zoomIn += 1;
 
     if( zoomIn < 7 )
-         zoomIn = 7;
+        zoomIn = 7;
 
     function callback(complete) {
         --parts;
@@ -474,7 +489,7 @@ function flyTo( view, location, zoomIn, done) {
         duration: duration
     }, callback);
 
-    var topZoom = zoom - 1;
+    // var topZoom = zoom - 1;
     //if( topZoom < 8 )
     //    topZoom = 8;
 

@@ -15,7 +15,7 @@
     <script type="text/javascript" src="biblemap/src/common.js?version=20170813"></script>
     <script type="text/javascript" src="biblemap/lib/binaryajax.js?version=20170813"></script>
     <script type="text/javascript" src="biblemap/src/binarywrapper.js?version=20170813"></script>
-    <script type="text/javascript" src="biblemap/src/GMDFileReader.js?version=20170813"></script>
+    <script type="text/javascript" src="biblemap/src/GMDFileReader.js?version=20170831"></script>
     <script type="text/javascript" src="biblemap/src/propertyDB.js?version=20170813"></script>
 
     <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20170903"></script>
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="biblemap/openLayers_v4.1.1/ol.js"></script>
     <script type="text/javascript" src="biblemap/src/distanceMeasureControl.js?version=20170820"></script>
     <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170831"></script>
-    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20170901"></script>
+    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20170902"></script>
     <script type="text/javascript" src="biblemap/vendor/jquery-1.8.1.js"></script>
     <script type="text/javascript" src="biblemap/vendor/json2.js"></script>
     <script type="text/javascript" src="biblemap/src/jquery.collapse.js"></script>
@@ -280,7 +280,7 @@
             <span style="color: rgb(255, 255, 255); font-size:11px;" onclick="showLicenseNotice()" >   Notice</span>
         </div>
 
-        <!--
+<!--
         <br>
         &nbsp&nbsp<input id="createTrajectory" type ="button" value="생성" onclick="createTrajectory()" >
         &nbsp&nbsp<input id="delTrajectory" type ="button" value="삭제" onclick="delTrajectory()" >
@@ -288,6 +288,7 @@
         <div id = "zoomLevel">ZoomLevel</div>
         <div id = "mousePosition">MousePos</div>
         -->
+
         <div>
         <!-- <input type="text" name="currency" class="biginput" id="autocomplete" size="12" style="font-size:12px;"> -->
         </div>
@@ -326,7 +327,7 @@
 
 
 <script>
-    setDebug( true );
+    setDebug( false );
 
     IsExistWord = function( array, word ) {
         for (var id in array ) {
@@ -1054,13 +1055,19 @@
         var moveDistance = getDistance( center[0], center[1], poiObj.x, poiObj.y );
 
         if( moveDistance < extentLength ) {
+            ConsoleLog( "moveTo..... 1");
             if( curZoom > poiObj.zoomIn )
                 moveTo(view, [poiObj.x, poiObj.y], curZoom );
             else
                 moveTo(view, [poiObj.x, poiObj.y], poiObj.zoomIn);
         }
         else {
-            flyTo(view, [poiObj.x, poiObj.y], poiObj.zoomIn, function (complete) {
+            ConsoleLog( "flyTo.....1 ");
+            var zoomIn = poiObj.zoomIn;
+            if( zoomIn > 12 )
+                zoomIn = 12;
+            flyTo(view, [poiObj.x, poiObj.y], zoomIn, function (complete) {
+         //   flyTo(view, [poiObj.x, poiObj.y], poiObj.zoomIn-1, function (complete) {
                 if (complete == true) {
                 }
             });
@@ -1091,12 +1098,14 @@
         var moveDistance = getDistance( center[0], center[1], pos.x, pos.y );
 
         if( moveDistance < extentLength ) {
+            ConsoleLog( "moveTo..... ");
             if( curZoom > pos.zoomIn )
                 moveTo(view, [pos.x, pos.y], curZoom );
             else
                 moveTo(view, [pos.x, pos.y], pos.zoomIn);
         }
         else {
+            ConsoleLog( "flyTo..... ");
             flyTo(view, [pos.x, pos.y], pos.zoomIn, function (complete) {
                 if (complete == true) {
                 }

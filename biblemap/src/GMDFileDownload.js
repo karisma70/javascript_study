@@ -198,7 +198,11 @@ function ShapeFileDownload( map, shpUrl, layerId, style, paramLayerManager, whol
                     attrs.values["label"] = attrs.values["bible"];
                 }
 
-                var poiobj = createPoiObj( attrs, record, paramStyle.visibleRange.min );    //  bible, title, range 에 해당하는 필드로 poi 오브젝트를 생성한다
+                var moveLevel = ( paramStyle.visibleRange.min + paramStyle.visibleRange.max ) /2 ;
+                if( moveLevel > 12 )
+                    moveLevel = 12;
+
+                var poiobj = createPoiObj( attrs, record, moveLevel );    //  bible, title, range 에 해당하는 필드로 poi 오브젝트를 생성한다
                 poiobj = layerManager.insertPoiObj( poiobj );
                 var confirmPoi = layerManager.getPoiObjById( poiobj.id );
 
