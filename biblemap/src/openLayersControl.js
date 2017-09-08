@@ -21,7 +21,7 @@
 
      { url : 'history/History_promise_canaan2', order: 5, style: {
          historyShow : 'false',
-         visibleRange : { max : 16, min : 6 },
+         visibleRange : { max : 9, min : 6 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
          lineStroke : {  color: [255, 255, 255], width : 0, opacity: 0.01  },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
@@ -29,7 +29,7 @@
 
      { url : 'history/History_12Sect', order: 6, style: {
          historyShow : 'false',
-         visibleRange : { max : 16, min : 7 },
+         visibleRange : { max : 11, min : 7 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
          lineStroke : {  color: [255, 255, 255], width : 0, opacity: 0.01  },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
@@ -38,7 +38,7 @@
 
      { url : 'history/History_BC12', order: 7, style: {
          historyShow : 'false',
-         visibleRange : { max : 16, min : 6 },
+         visibleRange : { max : 9, min : 6 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
          lineStroke : {  color: [255, 255, 255], width : 0, opacity: 0.01  },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
@@ -46,7 +46,7 @@
 
      { url : 'history/History_saul_king', order: 8, style: {
          historyShow : 'false',
-         visibleRange : { max : 16, min : 6 },
+         visibleRange : { max : 10, min : 6 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
          lineStroke : {  color: [255, 255, 255], width : 0, opacity: 0.01  },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
@@ -54,7 +54,7 @@
 
      { url : 'history/History_david_king', order: 9, style: {
          historyShow : 'false',
-         visibleRange : { max : 16, min : 6 },
+         visibleRange : { max : 9, min : 6 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
          lineStroke : {  color: [255, 255, 255], width : 0, opacity: 0.01  },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
@@ -62,7 +62,7 @@
 
      { url : 'history/History_divideIsrael', order: 10, style: {
          historyShow : 'false',
-         visibleRange : { max : 16, min : 7 },
+         visibleRange : { max : 10, min : 7 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
          lineStroke : {  color: [255, 255, 255], width : 0, opacity: 0.01  },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
@@ -449,6 +449,7 @@ LayerManager.prototype.getPoiObjects = function(){
 
 
 function flyTo( view, location, zoomIn, done) {
+    zoomIn = Math.floor( zoomIn );
     var duration = 2000;
     var zoom = view.getZoom();
     var center = view.getCenter();
@@ -456,7 +457,14 @@ function flyTo( view, location, zoomIn, done) {
     var called = false;
 
     var dist = getDistance( center[0], center[1], location[0], location[1] );
+    duration = dist / 1000;
+    if( duration < 1200 )
+        duration = 1200;
+    if( duration > 2000 )
+        duration = 2000;
+
     var adjustZoom = dist / 400000;
+    adjustZoom = Math.ceil( adjustZoom );
     var topZoom = zoom - adjustZoom;
 
     if( topZoom < 6 )
@@ -467,12 +475,12 @@ function flyTo( view, location, zoomIn, done) {
     // if( topZoom > (zoom -1) )
      //   topZoom = zoom -1;
 
-    ConsoleLog( "adjustZoom : " + adjustZoom + "topZoom : " + topZoom );
+    ConsoleLog( "duration : " + duration + "adjustZoom : " + adjustZoom + "topZoom : " + topZoom );
 
     // zoomIn += 1;
 
-    if( zoomIn < 7 )
-        zoomIn = 7;
+    if( zoomIn < 8 )
+        zoomIn = 8;
 
     function callback(complete) {
         --parts;
@@ -484,14 +492,18 @@ function flyTo( view, location, zoomIn, done) {
             done(complete);
         }
     }
+
+
     view.animate({
         center: location,
         duration: duration
     }, callback);
 
+
     // var topZoom = zoom - 1;
     //if( topZoom < 8 )
     //    topZoom = 8;
+
 
     view.animate({
         //  zoom: zoom - 1,
@@ -502,11 +514,14 @@ function flyTo( view, location, zoomIn, done) {
         zoom : zoomIn,
         duration: duration / 2
     }, callback);
+
 }
 
 function moveTo( view, location, zoomIn, done ) {
       // if( zoomIn < 10 )
       //  zoomIn = 10;
+
+    zoomIn = Math.floor( zoomIn );
 
     var parts = 2;
     var called = false;
