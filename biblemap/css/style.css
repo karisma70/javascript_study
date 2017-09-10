@@ -52,14 +52,15 @@ body {
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; }
 ol, ul { list-style: none; }
 
-input, textarea { 
+input, textarea {
+    font-family: 'Nanum Gothic', serif;
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  outline: none; 
+  outline: none;
 }
 
 blockquote, q { quotes: none; }

@@ -198,7 +198,9 @@ function ShapeFileDownload( map, shpUrl, layerId, style, paramLayerManager, whol
                     attrs.values["label"] = attrs.values["bible"];
                 }
 
-                var moveLevel = ( paramStyle.visibleRange.min + paramStyle.visibleRange.max ) /2 ;
+                // var moveLevel = ( paramStyle.visibleRange.min + paramStyle.visibleRange.max ) /2 ;
+                // moveLevel = Math.floor(moveLevel) -2;
+                var moveLevel = paramStyle.visibleRange.min +1;
                 if( moveLevel > 12 )
                     moveLevel = 12;
 

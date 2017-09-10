@@ -25,8 +25,8 @@
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170829"></script>
     <script type="text/javascript" src="biblemap/openLayers_v4.1.1/ol.js"></script>
     <script type="text/javascript" src="biblemap/src/distanceMeasureControl.js?version=20170820"></script>
-    <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170831"></script>
-    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20170905"></script>
+    <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170901"></script>
+    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20170906"></script>
     <script type="text/javascript" src="biblemap/vendor/jquery-1.8.1.js"></script>
     <script type="text/javascript" src="biblemap/vendor/json2.js"></script>
     <script type="text/javascript" src="biblemap/src/jquery.collapse.js"></script>
@@ -60,8 +60,11 @@
             height: 100%;
         }
         #sidebar{
+            /* height: 100%; */
             width: 200px;
             float:left;
+            border:1px solid grey;
+            border-color: rgb( 210, 210, 210);
         }
         .mapview{
             /*width : 100%;
@@ -83,7 +86,8 @@
             position: absolute;
             /* top: 65%;
             height: 34%; */
-            width: 100%;
+            left: 200px;
+            /* width: 100%; */
             background: white;
             font-family: '새굴림';
             /* border:1px solid black;  */
@@ -251,7 +255,7 @@
                 <br>
             </div>
             <h3>시대별 경계 영역</h3>
-            <div class="content" style ="background-color:#FFFFFF; height: 210px">
+            <div class="content" style ="background-color:#FFFFFF; height: 230px">
                 <span id ="range" style="margin-left: 20px; font-size:12px; vertical-align:middle;">현재의 국가</span>
                 <div style="height: 8px"></div>
                 <div name ="historyBar" style="margin-left:0px; width: 180px; height: 34px; border: 1px solid #A7A4A4;">
@@ -259,7 +263,7 @@
                     &nbsp;&nbsp;&nbsp;
                 </div>
                 <div style="height: 8px"></div>
-                <div id="historyAdminExplain" style ="overflow-y:scroll; margin-left: 0px; width : 180px; height: 100px; border: 1px solid #A7A4A4;" >
+                <div id="historyAdminExplain" style ="overflow-y:scroll; margin-left: 0px; width : 180px; height: 120px; border: 1px solid #A7A4A4;" >
                 </div>
                 <div style="height:5px;"></div>
                 <div>
@@ -269,14 +273,17 @@
             </div>
             <h3>주요 이동 경로</h3>
             <div class="content" style ="background-color:#FFFFFF">
-                <select id="movePath" style="margin-left: 10px; height:1.7em; font-size:12px;" ></select>
+                <select id="movePath" style="margin-left: 0px; width:180px; height:1.7em; font-size:12px;" ></select>
                 <br>
                 <div style="height: 2px"></div>
-                <input type="image" src="biblemap/image/trajectory_play.jpg?version=20170813" style="margin-left:120px; left: 50px; width:20px; height:20px; vertical-align:middle" onclick="pathAction()">
+                <input type="image" src="biblemap/image/trajectory_play.jpg?version=20170813" style="margin-left:134px; width:20px; height:20px; vertical-align:middle" onclick="pathAction()">
                 <!-- <input id="showMovingPath" type ="button" style="font-size:12px;" value="Play" onclick="pathAction()" > -->
                 <input type="image" src="biblemap/image/trajectory_stop.jpg?version=20170813" style="width:20px; height:20px; vertical-align:middle" onclick="pathHide()">
                 <!-- &nbsp;<input id="hideMovingPath" type ="button" style="font-size:12px;" value="Off" onclick="pathHide()" > -->
                 <br>
+                <div style="height:5px;"></div>
+                <div id="movePathAdminExplain" style ="overflow-y:scroll; margin-left: 0px; width : 180px; height: 120px; border: 1px solid #A7A4A4;" >
+                </div>
             </div>
         </div>  <!--  <div id="css3-animated-autoclose" data-collapse>  -->
 
@@ -285,31 +292,36 @@
 
         <br>
 
-        <div id ="dummy" class = "dummy" style="position: absolute; top:56px;"></div>
-        <div id ="licenseNotice" style="position:absolute; left: 0px; top:0px; height: 16px; width:200px; background-color:rgb(66, 133, 244 );" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <span style="color: rgb(255, 255, 255); font-size:11px;" onclick="showLicenseNotice()" >   Notice</span>
+        <div id ="dummy" class = "dummy" style="position: absolute; top:56px; width: 198px; height: 200px;">
+            <div id ="licenseNotice" style="left: 0px; top:0px; height: 17px; width:198px; background-color:rgb( 199, 219, 252  );" >
+                <!-- <span style="color: rgb(255, 255, 255); font-size:11px; horizontal-align: center;" onclick="showLicenseNotice()" >   Notice</span> -->
+                <a href="javascript:showLicenseNotice();"><img src="biblemap/image/L_biblemap_logo.png" style="position: absolute; top: 17px; width:198px; height:182px; vertical-align:middle" ></a>
+            </div>
         </div>
 
-        <!--
-                <br>
-                &nbsp&nbsp<input id="createTrajectory" type ="button" value="생성" onclick="createTrajectory()" >
-                &nbsp&nbsp<input id="delTrajectory" type ="button" value="삭제" onclick="delTrajectory()" >
-                <br>
-                <div id = "zoomLevel">ZoomLevel</div>
-                <div id = "mousePosition">MousePos</div>
-        -->
-
+<!--
         <div>
-            <!-- <input type="text" name="currency" class="biginput" id="autocomplete" size="12" style="font-size:12px;"> -->
+            <br>
+            &nbsp&nbsp<input id="createTrajectory" type ="button" value="생성" onclick="createTrajectory()" >
+            &nbsp&nbsp<input id="delTrajectory" type ="button" value="삭제" onclick="delTrajectory()" >
+            <br>
+            <div id = "zoomLevel">ZoomLevel</div>
+            <div id = "mousePosition">MousePos</div>
         </div>
-    </div>
+-->
+    </div>  <!-- Side bar div   -->
 
-    <div id="map" class="mapview" style="position:absolute;">
+    <div>
+        <!-- <input type="text" name="currency" class="biginput" id="autocomplete" size="12" style="font-size:12px;"> -->
     </div>
-    <div id ="footer" style="overflow-y:scroll; line-height: 180%; font-size:13px ; clear: both;">
-        <p>waiting.....</p>
-    </div>
-    <img src="biblemap/image/hideBible.png" id="footerToggle" name="img" style="position:absolute; width:50px; height:12px;" onclick="toggleScrMap()">
+</div>
+
+<div id="map" class="mapview" style="position:absolute;">
+</div>
+<div id ="footer" style="overflow-y:scroll; line-height: 180%; font-size:13px ; clear: both;">
+    <p>waiting.....</p>
+</div>
+<img src="biblemap/image/hideBible.png" id="footerToggle" name="img" style="position:absolute; width:50px; height:12px;" onclick="toggleScrMap()">
 </div>
 
 <div id="popup" class="ol-popup" style="font-size:1.1em;">
@@ -331,13 +343,13 @@
         </div>
         <div class="btn-r">
             <a href="#" class="btn-layerClose">Close</a>
-        </div>
+            바벨론     </div>
     </div>
 </div>
 
 
 <script>
-    setDebug( false );
+    setDebug( true );
 
     IsExistWord = function( array, word ) {
         for (var id in array ) {
@@ -362,8 +374,6 @@
          currencies.push( { value: poi.biblePlace });
          }
          */
-
-
 
         var currencies = [];
         var poiDic = layerManager.getPoiDictionaryObj();
@@ -525,18 +535,20 @@
             var footer = document.getElementById('footer');
 
             var toggleBtn = document.getElementById("footerToggle");
-            toggleBtn.style.left = ( window.innerWidth * 0.5 ) + "px";
+            toggleBtn.style.left = (200 -25) + ( (window.innerWidth -200) * 0.5 ) + "px";
             toggleBtn.style.top = (window.innerHeight - 13)+ "px";
 
             $("#footer").hide();
 
-            sidebar.style.bottom = 0 + 'px';
+            sidebar.style.top = 1 + 'px';
+            sidebar.style.bottom = 1 + 'px';
 
             var dummy  = document.getElementById('dummy');
             var licenseNotice = document.getElementById('licenseNotice');
 
-            dummy.style.top = (window.innerHeight - 30) + 'px';
-            licenseNotice.style.top = (window.innerHeight - 16) + 'px';
+            // dummy.style.top = (window.innerHeight - 30) + 'px';
+            dummy.style.top = (window.innerHeight - 202) + 'px';
+            // licenseNotice.style.top = (window.innerHeight - 16) + 'px';
 
             mapview.style.left = 200+'px';
             mapview.style.right = 0 + 'px';
@@ -555,16 +567,18 @@
 
             $("#footer").show();
             footer.style.top = mapHeight + 5 + 'px';
-            // footer.style.top = mapHeight +'px';
+            footer.style.left = 200+'px';
+            footer.style.right = 0 +'px';
             footer.style.bottom = 0 + 'px';
 
             var footerTop = footer.getBoundingClientRect().top;
 
-            toggleBtn.style.left = ( window.innerWidth * 0.5 ) + "px";
+            toggleBtn.style.left = (200 -25) + ( (window.innerWidth -200) * 0.5 ) + "px";
             toggleBtn.style.top = (footerTop -15) + "px";
 
-            sidebar.style.top = 0;
-            sidebar.style.bottom = ( window.innerHeight - mapHeight ) + 'px';
+            sidebar.style.top = 1 + 'px';
+            sidebar.style.bottom = 1 + 'px';
+            // sidebar.style.bottom = ( window.innerHeight - mapHeight ) + 'px';
             mapview.style.left = 200+'px';
             mapview.style.right = 0 + 'px';
             mapview.style.top = 0;
@@ -573,11 +587,14 @@
             var dummy  = document.getElementById('dummy');
             var licenseNotice = document.getElementById('licenseNotice');
             var sidebarHeight = sidebar.getBoundingClientRect().height;
-            dummy.style.top = (sidebarHeight - 30) + 'px';
-            licenseNotice.style.top = (sidebarHeight - 16) + 'px';
+
+            dummy.style.top = (window.innerHeight - 202) + 'px';
+            // dummy.style.top = (sidebarHeight - 30) + 'px';
+            // licenseNotice.style.top = (sidebarHeight - 16) + 'px';
 
             bibleMap.updateSize();
         }
+
 
         function showScrMap( ){
 
@@ -696,7 +713,7 @@
     }
 
     function showLicenseNotice(){
-        window.open("biblemap/src/licenseNotice.html", "notice of license", "width=400, height=400, top=0, left=0, location=no, directories=no,resizable=no,status=no,toolbar=no,menubar=no, scrollbars=yes" );
+        window.open("licenseNotice.html", "notice of license", "width=400, height=400, top=0, left=0, location=no, directories=no,resizable=no,status=no,toolbar=no,menubar=no, scrollbars=yes" );
     }
 
 

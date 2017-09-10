@@ -14,7 +14,7 @@
         fillColor : 'rgba( 255, 255, 255, 0.001)',
         lineStroke : {  color: [174, 122, 40], width : 1, opacity: 0.01  },
         //textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 12px arial', color: '#2581D8', outlineColor : '#CECBCB', outlineWidth : 3  }}
-         textStroke : { prop: 'label', align: 'center', baseline: 'middle' , font : 'bold 12px arial', color: '#F1EEEE', outlineColor : '#2581D8', outlineWidth : 2  }}
+         textStroke : { prop: 'label', align: 'center', baseline: 'middle' , font : 'normal 14px Nanum Gothic', color: '#F1EEEE', outlineColor : '#6d6954', outlineWidth : 3  }}
      },
 
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +71,7 @@
 
      { url: 'history/History_12Sect_poi',  order: 20, style: {
          visibleRange : { max : 16 , min : 8 },
-         textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#5F0291', outlineWidth : 4  }}
+         textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px Nanum Gothic', color: '#E7E5E5', outlineColor : '#5F0291', outlineWidth : 4  }}
      },
 
 
@@ -80,35 +80,35 @@
 
          { url: 'level_11_poi',  order: 21, style: {
              visibleRange : { max : 16 , min : 11 },
-             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "black", outlineWidth : 3  }}
+             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px Nanum Gothic', color: "white", outlineColor : "black", outlineWidth : 2  }}
          },
 
 
          { url: 'level_10_poi',  order: 22, style: {
              visibleRange : { max : 16 , min : 10 },
-             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "#313132", outlineWidth : 3  } }
+             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px Nanum Gothic', color: "white", outlineColor : "#313132", outlineWidth : 2  } }
          },
 
 
          { url : 'level_9_poi',  order: 23, style: {
              visibleRange : { max : 16 , min : 9 },
-             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 13px 돋움', color: "white", outlineColor : "#49494A", outlineWidth : 3  } }
+             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px Nanum Gothic', color: "white", outlineColor : "#9b490d", outlineWidth : 2  } }
          },
 
          { url : 'level_7_poi',  order: 24, style: {
              visibleRange : { max : 16 , min : 7 },
-             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px 돋움', color: "white", outlineColor : "#636364", outlineWidth : 3  } }
+             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px Nanum Gothic', color: "white", outlineColor : "#c56618", outlineWidth : 3  } }  //3e636a
          },
 
          { url: 'level_6_poi',  order: 25, style: {
              visibleRange : { max : 16 , min : 6 },
-             textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#033078', outlineWidth : 4  }}
+             textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px Nanum Gothic', color: '#E7E5E5', outlineColor : '#033078', outlineWidth : 3  }}
          },
 
          {
            url: 'level_4_poi',  order: 26, style: {
              visibleRange : { max : 16 , min : 4 },
-             textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px arial', color: '#E7E5E5', outlineColor : '#105602', outlineWidth : 4  }}
+             textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px Nanum Gothic', color: '#E7E5E5', outlineColor : '#105602', outlineWidth : 4  }}
          }
 
  ];
@@ -842,7 +842,7 @@ function createLayer( source  ) {
 
      return function( overlay, cssMap ){
          // return new MapManager( overlay, cssMap, createView( [3942321.454123089, 3792452.570684223], 15, 4, 8 ) );
-         return new MapManager( overlay, cssMap, createView( [4198844, 3971926], 15, 4, 6 ) );
+         return new MapManager( overlay, cssMap, createView( [3844176, 3806822], 15, 4, 7 ) );
      }
 
  }());
