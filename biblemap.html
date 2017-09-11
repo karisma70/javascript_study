@@ -20,13 +20,13 @@
     <script type="text/javascript" src="biblemap/src/propertyDB.js?version=20170813"></script>
 
     <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20170903"></script>
-    <script type="text/javascript" src="biblemap/src/routePlay.js?version=20170813"></script>
-    <script type="text/javascript" src="biblemap/src/trajectoryData.js?version=20170828"></script>
+    <script type="text/javascript" src="biblemap/src/routePlay.js?version=20170830"></script>
+    <script type="text/javascript" src="biblemap/src/trajectoryData.js?version=20170831"></script>
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170829"></script>
     <script type="text/javascript" src="biblemap/openLayers_v4.1.1/ol.js"></script>
     <script type="text/javascript" src="biblemap/src/distanceMeasureControl.js?version=20170820"></script>
     <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170901"></script>
-    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20170906"></script>
+    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20170907"></script>
     <script type="text/javascript" src="biblemap/vendor/jquery-1.8.1.js"></script>
     <script type="text/javascript" src="biblemap/vendor/json2.js"></script>
     <script type="text/javascript" src="biblemap/src/jquery.collapse.js"></script>
@@ -235,7 +235,7 @@
         <!-- <div id="css3-animated-autoclose" data-collapse> -->
         <div id="accordion-example" data-collapse="accordion">
             <h3 class="open">성경검색</h3>
-            <div class="content" style ="height: 120px;">
+            <div class="content" style ="height: 110px;">
                 <div id ="bibleSearch" style="font-size:12px; height: 55px">
                     <select id ="bibleTitle" name="bibleTitle" style="margin-left: 11px; width: 122px; height:1.7em; font-size:12px;" ></select>
                     <div style="height: 8px"></div>
@@ -255,7 +255,7 @@
                 <br>
             </div>
             <h3>시대별 경계 영역</h3>
-            <div class="content" style ="background-color:#FFFFFF; height: 230px">
+            <div class="content" style ="background-color:#FFFFFF; height: 275px">
                 <span id ="range" style="margin-left: 20px; font-size:12px; vertical-align:middle;">현재의 국가</span>
                 <div style="height: 8px"></div>
                 <div name ="historyBar" style="margin-left:0px; width: 180px; height: 34px; border: 1px solid #A7A4A4;">
@@ -263,26 +263,29 @@
                     &nbsp;&nbsp;&nbsp;
                 </div>
                 <div style="height: 8px"></div>
-                <div id="historyAdminExplain" style ="overflow-y:scroll; margin-left: 0px; width : 180px; height: 120px; border: 1px solid #A7A4A4;" >
+                <div id="historyAdminExplain" style ="overflow-y:scroll; margin-left: 0px; width : 180px; height: 170px; border: 1px solid #A7A4A4;" >
                 </div>
                 <div style="height:5px;"></div>
                 <div>
-                    <input type="image" src="biblemap/image/expand-text-icon.png" style="margin-left: 160px; width:20px; height:20px; vertical-align:middle" onclick="showHistoryAdmin()">
+                    <input type="image" src="biblemap/image/expand-text-icon.png" style="position:absolute; margin-left: 160px; topwidth:20px; height:20px; vertical-align:middle" onclick="showHistoryAdmin()">
                 </div>
 
             </div>
             <h3>주요 이동 경로</h3>
-            <div class="content" style ="background-color:#FFFFFF">
-                <select id="movePath" style="margin-left: 0px; width:180px; height:1.7em; font-size:12px;" ></select>
+            <div class="content" style ="width:198px; background-color:#FFFFFF">
+                <select id="movePath" style="margin-left: 0px; width:180px; height:1.7em; font-size:12px;" onchange="eventMovingPathChange(this.value)" ></select>
                 <br>
-                <div style="height: 2px"></div>
-                <input type="image" src="biblemap/image/trajectory_play.jpg?version=20170813" style="margin-left:134px; width:20px; height:20px; vertical-align:middle" onclick="pathAction()">
-                <!-- <input id="showMovingPath" type ="button" style="font-size:12px;" value="Play" onclick="pathAction()" > -->
-                <input type="image" src="biblemap/image/trajectory_stop.jpg?version=20170813" style="width:20px; height:20px; vertical-align:middle" onclick="pathHide()">
-                <!-- &nbsp;<input id="hideMovingPath" type ="button" style="font-size:12px;" value="Off" onclick="pathHide()" > -->
+                <div style="height: 10px"></div>
+                <select id="movingSpeed" style="position: absolute; margin-left:60px; width:40px; height:1.7em; font-size:12px;"  onchange="eventMovingSpeedChange(this.value)" ></select>
+                <input type="image" src="biblemap/image/trajectory_play.jpg?version=20170813" style="position: absolute; margin-left:115px; width:20px; height:20px; vertical-align:middle" onclick="pathAction()">
+                <input type="image" src="biblemap/image/trajectory_pause.png?version=20170813" style="position: absolute; margin-left:138px; width:20px; height:20px; vertical-align:middle" onclick="pathPause()">
+                <input type="image" src="biblemap/image/trajectory_stop.jpg?version=20170813" style="position: absolute; margin-left:160px; width:20px; height:20px; vertical-align:middle" onclick="pathHide()">
                 <br>
-                <div style="height:5px;"></div>
-                <div id="movePathAdminExplain" style ="overflow-y:scroll; margin-left: 0px; width : 180px; height: 120px; border: 1px solid #A7A4A4;" >
+                <div style="height:15px;"></div>
+                <div id="movePathExplain" style ="overflow-y:scroll; margin-left: 0px; width : 180px; height: 200px; border: 1px solid #A7A4A4;" ></div>
+                <div style="height: 5px"></div>
+                <div>
+                    <input type="image" src="biblemap/image/expand-text-icon.png" style="margin-left: 160px; width:20px; height:20px; vertical-align:middle" onclick="showPathExplain()">
                 </div>
             </div>
         </div>  <!--  <div id="css3-animated-autoclose" data-collapse>  -->
@@ -309,6 +312,7 @@
             <div id = "mousePosition">MousePos</div>
         </div>
 -->
+
     </div>  <!-- Side bar div   -->
 
     <div>
@@ -343,13 +347,13 @@
         </div>
         <div class="btn-r">
             <a href="#" class="btn-layerClose">Close</a>
-            바벨론     </div>
+         </div>
     </div>
 </div>
 
 
 <script>
-    setDebug( true );
+    setDebug( false );
 
     IsExistWord = function( array, word ) {
         for (var id in array ) {
@@ -360,6 +364,7 @@
         }
         return false;
     };
+
 
     function initTextAutoComplete(){
 
@@ -513,6 +518,8 @@
     measureBtn.addEventListener('click', measureDistance.toggleMeasureDistance, false);
 
 
+    eventMovingPathChange(0);     //
+
     var selPath = document.getElementById('movePath');
     var count = trajectoryData.getCount();
     for( var idx = 0; idx < count; idx ++  ) {
@@ -521,6 +528,17 @@
         path.text = obj.name;
         path.value = obj.value;
         selPath.appendChild( path );
+    }
+
+
+    var selSpeed = document.getElementById('movingSpeed');
+    var baseSpeed = 0.0;
+    for( var idx = 0; idx < 4; idx ++ ){
+        var speed = document.createElement( "option");
+        speed.text = (idx + 1) + 'x';
+        speed.value = baseSpeed;
+        baseSpeed += 0.04;
+        selSpeed.appendChild( speed );
     }
 
 
@@ -827,6 +845,41 @@
     ///////////////////////////////////////////////////////////////
 
     var routeMove;
+    var oldMovePath = -1;
+
+    function eventMovingPathChange( value){
+
+        var trajectory = trajectoryData.getTrajectoryByValue( value );
+        if( trajectory == null )
+            return;
+
+        document.getElementById("movePathExplain").innerHTML = trajectory.text;
+    }
+
+    function showPathExplain( ){
+
+        /*
+        var selPath = document.getElementById('movePath');
+        var count = trajectoryData.getCount();
+        for( var idx = 0; idx < count; idx ++  ) {
+            var path = document.createElement("option");
+            var obj = trajectoryData.getTrajectoryByValue(idx);
+            */
+
+        var val = document.getElementById("movePath").value;
+        var obj = trajectoryData.getTrajectoryByValue( val );
+
+        if( obj.text )
+            showTextLayerPopup( obj.name, obj.text );
+    }
+
+    function eventMovingSpeedChange( value ){
+
+        ConsoleLog( "EventMovingSpeed :" + value );
+
+        if( routeMove)
+            routeMove.adjustMovingSpeed( value );
+    }
 
 
     function pathAction( ) {
@@ -841,29 +894,65 @@
             routeMove.stop();
         }
 
+
+        var speed = $("#movingSpeed").val();
+
         // var movePath = document.getElementById('movePath').value;
         var movePath = $( "#movePath" ).val();
         var index = Number( movePath);
 
-        var trajectoryArray = trajectoryData.getTrajectoryByValue( index );
-        if( trajectoryArray == null )
+        var trajectory = trajectoryData.getTrajectoryByValue( index );
+        if( trajectory == null )
             return;
 
-        //routeMove = new RouteMoveProcess( bibleMap, trajectoryArray.data, layerManager.getLayerContainer().poiLayer, dvPopupContent, popupOverlay );
-        // routeMove = new RouteMoveProcess( bibleMap, trajectoryArray.data, layerManager.getLayerContainer().poiLayer, pathTooltip );
-        routeMove = new RouteMoveProcess( bibleMap, trajectoryArray.data, layerManager.getPoiObjectArray(), pathTooltip );
 
+        if( oldMovePath != movePath ) {
 
-        var extent = trajectoryData.getExtent( index );
+            routeMove = new RouteMoveProcess(bibleMap, trajectory, layerManager.getPoiObjectArray(), pathTooltip);
 
-        var view = bibleMap.getView();
-        view.fit( extent, bibleMap.getSize() );
+            routeMove.adjustMovingSpeed( speed );
 
-        pathTooltip.allRemove();
+            var extent = trajectoryData.getExtent(index);
 
-        routeMove.play();
+            var view = bibleMap.getView();
+            view.fit(extent, bibleMap.getSize());
+
+            pathTooltip.allRemove();
+
+            routeMove.play();
+
+            oldMovePath = movePath;
+        }
+        else{
+            if( routeMove ) {
+                routeMove.pause(false);
+                routeMove.play();
+            }
+            else{
+                routeMove = new RouteMoveProcess(bibleMap, trajectory, layerManager.getPoiObjectArray(), pathTooltip);
+
+                routeMove.adjustMovingSpeed( speed );
+
+                var extent = trajectoryData.getExtent(index);
+
+                var view = bibleMap.getView();
+                view.fit(extent, bibleMap.getSize());
+
+                pathTooltip.allRemove();
+
+                routeMove.play();
+
+                oldMovePath = movePath;
+            }
+        }
+
     }
 
+    function pathPause(){
+        if( routeMove ){
+            routeMove.pause( true );
+        }
+    }
 
     function pathHide(){
 
@@ -872,11 +961,16 @@
         }
 
         pathTooltip.allRemove();
+
+        routeMove = null;
     }
 
     bibleMapManager.mapEventPrecompose( function(evt){
         var zoom = bibleMapManager.getView().getZoom();
         $("#zoomLevel").html("zoom level : " + zoom); // + zoom;
+
+        if( routeMove)
+            routeMove.updateMovingSpeed( zoom );
     });
 
 

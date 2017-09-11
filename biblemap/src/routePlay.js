@@ -89,7 +89,7 @@ function CreatePathArrowLayer( trajectoryArray ) {
 
 // var tolerancePoiPos = 2000;
 
-function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiArray, paramTooltip ){
+function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, paramTooltip ){
 
     var moveLineStyle = new ol.style.Style({
         stroke: new ol.style.Stroke({
@@ -97,17 +97,26 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiArray, paramT
             width: 3   })
     });
 
-    var tolerancePoiPos = 2000;
+    // var tolerancePoiPos = 700;
+    var tolerancePoiPos = 1500;
 
     var poiArray = paramPoiArray;
     var bibleMap = paramMap;
-    var trajectoryArray = paramTrajectoryArray;
+    var trajectoryArray = paramTrajectory.data;
+    var trajectoryLabelList = paramTrajectory.labelList;
+
     var pathVector = null;
     var pathMovingLayer = null;
     var pathArrowLayer = null;
     var popupPoiArray = [];
-
+    var pointsPerMs = 0.2;
+    var totalDist = 0;
+    var oldFrameState = 0;
+    var pathPause = false;
+    var bIsFirstLoop = true;
     var tooltip = paramTooltip;
+    var beforeDetectPoi = null;
+    var movingSpeed = 0.0;
 
     addLater = function (feature) {
         var timeVal = new Date().getTime();
@@ -116,13 +125,46 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiArray, paramT
         pathVector.addFeature(feature);
     };
 
+    this.adjustMovingSpeed = function( val ){
+        movingSpeed = Number( val );
+    };
+
+    this.updateMovingSpeed = function( mapLevel ){
+
+        if( mapLevel <= 5 ){
+            pointsPerMs = 0.1;
+        }
+        else if( mapLevel == 6 )
+            pointsPerMs = 0.2;
+        else if( mapLevel == 7  )
+            pointsPerMs = 0.15;
+        else if( mapLevel == 8  )
+            pointsPerMs = 0.1;
+        else if( mapLevel == 9  )
+            pointsPerMs = 0.08;
+        else if( mapLevel == 10 )
+            pointsPerMs = 0.04;
+        else if( mapLevel > 10 )
+            pointsPerMs = 0.02;
+
+      //   ConsoleLog( "mapLevel : " + mapLevel + " perMs : " + pointsPerMs );
+    };
+
+    this.pause = function( val ){
+        pathPause = val;
+
+    };
+
     drawMoving = function (event) {
-        var pointsPerMs = 0.2;
 
         var vectorContext = event.vectorContext;
         var frameState = event.frameState;
+        if( oldFrameState == 0 ){
+            oldFrameState = frameState;
+        }
         vectorContext.setStyle(moveLineStyle);
-        var beforeDetectPoi = null;
+        if( pathMovingLayer == null)
+            return;
 
         var features = pathVector.getFeatures();
         for (var i = 0; i < features.length; i++) {         // feature의 갯수는 1 이다
@@ -134,8 +176,15 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiArray, paramT
                 // only draw the lines for which the animation has not finished yet
                 var coords = feature.getGeometry().getCoordinates();
 
-                var elapsedTime = frameState.time - feature.get('start');
-                var elapsedPoints = elapsedTime * pointsPerMs;
+                var moveDist = (frameState.time - oldFrameState.time ) * ( pointsPerMs + movingSpeed) ;
+                var elapsedPoints = 0;
+
+                elapsedPoints = moveDist + totalDist;
+
+                if( pathPause == false )
+                    totalDist += moveDist;
+
+                oldFrameState = frameState;
 
                 if (elapsedPoints >= coords.length) {
                     feature.set('finished', true);
@@ -150,19 +199,33 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiArray, paramT
                         bibleMap.removeLayer(pathMovingLayer);
                         pathMovingLayer = null;
                     }
-
                 }
 
                 var maxIndex = Math.min(elapsedPoints, coords.length);
                 if (maxIndex < 1)
                     continue;
 
-                var currentLine = new ol.geom.LineString(coords.slice(0, maxIndex));
+                var currentLine = new ol.geom.LineString(coords.slice(0, maxIndex));    ///////////////////////////////
+                vectorContext.drawGeometry(currentLine);
+
+                // var coordArray = coords.slice(0, maxIndex);
+                // ConsoleLog( "currentLine [0] X: " + coordArray[0][0] + ", Y: " + coordArray[0][1] );
+
                 var curCoord = coords.slice(maxIndex - 1, maxIndex)[0];
 
                 var minDistance = 999999999;
                 var detectPoi = null;
                 var find = false;
+                var findPoiIdx = -1;
+
+                if( bIsFirstLoop == true  ){
+                    var firstPoi = popupPoiArray[0];
+                    tooltip.create( firstPoi.biblePlace, [firstPoi.x, firstPoi.y]);
+                    ConsoleLog( "first toolTip Create : " + firstPoi.biblePlace );
+                    beforeDetectPoi = firstPoi;
+                }
+
+                bIsFirstLoop = false;
 
                 for (var idx in popupPoiArray) {
                     var temp = popupPoiArray[idx];
@@ -171,17 +234,18 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiArray, paramT
                         minDistance = dist;
                         detectPoi = temp;
                         find = true;
+                        findPoiIdx = idx;
                     }
                 }       // 확보되어 있는 궤적관련 poi리스트 중에서 제일 근거리에 있는 poi를 찾는다
 
-                if (find == true && minDistance < ( tolerancePoiPos + 10000)) {
+                if (find == true && minDistance < ( tolerancePoiPos + 6000)) {
                     if (detectPoi != beforeDetectPoi) {
                         tooltip.create(detectPoi.biblePlace, [detectPoi.x, detectPoi.y]);
+                        ConsoleLog( "toolTip Create : " + detectPoi.biblePlace );
                         beforeDetectPoi = detectPoi;
                     }
                 }
 
-                vectorContext.drawGeometry(currentLine);
             }
         }   // end of for (var i = 0; i < features.length; i++) {
 
@@ -199,13 +263,27 @@ function RouteMoveProcess( paramMap, paramTrajectoryArray, paramPoiArray, paramT
                 var obj = poiArray[idx];
 
                 if (IsWithinTolerance( trjX, trjY, obj.x, obj.y, tolerancePoiPos ) == true) {
+
+                    if( trajectoryLabelList )
+                    {
+                        var IsFind = false;
+                        for( var list in trajectoryLabelList ){
+                            if( obj.biblePlace == trajectoryLabelList[list] ){
+                                IsFind = true;
+                                break;
+                            }
+                        }
+                        if( IsFind == false )
+                            continue;
+                    }
+
                     obj.trjX = trjX;
                     obj.trjY = trjY;
                     var dist = getDistance( trjX, trjY, obj.x, obj.y );
                     if( dist < minDist ){
                         minDist = dist;
                         retObj = obj;
-                        ConsoleLog("Find !!!  >> " + obj.biblePlace + " : " + dist + ", tolerance : " + tolerancePoiPos );
+                     //   ConsoleLog("Find !!!  >> X:" + + trjX + ", Y: " + trjY +", name: " + obj.biblePlace + " : " + dist + ", tolerance : " + tolerancePoiPos );
                     }
                 }
 
