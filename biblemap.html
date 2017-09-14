@@ -19,14 +19,14 @@
     <script type="text/javascript" src="biblemap/src/GMDFileReader.js?version=20170831"></script>
     <script type="text/javascript" src="biblemap/src/propertyDB.js?version=20170813"></script>
 
-    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20170903"></script>
+    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20170904"></script>
     <script type="text/javascript" src="biblemap/src/routePlay.js?version=20170830"></script>
-    <script type="text/javascript" src="biblemap/src/trajectoryData.js?version=20170831"></script>
+    <script type="text/javascript" src="biblemap/src/trajectoryData.js?version=20170901"></script>
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170829"></script>
     <script type="text/javascript" src="biblemap/openLayers_v4.1.1/ol.js"></script>
     <script type="text/javascript" src="biblemap/src/distanceMeasureControl.js?version=20170820"></script>
     <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170901"></script>
-    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20170907"></script>
+    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20170908"></script>
     <script type="text/javascript" src="biblemap/vendor/jquery-1.8.1.js"></script>
     <script type="text/javascript" src="biblemap/vendor/json2.js"></script>
     <script type="text/javascript" src="biblemap/src/jquery.collapse.js"></script>
@@ -221,12 +221,12 @@
 
 <div class="wrapperDiv">
     <div id="sidebar" style="position:absolute; ">
-        <a href="http://blog.naver.com/bible-map" target="_blank" style="text-decoration:none"><div id="logo" style="height:27px; background-color:rgb( 59, 89, 153 );"><img src="biblemap/image/biblemap_logo.png" style="width:27px; height:27px; vertical-align:middle" >
+        <a href="javascript:showLicenseNotice();" target="_blank" style="text-decoration:none"><div id="logo" style="height:27px; background-color:rgb( 59, 89, 153 );"><img src="biblemap/image/biblemap_logo.png" style="width:27px; height:27px; vertical-align:middle" >
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:10pt; font-weight:bold; color:white;text-align:center;">성경지도</span></div></a>
         <div class="dummy2" style = "height: 4px;"></div>
         <div class="dummy2" style = "height: 86px;">
             <span style="margin-left: 10px; font-size:12px;">지명</span>
-            <input type="text" name="currency" class="biginput" id="biblePlace" size="12" style="margin-left:2px; width: 120px; height:20px; font-size:12px; " value="예루살렘" onkeypress="if(event.keyCode==13) searchBiblePlace();">
+            <input type="text" name="currency" class="biginput" id="biblePlace" size="12" style="margin-left:2px; width: 120px; height:20px; font-size:12px; " value="갈릴리 호수" onkeypress="if(event.keyCode==13) searchBiblePlace();">
             <input type="button" class="button" value="검색" style="position: absolute; vertical-align:center; margin-left: 2px;" onclick="searchBiblePlace()">
             <div style="height: 4px"></div>
             <!-- <div id ="searchedPoiList" rows= "5" style="border:1px solid grey; margin-left:10px; height: 60px; width: 163px; font-size:13px ; clear: both;"></div>  -->
@@ -240,7 +240,7 @@
                     <select id ="bibleTitle" name="bibleTitle" style="margin-left: 11px; width: 122px; height:1.7em; font-size:12px;" ></select>
                     <div style="height: 8px"></div>
                     <input type="image" src="biblemap/image/left_arrow.jpg?version=20170814" style="position: absolute;  margin-left: 10px; width:18px; height:20px; vertical-align:middle" onclick="decreaseBibleChapter()">
-                    <input type="number" class="chapterNum" id ="bibleChapter" style="margin-left: 30px; top: 50px;  width: 3em; height: 20px; font-size:12px;" value="14"> 장
+                    <input type="number" class="chapterNum" id ="bibleChapter" style="margin-left: 30px; top: 50px;  width: 3em; height: 20px; font-size:12px;" value="1"> 장
                     <input type="image" src="biblemap/image/right_arrow.jpg?version=20170814" style="position: absolute;  margin-left: 2px;width:18px; height:20px; vertical-align:middle" onclick="increaseBibleChapter()">
                     <input type="button" class="button" value="검색" style="position: absolute;  margin-left: 24px;" onclick="searchBibleChapter()">
                 </div>
@@ -267,7 +267,7 @@
                 </div>
                 <div style="height:5px;"></div>
                 <div>
-                    <input type="image" src="biblemap/image/expand-text-icon.png" style="position:absolute; margin-left: 160px; topwidth:20px; height:20px; vertical-align:middle" onclick="showHistoryAdmin()">
+                    <input type="image" src="biblemap/image/expand-text-icon.png" style="position:absolute; margin-left: 160px; width:20px; height:20px; vertical-align:middle" onclick="showHistoryAdmin()">
                 </div>
 
             </div>
@@ -298,7 +298,7 @@
         <div id ="dummy" class = "dummy" style="position: absolute; top:56px; width: 198px; height: 200px;">
             <div id ="licenseNotice" style="left: 0px; top:0px; height: 17px; width:198px; background-color:rgb( 199, 219, 252  );" >
                 <!-- <span style="color: rgb(255, 255, 255); font-size:11px; horizontal-align: center;" onclick="showLicenseNotice()" >   Notice</span> -->
-                <a href="javascript:showLicenseNotice();"><img src="biblemap/image/L_biblemap_logo.png" style="position: absolute; top: 17px; width:198px; height:182px; vertical-align:middle" ></a>
+                <a href="http://blog.naver.com/bible-map" target="_blank" style="text-decoration:none"><img src="biblemap/image/L_biblemap_logo.png" style="position: absolute; top: 17px; width:198px; height:182px; vertical-align:middle" ></a>
             </div>
         </div>
 
@@ -325,7 +325,7 @@
 <div id ="footer" style="overflow-y:scroll; line-height: 180%; font-size:13px ; clear: both;">
     <p>waiting.....</p>
 </div>
-<img src="biblemap/image/hideBible.png" id="footerToggle" name="img" style="position:absolute; width:50px; height:12px;" onclick="toggleScrMap()">
+<img src="biblemap/image/hideBible2.png" id="footerToggle" name="img" style="position:absolute; width:50px; height:12px;" onclick="toggleScrMap()">
 </div>
 
 <div id="popup" class="ol-popup" style="font-size:1.1em;">
@@ -506,6 +506,37 @@
 
     var bibleMapManager = createMapManager( popupOverlay, 'map' );
     var trajectoryData = new TrajectoryData();
+
+    function downloadTrajectoryData( callback ) {
+        trajectoryData.requestMovePath( function( resObj ){
+
+            eventMovingPathChange(0);     //
+
+            var selPath = document.getElementById('movePath');
+            var count = trajectoryData.getCount();
+            for( var idx = 0; idx < count; idx ++  ) {
+                var path = document.createElement("option");
+                var obj = trajectoryData.getTrajectoryByValue(idx);
+                // path.text = obj.name;
+                path.text = obj.title;
+                path.value = obj.value;
+                selPath.appendChild( path );
+            }
+
+            ConsoleLog( "Complete!!! MovePath List!!! ");
+
+            callback();
+
+        } );
+    }
+
+    function downloadNeedDataList(){
+
+        downloadTrajectoryData(  searchBibleChapter );
+
+    }
+
+
     var layerManager = bibleMapManager.getLayerManager();
     var bibleMap = bibleMapManager.getMap();
 
@@ -516,20 +547,6 @@
 
     var measureDistance = new DistanceMeasureControl( bibleMapManager );
     measureBtn.addEventListener('click', measureDistance.toggleMeasureDistance, false);
-
-
-    eventMovingPathChange(0);     //
-
-    var selPath = document.getElementById('movePath');
-    var count = trajectoryData.getCount();
-    for( var idx = 0; idx < count; idx ++  ) {
-        var path = document.createElement("option");
-        var obj = trajectoryData.getTrajectoryByValue(idx);
-        path.text = obj.name;
-        path.value = obj.value;
-        selPath.appendChild( path );
-    }
-
 
     var selSpeed = document.getElementById('movingSpeed');
     var baseSpeed = 0.0;
@@ -592,7 +609,7 @@
             var footerTop = footer.getBoundingClientRect().top;
 
             toggleBtn.style.left = (200 -25) + ( (window.innerWidth -200) * 0.5 ) + "px";
-            toggleBtn.style.top = (footerTop -15) + "px";
+            toggleBtn.style.top = (footerTop -17) + "px";
 
             sidebar.style.top = 1 + 'px';
             sidebar.style.bottom = 1 + 'px';
@@ -616,8 +633,8 @@
 
         function showScrMap( ){
 
-            var img1 = "biblemap/image/hideBible.png";
-            var img2 = "biblemap/image/showBible.png";
+            var img1 = "biblemap/image/hideBible2.png";
+            var img2 = "biblemap/image/showBible2.png";
 
             var toggleBtn = document.getElementById("footerToggle");
             $("#footerToggle").css( "z-index", "5000" );
@@ -684,6 +701,8 @@
     function getSearchWordsFromStorage(){
         var strObj = localStorage.getItem( 'bibleMap');
         if( strObj == null ){
+            $("#bibleTitle" ).val( "7");
+            $("#bibleChapter").val( "1" );
             return;
         }
         var Obj = JSON.parse( strObj );
@@ -696,7 +715,7 @@
                 strText = Obj['bibleTitle'];
         }
         if( strText == "")
-            strText = "1";
+            strText = "7";
         $( "#bibleTitle" ).val( strText );
 
         strText = "";
@@ -705,7 +724,7 @@
                 strText = Obj['bibleChapter'];
         }
         if( strText == "" ){
-            strText = "14";
+            strText = "1";
         }
         $("#bibleChapter").val( strText );
 
@@ -831,11 +850,12 @@
             var layer = bibleMapLayers[idx];
 
             new ShapeFileDownload( bibleMap, layer.url, layer.order, layer.style, layerManager, function( ){
-                searchBibleChapter();
                 changeHistoryAdmin( historyAdmin.value );
                 // sortPoiWordsArray( layerManager.getLayerContainer() );
                 layerManager.sortPoiWords();
                 initTextAutoComplete();
+                downloadNeedDataList( );
+                $("#biblePlace").focus();
             } );
         }
     };
@@ -857,20 +877,11 @@
     }
 
     function showPathExplain( ){
-
-        /*
-        var selPath = document.getElementById('movePath');
-        var count = trajectoryData.getCount();
-        for( var idx = 0; idx < count; idx ++  ) {
-            var path = document.createElement("option");
-            var obj = trajectoryData.getTrajectoryByValue(idx);
-            */
-
         var val = document.getElementById("movePath").value;
         var obj = trajectoryData.getTrajectoryByValue( val );
 
         if( obj.text )
-            showTextLayerPopup( obj.name, obj.text );
+            showTextLayerPopup( obj.title, obj.text );
     }
 
     function eventMovingSpeedChange( value ){
@@ -1034,8 +1045,10 @@
             } else {    // 나머지 폴리곤에 정의된 "name" 필드로 검색하도록 한다
 
                 var poiObj = layerManager.getPoiObjById( poiID );
-                if( poiObj.rangeArray != null ) {
+                requestPoiContentAndShow( poiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
 
+                /*
+                if( poiObj.rangeArray != null ) {
                     requestBibleByRange( poiObj, function () {
                         requestPoiContentAndShow( poiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
                         adjustScrDiv.setIsFullScr("false");
@@ -1047,6 +1060,7 @@
                         adjustScrDiv.setIsFullScr("false");
                     });
                 }
+                */
 
             }
         }

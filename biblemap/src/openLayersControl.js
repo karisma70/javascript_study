@@ -97,7 +97,7 @@
 
          { url : 'level_7_poi',  order: 24, style: {
              visibleRange : { max : 16 , min : 7 },
-             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px Nanum Gothic', color: "white", outlineColor : "#c56618", outlineWidth : 3  } }  //3e636a
+             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px Nanum Gothic', color: "white", outlineColor : "#3737FF", outlineWidth : 2  } }  //3e636a
          },
 
          { url: 'level_6_poi',  order: 25, style: {

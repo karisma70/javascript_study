@@ -313,8 +313,8 @@ function layerPopup(el){
     // 화면의 중앙에 레이어를 띄운다.
     if ($elHeight < docHeight || $elWidth < docWidth) {
         $el.css({
-            // marginTop: -$elHeight /2,
-            top : 20,
+            marginTop: -$elHeight /2,
+            //top : 20,
             marginLeft: -$elWidth/2
         })
     } else {
@@ -550,7 +550,7 @@ var BibleChapterList = function() {
     var chapterArray = [];
 
     setChapterArray = function(  objList ){
-        chapterArray = [];
+        // chapterArray = [];
 
         for (var idx in objList ) {
             var chapter = objList[idx];
