@@ -453,6 +453,7 @@ function requestPoiContentAndShow( poiObj, popup, overlay ) {
 
     showTextPoi = function() {
 
+        /*
         var popupTitle = document.getElementById( 'poiTitle' );
         popupTitle.innerHTML = "";
         popupTitle.innerHTML += poiText;
@@ -465,6 +466,16 @@ function requestPoiContentAndShow( poiObj, popup, overlay ) {
         popupContent.innerHTML += '<br>' + infoText;
 
         layerPopup( '#customPopup' );
+        */
+
+        var infoTab = document.getElementById( 'tab3' );
+        infoTab.innerHTML = "";
+        infoTab.innerHTML += infoText;
+
+        adjustScrDiv.setIsFullScr("false");
+
+        tabMenu.selectTab('tab3Menu');
+
     };
 }
 

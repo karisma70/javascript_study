@@ -325,6 +325,7 @@
 <div id ="footer" style="overflow-y:scroll; line-height: 180%; font-size:13px ; clear: both;">
     <p>waiting.....</p>
 </div>
+<div>
 <img src="biblemap/image/hideBible2.png" id="footerToggle" name="img" style="position:absolute; width:50px; height:12px;" onclick="toggleScrMap()">
 </div>
 
@@ -624,8 +625,6 @@
             var sidebarHeight = sidebar.getBoundingClientRect().height;
 
             dummy.style.top = (window.innerHeight - 202) + 'px';
-            // dummy.style.top = (sidebarHeight - 30) + 'px';
-            // licenseNotice.style.top = (sidebarHeight - 16) + 'px';
 
             bibleMap.updateSize();
         }

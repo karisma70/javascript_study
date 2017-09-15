@@ -235,6 +235,12 @@ function ShapeFileDownload( map, shpUrl, layerId, style, paramLayerManager, whol
                 layerManager.insertPoiObjToDictionary( poiobj, searchWord );
                 layerManager.insertPoiWord( searchWord );
 
+                searchWord = getStringFromAttrs( attrs, "search3");
+                if( searchWord != "" ) {
+                    layerManager.insertPoiObjToDictionary(poiobj, searchWord);
+                    layerManager.insertPoiWord(searchWord);
+                }
+
                 var orgName = "";
 
                 // bible, label, search1, search2
