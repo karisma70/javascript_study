@@ -2,7 +2,6 @@
  * Created by Administrator on 2017-06-23.
  */
 
-
 function CreatePathArrowLayer( trajectoryArray ) {
 
     var pathArrowStyleFunction = function (feature) {
