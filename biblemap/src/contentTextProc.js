@@ -347,7 +347,7 @@ function requestPoiContentAndShow( poiObj, popup, overlay ) {
     var youtubeIcon = "<img src=\"biblemap/image/camera-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">";
 
     var textRef = "<a href =\"javascript:showTextPoi()\"' >";
-    var textIcon = "<img src=\"biblemap/image/text-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">";
+    var textIcon = "<img src=\"biblemap/image/text-icon.png?version=20170904\" style=\"width:20px; height:20px; vertical-align:middle;\">";
 
     var lineImage = '<div style=\"height: 14px; background: url(biblemap/image/horizon-line.png);\"></div>';
 
@@ -399,7 +399,7 @@ function requestPoiContentAndShow( poiObj, popup, overlay ) {
             popup.innerHTML = poiText;
 
         if(infoText != "" ){
-            popup.innerHTML += "" + textRef + textIcon + "</a>";
+            popup.innerHTML += "" + textRef + " " + textIcon + "</a>";
         }
 
         showTitlePoi( popup, poiObj.title );
@@ -451,29 +451,15 @@ function requestPoiContentAndShow( poiObj, popup, overlay ) {
     };
     */
 
-    showTextPoi = function() {
-
-        /*
-        var popupTitle = document.getElementById( 'poiTitle' );
-        popupTitle.innerHTML = "";
-        popupTitle.innerHTML += poiText;
-        popupTitle.innerHTML += lineImage;
-
-        var popupContent = document.getElementById( 'poiTextContent' );
-        popupContent.innerHTML = "";
-        // popupContent.innerHTML += poiText;
-        // popupContent.innerHTML += lineImage + "<br>";
-        popupContent.innerHTML += '<br>' + infoText;
-
-        layerPopup( '#customPopup' );
-        */
+    showTextPoi = function() {      // tabMenu 에서 정보 보여주기
 
         var infoTab = document.getElementById( 'tab3' );
-        infoTab.innerHTML = "";
+        infoTab.innerHTML = "< " + poiText + " >  ";
         infoTab.innerHTML += infoText;
 
         adjustScrDiv.setIsFullScr("false");
 
+        $("#tab3").scrollTop(0);
         tabMenu.selectTab('tab3Menu');
 
     };
@@ -511,7 +497,7 @@ function Tooltip( paramMap, cssClassName ) {
 
     var zOrder = 0;
 
-    this.create = function(text, coord){
+    this.create = function( poiName, linkedText, coord){
 
         tooltipElement = document.createElement('div');
 
@@ -525,11 +511,11 @@ function Tooltip( paramMap, cssClassName ) {
         });
         bibleMap.addOverlay(tooltip);
 
-        tooltipElement.innerHTML = text;
+        tooltipElement.innerHTML = linkedText;
 
 
-        tooltipElement.setAttribute("id", text );
-        var strID = "#"+text;
+        tooltipElement.setAttribute("id", poiName );
+        var strID = "#"+ poiName ;
 
         $(strID).css( "z-index", zOrder.toString() );
 

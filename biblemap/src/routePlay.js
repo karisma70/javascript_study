@@ -155,6 +155,15 @@ function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, paramToolti
 
     };
 
+    makeLinkedName = function( poiID, placeName ){
+        var strStart = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + poiID + ')\" style=\"text-decoration:none; font-weight:normal; color: #000000;' + '\" >';
+        var linkedPlaceName = strStart;
+        linkedPlaceName += placeName;
+        linkedPlaceName += '</a>';
+
+        return linkedPlaceName;
+    };
+
     drawMoving = function (event) {
 
         var vectorContext = event.vectorContext;
@@ -220,7 +229,11 @@ function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, paramToolti
 
                 if( bIsFirstLoop == true  ){
                     var firstPoi = popupPoiArray[0];
-                    tooltip.create( firstPoi.biblePlace, [firstPoi.x, firstPoi.y]);
+
+                    // tooltip.create( firstPoi.biblePlace, [firstPoi.x, firstPoi.y]);
+                    var linkedPlaceName = makeLinkedName( firstPoi.id, firstPoi.biblePlace );
+                    tooltip.create( firstPoi.biblePlace, linkedPlaceName, [firstPoi.x, firstPoi.y]);
+
                     ConsoleLog( "first toolTip Create : " + firstPoi.biblePlace );
                     beforeDetectPoi = firstPoi;
                 }
@@ -240,7 +253,19 @@ function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, paramToolti
 
                 if (find == true && minDistance < ( tolerancePoiPos + 6000)) {
                     if (detectPoi != beforeDetectPoi) {
-                        tooltip.create(detectPoi.biblePlace, [detectPoi.x, detectPoi.y]);
+
+                        var linkedPlaceName = makeLinkedName( detectPoi.id, detectPoi.biblePlace );
+
+                        /*
+                        var strStart = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + detectPoi.id + ')\" style=\"text-decoration:none; font-weight:normal; color: #000000;' + '\" >';
+                        var linkedPlaceName = strStart;
+                        linkedPlaceName += detectPoi.biblePlace;
+                        linkedPlaceName += '</a>';
+                        */
+
+                        // tooltip.create(detectPoi.biblePlace, [detectPoi.x, detectPoi.y]);
+                        tooltip.create( detectPoi.biblePlace, linkedPlaceName, [detectPoi.x, detectPoi.y]);
+
                         ConsoleLog( "toolTip Create : " + detectPoi.biblePlace );
                         beforeDetectPoi = detectPoi;
                     }
