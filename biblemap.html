@@ -81,10 +81,25 @@
          }
 
         div > select {
+
             font-family: 'Nanum Gothic';
             font-size: 12px;
             height:20px;
+
+            background: url('biblemap/image/down_arrow.png') no-repeat 100% 50%; /* 네이티브 화살표를 커스텀 화살표로 대체 */
+
+            border-radius: 0px; /* iOS 둥근모서리 제거 */
+            -webkit-appearance: none; /* 네이티브 외형 감추기 */
+            -moz-appearance: none;
+            appearance: none;
+
+            background-color: rgb(255,255, 255);
             border: 1px solid rgb(217, 217, 217);
+        }
+
+        /* 화살표 없애기 for IE10, 11*/
+        div > select::-ms-expand {
+            display: none;
         }
 
         div > input {
