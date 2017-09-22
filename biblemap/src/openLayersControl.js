@@ -434,8 +434,6 @@ LayerManager.prototype.getPoiObjects = function(){
 };
 
 
-
-
  function createOverlay( divID ){    // container
      var overlay = new ol.Overlay(/** @type {olx.OverlayOptions} */ ({
          element: divID,

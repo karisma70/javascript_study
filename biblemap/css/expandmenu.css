@@ -44,8 +44,9 @@ h3 {
   margin: 0;
   vertical-align:middle;
   font-size: 13px;
-  background-color: rgb(61, 185, 246);
-}
+  /* background-color: rgb( 79, 108, 185);  */
+  background: rgb( 61, 185, 246);
+  }
 
 h3 a {
   height: 32px;
@@ -58,18 +59,23 @@ h3 a {
   text-decoration: none;
   font-family: 'Nanum Gothic';
   font-weight: normal;
-  border-bottom: 1px solid rgb(0, 157, 235);
-  /* text-shadow: 1px 1px 1px rgb(32,81,0);  */
+  /* border-bottom: 1px solid rgb( 59, 86, 153 );  */
+  border-bottom: 1px solid rgb( 0, 148, 219 );
+
 }
-h3:hover { background: rgb( 91, 197, 247 );  }
-h3.open  { background: rgb( 0, 158, 236 );
-    /*
-  background-image: linear-gradient(bottom, rgb(66, 133, 244 )14%, rgb( 124, 171, 248) 14%);
-  background-image: -o-linear-gradient(bottom, rgb( 66, 133, 244 )14%, rgb( 124, 171, 248) 57%);
-  background-image: -moz-linear-gradient(bottom, rgb( 66, 133, 244 )14%, rgb( 124, 171, 248) 57%);
-  background-image: -webkit-linear-gradient(bottom, rgb( 66, 133, 244 )14%, rgb( 124, 171, 248) 57%);
-  background-image: -ms-linear-gradient(bottom, rgb( 66, 133, 244 ) 14%, rgb( 124, 171, 248) 57%);
-  */
+h3:hover { background: rgb( 105, 131, 197 ); }
+
+h3.open  {
+  /* background: rgb( 59, 86, 153 ); */
+  background-color: rgb( 51, 158, 244 );
+
+  /*
+background-image: linear-gradient(bottom, rgb(66, 133, 244 )14%, rgb( 124, 171, 248) 14%);
+background-image: -o-linear-gradient(bottom, rgb( 66, 133, 244 )14%, rgb( 124, 171, 248) 57%);
+background-image: -moz-linear-gradient(bottom, rgb( 66, 133, 244 )14%, rgb( 124, 171, 248) 57%);
+background-image: -webkit-linear-gradient(bottom, rgb( 66, 133, 244 )14%, rgb( 124, 171, 248) 57%);
+background-image: -ms-linear-gradient(bottom, rgb( 66, 133, 244 ) 14%, rgb( 124, 171, 248) 57%);
+*/
 }
 
 /* h3.open a { background-position: 13px -25px; }  */
@@ -103,10 +109,10 @@ h3+div {
   display: block!important;
   -webkit-transform: translateZ(0);
   -webkit-transition: all 0.3s ease;
-	-moz-transition: all 0.3s ease;
-	-o-transition: all 0.3s ease;
-	/* -ms-transition:all 0.3s ease;  */
-	transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  /* -ms-transition:all 0.3s ease;  */
+  transition: all 0.3s ease;
 }
 #css3-animated-example .content {
   padding: 10px;

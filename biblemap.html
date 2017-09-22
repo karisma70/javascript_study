@@ -7,8 +7,9 @@
     <link rel="shortcut icon" href="http://www.biblemap.or.kr/favicon.ico" type="image/x-icon"/>
     <link rel="icon" href="http://www.biblemap.or.kr/favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" type="text/css" media="all" href="http://fonts.googleapis.com/earlyaccess/nanumgothic.css">
+    <link rel="stylesheet" type="text/css" media="all" href="http://fonts.googleapis.com/earlyaccess/hanna.css">
     <link rel="stylesheet" href="https://openlayers.org/en/v4.1.1/css/ol.css" type="text/css">
-    <link rel="stylesheet" href="biblemap/css/expandmenu.css?version=20170913">
+    <link rel="stylesheet" href="biblemap/css/expandmenu.css?version=20170917">
     <meta name="viewport" content="width=device-width">
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
     <!-- <script src="https://api.mapbox.com/mapbox.js/plugins/arc.js/v0.1.0/arc.js"></script> -->
@@ -36,7 +37,7 @@
 
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/autocomplete_style.css?version=20170911">
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/popup.css?version=version=20170910">
-    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/tabMenu.css?version=version=20170912">
+    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/tabMenu.css?version=version=20170916">
     <!-- <script type="text/javascript" src="biblemap/js/jquery-1.9.1.min.js"></script> -->
     <script type="text/javascript" src="biblemap/js/jquery.autocomplete.min.js"></script>
 
@@ -59,24 +60,34 @@
             width: 100%;
             height: 100%;
             font-size: 12px;
+            color : rgb( 40, 40, 40 );
         }
 
+        /* Let's get this party started */
         ::-webkit-scrollbar {
             width: 8px;
-            height: 5px;
         }
-        ::-webkit-scrollbar-button {
-            background: #ccc
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(240,240,240,0.3);
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
         }
-        ::-webkit-scrollbar-track-piece {
-            background: #888
-        }
+
+        /* Handle */
         ::-webkit-scrollbar-thumb {
-            background: #eee
-        }​
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            background: rgba(240,240,240,0.8);
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+        }
+        ::-webkit-scrollbar-thumb:window-inactive {
+            background: rgba(240,240,240,0.8);
+        }
 
 
-         div > span {
+        div > span {
              font-family: 'Nanum Gothic';
          }
 
@@ -84,6 +95,7 @@
 
             font-family: 'Nanum Gothic';
             font-size: 12px;
+            padding-left: 5px;
             height:20px;
 
             background: url('biblemap/image/down_arrow.png') no-repeat 100% 50%; /* 네이티브 화살표를 커스텀 화살표로 대체 */
@@ -94,7 +106,7 @@
             appearance: none;
 
             background-color: rgb(255,255, 255);
-            border: 1px solid rgb(217, 217, 217);
+           border: 1px solid rgb(217, 217, 217);
         }
 
         /* 화살표 없애기 for IE10, 11*/
@@ -165,6 +177,8 @@
         .ol-popup-content {
             font-size: 10px;
             font-family: 'Nanum Gothic';
+            /* font-family: 'hanna', sans-serif; */
+
         }
 
         .ol-popup {
@@ -253,7 +267,8 @@
 
             width:200px;
             height: 15px;
-            background-color:rgb( 239, 244, 254  );
+            /* background-color:rgb( 239, 244, 254  );  */
+            background-color:rgb( 248, 248, 248  );
         }
 
         .tooltip {
@@ -290,23 +305,23 @@
 <!-- <body oncontextmenu="return false" ondragstart="return false" onselectstart="return false"> -->
 
 <div class="wrapperDiv">
-    <div id="sidebar" style="position:absolute; background-color:rgb( 239, 244, 254  );" >
-        <a href="javascript:showLicenseNotice();" target="_blank" style="text-decoration:none"><div id="logo" style="height:32px; background-color:rgb( 59, 89, 153 );"><img src="biblemap/image/biblemap_logo.png" style="width:27px; height:32px; vertical-align:middle" >
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:12pt; font-weight:bold; color:white;text-align:center;  vertical-align:middle;">성경지도</span></div></a>
-        <div class="dummy2" style = "height: 10px;"></div>
-        <div class="dummy2" style = "height: 100px;">
-            <div id ="bibleSearch" style="font-size:12px; height: 55px">
-                <select id ="bibleTitle" name="bibleTitle" style="margin-left: 11px; width: 122px; height:21px; " ></select>
-                <div style="height: 5px"></div>
-                <input type="image" src="biblemap/image/left_arrow.png?version=20170905" style="position: absolute;  margin-left: 10px; width:18px; height:20px; vertical-align:middle" onclick="decreaseBibleChapter()">
-                <input type="number" class="chapterNum" id ="bibleChapter" style="margin-left: 30px; top: 50px;  width: 3em; height: 20px; font-size:12px;" value="1"> <span style="margin-left: 0px; font-size:12px;">장</span>
+    <div id="sidebar" style="position:absolute; background-color:rgb( 248, 248, 248  );" >
+        <a href="javascript:showLicenseNotice();" target="_blank" style="text-decoration:none; vertical-align:middle;"><div id="logo" style="height:32px; background-color:rgb( 59, 89, 153 );"><img src="biblemap/image/biblemap_logo.png" style="width:27px; height:33px; vertical-align:middle" >
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span  style="font-size:11pt; font-weight:bold; color:white; text-align:center;  vertical-align:middle; font: 'Hanna', serif;" >성경지도</span></div></a>
+        <div class="dummy2" style = "height: 8px;"></div>
+        <div class="dummy2" style = "height: 81px;">
+            <div id ="bibleSearch" style="font-size:12px; height: 50px">
+                <select id ="bibleTitle" name="bibleTitle" style="margin-left: 46px; width: 120px; height:21px; " ></select>
+                <div style="height: 4px"></div>
+                <input type="image" src="biblemap/image/left_arrow.png?version=20170905" style="position: absolute;  margin-left: 46px; width:18px; height:20px; vertical-align:middle" onclick="decreaseBibleChapter()">
+                <input type="number" class="chapterNum" id ="bibleChapter" style="padding-left: 3px; margin-left: 66px; top: 50px;  width: 3em; height: 20px; font-size:12px;" value="1"> <span style="margin-left: 0px; font-size:12px;">장</span>
                 <input type="image" src="biblemap/image/right_arrow.png?version=20170905" style="position: absolute;  margin-left: 2px;width:18px; height:20px; vertical-align:middle" onclick="increaseBibleChapter()">
-                <input type="button" class="button" value="검색" style="position: absolute;  margin-left: 24px;" onclick="searchBibleChapter()">
+                <input type="button" class="button" value="검색" style="position: absolute;  margin-left: 22px;" onclick="searchBibleChapter()">
             </div>
-            <div style="height: 6px"></div>
+
             <div name="searchWord" style="height:20px;">
                 <!-- <img src="image/word_search2.png" style="width:20px; height:22px; vertical-align:middle" ><input type="text" id ="bibleWord" size="12" style="font-size:12px;" value="바울"><input type="button" value="검색" style="font-size:12px;" onclick="searchBibleWord()"> -->
-                <span style="margin-left: 10px; font-size:12px;">단어</span>&nbsp;<input type="text" id ="bibleWord" size="12" style="width:96px; height:21px; font-size:12px;"  value="바울" onkeypress="if(event.keyCode==13) searchBibleWord();">
+                <span style="margin-left: 18px; font-size:12px;">단어</span><input type="text" id ="bibleWord" size="12" style="padding-left: 5px; margin-left: 3px; width:90px; height:21px; font-size:12px;"  value="바울" onkeypress="if(event.keyCode==13) searchBibleWord();">
                 <input type="button" class="button" value="검색" style="position: absolute; margin-left: 2px;" onclick="searchBibleWord()">
             </div>
         </div>
@@ -314,16 +329,16 @@
         <div id="accordion-example" data-collapse="accordion">
             <h3 class="open" >지명검색</h3>
             <div class="content" style ="width:198px; height: 100px; background-color:#FFFFFF;">
-                <span style="margin-left: 0px; font-size:12px;">지명</span>
+                <span style="margin-left: 10px; font-size:12px;">지명</span>
                 <input type="text" name="currency" class="biginput" id="biblePlace" size="12"
-                       style="margin-left:3px; width: 117px; height:20px; font-size:12px; font:'Nanum Gothic'; " value="갈릴리 호수" onkeypress="if(event.keyCode==13) searchBiblePlace();">
+                       style="padding-left: 5px; margin-left:3px; width: 90px; height:20px; font-size:12px; font:'Nanum Gothic'; " value="갈릴리 호수" onkeypress="if(event.keyCode==13) searchBiblePlace();">
                 <input type="button" class="button" value="검색" style="position: absolute; vertical-align:center; margin-left: 2px;" onclick="searchBiblePlace()">
                 <div style="height: 4px"></div>
                 <!-- <div id ="searchedPoiList" rows= "5" style="border:1px solid grey; margin-left:10px; height: 60px; width: 163px; font-size:13px ; clear: both;"></div>  -->
-                <select id ="searchedPoiList" name="searchedPoiList" size='3' style="overflow:hidden; margin-left:26px; width: 151px; height:52px; border: 1px solid #D9D9D9; " ></select>
+                <select id ="searchedPoiList" name="searchedPoiList" size='3' style="overflow:hidden; margin-left:35px; width: 123px; height:52px; border: 1px solid #D9D9D9; " ></select>
             </div>
             <h3>시대별 경계 영역</h3>
-            <div class="content" style ="background-color:#FFFFFF; height: 275px; border:1px solid #5BC5F7 ">
+            <div class="content" style ="background-color:#FFFFFF; height: 275px;">
                 <span id ="range" style="margin-left: 20px; font-size:12px; vertical-align:middle;">현재의 국가</span>
                 <div style="height: 8px"></div>
                 <div name ="historyBar" style="margin-left:0px; width: 180px; height: 34px; border: 1px solid rgb(217, 217, 217);">
@@ -341,7 +356,7 @@
             </div>
             <h3>주요 이동 경로</h3>
             <div class="content" style ="width:198px; background-color:#FFFFFF">
-                <select id="movePath" style="margin-left: 0px; width:180px; " onchange="eventMovingPathChange(this.value)" ></select>
+                <select id="movePath" style="margin-left: 0px; width:180px; height:21px;" onchange="eventMovingPathChange(this.value)" ></select>
                 <br>
                 <div style="height: 10px"></div>
                 <input type="image" src="biblemap/image/expand-text-icon.png?version=20170905" style="position: absolute; margin-left: 0px; width:20px; height:20px; vertical-align:middle" onclick="showPathExplain()">
@@ -362,6 +377,7 @@
         <br>
 
         <div id ="dummy" class = "dummy" style="position: absolute; top:56px; width: 198px; height: 200px;">
+            <span class="hana-font" style="margin-left: 40px; font-size:7pt; font-weight:bold; color:rgb( 59, 89, 153 ); text-align:center;  vertical-align:middle; font: 'Hanna', serif;" >www.biblemap.or.kr</span>
             <div id ="licenseNotice" style="left: 0px; top:0px; height: 17px; width:198px; background-color:rgb( 199, 219, 252  );" >
                 <!-- <span style="color: rgb(255, 255, 255); font-size:11px; horizontal-align: center;" onclick="showLicenseNotice()" >   Notice</span> -->
                 <a href="http://blog.naver.com/bible-map" target="_blank" style="text-decoration:none"><img src="biblemap/image/L_biblemap_logo.png" style="position: absolute; top: 17px; width:198px; height:182px; vertical-align:middle" ></a>
@@ -402,13 +418,15 @@
         </div>
         <!-- #tab1 -->
         <div id="tab2" class="tab_content">
-            <span style="font-size:10pt; text-align:center;">검색결과가 없습니다 <br> 성경의 단어 검색 버튼을 클릭해 주세요
-           </span>
+            검색결과가&nbsp;없습니다 <br> 성경의&nbsp;단어&nbsp;검색&nbsp;버튼을&nbsp;클릭해&nbsp;주세요
+           <!--  <span style="font-size:10pt; text-align:center;">검색결과가&nbsp;없습니다 <br> 성경의&nbsp;단어&nbsp;검색&nbsp;버튼을&nbsp;클릭해&nbsp;주세요
+           </span> -->
         </div>
         <!-- #tab2 -->
         <div id="tab3" class="tab_content" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
-            <span style="font-size:10pt; text-align:center;">검색결과가 없습니다 <br> 지도상의 지명을 클릭해 주세요
-            </span>
+            검색결과가&nbsp;없습니다 <br> 지도상의&nbsp;지명을&nbsp;클릭하고&nbsp;아이콘&nbsp;'i'를&nbsp;클릭해&nbsp;주세요
+            <!-- <span style="font-size:10pt; text-align:center;">검색결과가 없습니다 <br> 지도상의 지명을 클릭해 주세요
+            </span> -->
         </div>
         <!-- #tab3 -->
     </div>
