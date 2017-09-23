@@ -15,20 +15,20 @@
     <!-- <script src="https://api.mapbox.com/mapbox.js/plugins/arc.js/v0.1.0/arc.js"></script> -->
     <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
     <script type="text/javascript" src="biblemap/src/arc.js?version=20170813"></script>
-    <script type="text/javascript" src="biblemap/src/common.js?version=20170813"></script>
+    <script type="text/javascript" src="biblemap/src/common.js?version=20170830"></script>
     <script type="text/javascript" src="biblemap/lib/binaryajax.js?version=20170813"></script>
     <script type="text/javascript" src="biblemap/src/binarywrapper.js?version=20170813"></script>
     <script type="text/javascript" src="biblemap/src/GMDFileReader.js?version=20170831"></script>
     <script type="text/javascript" src="biblemap/src/propertyDB.js?version=20170813"></script>
 
-    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20170912"></script>
-    <script type="text/javascript" src="biblemap/src/routePlay.js?version=20170901"></script>
+    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20170913"></script>
+    <script type="text/javascript" src="biblemap/src/routePlay.js?version=20170902"></script>
     <script type="text/javascript" src="biblemap/src/trajectoryData.js?version=20170901"></script>
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170829"></script>
     <script type="text/javascript" src="biblemap/openLayers_v4.1.1/ol.js"></script>
     <script type="text/javascript" src="biblemap/src/distanceMeasureControl.js?version=20170820"></script>
     <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170901"></script>
-    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20170908"></script>
+    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20170909"></script>
     <script type="text/javascript" src="biblemap/vendor/jquery-1.8.1.js"></script>
     <script type="text/javascript" src="biblemap/vendor/json2.js"></script>
     <script type="text/javascript" src="biblemap/src/jquery.collapse.js"></script>
@@ -236,6 +236,10 @@
             left: .5em;
         }
         .ol-touch .measure-distance {
+            top: 120px;
+        }
+
+        .ol-touch .prevPoi {
             top: 80px;
         }
 
@@ -525,18 +529,6 @@
 
     function initTextAutoComplete(){
 
-        /*
-         var poiObjs = layerManager.getPoiObjects();
-         var currencies = [];
-
-         for( var idx in poiObjs){
-         var poi = poiObjs[idx];
-
-         if( IsExistWord( currencies,  poi.biblePlace ) == false)
-         currencies.push( { value: poi.biblePlace });
-         }
-         */
-
         var currencies = [];
         var poiDic = layerManager.getPoiDictionaryObj();
 
@@ -548,8 +540,6 @@
             }
         }
 
-
-
         $('#biblePlace').autocomplete({
             lookup: currencies,
             onSelect: function (suggestion) {
@@ -559,7 +549,6 @@
                 var dvBiblePlace = document.getElementById("biblePlace");
                 dvBiblePlace.value = suggestion.value;
                 searchBiblePlace();
-                console.log( suggestion.value );
             }
         });
     }
@@ -629,25 +618,40 @@
     var popupOverlay = createOverlay( dvPopupContainer );    // dvPopupContainer
 
     var measureBtn = document.createElement('button');
+    measureBtn.innerHTML = 'M';
 
-    var MeasureDistanceEvent = function( opt_options ) {
+
+    var prevPoiBtn = document.createElement('button');
+    prevPoiBtn.innerHTML = '<';
+
+    var nextPoiBtn = document.createElement('button');
+    nextPoiBtn.innerHTML = '>';
+
+    var MapMenuClickEvent = function( opt_options ) {
 
         var options = opt_options || {};
-        measureBtn.innerHTML = 'M';
 
         var element = document.createElement( 'div');
         element.className = 'measure-distance ol-unselectable ol-control';
         element.appendChild( measureBtn );
+        var br = document.createElement('br');
+        element.appendChild( br );
+        element.appendChild( prevPoiBtn );
+        element.appendChild( nextPoiBtn );
+
+        element.setAttribute("id", "mapMenuDiv" );
+        $('#mapMenuDiv').css( "z-index", "9000" );
 
         ol.control.Control.call( this, {
             element: element,
             target: options.target
         });
     };
-    ol.inherits( MeasureDistanceEvent, ol.control.Control );
+
+    ol.inherits( MapMenuClickEvent, ol.control.Control );
+
 
     var bibleChapterList = new BibleChapterList();
-
 
     bibleChapterList.requestBibleChapter( function(){
         for( var order = 1; order <= bibleChapterList.getCount(); order ++  ) {
@@ -699,11 +703,24 @@
 
     var pathTooltip = new Tooltip( bibleMap, 'tooltip tooltip-static' );
 
-    var measureEvent = new MeasureDistanceEvent();
-    bibleMap.addControl( measureEvent );
+    var mapMenuClickEvent = new MapMenuClickEvent();
+    bibleMap.addControl( mapMenuClickEvent );
 
     var measureDistance = new DistanceMeasureControl( bibleMapManager );
     measureBtn.addEventListener('click', measureDistance.toggleMeasureDistance, false);
+    prevPoiBtn.addEventListener('click', function(){
+        var poiObj = layerManager.historyPrevPoi();
+        if( poiObj != null )
+            moveToPlaceByPoiObj( poiObj );
+        ConsoleLog( "Prev Poi Button!!! ");
+    }, false );
+
+    nextPoiBtn.addEventListener('click', function(){
+        var poiObj = layerManager.historyNextPoi();
+        if( poiObj != null )
+            moveToPlaceByPoiObj( poiObj );
+        ConsoleLog( "Next Poi Button!!! ");
+    }, false );
 
     var selSpeed = document.getElementById('movingSpeed');
     var baseSpeed = 0.0;
@@ -730,7 +747,7 @@
 
             // $("#footerDummy").hide();
 
-            var conatainer = document.getElementById('container');
+            var container = document.getElementById('container');
             $("#container").hide();
 
             var toggleBtn = document.getElementById("footerToggle");
@@ -1226,8 +1243,9 @@
                  */
                 var poiArray = layerManager.getPoiObjArrayFromDictionary( posName );
                 if( poiArray.length < 2){
-                    var tempPoiObj = poiArray[ 0];
-                    requestPoiContentAndShow( tempPoiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+                    var poiObj = poiArray[ 0];
+                    layerManager.historyInsertPoi( poiObj );
+                    requestPoiContentAndShow( poiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
                 }
             }
         } else {        //  poi Layer를 선택했을 경우
@@ -1238,6 +1256,7 @@
             } else {    // 나머지 폴리곤에 정의된 "name" 필드로 검색하도록 한다
 
                 var poiObj = layerManager.getPoiObjById( poiID );
+                layerManager.historyInsertPoi( poiObj );
                 requestPoiContentAndShow( poiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
 
                 /*
@@ -1366,6 +1385,9 @@
             return;
 
         var poiObj = layerManager.getPoiObjById( poiID );
+
+        layerManager.historyInsertPoi( poiObj );
+
         moveToPlaceByPoiObj( poiObj );
     }
 
@@ -1630,7 +1652,7 @@
 
                 function appendReceiveMsg( resObj, strConvText ){
                     $(tabID).append( "<tr>");
-                    var strChapterLinkWithBibleContent = "<td width = \"150\">&nbsp;&nbsp;" +'<a href= "javascript:requestBibleWithChapter( \'' + resObj.title + '\','+ resObj.chapter +')\" style=\"text-decoration:none; font-weight:bold; color:#464646;\">'
+                    var strChapterLinkWithBibleContent = "<td width = \"150\" >&nbsp;&nbsp;" +'<a href= "javascript:requestBibleWithChapter( \'' + resObj.title + '\','+ resObj.chapter +')\" style=\"text-decoration:none; font-weight:bold; color:#464646;\">'
                             + resObj.title + " " + resObj.chapter + ":" + resObj.paragraph +"</a>"+ "</td>"
                             + "<td>" + strConvText + "</td>";
                     $(tabID).append( strChapterLinkWithBibleContent );

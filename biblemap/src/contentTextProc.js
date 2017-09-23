@@ -197,11 +197,6 @@ function makeStrongInText( LayerManager, searchWord, recvObj ) {
             color = "#0D63DB";  // 군청색, //  텍스트 내에 지명이 있을때 군청색
         }
 
-        // for debug
-        if( placeName == "베들레헴"){
-            ConsoleLog( "====>" + placeName );
-        }
-
         bibleText = makeStrongWordInText( LayerManager, placeName, bibleTitle, bibleText, color, true );
     }
 
@@ -339,7 +334,6 @@ function layerPopup(el){
 
 
 function requestPoiContentAndShow( poiObj, popup, overlay ) {
-
     var youtube = "";
     var infoText = "";
     var poiText = poiObj.biblePlace;
@@ -588,7 +582,7 @@ var BibleChapterList = function() {
         };
 
         var jsonStr = JSON.stringify( searchParam );
-        ConsoleLog( "send param : " + jsonStr );
+        // ConsoleLog( "send param : " + jsonStr );
 
         httpRequest("POST", jsonStr, function( http ) {
             var resObj = JSON.parse(http.responseText);

@@ -250,17 +250,11 @@ function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, paramToolti
                     }
                 }       // 확보되어 있는 궤적관련 poi리스트 중에서 제일 근거리에 있는 poi를 찾는다
 
-                if (find == true && minDistance < ( tolerancePoiPos + 6000)) {
+
+                if (find == true && minDistance < ( tolerancePoiPos + 9000)) {
                     if (detectPoi != beforeDetectPoi) {
 
                         var linkedPlaceName = makeLinkedName( detectPoi.id, detectPoi.biblePlace );
-
-                        /*
-                        var strStart = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + detectPoi.id + ')\" style=\"text-decoration:none; font-weight:normal; color: #000000;' + '\" >';
-                        var linkedPlaceName = strStart;
-                        linkedPlaceName += detectPoi.biblePlace;
-                        linkedPlaceName += '</a>';
-                        */
 
                         // tooltip.create(detectPoi.biblePlace, [detectPoi.x, detectPoi.y]);
                         tooltip.create( detectPoi.biblePlace, linkedPlaceName, [detectPoi.x, detectPoi.y]);
@@ -336,10 +330,12 @@ function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, paramToolti
             var to = moveArray[i + 1];
             var poi = null;
 
-            if( i == 0 )
+            if( i == 0 ) {
                 poi = IsWithinToleranceOfPoi(from[0], from[1]);
+            }
             else
-                poi = IsWithinToleranceOfPoi( to[0], to[1] );
+                poi = IsWithinToleranceOfPoi( to[0], to[1] );{
+            }
 
             if( poi != null ){
                 popupPoiArray.push( poi );
@@ -380,6 +376,17 @@ function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, paramToolti
                 }
             }
         }
+
+        //  debuging  for
+        /*
+        var poisString = "";
+
+        for( var idx in popupPoiArray ){
+            poisString += popupPoiArray[idx].biblePlace + ", ";
+        }
+
+        alert( poisString );
+        */
 
         var line = new ol.geom.LineString(pathArray);
         line.transform(ol.proj.get('EPSG:4326'), ol.proj.get('EPSG:3857'));

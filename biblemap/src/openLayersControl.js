@@ -268,7 +268,22 @@
          poiDicObjects: [],      // 레코드 단위 poi 오브젝트 들을 담아둔 배열
          poiWords : []          // 단어 검색을 위한 지명 배열
      };
+
+     this.historyPoi = new HistoryClickedPoi();
  }
+
+ LayerManager.prototype.historyInsertPoi = function( poiObj ) {
+     this.historyPoi.insertPoi( poiObj );
+ };
+
+ LayerManager.prototype.historyPrevPoi = function() {
+     return this.historyPoi.prevPoi();
+ };
+
+ LayerManager.prototype.historyNextPoi = function() {
+     return this.historyPoi.nextPoi();
+ };
+
 
 LayerManager.prototype.getPoiObjectArray = function(){
     return this.layerContainer.poiDicObjects;
@@ -844,3 +859,5 @@ function createLayer( source  ) {
      }
 
  }());
+
+
