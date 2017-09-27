@@ -108,12 +108,14 @@ function makeStrongWordInText( LayerManager, strWord, bibleTitle, bibleText, col
     var strongEnd = "</font></strong>";
 
     var strPos = bibleText.indexOf(strWord);
-    if( strPos == -1 ){
+    if (strPos == -1) {
         return bibleText;
     }
 
-    if( strPos > 0 && bibleText.substring(strPos-1, strPos) != " " )
-        return bibleText;
+    if (strPos > 0 && bibleText.substring(strPos - 1, strPos) != " ") {
+          if( bibleText.substring(strPos-1, strPos) != "'" )
+                return bibleText;
+    }
     if( strPos > 0 &&  ( bibleText.substring(strPos-1, strPos) == ">" || bibleText.substring( strPos + strWord.length, strPos + strWord.length + 1 ) == "<") ) {       // 이미 발견된 단어이므로 스킵
         return bibleText;
     }
@@ -166,26 +168,9 @@ function makeStrongInText( LayerManager, searchWord, recvObj ) {
         return "";
     }
 
-    var bibleTitle = recvObj.title;
+    var bibleTitle = recvObj.title;     // 성경의 책권을 의미
     var bibleText = recvObj.content;
     var boolFind = false;
-
-
-    /*
-    for( var order in layerContainer.poiWords ){
-        var placeName = layerContainer.poiWords[order].text;
-        if (layerContainer.poiLayer.hasOwnProperty( placeName ) && typeof layerContainer.poiLayer[ placeName ] === "object") {
-            var color = "";
-            if( placeName == searchWord ) {
-                boolFind = true;
-                color = "#B404AE";  // 핑크색 , //  텍스트 내에 검색어와 지명이 일치할때
-            }else{
-                color = "#0D63DB";  // 군청색, //  텍스트 내에 지명이 있을때 군청색
-            }
-            bibleText = makeStrongWordInText( LayerManager, placeName, bibleTitle, bibleText, color );
-        }
-    }
-    */
 
     for( var order in layerContainer.poiWords ) {
         var color = "";
@@ -335,6 +320,7 @@ function layerPopup(el){
 
 function requestPoiContentAndShow( poiObj, popup, overlay ) {
     var youtube = "";
+    var focusPoiObj = poiObj;
     var infoText = "";
     var poiText = poiObj.biblePlace;
 
@@ -449,8 +435,16 @@ function requestPoiContentAndShow( poiObj, popup, overlay ) {
     showTextPoi = function() {      // tabMenu 에서 정보 보여주기
 
         var infoTab = document.getElementById( 'tab3' );
-        infoTab.innerHTML = "< " + poiText + " >  ";
-        infoTab.innerHTML += infoText;
+        infoTab.innerHTML = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + focusPoiObj.id + ')\" style=\"text-decoration:none; font-weight:bold; color: #9C1AC8 \" >' + "[ " + poiText + " ]  " +  '</a>';
+
+        var infoObj = { // title : poiText,
+                        content : infoText
+        };
+
+        var strConvText = makeStrongInText( layerManager, focusPoiObj.biblePlace, infoObj );
+
+        // infoTab.innerHTML += infoText;
+        infoTab.innerHTML += strConvText;
 
         adjustScrDiv.setIsFullScr("false");
 

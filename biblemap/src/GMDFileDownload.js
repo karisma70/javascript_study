@@ -201,8 +201,8 @@ function ShapeFileDownload( map, shpUrl, layerId, style, paramLayerManager, whol
                 // var moveLevel = ( paramStyle.visibleRange.min + paramStyle.visibleRange.max ) /2 ;
                 // moveLevel = Math.floor(moveLevel) -2;
                 var moveLevel = paramStyle.visibleRange.min +1;
-                if( moveLevel > 12 )
-                    moveLevel = 12;
+                if( moveLevel > 11 )
+                    moveLevel = 11;
 
                 var poiobj = createPoiObj( attrs, record, moveLevel );    //  bible, title, range 에 해당하는 필드로 poi 오브젝트를 생성한다
                 poiobj = layerManager.insertPoiObj( poiobj );
@@ -290,7 +290,8 @@ function ShapeFileDownload( map, shpUrl, layerId, style, paramLayerManager, whol
                             biblePlace : orgName,
                             x: record.shape.x,
                             y: record.shape.y,
-                            zoomIn: paramStyle.visibleRange.min
+                            // zoomIn: paramStyle.visibleRange.min
+                            zoomIn: moveLevel
                         };
 
                         /*

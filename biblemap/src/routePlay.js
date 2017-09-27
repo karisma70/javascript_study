@@ -88,7 +88,7 @@ function CreatePathArrowLayer( trajectoryArray ) {
 
 // var tolerancePoiPos = 2000;
 
-function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, paramTooltip ){
+function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, paramTooltip, CallBackForInitPathComplete ){
 
     var moveLineStyle = new ol.style.Style({
         stroke: new ol.style.Stroke({
@@ -97,7 +97,7 @@ function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, paramToolti
     });
 
     // var tolerancePoiPos = 700;
-    var tolerancePoiPos = 1500;
+    var tolerancePoiPos = 2000;
 
     var poiArray = paramPoiArray;
     var bibleMap = paramMap;
@@ -251,7 +251,7 @@ function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, paramToolti
                 }       // 확보되어 있는 궤적관련 poi리스트 중에서 제일 근거리에 있는 poi를 찾는다
 
 
-                if (find == true && minDistance < ( tolerancePoiPos + 9000)) {
+                if (find == true && minDistance < ( tolerancePoiPos + 9500 )) {
                     if (detectPoi != beforeDetectPoi) {
 
                         var linkedPlaceName = makeLinkedName( detectPoi.id, detectPoi.biblePlace );
@@ -333,26 +333,42 @@ function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, paramToolti
             if( i == 0 ) {
                 poi = IsWithinToleranceOfPoi(from[0], from[1]);
             }
-            else
-                poi = IsWithinToleranceOfPoi( to[0], to[1] );{
+            else {
+                 poi = IsWithinToleranceOfPoi( to[0], to[1] );
             }
 
             if( poi != null ){
-                popupPoiArray.push( poi );
+                if( popupPoiArray.length > 0 ){
+                    var beforePoi = popupPoiArray[ popupPoiArray.length-1 ];
+                    if( poi.id != beforePoi.id ) {
+                        ConsoleLog("Pushed Poi [" + popupPoiArray.length + "]==> " + poi.biblePlace );
+                        popupPoiArray.push(poi);
+                    }
+                }
+                else {
+                    popupPoiArray.push(poi);
+                }
             }
 
             if( i == 0 ) {
                 poi = IsWithinToleranceOfPoi(to[0], to[1]);
                 if( poi != null ){
-                    popupPoiArray.push( poi );
+                    if( popupPoiArray.length > 0 ){
+                        var beforePoi = popupPoiArray[ popupPoiArray.length-1 ];
+                        if( poi.id != beforePoi.id ) {
+                            ConsoleLog("Pushed Poi [" + popupPoiArray.length + "]==> " + poi.biblePlace );
+                            popupPoiArray.push(poi);
+                        }
+                    }
+                    else {
+                        popupPoiArray.push(poi);
+                    }
                 }
             }
-
 
             var pointArray = [];
             pointArray.push(from);
             pointArray.push(to);
-
 
             var dist = getDistance( from[0], from[1], to[0], to[1] );
             var divCount = ( dist / totDist ) * 3000 ;
@@ -377,16 +393,7 @@ function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, paramToolti
             }
         }
 
-        //  debuging  for
-        /*
-        var poisString = "";
-
-        for( var idx in popupPoiArray ){
-            poisString += popupPoiArray[idx].biblePlace + ", ";
-        }
-
-        alert( poisString );
-        */
+        CallBackForInitPathComplete( popupPoiArray );       ///////////////////////////
 
         var line = new ol.geom.LineString(pathArray);
         line.transform(ol.proj.get('EPSG:4326'), ol.proj.get('EPSG:3857'));
