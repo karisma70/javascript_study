@@ -129,7 +129,7 @@ function getStringFromAttrs( attrs, field ) {
 }
 
 
-function ShapeFileDownload( map, shpUrl, layerId, style, paramLayerManager, wholeCompleteCallback ) {
+function GMDFileDownload( map, shpUrl, layerId, style, paramLayerManager, wholeCompleteCallback ) {
 
     var url = "biblemap/downloadmap/" + shpUrl;
 
@@ -158,13 +158,6 @@ function ShapeFileDownload( map, shpUrl, layerId, style, paramLayerManager, whol
 
         var format = new ol.format.WKT();
         var features = [];
-
-        /*
-        if( shpFile.records.length != dbfFile.records.length ){
-            alert( url + " File is shape Error!!!" + "shape File Records : " + shpFile.records.length + ", dbf File Records :  " + dbfFile.records.length );
-            return;
-        }
-        */
 
         if( shpFile.records.length != dbfFile.records.length ){
             ConsoleLog( "Critial shapefile Error!!  id: " + layerId + ", shape records: " + shpFile.records.length + ", dbf records: " + dbfFile.records.length );
@@ -207,14 +200,6 @@ function ShapeFileDownload( map, shpUrl, layerId, style, paramLayerManager, whol
                 var poiobj = createPoiObj( attrs, record, moveLevel );    //  bible, title, range 에 해당하는 필드로 poi 오브젝트를 생성한다
                 poiobj = layerManager.insertPoiObj( poiobj );
                 var confirmPoi = layerManager.getPoiObjById( poiobj.id );
-
-
-                /*
-                var strText = getStringFromAttrs( attrs, "label" );         // label 필드가 ""인 경우 bible의 필드를 카피하도록 한다.
-                if( strText == "" ){
-                    attrs.values["label"] = attrs.values["bible"];
-                } */
-
 
                 var feature = createFeatureFromWkt(wkt, attrs, bTransform, format, "label" );
                 feature.setProperties({  'id' : poiobj.id,
@@ -293,24 +278,9 @@ function ShapeFileDownload( map, shpUrl, layerId, style, paramLayerManager, whol
                             // zoomIn: paramStyle.visibleRange.min
                             zoomIn: moveLevel
                         };
-
-                        /*
-                        var poiObj = {
-                            text: textString,
-                            length: textString.length
-                        };
-
-                        layerContainer.poiWords.push(poiObj);
-                        */
-
                     }
                 }  // end of for( prop in attrs.values )
 
-                /*
-                var feature = createFeatureFromWkt(wkt, attrs, bTransform, format, "label" );
-                feature.setProperties({'style': paramStyle});
-                features.push(feature);
-                */
             }
             else if (shpFile.header.shapeType == ShpType.SHAPE_POLYLINE) {      // POLYLINE
                 var points = [];//record.shape.rings[0].x + ' ' + record.shape.rings[0].y];

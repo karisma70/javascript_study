@@ -18,7 +18,7 @@
     <script type="text/javascript" src="biblemap/src/common.js?version=20170830"></script>
     <script type="text/javascript" src="biblemap/lib/binaryajax.js?version=20170813"></script>
     <script type="text/javascript" src="biblemap/src/binarywrapper.js?version=20170813"></script>
-    <script type="text/javascript" src="biblemap/src/GMDFileReader.js?version=20170831"></script>
+    <script type="text/javascript" src="biblemap/src/GMDFileReader.js?version=20170901"></script>
     <script type="text/javascript" src="biblemap/src/propertyDB.js?version=20170813"></script>
 
     <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20170920"></script>
@@ -28,7 +28,7 @@
     <script type="text/javascript" src="biblemap/openLayers_v4.1.1/ol.js"></script>
     <script type="text/javascript" src="biblemap/src/distanceMeasureControl.js?version=20170820"></script>
     <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170905"></script>
-    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20170909"></script>
+    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20170910"></script>
     <script type="text/javascript" src="biblemap/vendor/jquery-1.8.1.js"></script>
     <script type="text/javascript" src="biblemap/vendor/json2.js"></script>
     <script type="text/javascript" src="biblemap/src/jquery.collapse.js"></script>
@@ -499,7 +499,8 @@
             $(this).addClass("active").css("color", "#000000");
             $(".tab_content").hide();
             var activeTab = $(this).attr("rel");
-            $("#" + activeTab).fadeIn();
+            // $("#" + activeTab).fadeIn();
+            $("#" + activeTab).show();
         });
 
         TabMenuControl = function() {
@@ -700,15 +701,11 @@
 
             ConsoleLog( "Complete!!! MovePath List!!! ");
 
-            callback();
+            if( callback ) {
+                callback();
+            }
 
         } );
-    }
-
-    function downloadNeedDataList(){
-
-        downloadTrajectoryData(  searchBibleChapter );
-
     }
 
 
@@ -971,7 +968,7 @@
     }
 
     function showLicenseNotice(){
-        window.open("licenseNotice.html", "notice of license", "width=400, height=400, top=0, left=0, location=no, directories=no,resizable=no,status=no,toolbar=no,menubar=no, scrollbars=yes" );
+        window.open("licenseNotice.html?version=20170920", "notice of license", "width=400, height=400, top=0, left=0, location=no, directories=no,resizable=no,status=no,toolbar=no,menubar=no, scrollbars=yes" );
     }
 
 
@@ -1067,18 +1064,27 @@
             }, false);
         }
 
-        layerManager.layerContainer.totalCount = bibleMapLayers.length;
+        layerManager.layerContainer.totalCount = bibleMapPointLayers.length;
 
-        for( idx in bibleMapLayers ){
-            var layer = bibleMapLayers[idx];
+        for( var idx in bibleMapPointLayers ){
+            var layer = bibleMapPointLayers[idx];
 
-            new ShapeFileDownload( bibleMap, layer.url, layer.order, layer.style, layerManager, function( ){
-                changeHistoryAdmin( historyAdmin.value );
-                // sortPoiWordsArray( layerManager.getLayerContainer() );
+            new GMDFileDownload( bibleMap, layer.url, layer.order, layer.style, layerManager, function( ){
                 layerManager.sortPoiWords();
                 initTextAutoComplete();
-                downloadNeedDataList( );
+                // downloadNeedDataList( );
+                searchBibleChapter( );
                 $("#bibleWord").focus();
+
+                layerManager.layerContainer.totalCount += bibleMapPolygonLayers.length;
+                for( var pid in bibleMapPolygonLayers ) {
+                    var layer = bibleMapPolygonLayers[ pid ];
+                    new GMDFileDownload( bibleMap, layer.url, layer.order, layer.style, layerManager, function( ){
+                        changeHistoryAdmin( historyAdmin.value );
+                        downloadTrajectoryData();
+                    });
+                }
+
             } );
         }
     };
@@ -1567,7 +1573,7 @@
     }
 
 
-    function searchBibleChapter(){
+    function searchBibleChapter( callback ){
 
         var searchParam = {
             type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
@@ -1643,6 +1649,9 @@
 
         reqeustAndShowContents('#tab1', searchParam, -1, function(){
             adjustScrDiv.setIsFullScr("false");
+            if( callback ){
+                callback();
+            }
         } );
     }
 

@@ -3,21 +3,17 @@
  */
 
 
-     // Iran, SaudiArabia , Turkey
-
-
- var bibleMapLayers = [
-
+ var bibleMapPolygonLayers = [
      { url : '110m-admin-0-countries', order: 1, style: {
-        historyShow : 'false',
-        visibleRange : { max : 16, min : 1 },
-        fillColor : 'rgba( 255, 255, 255, 0.001)',
-        lineStroke : {  color: [174, 122, 40], width : 1, opacity: 0.01  },
-        //textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 12px arial', color: '#2581D8', outlineColor : '#CECBCB', outlineWidth : 3  }}
+         historyShow : 'false',
+         visibleRange : { max : 16, min : 1 },
+         fillColor : 'rgba( 255, 255, 255, 0.001)',
+         lineStroke : {  color: [174, 122, 40], width : 1, opacity: 0.01  },
+         //textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 12px arial', color: '#2581D8', outlineColor : '#CECBCB', outlineWidth : 3  }}
          textStroke : { prop: 'label', align: 'center', baseline: 'middle' , font : 'normal 14px Nanum Gothic', color: '#F1EEEE', outlineColor : '#6d6954', outlineWidth : 3  }}
      },
 
-         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
      { url : 'history/History_promise_canaan2', order: 5, style: {
          historyShow : 'false',
@@ -66,17 +62,16 @@
          fillColor : 'rgba( 255, 255, 255, 0.001)',
          lineStroke : {  color: [255, 255, 255], width : 0, opacity: 0.01  },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
-     },
+     }
+ ];
 
+ var bibleMapPointLayers = [
+         { url: 'history/History_12Sect_poi',  order: 20, style: {
+             visibleRange : { max : 16 , min : 8 },
+             textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px Nanum Gothic', color: '#E7E5E5', outlineColor : '#5F0291', outlineWidth : 4  }}
+         },
 
-     { url: 'history/History_12Sect_poi',  order: 20, style: {
-         visibleRange : { max : 16 , min : 8 },
-         textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px Nanum Gothic', color: '#E7E5E5', outlineColor : '#5F0291', outlineWidth : 4  }}
-     },
-
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
          { url: 'level_11_poi',  order: 21, style: {
              visibleRange : { max : 16 , min : 11 },
@@ -106,12 +101,12 @@
          },
 
          {
-           url: 'level_4_poi',  order: 26, style: {
+             url: 'level_4_poi',  order: 26, style: {
              visibleRange : { max : 16 , min : 4 },
              textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px Nanum Gothic', color: '#E7E5E5', outlineColor : '#105602', outlineWidth : 4  }}
          }
+     ];
 
- ];
 
  function getDistance( x1, y1, x2, y2){
 
