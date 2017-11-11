@@ -358,7 +358,7 @@
                 <span id ="range" style="margin-left: 20px; font-size:12px; vertical-align:middle;">현재의 국가</span>
                 <div style="height: 8px"></div>
                 <div name ="historyBar" style="margin-left:0px; width: 180px; height: 34px; border: 1px solid rgb(217, 217, 217);">
-                    <input id="historyAdmin" type ="range" style = "margin-left: 10px; top: 5px; width:160px; height: 30px; font-size:12px; border: none;" min = "0" max = "6" value = "6" onchange="eventHistoryAdmin(this.value)" onclick="eventHistoryAdmin(this.value)" >
+                    <input id="historyAdmin" type ="range" style = "margin-left: 10px; top: 5px; width:160px; height: 30px; font-size:12px; border: none;" min = "0" max = "7" value = "7" onchange="eventHistoryAdmin(this.value)" onclick="eventHistoryAdmin(this.value)" >
                     &nbsp;&nbsp;&nbsp;
                 </div>
                 <div style="height: 8px"></div>
@@ -1006,7 +1006,7 @@
             }
         }
 
-        var historyArray = [5, 6, 7, 8, 9, 10, [ 1, 2, 3, 4 ] ];
+        var historyArray = [5, 6, 7, 8, 9, 10, 11, [ 1, 2, 3, 4 ] ];
 
         function showHistoryLayer( showId ) {
             for (idx in layerManager.layerContainer.layers) {
@@ -1079,6 +1079,7 @@
                 layerManager.layerContainer.totalCount += bibleMapPolygonLayers.length;
                 for( var pid in bibleMapPolygonLayers ) {
                     var layer = bibleMapPolygonLayers[ pid ];
+                    ConsoleLog( "layer.url ==> " + layer.url );
                     new GMDFileDownload( bibleMap, layer.url, layer.order, layer.style, layerManager, function( ){
                         changeHistoryAdmin( historyAdmin.value );
                         downloadTrajectoryData();
