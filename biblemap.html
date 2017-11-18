@@ -430,23 +430,20 @@
         <li id="tab1Menu" class="active" rel="tab1">성경본문</span></li>
         <li id="tab2Menu" rel="tab2"><span style="font-color:white; ">단어검색</span></li>
         <li id="tab3Menu" rel="tab3">지명정보</li>
+        <li id="tab4Menu" rel="tab4">기타정보</li>
     </ul>
     <div id ="tab_contain" class="tab_container"  >
         <div id="tab1" class="tab_content">
         </div>
-        <!-- #tab1 -->
         <div id="tab2" class="tab_content">
             검색결과가&nbsp;없습니다 <br> 성경의&nbsp;단어&nbsp;검색&nbsp;버튼을&nbsp;클릭해&nbsp;주세요
-           <!--  <span style="font-size:10pt; text-align:center;">검색결과가&nbsp;없습니다 <br> 성경의&nbsp;단어&nbsp;검색&nbsp;버튼을&nbsp;클릭해&nbsp;주세요
-           </span> -->
         </div>
-        <!-- #tab2 -->
         <div id="tab3" class="tab_content" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
             검색결과가&nbsp;없습니다 <br> 지도상의&nbsp;지명을&nbsp;클릭하고&nbsp;아이콘&nbsp;'i'를&nbsp;클릭해&nbsp;주세요
-            <!-- <span style="font-size:10pt; text-align:center;">검색결과가 없습니다 <br> 지도상의 지명을 클릭해 주세요
-            </span> -->
         </div>
-        <!-- #tab3 -->
+        <div id="tab4" class="tab_content" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
+            시대별 경계 영역 또는 주요 이동 경로 메뉴에서 아이콘&nbsp;'i'를&nbsp;클릭해&nbsp;주세요
+        </div>
     </div>
     <!-- .tab_container -->
 </div>
@@ -541,7 +538,7 @@
         return false;
     };
 
-
+    // 지명 검색창에 지명 입력시 자동으로 후보단어 표시하기
     function initTextAutoComplete(){
 
         var currencies = [];
@@ -793,6 +790,7 @@
             var tab1 = document.getElementById( "tab1");
             var tab2 = document.getElementById( "tab2");
             var tab3 = document.getElementById( "tab3");
+            var tab4 = document.getElementById( "tab4");
 
             var mapHeight = window.innerHeight * 0.60;
 
@@ -823,6 +821,11 @@
             tab3.style.left = 15+'px';
             tab3.style.right = 5 + 'px';
             tab3.style.bottom = 5 + 'px';
+
+            tab4.style.top = 0 +'px';
+            tab4.style.left = 15+'px';
+            tab4.style.right = 5 + 'px';
+            tab4.style.bottom = 5 + 'px';
 
 
             var footerTop = footer.getBoundingClientRect().top;
@@ -983,17 +986,46 @@
 
 
     function eventHistoryAdmin( newVal ){
-        adjustScrDiv.setIsFullScr("true");
+        dvPopupCloser.onclick();
+        // adjustScrDiv.setIsFullScr("false");
         changeHistoryAdmin( newVal );
+        // writeInfoTabHistoryAdmin();
     }
 
-    function showHistoryAdmin( ){
+    function writeInfoTabHistoryAdmin(){
+        var infoTab = document.getElementById( 'tab4' );
+
         var newVal = document.getElementById("historyAdmin").value;
+        var obj =  getHistoryAdminStringObj( newVal );
 
-        var strObj =  getHistoryAdminStringObj( newVal );
+        var strConvText;
 
-        showTextLayerPopup( strObj.title, strObj.text );
+        infoTab.innerHTML = "<strong><font >" + '[ ' + obj.title + ' ]' + "</font></strong>" +'<br>';
+
+        var infoObj = { // title : poiText,
+            content : obj.text
+        };
+
+        if( obj.text ) {
+            strConvText = makeStrongInText( layerManager, "abc", infoObj );
+        }
+
+        infoTab.innerHTML += strConvText;
     }
+
+
+    function showHistoryAdmin(){
+
+        writeInfoTabHistoryAdmin();
+
+        // infoTab.innerHTML = obj.text;
+        adjustScrDiv.setIsFullScr("false");
+
+        $("#tab4").scrollTop(0);
+        tabMenu.selectTab('tab4Menu');
+
+    }
+
 
     function changeHistoryAdmin( newValue ){
 
@@ -1109,12 +1141,35 @@
     //    $('#pathPoiList').empty();
     }
 
-    function showPathExplain( ){
+
+    function showPathExplain(){
+
+        writeInfoTabPathExplain();
+        adjustScrDiv.setIsFullScr("false");
+
+        $("#tab4").scrollTop(0);
+        tabMenu.selectTab('tab4Menu');
+
+    }
+
+    function writeInfoTabPathExplain(){
+        var infoTab = document.getElementById( 'tab4' );
+
         var val = document.getElementById("movePath").value;
         var obj = trajectoryData.getTrajectoryByValue( val );
+        var strConvText;
 
-        if( obj.text )
-            showTextLayerPopup( obj.title, obj.text );
+        infoTab.innerHTML = "<strong><font >" + '[ ' + obj.title + ' ]' + "</font></strong>" +'<br>';
+
+        var infoObj = { // title : poiText,
+            content : obj.text
+        };
+
+        if( obj.text ) {
+            strConvText = makeStrongInText( layerManager, "abc", infoObj );
+        }
+
+        infoTab.innerHTML += strConvText;
     }
 
     function eventMovingSpeedChange( value ){
@@ -1129,7 +1184,7 @@
     function setExtentOfPath() {
 
         dvPopupCloser.onclick();
-        adjustScrDiv.setIsFullScr("true");
+        adjustScrDiv.setIsFullScr("false");
         var movePath = $("#movePath").val();
         var index = Number(movePath);
         var extent = trajectoryData.getExtent(index);
@@ -1143,7 +1198,11 @@
 
         dvPopupCloser.onclick();
 
-        adjustScrDiv.setIsFullScr("true");
+        /*
+        writeInfoTabPathExplain();
+        adjustScrDiv.setIsFullScr("false");
+        */
+        showPathExplain();
 
         measureDistance.removeMeasureDraw();
 
