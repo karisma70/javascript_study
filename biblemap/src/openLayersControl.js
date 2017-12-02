@@ -78,7 +78,8 @@
  var bibleMapPointLayers = [
          { url: 'history/History_12Sect_poi',  order: 20, style: {
              visibleRange : { max : 16 , min : 8 },
-             textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px Nanum Gothic', color: '#E7E5E5', outlineColor : '#5F0291', outlineWidth : 4  }}
+             // textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px Nanum Gothic', color: '#E7E5E5', outlineColor : '#5F0291', outlineWidth : 3  }}
+             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 13px Nanum Gothic', color: "#E7E5E5", outlineColor : "#5F0291", outlineWidth : 3  } }  //3e636a
          },
 
          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,13 +108,14 @@
 
          { url: 'level_6_poi',  order: 25, style: {
              visibleRange : { max : 16 , min : 6 },
-             textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px Nanum Gothic', color: '#E7E5E5', outlineColor : '#033078', outlineWidth : 3  }}
+             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 13px Nanum Gothic', color: '#E7E5E5', outlineColor : '#033078', outlineWidth : 3  }}
          },
 
          {
              url: 'level_4_poi',  order: 26, style: {
              visibleRange : { max : 16 , min : 4 },
-             textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px Nanum Gothic', color: '#E7E5E5', outlineColor : '#105602', outlineWidth : 4  }}
+            // textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px Nanum Gothic', color: '#E7E5E5', outlineColor : '#105602', outlineWidth : 4  }}
+             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 13px Nanum Gothic', color: "#E7E5E5", outlineColor : "#105602", outlineWidth : 3  } }  //3e636a
          }
      ];
 
@@ -866,3 +868,92 @@ function createLayer( source  ) {
  }());
 
 
+
+
+ var init3dMap = function(){
+
+     var behindInit2DMap = function() {
+         var olView = new ol.View({
+             // center: [-9101767, 2822912],
+             center: [3844176, 3806822],
+             // zoom: 14
+             maxZoom: 15,
+             // minZoom: 4,
+             minZoom: 4,
+             // zoom: 8
+             zoom: 7
+
+
+         });
+
+         var olMap = new ol.Map({
+             layers: [
+                 new ol.layer.Tile({
+                     source: new ol.source.BingMaps({
+                         key: 'Aj2EBKlpTb_8cxuPEs0OHBBoiplb0HYYaOb8DVHTyCK7dduQSzMTv1i9gb4WwnP2',
+                         imagerySet: "Aerial"
+                     })
+                 })
+             ],
+             target: 'behindMap2D',
+             view: olView
+         });
+
+         return {
+             view : olView,
+             map : olMap };
+     };
+
+     var map2D = behindInit2DMap();
+
+     //var ol3d = new olcs.OLCesium({map: bibleMap, target: 'map3D'});
+     var ol3d = new olcs.OLCesium({map: map2D.map, target: 'map3D'});
+     var scene = ol3d.getCesiumScene();
+
+     scene.screenSpaceCameraController.minimumZoomDistance = 1000;
+     scene.screenSpaceCameraController.maximumZoomDistance = 400000;
+     scene.screenSpaceCameraController._minimumZoomRate = 5; // ←
+
+     var terrainProvider = new Cesium.CesiumTerrainProvider({
+         url : '//assets.agi.com/stk-terrain/world',
+         requestVertexNormals: false
+     });
+     scene.terrainProvider = terrainProvider;
+     ol3d.setEnabled(true);
+     // window.map2 = ol3d;
+
+     //var rmCesiumAttr = function(){
+     $e = $('.cesium-credit-textContainer');
+     $e.parent().remove();
+     $e.remove();
+     // };
+
+     return map2D;
+ };
+
+
+
+ function Create3DMap( map2D, target ) {
+     // var ol3d = new olcs.OLCesium({map: map2D.map, target: 'map3D'});
+     var ol3d = new olcs.OLCesium({map: map2D, target: target });
+     var scene = ol3d.getCesiumScene();
+
+     scene.screenSpaceCameraController.minimumZoomDistance = 1000;
+     scene.screenSpaceCameraController.maximumZoomDistance = 400000;
+     scene.screenSpaceCameraController._minimumZoomRate = 5; // ←
+
+     var terrainProvider = new Cesium.CesiumTerrainProvider({
+         url: '//assets.agi.com/stk-terrain/world',
+         requestVertexNormals: false
+     });
+     scene.terrainProvider = terrainProvider;
+     ol3d.setEnabled(true);
+     // window.map2 = ol3d;
+
+     //var rmCesiumAttr = function(){
+     $e = $('.cesium-credit-textContainer');
+     $e.parent().remove();
+     $e.remove();
+
+     return ol3d;
+ }

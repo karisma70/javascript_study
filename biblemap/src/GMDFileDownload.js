@@ -129,7 +129,7 @@ function getStringFromAttrs( attrs, field ) {
 }
 
 
-function GMDFileDownload( map, shpUrl, layerId, style, paramLayerManager, wholeCompleteCallback ) {
+function GMDFileDownload( map, behindMap, shpUrl, layerId, style, paramLayerManager, wholeCompleteCallback ) {
 
     var url = "biblemap/downloadmap/" + shpUrl;
 
@@ -367,6 +367,11 @@ function GMDFileDownload( map, shpUrl, layerId, style, paramLayerManager, wholeC
 
 
         map.addLayer(  shapeLayer );
+
+        if( behindMap ) {
+            behindMap.addLayer(shapeLayer);
+        }
+
         shapeLayer.setZIndex( layerId );
 
 

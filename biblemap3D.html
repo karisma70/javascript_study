@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Bible Map</title>
+    <link rel="shortcut icon" href="http://www.biblemap.or.kr/favicon.ico" type="image/x-icon"/>
+    <link rel="icon" href="http://www.biblemap.or.kr/favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" type="text/css" media="all" href="http://fonts.googleapis.com/earlyaccess/nanumgothic.css">
+    <link rel="stylesheet" type="text/css" media="all" href="http://fonts.googleapis.com/earlyaccess/hanna.css">
+    <!-- <link rel="stylesheet" href="https://openlayers.org/en/v4.1.1/css/ol.css" type="text/css"> -->
+    <link rel="stylesheet" href="https://openlayers.org/en/v4.4.2/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="biblemap/css/expandmenu.css?version=20170917">
+    <link rel="stylesheet" href="biblemap/ol-cesium-v1.32/ol.css" type="text/css">
+
+    <meta name="viewport" content="width=device-width">
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+    <!-- <script src="https://api.mapbox.com/mapbox.js/plugins/arc.js/v0.1.0/arc.js"></script> -->
+
+    <script type="text/javascript" src="biblemap/src/arc.js?version=20170813"></script>
+    <script type="text/javascript" src="biblemap/src/common.js?version=20170830"></script>
+    <script type="text/javascript" src="biblemap/lib/binaryajax.js?version=20170813"></script>
+    <script type="text/javascript" src="biblemap/src/binarywrapper.js?version=20170813"></script>
+    <script type="text/javascript" src="biblemap/src/GMDFileReader.js?version=20170901"></script>
+    <script type="text/javascript" src="biblemap/src/propertyDB.js?version=20170813"></script>
+
+    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20171109"></script>
+    <script type="text/javascript" src="biblemap/src/routePlay.js?version=20170905"></script>
+    <script type="text/javascript" src="biblemap/src/trajectoryData.js?version=20170901"></script>
+    <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170829"></script>
+    <!-- <script type="text/javascript" src="biblemap/openLayers_v4.1.1/ol.js"></script> -->
+    <!-- <script type="text/javascript" src="biblemap/openLayers_v4.4.2/ol.js"></script> -->
+    <script src="biblemap/ol-cesium-v1.32/Cesium/Cesium.js"></script>
+    <script src="biblemap/ol-cesium-v1.32/olcesium.js"></script>
+
+    <script type="text/javascript" src="biblemap/src/distanceMeasureControl.js?version=20170820"></script>
+    <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170905"></script>
+    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20171109"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+    <!-- <script type="text/javascript" src="biblemap/vendor/jquery-1.8.1.js"></script> -->
+    <script type="text/javascript" src="biblemap/vendor/json2.js"></script>
+    <script type="text/javascript" src="biblemap/src/jquery.collapse.js"></script>
+    <script type="text/javascript" src="biblemap/src/jquery.collapse_storage.js"></script>
+    <script type="text/javascript" src="biblemap/src/jquery.collapse_cookie_storage.js"></script>
+
+    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/autocomplete_style.css?version=20170911">
+    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/popup.css?version=version=20170910">
+    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/tabMenu.css?version=version=20170916">
+    <!-- <script type="text/javascript" src="biblemap/js/jquery-1.9.1.min.js"></script> -->
+    <script type="text/javascript" src="biblemap/js/jquery.autocomplete.min.js"></script>
+
+
+    <style type ="text/css">
+
+        img {-ms-interpolation-mode:bicubic;}
+
+        *{   margin: 0;padding: 0;
+
+            -moz-box-sizing: border-box;            /*  마우스 드래그 방지   */
+            box-sizing: border-box;
+            -webkit-user-select : none;
+            -moz-user-select : none;
+            user-select: none;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-size: 12px;
+            color : rgb( 40, 40, 40 );
+        }
+
+        /* Let's get this party started */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(240,240,240,0.3);
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            background: rgba(240,240,240,0.8);
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+        }
+        ::-webkit-scrollbar-thumb:window-inactive {
+            background: rgba(240,240,240,0.8);
+        }
+
+
+        div > span {
+            font-family: 'Nanum Gothic';
+        }
+
+        div > select {
+
+            font-family: 'Nanum Gothic';
+            font-size: 12px;
+            padding-left: 5px;
+            height:20px;
+
+
+
+            /*background: url('biblemap/image/down_arrow.png') no-repeat 100% 50%; */  /* 네이티브 화살표를 커스텀 화살표로 대체 */
+
+            /*border-radius: 0px; */ /* iOS 둥근모서리 제거 */
+            /*-webkit-appearance: none; */ /* 네이티브 외형 감추기 */
+            /*-moz-appearance: none;
+            appearance: none;  */
+
+            background-color: rgb(255,255, 255);
+            border: 1px solid rgb(217, 217, 217);
+        }
+
+        .customSelect{
+            background: url('biblemap/image/down_arrow.png') no-repeat 100% 50%; /* 네이티브 화살표를 커스텀 화살표로 대체 */
+            background-color: rgb(255,255, 255);
+
+            border-radius: 0px; /* iOS 둥근모서리 제거 */
+            -webkit-appearance: none; /* 네이티브 외형 감추기 */
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        /* 화살표 없애기 for IE10, 11*/
+        div > select::-ms-expand {
+            display: none;
+        }
+
+        div > input {
+            font-family: 'Nanum Gothic';
+            font-size: 12px;
+
+            -moz-user-select : text;
+            -webkit-user-select : text;
+            -ms-user-select : text;
+            user-select : text;
+            border: 1px solid rgb(217, 217, 217);
+        }
+
+        .wrapperDiv{
+            /* overflow:hidden; */
+            /* border:1px solid red; */
+            height: 100%;
+        }
+        #sidebar{
+            /* height: 100%; */
+            width: 200px;
+            float:left;
+            border:1px solid grey;
+            border-color: rgb( 210, 210, 210);
+        }
+        .mapview{
+            /*width : 100%;
+            height: 80%; */
+            float: left;
+            /* margin-right: -200px;
+            padding-right: 200px; */
+            background-color: #ffffff;
+            border:1px solid grey;
+        }
+
+        #poiTextContent {
+            letter-spacing:0px;
+            line-height: 1.8em;
+            font-family: 'Nanum Gothic', serif;
+        }
+
+        #footer{
+            position: absolute;
+            /* top: 65%;
+            height: 34%; */
+            left: 200px;
+            /* width: 100%; */
+            /* background-color: #D0E1EB;  */
+            background-color: white;
+            font-family: '새굴림';
+            /* border:1px solid black;  */
+        }
+
+        #footerDummy{
+            position: absolute;
+            /* top: 65%;
+            height: 34%; */
+            left: 200px;
+            /* width: 100%; */
+            background-color: #D0E1EB;
+        }
+
+        .ol-popup-content {
+            font-size: 10px;
+            font-family: 'Nanum Gothic';
+            /* font-family: 'hanna', sans-serif; */
+
+        }
+
+        .ol-popup {
+            position: absolute;
+            background-color: white;
+            -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+            filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #cccccc;
+            bottom: 12px;
+            left: -50px;
+            min-width: 145px;
+
+            -ms-user-select: none;
+            -moz-user-select: -moz-none;
+            -khtml-user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .ol-popup:after, .ol-popup:before {
+            top: 100%;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+        }
+        .ol-popup:after {
+            border-top-color: white;
+            border-width: 10px;
+            left: 48px;
+            margin-left: -10px;
+        }
+        .ol-popup:before {
+            border-top-color: #cccccc;
+            border-width: 11px;
+            left: 48px;
+            margin-left: -11px;
+        }
+        .ol-popup-closer {
+            text-decoration: none;
+            position: absolute;
+            top: 2px;
+            right: 8px;
+            font-size : 12px;
+        }
+        .ol-popup-closer:after {
+            content: "✖";
+        }
+
+        .measure-distance {
+            top: 65px;
+            left: .5em;
+        }
+        .ol-touch .measure-distance {
+            top: 120px;
+        }
+
+        .ol-touch .prevPoi {
+            top: 80px;
+        }
+
+        text {
+            font-family: 'Nanum Gothic', serif;
+        }
+
+        .button {
+            /*vertical-align:center; */
+            vertical-align: top;
+            line-height: 1px;
+            font-family: 'Nanum Gothic', serif;
+            font-size: 11px;
+            color: white;
+            height: 20px;
+            width: 30px;
+            border:0;
+            outline: 0;
+            background-color: #38B7F5;
+        }
+        .dummy {
+
+            width:200px;
+            height: 15px;
+            background-color:rgb( 199, 219, 252  );
+        }
+
+        .dummy2 {
+
+            width:200px;
+            height: 15px;
+            /* background-color:rgb( 239, 244, 254  );  */
+            background-color:rgb( 248, 248, 248  );
+        }
+
+        .tooltip {
+            position: relative;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+            color: white;
+            padding: 4px 8px;
+            /* opacity: 0.7;  */
+            white-space: nowrap;
+        }
+        .tooltip-static {
+            background-color: #ffcc33;
+            /* background-color: #FBFE38;  */
+            color: black;
+            border: 1px solid white;
+        }
+        .tooltip-static:before {
+            border-top: 6px solid rgba(0, 0, 0, 0.5);
+            border-right: 6px solid transparent;
+            border-left: 6px solid transparent;
+            content: "";
+            position: absolute;
+            bottom: -6px;
+            margin-left: -7px;
+            left: 50%;
+        }
+        .tooltip-static:before {
+            border-top-color: #ffcc33;
+            /* border-top-color: #FBFE38; */
+        }
+    </style>
+</head>
+
+<body>
+<div class="wrapperDiv">
+    <div id="sidebar" style="position:absolute; background-color:rgb( 248, 248, 248  );" >
+        <a href="javascript:showLicenseNotice();" target="_blank" style="text-decoration:none; vertical-align:middle;"><div id="logo" style="height:32px; background-color:rgb( 59, 89, 153 );"><img src="biblemap/image/biblemap_logo.png" style="width:27px; height:33px; vertical-align:middle" >
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span  style="font-size:11pt; font-weight:bold; color:white; text-align:center;  vertical-align:middle; font: 'Hanna', serif;" >성경지도</span></div></a>
+        <div class="dummy2" style = "height: 8px;"></div>
+        <div class="dummy2" style = "height: 81px;">
+            <div id ="bibleSearch" style="font-size:12px; height: 50px">
+                <select id ="bibleTitle"  class="customSelect" name="bibleTitle" style="margin-left: 46px; width: 120px; height:21px; " ></select>
+                <div style="height: 4px"></div>
+                <input type="image" src="biblemap/image/left_arrow.png?version=20170905" style="position: absolute;  margin-left: 46px; width:18px; height:20px; vertical-align:middle" onclick="decreaseBibleChapter()">
+                <input type="number" class="chapterNum" id ="bibleChapter" style="padding-left: 3px; margin-left: 66px; top: 50px;  width: 3em; height: 20px; font-size:12px;" value="1"> <span style="margin-left: 0px; font-size:12px;">장</span>
+                <input type="image" src="biblemap/image/right_arrow.png?version=20170905" style="position: absolute;  margin-left: 2px;width:18px; height:20px; vertical-align:middle" onclick="increaseBibleChapter()">
+                <input type="button" class="button" value="검색" style="position: absolute;  margin-left: 22px;" onclick="searchBibleChapter()">
+            </div>
+
+            <div name="searchWord" style="height:20px;">
+                <!-- <img src="image/word_search2.png" style="width:20px; height:22px; vertical-align:middle" ><input type="text" id ="bibleWord" size="12" style="font-size:12px;" value="바울"><input type="button" value="검색" style="font-size:12px;" onclick="searchBibleWord()"> -->
+                <span style="margin-left: 18px; font-size:12px;">단어</span><input type="text" id ="bibleWord" size="12" style="padding-left: 5px; margin-left: 3px; width:90px; height:21px; font-size:12px;"  value="바울" onkeypress="if(event.keyCode==13) searchBibleWord();">
+                <input type="button" class="button" value="검색" style="position: absolute; margin-left: 2px;" onclick="searchBibleWord()">
+            </div>
+        </div>
+        <!-- <div id="css3-animated-autoclose" data-collapse> -->
+        <div id="accordion-example" data-collapse="accordion">
+            <h3 class="open" >지명검색</h3>
+            <div class="content" style ="width:198px; height: 100px; background-color:#FFFFFF;">
+                <span style="margin-left: 10px; font-size:12px;">지명</span>
+                <input type="text" name="currency" class="biginput" id="biblePlace" size="12"
+                       style="padding-left: 5px; margin-left:3px; width: 90px; height:20px; font-size:12px; font:'Nanum Gothic'; " value="갈릴리 호수" onkeypress="if(event.keyCode==13) searchBiblePlace();">
+                <input type="button" class="button" value="검색" style="position: absolute; vertical-align:center; margin-left: 2px;" onclick="searchBiblePlace()">
+                <div style="height: 4px"></div>
+                <!-- <div id ="searchedPoiList" rows= "5" style="border:1px solid grey; margin-left:10px; height: 60px; width: 163px; font-size:13px ; clear: both;"></div>  -->
+                <select id ="searchedPoiList" name="searchedPoiList" size='3' style="overflow:hidden; margin-left:35px; width: 123px; height:52px; border: 1px solid #D9D9D9; " ></select>
+            </div>
+            <h3>시대별 경계 영역</h3>
+            <div class="content" style ="background-color:#FFFFFF; height: 275px;">
+                <span id ="range" style="margin-left: 20px; font-size:12px; vertical-align:middle;">현재의 국가</span>
+                <div style="height: 8px"></div>
+                <div name ="historyBar" style="margin-left:0px; width: 180px; height: 34px; border: 1px solid rgb(217, 217, 217);">
+                    <input id="historyAdmin" type ="range" style = "margin-left: 10px; top: 5px; width:160px; height: 30px; font-size:12px; border: none;" min = "0" max = "7" value = "7" onchange="eventHistoryAdmin(this.value)" onclick="eventHistoryAdmin(this.value)" >
+                    &nbsp;&nbsp;&nbsp;
+                </div>
+                <div style="height: 8px"></div>
+                <div id="historyAdminExplain" style ="overflow-y:scroll; margin-left: 0px; width : 180px; height: 160px; line-height: 1.6em; border: 1px solid #A7A4A4; font-family: 'Nanum Gothic';" >
+                </div>
+                <div style="height:5px;"></div>
+                <div>
+                    <input type="image" src="biblemap/image/show-info-icon.png?version=20170905" style="position:absolute; margin-left: 160px; width:20px; height:20px; vertical-align:middle" onclick="showHistoryAdmin()">
+                </div>
+
+            </div>
+            <h3>주요 이동 경로</h3>
+            <div class="content" style ="width:198px; background-color:#FFFFFF">
+                <select id="movePath" class="customSelect" style="margin-left: 10px; width:160px; height:21px;" onchange="eventMovingPathChange(this.value)" ></select>
+                <br>
+                <div style="height: 10px"></div>
+                <input type="image" src="biblemap/image/set-extent-icon.png?version=20170905" style="position: absolute; margin-left: 10px; width:20px; height:20px; vertical-align:middle" onclick="setExtentOfPath()">
+                <select id="movingSpeed" class="customSelect" style="position: absolute; margin-left:40px; width:50px; height: 20px; font-size:12px;"  onchange="eventMovingSpeedChange(this.value)" ></select>
+                <input type="image" src="biblemap/image/trajectory_play.jpg?version=20170905" style="position: absolute; margin-left:105px; width:20px; height:20px; vertical-align:middle" onclick="pathAction()">
+                <input type="image" src="biblemap/image/trajectory_pause.png?version=2017905" style="position: absolute; margin-left:128px; width:20px; height:20px; vertical-align:middle" onclick="pathPause()">
+                <input type="image" src="biblemap/image/trajectory_stop.jpg?version=2017905" style="position: absolute; margin-left:150px; width:20px; height:20px; vertical-align:middle" onclick="pathHide()">
+                <br>
+                <div style="height:15px;"></div>
+                <!-- <div id="movePathExplain" style ="overflow-y:scroll; margin-left: 0px; width : 180px; height: 200px; line-height: 1.6em; border: 1px solid rgb(217,217,217); font-family: 'Nanum Gothic';" ></div> -->
+                <input type="image" src="biblemap/image/show-info-icon.png?version=20170905" style="position: absolute; margin-left: 10px; width:20px; height:20px; vertical-align:middle" onclick="showPathExplain()">
+                <select id ="pathPoiList" name="pathPoiList" size='10' style="overflow-y:scroll; margin-left:40px; width: 123px; height:170px; border: 1px solid #D9D9D9; " ></select>
+                <div style="height: 5px"></div>
+            </div>
+        </div>  <!--  <div id="css3-animated-autoclose" data-collapse>  -->
+
+        <br>
+        <br>
+
+        <!--
+        <div>
+            <br>
+            &nbsp&nbsp<input id="createTrajectory" type ="button" value="생성" onclick="createTrajectory()" >
+            &nbsp&nbsp<input id="delTrajectory" type ="button" value="삭제" onclick="delTrajectory()" >
+            <br>
+            <div id = "zoomLevel">ZoomLevel</div>
+            <div id = "mousePosition">MousePos</div>
+        </div>
+        -->
+
+        <br>
+
+        <div id ="dummy" class = "dummy" style="position: absolute; top:56px; width: 198px; height: 200px;">
+            <span class="hana-font" style="margin-left: 40px; font-size:7pt; font-weight:bold; color:rgb( 59, 89, 153 ); text-align:center;  vertical-align:middle; font: 'Hanna', serif;" >www.biblemap.or.kr</span>
+            <div id ="licenseNotice" style="left: 0px; top:0px; height: 17px; width:198px; background-color:rgb( 199, 219, 252  );" >
+                <!-- <span style="color: rgb(255, 255, 255); font-size:11px; horizontal-align: center;" onclick="showLicenseNotice()" >   Notice</span> -->
+                <a href="http://blog.naver.com/bible-map" target="_blank" style="text-decoration:none"><img src="biblemap/image/L_biblemap_logo.png" style="position: absolute; top: 17px; width:198px; height:182px; vertical-align:middle" ></a>
+            </div>
+        </div>
+
+        <div id="cesiumContainer"></div>
+    </div>
+
+
+
+
+</div>  <!-- Side bar div   -->
+
+<div>
+    <!-- <input type="text" name="currency" class="biginput" id="autocomplete" size="12" style="font-size:12px;"> -->
+</div>
+</div>
+
+<div id="map" class="mapview" style="position:absolute;">
+</div>
+
+<div id="map3D" class="mapview" style="position:absolute;">
+</div>
+
+<!-- <div id="behindMap2D" class="mapview" style="position:absolute; display:none;"> -->
+<div id="behindMap2D" class="mapview" style="position:absolute;">
+</div>
+
+
+<!-- <div id="footerDummy"></div> -->
+
+<div id="footer">
+    <ul id="tabsMenu" class="tabs">
+        <li id="tab1Menu" class="active" rel="tab1">성경본문</span></li>
+        <li id="tab2Menu" rel="tab2"><span style="font-color:white; ">단어검색</span></li>
+        <li id="tab3Menu" rel="tab3">지명정보</li>
+        <li id="tab4Menu" rel="tab4">기타정보</li>
+    </ul>
+    <div id ="tab_contain" class="tab_container"  >
+        <div id="tab1" class="tab_content">
+        </div>
+        <div id="tab2" class="tab_content">
+            검색결과가&nbsp;없습니다 <br> 성경의&nbsp;단어&nbsp;검색&nbsp;버튼을&nbsp;클릭해&nbsp;주세요
+        </div>
+        <div id="tab3" class="tab_content" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
+            검색결과가&nbsp;없습니다 <br> 지도상의&nbsp;지명을&nbsp;클릭하고&nbsp;아이콘&nbsp;'i'를&nbsp;클릭해&nbsp;주세요
+        </div>
+        <div id="tab4" class="tab_content" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
+            시대별&nbsp;경계&nbsp;영역&nbsp;또는&nbsp;주요&nbsp;이동&nbsp;경로&nbsp;메뉴에서&nbsp;아이콘&nbsp;'i'를&nbsp;클릭해&nbsp;주세요&nbsp
+        </div>
+    </div>
+    <!-- .tab_container -->
+</div>
+
+
+
+
+<div>
+    <img src="biblemap/image/hideBible.png2017905" id="footerToggle" name="img" style="position:absolute; width:50px; height:12px;" onclick="toggleScrMap()">
+</div>
+
+<div id="popup" class="ol-popup" style="font-size:1.1em;">
+    <a href="#" id="popup-closer" class="ol-popup-closer" ></a>
+    <div style="height: 8px"></div>
+    <div id="popup-content" class="ol-popup-content" style="text-align:center; font-size: 13px;"></div>
+</div>
+
+
+<div id="customPopup" class="pop-layer" style = "width : 550px; height: 520px;" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
+    <div class="pop-container" >
+        <div>
+            <span id ="poiTitle" style="font-size:12pt; text-align:center;">
+           </span>
+        </div>
+        <div id ="contentDiv" style = "overflow-y:scroll; width : 510px; height: 400px;">
+            <span id ="poiTextContent" style="font-size:11pt; text-align:center;">
+           </span>
+        </div>
+        <div class="btn-r">
+            <a href="#" class="btn-layerClose">Close</a>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    setDebug( true );
+
+
+    var tabMenu = (function () {
+        $(".tab_content").hide();
+        $(".tab_content:first").show();
+
+        var selMenuString = "";
+
+        $("ul.tabs li").click(function () {
+            selMenuString = $(this).text();
+            ConsoleLog( selMenuString );
+            $("ul.tabs li").removeClass("active").css("color", "#FFFFFF");
+            $(this).addClass("active").css("color", "#000000");
+            $(".tab_content").hide();
+            var activeTab = $(this).attr("rel");
+            // $("#" + activeTab).fadeIn();
+            $("#" + activeTab).show();
+        });
+
+        TabMenuControl = function() {
+            this.selectTab = function (menuID) {
+                // var el = document.getElementById('tab1Menu');
+                var el = document.getElementById(menuID);
+                eventFire(el, 'click');
+            };
+
+            this.getSelectedTabString = function () {
+                return selMenuString;
+            };
+
+            return this;
+        };
+
+        return new TabMenuControl;
+
+    }());
+
+
+    $(document).ready(function(){
+        // alert('ojtiger.com');
+
+        tabMenu.selectTab( 'tab1Menu');
+    });
+
+
+
+
+    IsExistWord = function( array, word ) {
+        for (var id in array ) {
+            var curObj = array[id];
+            if( curObj.value == word) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    // 지명 검색창에 지명 입력시 자동으로 후보단어 표시하기
+    function initTextAutoComplete(){
+
+        var currencies = [];
+        var poiDic = layerManager.getPoiDictionaryObj();
+
+        for( prop in poiDic ){
+            if( poiDic.hasOwnProperty(prop) && typeof poiDic[prop] === "object" ){
+                if( IsExistWord( currencies,  prop ) == false) {
+                    currencies.push({value: prop});
+                }
+            }
+        }
+
+        $('#biblePlace').autocomplete({
+            lookup: currencies,
+            onSelect: function (suggestion) {
+                // var thehtml = '<strong>Currency Name:</strong> ' + suggestion.value + ' <br> <strong>Symbol:</strong> ' + suggestion.data;
+                // $('#outputcontent').html(thehtml);
+
+                var dvBiblePlace = document.getElementById("biblePlace");
+                dvBiblePlace.value = suggestion.value;
+                searchBiblePlace();
+            }
+        });
+    }
+
+
+    function createTrajectory() {
+
+        bibleMapManager.addTrajectoryInteraction(function (vertices) {
+            console.log("------------------------");
+            console.log("[");
+            for (var idx = 0; idx < vertices.length; idx++) {
+                var pos = vertices[idx];
+                console.log( "[" + pos + "],");
+            }
+            console.log("]");
+            console.log("------------------------");
+        });
+    }
+
+    function delTrajectory(){
+        bibleMapManager.removeTrajectoryInteraction();
+    }
+
+
+    var dvBibleTitle = document.getElementById('bibleTitle');
+    var dvBibleChapter = document.getElementById('bibleChapter');
+    var beforeChapterSearchParam = { type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
+        option: { "title": "",
+            "chapter" : ""
+        }
+    };
+
+    dvBibleTitle.addEventListener("change", function(e){
+        dvBibleChapter.value = "1";
+        searchBibleChapter();
+    });
+
+
+    $('.chapterNum').bind('keyup mouseup', function(){
+        searchBibleChapter();
+    } );
+
+    var dvBibleWord = document.getElementById("bibleWord");
+    /*
+     dvBibleWord.addEventListener("change", function(e){
+     searchBibleWord();
+     });
+     */
+
+    var dvBiblePlace = document.getElementById("biblePlace");
+
+    /*
+     dvBiblePlace.addEventListener("change", function(e){
+     searchBiblePlace();
+     });
+     */
+
+    $( '#customPopup' ).css( "z-index", 6000 );
+
+    var dvPopupContainer = document.getElementById('popup');
+    dvPopupContainer.setAttribute("id", "popupContainer" );
+    $( '#popupContainer' ).css( "z-index", 2000 );
+
+    var dvPopupContent = document.getElementById('popup-content');
+    var dvPopupCloser = document.getElementById('popup-closer');
+
+    var popupOverlay = createOverlay( dvPopupContainer );    // dvPopupContainer
+
+    var measureBtn = document.createElement('button');
+    measureBtn.innerHTML = 'M';
+
+
+    var prevPoiBtn = document.createElement('button');
+    prevPoiBtn.innerHTML = '<';
+
+    var nextPoiBtn = document.createElement('button');
+    nextPoiBtn.innerHTML = '>';
+
+    var MapMenuClickEvent = function( opt_options ) {
+
+        var options = opt_options || {};
+
+        var element = document.createElement( 'div');
+        element.className = 'measure-distance ol-unselectable ol-control';
+        element.appendChild( measureBtn );
+        var br = document.createElement('br');
+        element.appendChild( br );
+        element.appendChild( prevPoiBtn );
+        element.appendChild( nextPoiBtn );
+
+        element.setAttribute("id", "mapMenuDiv" );
+        $('#mapMenuDiv').css( "z-index", "9000" );
+
+        ol.control.Control.call( this, {
+            element: element,
+            target: options.target
+        });
+    };
+
+    ol.inherits( MapMenuClickEvent, ol.control.Control );
+
+
+    var bibleChapterList = new BibleChapterList();
+
+    bibleChapterList.requestBibleChapter( function(){
+        for( var order = 1; order <= bibleChapterList.getCount(); order ++  ) {
+            var chapter = document.createElement("option");
+            var obj =  bibleChapterList.getChapterByNumber( order );
+            chapter.text = obj.title;
+            chapter.value = obj.bookNumber;
+            dvBibleTitle.appendChild( chapter );
+        }
+
+        getSearchWordsFromStorage();
+    } );
+
+    var bibleMapManager = createMapManager( popupOverlay, 'map' );
+
+    var behind2D = init3dMap();
+
+    var trajectoryData = new TrajectoryData();
+
+    function downloadTrajectoryData( callback ) {
+        trajectoryData.requestMovePath( function( resObj ){
+
+            eventMovingPathChange(0);     //
+
+            var selPath = document.getElementById('movePath');
+            var count = trajectoryData.getCount();
+            for( var idx = 0; idx < count; idx ++  ) {
+                var path = document.createElement("option");
+                var obj = trajectoryData.getTrajectoryByValue(idx);
+                // path.text = obj.name;
+                path.text = obj.title;
+                path.value = obj.value;
+                selPath.appendChild( path );
+            }
+
+            ConsoleLog( "Complete!!! MovePath List!!! ");
+
+            if( callback ) {
+                callback();
+            }
+
+        } );
+    }
+
+
+    var layerManager = bibleMapManager.getLayerManager();
+    var bibleMap = bibleMapManager.getMap();
+
+
+    var pathTooltip = new Tooltip( bibleMap, 'tooltip tooltip-static' );
+
+    var mapMenuClickEvent = new MapMenuClickEvent();
+    bibleMap.addControl( mapMenuClickEvent );
+
+    var measureDistance = new DistanceMeasureControl( bibleMapManager );
+    measureBtn.addEventListener('click', measureDistance.toggleMeasureDistance, false);
+    prevPoiBtn.addEventListener('click', function(){
+        var poiObj = layerManager.historyPrevPoi();
+        if( poiObj != null )
+            moveToPlaceByPoiObj( poiObj );
+        ConsoleLog( "Prev Poi Button!!! ");
+    }, false );
+
+    nextPoiBtn.addEventListener('click', function(){
+        var poiObj = layerManager.historyNextPoi();
+        if( poiObj != null )
+            moveToPlaceByPoiObj( poiObj );
+        ConsoleLog( "Next Poi Button!!! ");
+    }, false );
+
+    var selSpeed = document.getElementById('movingSpeed');
+    var baseSpeed = 0.0;
+    for( var idx = 0; idx < 4; idx ++ ){
+        var speed = document.createElement( "option");
+        speed.text = (idx + 1) + 'x';
+        speed.value = baseSpeed;
+        baseSpeed += 0.04;
+        selSpeed.appendChild( speed );
+    }
+
+
+    var adjustScrDiv = (function(){
+
+        var bIsFullScr = 'false';
+
+        function fullScrMap(){
+            var sidebar = document.getElementById('sidebar');
+            var mapview = document.getElementById('map');
+            var mapview3D = document.getElementById('map3D');
+
+            var footer = document.getElementById('footer');
+            $("#footer").hide();
+
+            // $("#footerDummy").hide();
+
+            var container = document.getElementById('container');
+            $("#container").hide();
+
+            var toggleBtn = document.getElementById("footerToggle");
+            toggleBtn.style.left = (200 -25) + ( (window.innerWidth -200) * 0.5 ) + "px";
+            toggleBtn.style.top = (window.innerHeight - 12)+ "px";
+
+            sidebar.style.top = 1 + 'px';
+            sidebar.style.bottom = 1 + 'px';
+
+            var dummy  = document.getElementById('dummy');
+            var licenseNotice = document.getElementById('licenseNotice');
+
+            // dummy.style.top = (window.innerHeight - 30) + 'px';
+            dummy.style.top = (window.innerHeight - 202) + 'px';
+            // licenseNotice.style.top = (window.innerHeight - 16) + 'px';
+
+            mapview.style.left = 200+'px';
+            // mapview.style.right = 0 + 'px';
+            mapview.style.right = (( window.innerWidth * 0.5 ) -100) + 'px';
+            mapview.style.bottom = 0 + 'px';
+
+            mapview3D.style.left = (( window.innerWidth * 0.5 )+100) + 'px';
+            mapview3D.style.right = 0 + 'px';
+            mapview3D.style.bottom = 0 + 'px';
+
+            bibleMap.updateSize();
+        }
+
+        function normalScrMap(){
+            var sidebar = document.getElementById('sidebar');
+            var toggleBtn = document.getElementById("footerToggle");
+            var mapview = document.getElementById('map');
+            var mapview3D = document.getElementById('map3D');
+            var footer = document.getElementById('footer');
+            // var footerDummy = document.getElementById('footerDummy');
+            var tab_contain = document.getElementById( "tab_contain");
+
+            var tab1 = document.getElementById( "tab1");
+            var tab2 = document.getElementById( "tab2");
+            var tab3 = document.getElementById( "tab3");
+            var tab4 = document.getElementById( "tab4");
+
+            var mapHeight = window.innerHeight * 0.60;
+
+            $("#footer").show();
+            footer.style.top = mapHeight + 10 + 'px';
+            footer.style.left = 201+'px';
+            footer.style.right = 0 +'px';
+            footer.style.bottom = 0 + 'px';
+
+
+            tab_contain.style.top = 35 +'px';
+            tab_contain.style.left = 0+'px';
+            tab_contain.style.right = 0 + 'px';
+            tab_contain.style.bottom = 5 + 'px';
+
+
+            tab1.style.top = 0 +'px';
+            tab1.style.left = 0+'px';
+            tab1.style.right = 0 + 'px';
+            tab1.style.bottom = 5 + 'px';
+
+            tab2.style.top = 0 +'px';
+            tab2.style.left = 0+'px';
+            tab2.style.right = 0 + 'px';
+            tab2.style.bottom = 5 + 'px';
+
+            tab3.style.top = 0 +'px';
+            tab3.style.left = 15+'px';
+            tab3.style.right = 5 + 'px';
+            tab3.style.bottom = 5 + 'px';
+
+            tab4.style.top = 0 +'px';
+            tab4.style.left = 15+'px';
+            tab4.style.right = 5 + 'px';
+            tab4.style.bottom = 5 + 'px';
+
+
+            var footerTop = footer.getBoundingClientRect().top;
+
+            toggleBtn.style.left = (200 -25) + ( (window.innerWidth -200) * 0.5 ) + "px";
+            toggleBtn.style.top = (footerTop -22) + "px";
+
+
+            sidebar.style.top = 1 + 'px';
+            sidebar.style.bottom = 1 + 'px';
+            // sidebar.style.bottom = ( window.innerHeight - mapHeight ) + 'px';
+            mapview.style.left = 200+'px';
+            // mapview.style.right = 0 + 'px';
+            mapview.style.right = (( window.innerWidth * 0.5 ) -100) + 'px';
+            mapview.style.top = 0;
+            mapview.style.bottom = ( window.innerHeight- mapHeight ) + 'px';
+
+            mapview3D.style.left = (( window.innerWidth * 0.5 )+100) + 'px';
+            mapview3D.style.right = 0 + 'px';
+            mapview3D.style.top = 0;
+            mapview3D.style.bottom = ( window.innerHeight- mapHeight ) + 'px';
+
+            var dummy  = document.getElementById('dummy');
+            var licenseNotice = document.getElementById('licenseNotice');
+            var sidebarHeight = sidebar.getBoundingClientRect().height;
+
+            dummy.style.top = (window.innerHeight - 202) + 'px';
+
+            bibleMap.updateSize();
+        }
+
+
+        function showScrMap( ){
+
+            var img1 = "biblemap/image/hideBible.png?version=20170905";
+            var img2 = "biblemap/image/showBible.png?version=20170905";
+
+            var toggleBtn = document.getElementById("footerToggle");
+            $("#footerToggle").css( "z-index", "5000" );
+
+
+            if( bIsFullScr == 'false' ) {
+                adjustScrDiv.normalScrMap();
+                toggleBtn.src = img1;
+            }
+            else{
+                adjustScrDiv.fullScrMap();
+                toggleBtn.src = img2;
+            }
+        }
+
+        function toggleScrMap( ){
+
+            if( bIsFullScr == 'false'){
+                bIsFullScr = 'true';
+            }
+            else{
+                bIsFullScr = 'false';
+            }
+            showScrMap();
+
+        }
+
+        function setIsFullScr( setVal ){
+            bIsFullScr = setVal;
+            showScrMap();
+        }
+
+        return {
+            fullScrMap : fullScrMap,
+            normalScrMap : normalScrMap,
+            showScrMap : showScrMap,
+            toggleScrMap : toggleScrMap,
+            setIsFullScr : setIsFullScr
+        };
+
+
+    }());
+
+    function toggleScrMap(){
+        adjustScrDiv.toggleScrMap();
+    }
+
+
+
+    function saveSearchWordsToStorage( ){
+
+        var Obj = {
+            'bibleTitle' : dvBibleTitle.value,
+            'bibleChapter' : dvBibleChapter.value.toString(),
+            'bibleWord' : dvBibleWord.value,
+            'biblePlace' : dvBiblePlace.value
+        };
+
+        var strObj = JSON.stringify( Obj );
+
+        localStorage.setItem( 'bibleMap', strObj );
+    }
+
+    function getSearchWordsFromStorage(){
+        var strObj = localStorage.getItem( 'bibleMap');
+        if( strObj == null ){
+            $("#bibleTitle" ).val( "7");
+            $("#bibleChapter").val( "1" );
+            return;
+        }
+        var Obj = JSON.parse( strObj );
+        if( Obj == null )
+            return;
+
+        var strText = "";
+        if( Obj.hasOwnProperty('bibleTitle' ) ) {
+            if( typeof( Obj['bibleTitle'] ) == "string")
+                strText = Obj['bibleTitle'];
+        }
+        if( strText == "")
+            strText = "7";
+        $( "#bibleTitle" ).val( strText );
+
+        strText = "";
+        if( Obj.hasOwnProperty('bibleChapter' ) ) {
+            if (typeof( Obj['bibleChapter'] ) == "string")
+                strText = Obj['bibleChapter'];
+        }
+        if( strText == "" ){
+            strText = "1";
+        }
+        $("#bibleChapter").val( strText );
+
+        strText = "";
+        if( Obj.hasOwnProperty('bibleWord' )){
+            if( typeof( Obj['bibleWord'] ) == "string")
+                strText = Obj['bibleWord'];
+        }
+        if( strText == ""){
+            strText = "바울";
+        }
+        $("#bibleWord").val( strText );
+
+        strText = "";
+        if( Obj.hasOwnProperty('biblePlace' )){
+            if( typeof( Obj['biblePlace'] ) == "string")
+                strText = Obj['biblePlace'];
+        }
+        if( strText == "" ){
+            strText = "예루살렘";
+        }
+        $("#biblePlace").val( strText );
+    }
+
+    function showLicenseNotice(){
+        window.open("licenseNotice.html?version=20170920", "notice of license", "width=400, height=400, top=0, left=0, location=no, directories=no,resizable=no,status=no,toolbar=no,menubar=no, scrollbars=yes" );
+    }
+
+
+    function currentHistoryAdminString( newValue ){
+        var strObj =  getHistoryAdminStringObj( newValue );
+
+        document.getElementById("range").innerHTML = strObj.title;
+        document.getElementById("historyAdminExplain").innerHTML = strObj.text;
+
+        $("#historyAdminExplain").scrollTop(0);
+    }
+
+
+    function eventHistoryAdmin( newVal ){
+        dvPopupCloser.onclick();
+        /*
+         adjustScrDiv.setIsFullScr("false");
+
+         writeInfoTabHistoryAdmin();
+         */
+
+        changeHistoryAdmin( newVal );
+        showHistoryAdmin();
+    }
+
+    function writeInfoTabHistoryAdmin(){
+        var infoTab = document.getElementById( 'tab4' );
+
+        var newVal = document.getElementById("historyAdmin").value;
+        var obj =  getHistoryAdminStringObj( newVal );
+
+        var strConvText;
+
+        infoTab.innerHTML = "<strong><font >" + '[ ' + obj.title + ' ]' + "</font></strong>" +'<br>';
+
+        var infoObj = { // title : poiText,
+            content : obj.text
+        };
+
+        if( obj.text ) {
+            strConvText = makeStrongInText( layerManager, "abc", infoObj );
+        }
+
+        infoTab.innerHTML += strConvText;
+    }
+
+
+    function showHistoryAdmin(){
+
+        writeInfoTabHistoryAdmin();
+
+        // infoTab.innerHTML = obj.text;
+        adjustScrDiv.setIsFullScr("false");
+
+        $("#tab4").scrollTop(0);
+        tabMenu.selectTab('tab4Menu');
+
+    }
+
+
+    function changeHistoryAdmin( newValue ){
+
+        currentHistoryAdminString( newValue );
+
+        for (idx in layerManager.layerContainer.layers) {
+            var layer = layerManager.layerContainer.layers[idx];
+            if (layer.get('historyShow')) {
+                layer.set('historyShow', 'false');
+            }
+        }
+
+        var historyArray = [5, 6, 7, 8, 9, 10, 11, [ 1, 2, 3, 4 ] ];
+
+        function showHistoryLayer( showId ) {
+            for (idx in layerManager.layerContainer.layers) {
+                var layer = layerManager.layerContainer.layers[idx];
+                var id = layer.get('id');
+                if (showId.length) {    // 현재의 국가는 4개의 레이어를 한꺼번에 켜고 꺼야 한다.
+                    for ( var hID in showId) {
+                        var sSubId = showId[hID];
+                        if (id == sSubId) {
+                            if (layer.get('historyShow')) {
+                                layer.set('historyShow', 'true');
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    if (id == showId) {
+                        if (layer.get('historyShow')) {
+                            layer.set('historyShow', 'true');
+                            var extent = layer.getSource().getExtent();
+                            var view = bibleMap.getView();
+                            view.fit( extent, bibleMap.getSize() );
+                            break;
+                        } else {
+                            alert(" historyArray[" + showId + "] : " + historyArray[showId] + ", layerID : " + id + "  has not property historyShow!!!");
+                        }
+                    }
+                }
+            }
+        }
+
+        showHistoryLayer( historyArray[newValue]);
+    }
+
+
+
+    ///////////////////////////////////////
+function syncBothMapView() {
+    bibleMap.updateSize();
+
+    var zoom = bibleMapManager.getView().getZoom();
+    var center = bibleMapManager.getView().getCenter();
+
+    behind2D.view.setZoom(zoom);
+    behind2D.view.setCenter(center);
+
+    bibleMap.updateSize();
+
+}
+
+
+    var downloadGeometries = function(){
+        var flag = 0;
+
+        var historyAdmin = document.getElementById("historyAdmin");
+        if( historyAdmin.addEventListener ) {
+            historyAdmin.addEventListener( "mousedown", function(){
+                flag = 1;
+            }, false );
+            historyAdmin.addEventListener( "mouseup", function(){
+                flag = 0;
+            }, false );
+
+            historyAdmin.addEventListener( "mousemove", function(){
+                if( flag == 1 ){
+                    currentHistoryAdminString( historyAdmin.value );
+                }
+            }, false);
+        }
+
+        layerManager.layerContainer.totalCount = bibleMapPointLayers.length;
+
+        for( var idx in bibleMapPointLayers ){
+            var layer = bibleMapPointLayers[idx];
+
+            new GMDFileDownload( bibleMap, behind2D.map, layer.url, layer.order, layer.style, layerManager, function( ){
+                layerManager.sortPoiWords();
+                initTextAutoComplete();
+                // downloadNeedDataList( );
+                searchBibleChapter( );
+
+                syncBothMapView();
+
+                $("#bibleWord").focus();
+
+                layerManager.layerContainer.totalCount += bibleMapPolygonLayers.length;
+                for( var pid in bibleMapPolygonLayers ) {
+                    var layer = bibleMapPolygonLayers[ pid ];
+                    ConsoleLog( "layer.url ==> " + layer.url );
+                    new GMDFileDownload( bibleMap, null, layer.url, layer.order, layer.style, layerManager, function( ){
+                        changeHistoryAdmin( historyAdmin.value );
+                        downloadTrajectoryData();
+
+                        // syncBothMapView();
+                    });
+                }
+
+            } );
+        }
+    };
+
+
+
+    ///////////////////////////////////////////////////////////////
+
+    var routeMove;
+    var oldMovePath = -1;
+
+    function eventMovingPathChange( value){
+
+        var trajectory = trajectoryData.getTrajectoryByValue( value );
+        if( trajectory == null )
+            return;
+
+        //   document.getElementById("movePathExplain").innerHTML = trajectory.text;
+        //   $("#movePathExplain").scrollTop(0);
+
+        //    $('#pathPoiList').empty();
+    }
+
+
+    function showPathExplain(){
+
+        writeInfoTabPathExplain();
+        adjustScrDiv.setIsFullScr("false");
+
+        $("#tab4").scrollTop(0);
+        tabMenu.selectTab('tab4Menu');
+
+    }
+
+    function writeInfoTabPathExplain(){
+        var infoTab = document.getElementById( 'tab4' );
+
+        var val = document.getElementById("movePath").value;
+        var obj = trajectoryData.getTrajectoryByValue( val );
+        var strConvText;
+
+        infoTab.innerHTML = "<strong><font >" + '[ ' + obj.title + ' ]' + "</font></strong>" +'<br>';
+
+        var infoObj = { // title : poiText,
+            content : obj.text
+        };
+
+        if( obj.text ) {
+            strConvText = makeStrongInText( layerManager, "abc", infoObj );
+        }
+
+        infoTab.innerHTML += strConvText;
+    }
+
+    function eventMovingSpeedChange( value ){
+
+        ConsoleLog( "EventMovingSpeed :" + value );
+
+        if( routeMove)
+            routeMove.adjustMovingSpeed( value );
+    }
+
+
+    function setExtentOfPath() {
+
+        dvPopupCloser.onclick();
+        adjustScrDiv.setIsFullScr("false");
+        var movePath = $("#movePath").val();
+        var index = Number(movePath);
+        var extent = trajectoryData.getExtent(index);
+        var view = bibleMap.getView();
+        view.fit(extent, bibleMap.getSize());
+
+    }
+
+
+    function pathAction( ) {
+
+        dvPopupCloser.onclick();
+
+        /*
+         writeInfoTabPathExplain();
+         adjustScrDiv.setIsFullScr("false");
+         */
+        showPathExplain();
+
+        measureDistance.removeMeasureDraw();
+
+        if( routeMove ){
+            routeMove.stop();
+        }
+
+        var speed = $("#movingSpeed").val();
+
+        // var movePath = document.getElementById('movePath').value;
+        var movePath = $( "#movePath" ).val();
+        var index = Number( movePath);
+
+        var trajectory = trajectoryData.getTrajectoryByValue( index );
+        if( trajectory == null )
+            return;
+
+        function newRouteMoveProcess(){
+            routeMove = new RouteMoveProcess(bibleMap, trajectory, layerManager.getPoiObjectArray(), pathTooltip, function( popupPoiArray ){
+                // ConsoleLog( popupPoiArray );
+                fillPathPoiList( popupPoiArray );
+            });
+
+            routeMove.adjustMovingSpeed( speed );
+
+            var extent = trajectoryData.getExtent(index);
+
+            var view = bibleMap.getView();
+            view.fit(extent, bibleMap.getSize());
+
+            pathTooltip.allRemove();
+
+            routeMove.play();
+
+            oldMovePath = movePath;
+        }
+
+
+        if( oldMovePath != movePath ) {
+            newRouteMoveProcess();
+        }
+        else{
+            if( routeMove ) {
+                routeMove.pause(false);
+                routeMove.play();
+            }
+            else{
+                newRouteMoveProcess();
+            }
+        }
+
+    }
+
+    function pathPause(){
+        if( routeMove ){
+            routeMove.pause( true );
+        }
+    }
+
+    function pathHide(){
+
+        if( routeMove ){
+            routeMove.stop();
+        }
+
+        pathTooltip.allRemove();
+
+        routeMove = null;
+    }
+
+    bibleMapManager.mapEventPrecompose( function(evt){
+        var zoom = bibleMapManager.getView().getZoom();
+        $("#zoomLevel").html("zoom level : " + zoom); // + zoom;
+
+        var center = bibleMapManager.getView().getCenter();
+
+        behind2D.view.setZoom( zoom+2 );
+        behind2D.view.setCenter( center );
+
+
+        if( routeMove)
+            routeMove.updateMovingSpeed( zoom );
+    });
+
+
+    bibleMapManager.clickEvent( function(evt){
+        var clickedPos = evt.coordinate;
+        $("#mousePosition").html( "Pos X: " + clickedPos[0] + ", Y:" + clickedPos[1] ); // + zoom;
+    });
+
+    bibleMapManager.singleClickEvent( function(evt){
+    });
+
+    bibleMapManager.selectFeatureEvent( function(e) {
+        var selLen = e.selected.length;
+        if (selLen < 1)
+            return;
+
+        beforeChapterSearchParam = { type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
+            option: { "title": "",
+                "chapter" : ""
+            }
+        };
+
+        var feature = e.selected[0];    // 첫번째 걸린 것만 가져오기로 하자
+        var layer = feature.getLayer(bibleMap);
+        var id = layer.get("id");
+        var pos = null;
+
+        var posName = feature.get("label");     //  OpenLayersControl.js 내에  createTextStyleOfFeature 함수에서  text: feature.get('label') 으로 설정되어 있음
+        var poiID = feature.get("id");     //  OpenLayersControl.js 내에  createTextStyleOfFeature 함수에서  text: feature.get('label') 으로 설정되어 있음
+
+        if (posName == null) {      // polygon 레이어를 클릭했을 경우
+            posName = feature.get("name");      // History admin polygon에는 name과 name2 필드가 존재함
+            if (posName == null)
+                return;
+            if (id < 5) {          // 전세계 폴리곤 경계라면...
+                posName = "<strong>현재 국가</strong><br>" + "&nbsp;" + posName;
+                dvPopupContent.innerHTML = posName;
+                popupOverlay.setPosition(bibleMapManager.getClickecPos());
+            } else {    // 나머지 폴리곤에 정의된 "name" 필드로 검색하도록 한다
+                // pos = layerManager.getPoiByName(posName);
+                // pos = bibleMapManager.getClickecPos();
+                dvPopupContent.innerHTML = posName;
+                popupOverlay.setPosition(bibleMapManager.getClickecPos());
+
+                /*
+                 requestBibleByWord(posName, function () {
+                 adjustScrDiv.setIsFullScr("false");
+                 });
+                 */
+                var poiArray = layerManager.getPoiObjArrayFromDictionary( posName );
+                if( poiArray.length < 2){
+                    var poiObj = poiArray[ 0];
+                    layerManager.historyInsertPoi( poiObj );
+                    requestPoiContentAndShow( poiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+                }
+            }
+        } else {        //  poi Layer를 선택했을 경우
+            if (id < 5) {          // 전세계 폴리곤 경계라면...
+                posName = "<strong>현재 국가</strong><br>" + "&nbsp;" + posName;
+                dvPopupContent.innerHTML = posName;
+                popupOverlay.setPosition(bibleMapManager.getClickecPos());
+            } else {    // 나머지 폴리곤에 정의된 "name" 필드로 검색하도록 한다
+
+                var poiObj = layerManager.getPoiObjById( poiID );
+                layerManager.historyInsertPoi( poiObj );
+                requestPoiContentAndShow( poiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+
+                /*
+                 if( poiObj.rangeArray != null ) {
+                 requestBibleByRange( poiObj, function () {
+                 requestPoiContentAndShow( poiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+                 adjustScrDiv.setIsFullScr("false");
+                 });
+                 }else {
+                 adjustScrDiv.setIsFullScr("false");
+                 requestBibleByWord( poiObj.biblePlace, function () {
+                 requestPoiContentAndShow( poiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+                 adjustScrDiv.setIsFullScr("false");
+                 });
+                 }
+                 */
+
+            }
+        }
+
+    });
+
+
+    dvPopupCloser.onclick = function() {
+        popupOverlay.setPosition(undefined);
+        dvPopupCloser.blur();
+        dvPopupContent.innerHTML = "";
+        return false;
+    };
+
+    function searchBibleWord(){
+        if( dvBibleWord.value == "" ){
+            return;
+        }
+
+        saveSearchWordsToStorage();
+
+        adjustScrDiv.setIsFullScr("false");
+
+        var searchWord = dvBibleWord.value;
+        // searchWord = " "+removeSpaceInWord( searchWord );
+        searchWord = removeSpaceInWord( searchWord );
+
+        var searchParam = {
+            type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
+            option: {}
+        };
+        searchParam.option.content= { $regex : searchWord };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
+
+        beforeChapterSearchParam = { type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
+            option: { "title": "",
+                "chapter" : ""
+            }
+        };
+
+        tabMenu.selectTab('tab2Menu');
+
+        reqeustAndShowContents( '#tab2', searchParam, -1, function( param, resObj ){
+            if( resObj.length < 1 ) {
+                ConsoleLog( "검색결과가 없어서 재검색!!!");
+                var placeWord = param.option.content.$regex;
+                var biblePlace = layerManager.getPoiByName(placeWord).biblePlace;
+                param.option.content = {$regex: biblePlace};
+
+                reqeustAndShowContents( '#tab2', param, -1, function( param, resObj ){
+                    // moveToPlaceByWord( param.option.content.$regex );
+                } );
+            } else {
+                // moveToPlaceByWord( param.option.content.$regex );
+            }
+        } );
+
+    }
+
+    function searchBiblePlace(){
+        if( dvBiblePlace.value == "" ){
+            return;
+        }
+
+        dvBiblePlace.value = removeSpaceInWord( dvBiblePlace.value );
+
+        saveSearchWordsToStorage();
+
+        var selSearchedPoiList = document.getElementById( "searchedPoiList" );
+
+        $('#searchedPoiList').empty();
+
+        var poiArray = layerManager.getPoiObjArrayFromDictionary( dvBiblePlace.value );
+        for( var idx in poiArray ){
+            ConsoleLog( "Find POI : " + poiArray[idx].biblePlace + ", title : " +  poiArray[idx].title );
+
+            var poiItem = document.createElement("option");
+            if( poiArray[idx].title != "" )
+                poiItem.text = poiArray[idx].title;
+            else
+                poiItem.text = poiArray[idx].biblePlace;
+            poiItem.value = poiArray[idx].id;
+            selSearchedPoiList.appendChild( poiItem );
+        }
+
+        var poiObj = null;
+
+        if( poiArray.length == 1 ){
+            poiObj = poiArray[0];
+            moveToPlaceByPoiID( poiObj.id );
+        }
+    }
+
+
+    $("#searchedPoiList").click( function(){
+        moveToPlaceSelPoiTitle( "#searchedPoiList" )
+    });
+
+
+    function fillPathPoiList( pathPoiArray ){
+        var selSearchedPoiList = document.getElementById( "pathPoiList" );
+
+        $('#pathPoiList').empty();
+
+        for( var idx in pathPoiArray ){
+            ConsoleLog( "path POI : " + pathPoiArray[idx].biblePlace + ", title : " +  pathPoiArray[idx].title );
+
+            var poiItem = document.createElement("option");
+            if( pathPoiArray[idx].title != "" )
+                poiItem.text = pathPoiArray[idx].title;
+            else
+                poiItem.text = pathPoiArray[idx].biblePlace;
+            poiItem.value = pathPoiArray[idx].id;
+            selSearchedPoiList.appendChild( poiItem );
+        }
+
+        $('#pathPoiList').scrollTop(0);
+    }
+
+    $("#pathPoiList").click( function(){
+        moveToPlaceSelPoiTitle( "#pathPoiList" )
+    });
+
+
+
+    function moveToPlaceSelPoiTitle( selectId ){
+
+        var selPoiId = $( selectId ).val();
+
+        moveToPlaceByPoiID( selPoiId );
+    }
+
+
+
+    function moveToPlaceByPoiID( poiID ){
+        if( poiID == null )
+            return;
+
+        var poiObj = layerManager.getPoiObjById( poiID );
+
+        layerManager.historyInsertPoi( poiObj );
+
+        moveToPlaceByPoiObj( poiObj );
+    }
+
+
+    function moveToPlaceByPoiObj( poiObj ){
+        if( poiObj == null )
+            return;
+
+        requestPoiContentAndShow( poiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+        var curZoom = bibleMap.getView().getZoom();
+
+        var view = bibleMap.getView();
+        var center = view.getCenter();
+        var curExtent = view.calculateExtent(bibleMap.getSize());
+
+        var extentLength = getDistance( curExtent[0], curExtent[1], curExtent[2], curExtent[3]);
+        var moveDistance = getDistance( center[0], center[1], poiObj.x, poiObj.y );
+
+        if( moveDistance < extentLength ) {
+            ConsoleLog( "moveTo..... 1");
+            if( curZoom > poiObj.zoomIn ) {
+
+                moveTo(view, [poiObj.x, poiObj.y], curZoom);
+                moveTo( behind2D.view, [poiObj.x, poiObj.y], curZoom);
+            }
+            else {
+                moveTo(view, [poiObj.x, poiObj.y], poiObj.zoomIn);
+                moveTo( behind2D.view, [poiObj.x, poiObj.y], poiObj.zoomIn);
+            }
+        }
+        else {
+            ConsoleLog( "flyTo.....1 ");
+            var zoomIn = poiObj.zoomIn;
+            if( zoomIn > 12 )
+                zoomIn = 12;
+            flyTo(view, [poiObj.x, poiObj.y], zoomIn, function (complete) {
+                //   flyTo(view, [poiObj.x, poiObj.y], poiObj.zoomIn-1, function (complete) {
+                if (complete == true) {
+                }
+            });
+
+            flyTo( behind2D.view, [poiObj.x, poiObj.y], zoomIn, function (complete) {
+                //   flyTo(view, [poiObj.x, poiObj.y], poiObj.zoomIn-1, function (complete) {
+                if (complete == true) {
+                }
+            });
+
+        }
+    }
+
+
+    /*
+     function moveToPlaceByWord( word ){
+     var pos = layerManager.getPoiByName( word );
+     if( pos == null )
+     return;
+
+
+     if( word == "예루살렘"){
+     pos.zoomIn = 14;
+     }
+
+     //    requestPoiContentAndShow( pos, word, dvPopupContent, popupOverlay );
+     alert( "requestPoiContentsAndShow  need to repair!!!" );
+     var curZoom = bibleMap.getView().getZoom();
+
+     var view = bibleMap.getView();
+     var center = view.getCenter();
+     var curExtent = view.calculateExtent(bibleMap.getSize());
+
+     var extentLength = getDistance( curExtent[0], curExtent[1], curExtent[2], curExtent[3]);
+     var moveDistance = getDistance( center[0], center[1], pos.x, pos.y );
+
+     if( moveDistance < extentLength ) {
+     ConsoleLog( "moveTo..... ");
+     if( curZoom > pos.zoomIn )
+     moveTo(view, [pos.x, pos.y], curZoom );
+     else
+     moveTo(view, [pos.x, pos.y], pos.zoomIn);
+     }
+     else {
+     ConsoleLog( "flyTo..... ");
+     flyTo(view, [pos.x, pos.y], pos.zoomIn, function (complete) {
+     if (complete == true) {
+     }
+     });
+     }
+     }
+     */
+
+    function requestBibleByWord( word, competeCallback ){
+
+        var searchParam = {
+            type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
+            option: {}
+        };
+
+        tabMenu.selectTab('tab2Menu');
+
+        // var searchWord = " " + word;
+        var searchWord = word;
+        searchParam.option.content= { $regex : searchWord };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
+        reqeustAndShowContents( '#tab2', searchParam, -1, competeCallback );
+    }
+
+    function requestBibleByRange( poiObj, completeCallback ){
+
+        var searchParam = {
+            type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
+            option: {}
+        };
+
+        if( poiObj.rangeArray == null ){
+            return;
+        }
+
+        tabMenu.selectTab('tab2Menu');
+
+        searchParam.option.title = { $in: poiObj.rangeArray };
+
+        // var searchPlace = " " + poiObj.biblePlace;
+        var searchPlace = poiObj.biblePlace;
+        searchParam.option.content= { $regex : searchPlace };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
+
+        // searchParam.option = {  title : {  $in: [ "창세기", "여호수아", "사사기"  ] }, content : { $regex:"숙곳" }};
+        reqeustAndShowContents( '#tab2', searchParam, -1, completeCallback );
+    }
+
+
+    function decreaseBibleChapter(){
+        var chapter = parseInt( dvBibleChapter.value);
+        chapter -= 1;
+        dvBibleChapter.value = String( chapter );
+        searchBibleChapter();
+    }
+
+    function increaseBibleChapter(){
+        var chapter = parseInt( dvBibleChapter.value);
+        chapter += 1;
+        dvBibleChapter.value = String( chapter );
+        searchBibleChapter();
+    }
+
+
+    function searchBibleChapter( callback ){
+
+        var searchParam = {
+            type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
+            option: {}
+        };
+
+        function consistSearchOpt( obj ){
+            searchParam.option[obj.name] = obj.value;
+        }
+
+        function consistSearchOpt( optionName, obj ){
+            searchParam.option[optionName] = obj.value;
+        }
+
+        if( dvBibleTitle.value == "" ){
+            return;
+        } else {
+            // consistSearchOpt( "title", bibleTitle  );
+            // searchParam.option["title"] = dvBibleTitle.value;
+            var chapter = bibleChapterList.getChapterByNumber( dvBibleTitle.value );
+            searchParam.option["title"] = chapter.title;
+        }
+
+        if( dvBibleChapter.value == "" ){
+            return;
+        } else {
+            if( dvBibleChapter.value == 0 ){
+                var chapter = bibleChapterList.getChapterByNumber( parseInt( dvBibleTitle.value) );
+                if( chapter.bookNumber <= 1) {
+                    dvBibleChapter.value = "1";
+                    dvBibleTitle.value = "1";
+                    return;
+                }else {
+                    var beforeChapter = bibleChapterList.getChapterByNumber( chapter.bookNumber -1 );
+                    dvBibleTitle.value = beforeChapter.bookNumber;
+                    dvBibleChapter.value = beforeChapter.lastNum;
+                    searchParam.option["title"] = beforeChapter.title;
+                }
+            }else{
+                var chapter = bibleChapterList.getChapterByNumber( parseInt( dvBibleTitle.value) );
+                if( chapter.lastNum < parseInt( dvBibleChapter.value) ){
+                    if( ( chapter.lastNum + 1 ) ==  parseInt( dvBibleChapter.value) ){
+                        var nextChapter = bibleChapterList.getChapterByNumber( chapter.bookNumber +1);
+                        if( nextChapter ) {
+                            dvBibleTitle.value = nextChapter.bookNumber.toString();
+                            dvBibleChapter.value = "1";
+                            searchParam.option["title"] = nextChapter.title;
+                        }else{
+                            dvBibleChapter.value = chapter.lastNum.toString();
+                        }
+                    }else{
+                        dvBibleChapter.value = chapter.lastNum.toString();
+                    }
+                }
+
+            }
+
+            // consistSearchOpt( "chapter", dvBibleChapter );
+            searchParam.option["chapter"] = parseInt( dvBibleChapter.value );
+        }
+
+        saveSearchWordsToStorage();
+
+        tabMenu.selectTab('tab1Menu');
+
+        if( searchParam.option["title"] == beforeChapterSearchParam.option["title"]
+                && searchParam.option["chapter"] == beforeChapterSearchParam.option["chapter"] ) {
+            adjustScrDiv.setIsFullScr("false");
+            return;
+        }
+
+        beforeChapterSearchParam = copyObject( searchParam );
+
+        reqeustAndShowContents('#tab1', searchParam, -1, function(){
+            adjustScrDiv.setIsFullScr("false");
+            if( callback ){
+                callback();
+            }
+        } );
+    }
+
+    function requestBibleWithChapter( title, chapter, paragraph ){
+        var searchParam = {
+            type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
+            option: {
+                "title" : title,
+                "chapter" : chapter
+            }
+        };
+
+        var bookNum = bibleChapterList.getBookNumberByName( title );
+        if( bookNum > 0 ) {
+            dvBibleTitle.value = bookNum.toString();
+        }
+
+        dvBibleChapter.value = chapter;
+
+        saveSearchWordsToStorage();
+
+        tabMenu.selectTab('tab1Menu');
+
+        reqeustAndShowContents( '#tab1', searchParam, paragraph, function(){
+            adjustScrDiv.setIsFullScr("false");
+        } );
+
+    }
+
+    // tabID : '#tab1'
+    function reqeustAndShowContents( tabID, searchParam , paragraph, completeCallback ){
+
+        $(tabID).empty();
+        $(tabID).append("Waiting....");
+
+        var jsonStr = JSON.stringify( searchParam );
+
+        httpRequest("POST", jsonStr, function( http ){
+            $(tabID).empty();
+
+            var resObj = JSON.parse( http.responseText );
+            if( resObj.length < 1 ){
+                $(tabID).append("검색된 결과가 없습니다.");
+                if( completeCallback )
+                    completeCallback( searchParam, resObj );
+                return;
+            }
+
+            if( resObj.result != "undefined" && resObj.result == "fail" ){
+                $(tabID).append( resObj.error + "\r\n" );
+            }
+            else {
+                $(tabID).append( "<table>");
+                //style=\'background-color:greenyellow\'
+                function appendReceiveMsg( resObj, strConvText ){
+                    $(tabID).append( "<tr>");
+                    var strChapterLinkWithBibleContent = "";
+                    if( tabID == '#tab1') {
+                        var reverseColor = '';
+                        if( paragraph == resObj.paragraph ){
+                            reverseColor = 'style=\'background-color:rgb(210, 210, 210);\'';
+                        }
+                        strChapterLinkWithBibleContent = "<td width = \"150\" " + reverseColor + " >&nbsp;&nbsp;" + resObj.title + " " + resObj.chapter + ":" + resObj.paragraph + "</td>" + "<td" + " " + reverseColor + ">" + strConvText + "</td>";
+                    }else if( tabID == '#tab2' ) {
+                        strChapterLinkWithBibleContent = "<td width = \"150\"  >&nbsp;&nbsp;" + '<a href= "javascript:requestBibleWithChapter( \'' + resObj.title + '\',' + resObj.chapter + ',' + resObj.paragraph + ' )\" style=\"text-decoration:none; font-weight:bold; color:#464646;\">'
+                                + resObj.title + " " + resObj.chapter + ":" + resObj.paragraph + "</a>" + "</td>"
+                                + "<td>" + strConvText + "</td>";
+                    }
+
+                    $(tabID).append( strChapterLinkWithBibleContent );
+                    $(tabID).append( "</tr>");
+                }
+
+                if (resObj.length != "undefined") {    // 배열로 받아올 경우
+                    for ( var idx in resObj) {
+                        if( searchParam.type == "Word" ){
+                            if( examinRightWordinText( searchParam.option.content.$regex, resObj[idx].content ) == true ){
+                                var searchWord = removeSpaceInWord( searchParam.option.content.$regex );
+                                var strConvText = makeStrongInText( layerManager, searchWord, resObj[idx] );
+                                appendReceiveMsg( resObj[idx], strConvText );
+                            }
+                        }else {
+                            var strConvText = "";
+                            strConvText = makeStrongInText( layerManager, dvBibleWord.value, resObj[idx] );
+                            appendReceiveMsg( resObj[idx], strConvText );
+                        }
+
+                    }
+                } else {        // 수신받은 데이터가 배열이 아니고 하나만 있을 경우
+                    if( searchParam.type == "Word" ){
+                        if( examinRightWordinText( searchParam.option.content.$regex, resObj.content ) == true ) {
+                            var searchWord = removeSpaceInWord( searchParam.option.content.$regex );
+                            var strConvText = makeStrongInText( layerManager, searchWord, resObj );
+                            appendReceiveMsg( resObj, strConvText );
+                        }
+                    } else {
+                        // var strConvText = makeStrongWordOfLocation( layerManager, resObj.content );
+                        var strConvText = makeStrongInText( layerManager, "", resObj );
+                        appendReceiveMsg( resObj, strConvText );
+                    }
+                }
+            }
+            $(tabID).append( "<br></table >");
+
+            if( tabID == '#tab1' && paragraph > 0 ){
+                $(tabID).scrollTop( (paragraph -1)* 20 );
+            }
+            else
+                $(tabID).scrollTop(0);
+
+            if( completeCallback )
+                completeCallback( searchParam, resObj );
+
+        } );    // end of httpRequest
+
+    }
+
+
+    window.onload = function(){
+        adjustScrDiv.normalScrMap();
+        downloadGeometries();
+    };
+
+    window.onresize = function(){
+        adjustScrDiv.showScrMap();
+    };
+
+</script>
+</body>
+</html>
