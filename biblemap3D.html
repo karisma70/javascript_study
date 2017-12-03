@@ -1335,18 +1335,38 @@ function syncBothMapView() {
         routeMove = null;
     }
 
+    var mainMapEvent = true;
+
     bibleMapManager.mapEventPrecompose( function(evt){
         var zoom = bibleMapManager.getView().getZoom();
         $("#zoomLevel").html("zoom level : " + zoom); // + zoom;
 
         var center = bibleMapManager.getView().getCenter();
 
-        behind2D.view.setZoom( zoom+2 );
-        behind2D.view.setCenter( center );
+        // behind2D.view.setZoom( zoom+2 );
+        // behind2D.view.setCenter( center );
+
+        ConsoleLog("bibleMapManager.mapEventPrecompose!!!!");
 
 
         if( routeMove)
             routeMove.updateMovingSpeed( zoom );
+    });
+
+    behind2D.mapEventPrecompose( function(evt){
+
+        var zoom = behind2D.view.getZoom();
+
+        // ConsoleLog( "!!!!!!!!!!! zoom :" + zoom );
+
+        // bibleMapManager.getView().setZoom( zoom -2 );
+
+        var center = behind2D.view.getCenter();
+
+        // bibleMapManager.getView().setCenter( center );
+
+        ConsoleLog("behind2D.mapEventPrecompose!!!!");
+
     });
 
 

@@ -870,10 +870,16 @@ function createLayer( source  ) {
 
 
 
- var init3dMap = function(){
+ var init3dMap = ( function(){
+
+     var mapView = null;
+     var map2DMap = null;
 
      var behindInit2DMap = function() {
-         var olView = new ol.View({
+         this.view = null;
+         this.map = null;
+
+         this.view = new ol.View({
              // center: [-9101767, 2822912],
              center: [3844176, 3806822],
              // zoom: 14
@@ -882,11 +888,11 @@ function createLayer( source  ) {
              minZoom: 4,
              // zoom: 8
              zoom: 7
-
-
          });
 
-         var olMap = new ol.Map({
+         mapView = this.view;
+
+         this.map = new ol.Map({
              layers: [
                  new ol.layer.Tile({
                      source: new ol.source.BingMaps({
@@ -896,40 +902,75 @@ function createLayer( source  ) {
                  })
              ],
              target: 'behindMap2D',
-             view: olView
+             // view: olView
+             view: this.view
          });
 
-         return {
-             view : olView,
-             map : olMap };
+         map2DMap = this.map;
+
+         var ol3d = new olcs.OLCesium({map: this.map, target: 'map3D'});
+         var scene = ol3d.getCesiumScene();
+
+         scene.screenSpaceCameraController.minimumZoomDistance = 1000;
+         scene.screenSpaceCameraController.maximumZoomDistance = 400000;
+         scene.screenSpaceCameraController._minimumZoomRate = 5; // ←
+
+         var terrainProvider = new Cesium.CesiumTerrainProvider({
+             url: '//assets.agi.com/stk-terrain/world',
+             requestVertexNormals: false
+         });
+         scene.terrainProvider = terrainProvider;
+         ol3d.setEnabled(true);
+         // window.map2 = ol3d;
+
+         //var rmCesiumAttr = function(){
+         $e = $('.cesium-credit-textContainer');
+         $e.parent().remove();
+         $e.remove();
+
+
+         this.mapEventPrecompose = function (callBack) {
+
+             this.map.on('precompose', function (evt) {
+
+                 var zoom = mapView.getZoom();
+                 var layers = map2DMap.getLayers();
+
+                 layers.forEach(function (layer) {
+                     var visibleRange = layer.get('visibleRange');
+                     if (typeof visibleRange !== "undefined") {
+
+                         if (visibleRange.min <= zoom && zoom <= visibleRange.max) {
+                             var historyMap = layer.get('historyShow');
+                             if (historyMap) {
+                                 if (historyMap == 'true')
+                                     layer.setVisible(true);
+                                 else
+                                     layer.setVisible(false);
+                             }
+                             else {
+                                 layer.setVisible(true);
+                             }
+                         }
+                         else {
+                             layer.setVisible(false);
+                         }
+                     }
+                 });
+
+                 callBack(evt);
+             });
+         };
+
      };
 
-     var map2D = behindInit2DMap();
 
-     //var ol3d = new olcs.OLCesium({map: bibleMap, target: 'map3D'});
-     var ol3d = new olcs.OLCesium({map: map2D.map, target: 'map3D'});
-     var scene = ol3d.getCesiumScene();
+     return function(){
+         var map2D = new behindInit2DMap();
+         return map2D;
+     }
 
-     scene.screenSpaceCameraController.minimumZoomDistance = 1000;
-     scene.screenSpaceCameraController.maximumZoomDistance = 400000;
-     scene.screenSpaceCameraController._minimumZoomRate = 5; // ←
-
-     var terrainProvider = new Cesium.CesiumTerrainProvider({
-         url : '//assets.agi.com/stk-terrain/world',
-         requestVertexNormals: false
-     });
-     scene.terrainProvider = terrainProvider;
-     ol3d.setEnabled(true);
-     // window.map2 = ol3d;
-
-     //var rmCesiumAttr = function(){
-     $e = $('.cesium-credit-textContainer');
-     $e.parent().remove();
-     $e.remove();
-     // };
-
-     return map2D;
- };
+ }());
 
 
 

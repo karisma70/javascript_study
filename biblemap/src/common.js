@@ -23,6 +23,10 @@ function copyObject( obj ){
     return copyObj;
 }
 
+function cloneObject( obj ) {
+    return jQuery.extend( true, {}, obj );
+}
+
 function eventFire(el, etype){
     if (el.fireEvent) {
         el.fireEvent('on' + etype);

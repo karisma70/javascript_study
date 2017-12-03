@@ -147,6 +147,25 @@ function GMDFileDownload( map, behindMap, shpUrl, layerId, style, paramLayerMana
         alert('failed to load ' + theLayer.dbfURL + ", errCode : " + errCode  );
     };
 
+    var createShapeLayer = function( features, layerId, style, styleFunction ) {
+
+        var shapeLayer = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                features: features
+            }),
+            style: styleFunction
+        });
+
+        shapeLayer.set('id', layerId, false);
+        shapeLayer.set('visibleRange', style.visibleRange);
+        if (style.historyShow)
+            shapeLayer.set('historyShow', style.historyShow);
+
+        return shapeLayer;
+
+    };
+
+
     var completeCallback = function( shpFile, layerId, style,  dbfFile ){       // callback Function
 
         var paramStyle = style;
@@ -158,6 +177,7 @@ function GMDFileDownload( map, behindMap, shpUrl, layerId, style, paramLayerMana
 
         var format = new ol.format.WKT();
         var features = [];
+        var cloneFeatures = [];
 
         if( shpFile.records.length != dbfFile.records.length ){
             ConsoleLog( "Critial shapefile Error!!  id: " + layerId + ", shape records: " + shpFile.records.length + ", dbf records: " + dbfFile.records.length );
@@ -204,8 +224,11 @@ function GMDFileDownload( map, behindMap, shpUrl, layerId, style, paramLayerMana
                 var feature = createFeatureFromWkt(wkt, attrs, bTransform, format, "label" );
                 feature.setProperties({  'id' : poiobj.id,
                                         'style': paramStyle });
-                //feature.setProperties({'id': poiobj.id });
                 features.push(feature);
+
+                var cloneFeature = cloneObject( feature );
+                cloneFeatures.push( cloneFeature );
+
 
                 var searchWord = getStringFromAttrs( attrs, "bible");
                 layerManager.insertPoiObjToDictionary( poiobj, searchWord );
@@ -345,19 +368,10 @@ function GMDFileDownload( map, behindMap, shpUrl, layerId, style, paramLayerMana
             createStyleFunction = createPointStyleOfFeature;
         }
 
-        var shapeLayer = new ol.layer.Vector({
-            source: new ol.source.Vector({
-                features: features
-            }),
-            style: createStyleFunction
-        });
-
-        shapeLayer.set( 'id', layerId, false );
-        shapeLayer.set( 'visibleRange', style.visibleRange );
-        if( style.historyShow )
-            shapeLayer.set( 'historyShow', style.historyShow );
-
+        var shapeLayer = createShapeLayer( features, layerId, style, createStyleFunction );
         layerContainer.layers.push( shapeLayer );
+        map.addLayer(  shapeLayer );
+
 
         if( layerContainer.totalCount <= layerContainer.layers.length ){
             wholeCompleteCallback( map, layerContainer );
@@ -366,10 +380,10 @@ function GMDFileDownload( map, behindMap, shpUrl, layerId, style, paramLayerMana
         }
 
 
-        map.addLayer(  shapeLayer );
+        var cloneShapeLayer = createShapeLayer( cloneFeatures, layerId, style, createStyleFunction );
 
         if( behindMap ) {
-            behindMap.addLayer(shapeLayer);
+            behindMap.addLayer( cloneShapeLayer );
         }
 
         shapeLayer.setZIndex( layerId );
