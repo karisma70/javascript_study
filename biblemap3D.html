@@ -776,6 +776,7 @@
             var sidebar = document.getElementById('sidebar');
             var mapview = document.getElementById('map');
             var mapview3D = document.getElementById('map3D');
+            var behindMap = document.getElementById('behindMap2D');
 
             var footer = document.getElementById('footer');
             $("#footer").hide();
@@ -808,6 +809,11 @@
             mapview3D.style.right = 0 + 'px';
             mapview3D.style.bottom = 0 + 'px';
 
+            behindMap.style.top = (window.innerHeight - 100) + 'px';
+            behindMap.style.left = (window.innerWidth - 150) + 'px';
+            behindMap.style.right = 0 + 'px';
+            behindMap.style.bottom = 0 + 'px';
+
             bibleMap.updateSize();
         }
 
@@ -816,6 +822,8 @@
             var toggleBtn = document.getElementById("footerToggle");
             var mapview = document.getElementById('map');
             var mapview3D = document.getElementById('map3D');
+            var behindMap = document.getElementById('behindMap2D');
+
             var footer = document.getElementById('footer');
             // var footerDummy = document.getElementById('footerDummy');
             var tab_contain = document.getElementById( "tab_contain");
@@ -880,6 +888,14 @@
             mapview3D.style.right = 0 + 'px';
             mapview3D.style.top = 0;
             mapview3D.style.bottom = ( window.innerHeight- mapHeight ) + 'px';
+
+
+
+            behindMap.style.top = (footerTop - ( 22 + 100 )) + 'px';
+            behindMap.style.left = (window.innerWidth - 150) + 'px';
+            behindMap.style.right = 0 + 'px';
+            behindMap.style.bottom = (footerTop - ( 22 + 160 )) + 'px';
+
 
             var dummy  = document.getElementById('dummy');
             var licenseNotice = document.getElementById('licenseNotice');
@@ -1341,12 +1357,12 @@ function syncBothMapView() {
         var zoom = bibleMapManager.getView().getZoom();
         $("#zoomLevel").html("zoom level : " + zoom); // + zoom;
 
-        var center = bibleMapManager.getView().getCenter();
+        // var center = bibleMapManager.getView().getCenter();
 
         // behind2D.view.setZoom( zoom+2 );
         // behind2D.view.setCenter( center );
 
-        ConsoleLog("bibleMapManager.mapEventPrecompose!!!!");
+        /// ConsoleLog("bibleMapManager.mapEventPrecompose!!!!");
 
 
         if( routeMove)
@@ -1355,17 +1371,17 @@ function syncBothMapView() {
 
     behind2D.mapEventPrecompose( function(evt){
 
-        var zoom = behind2D.view.getZoom();
+       // var zoom = behind2D.view.getZoom();
 
         // ConsoleLog( "!!!!!!!!!!! zoom :" + zoom );
 
         // bibleMapManager.getView().setZoom( zoom -2 );
 
-        var center = behind2D.view.getCenter();
+      //   var center = behind2D.view.getCenter();
 
         // bibleMapManager.getView().setCenter( center );
 
-        ConsoleLog("behind2D.mapEventPrecompose!!!!");
+      //   ConsoleLog("behind2D.mapEventPrecompose!!!!");
 
     });
 
@@ -1622,6 +1638,7 @@ function syncBothMapView() {
         else {
             ConsoleLog( "flyTo.....1 ");
             var zoomIn = poiObj.zoomIn;
+        //    var zoomIn = curZoom;
             if( zoomIn > 12 )
                 zoomIn = 12;
             flyTo(view, [poiObj.x, poiObj.y], zoomIn, function (complete) {
