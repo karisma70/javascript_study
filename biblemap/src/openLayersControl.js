@@ -200,6 +200,32 @@
  };
 
 
+ /*
+ const textStyle = [new ol.style.Style({
+     text: new ol.style.Text({
+         text: 'Only text',
+         textAlign: 'center',
+         textBaseline: 'middle',
+         stroke: new ol.style.Stroke({
+             color: 'red',
+             width: 3
+         }),
+         fill: new ol.style.Fill({
+             color: 'rgba(0, 0, 155, 0.3)'
+         })
+     })
+ }), new ol.style.Style({
+     geometry: new ol.geom.Circle([1000000, 3000000, 10000], 2e6),
+     stroke: new ol.style.Stroke({
+         color: 'blue',
+         width: 2
+     }),
+     fill: new ol.style.Fill({
+         color: 'rgba(0, 0, 255, 0.2)'
+     })
+ })];
+*/
+
  var createTextStyleOfFeature = function( feature, resolution ){
 
      var featureStyle = feature.get('style');
@@ -225,10 +251,10 @@
      } else {
          return null;
      }
- }
+ };
 
  function createPointStyleOfFeature(feature, resolution) {
-     return new ol.style.Style({
+      return new ol.style.Style({
          /*
           image: new ol.style.Circle({
           radius: 3,
@@ -237,8 +263,54 @@
           }),
           */
          text: createTextStyleOfFeature(feature, resolution )
-     });
+      });
+
+/*
+     return [ new ol.style.Style({
+                text: createTextStyleOfFeature(feature, resolution )
+                }),
+                 new ol.style.Style({
+                     geometry: new ol.geom.Circle([1000000, 3000000, 10000], 2e6),
+                     stroke: new ol.style.Stroke({
+                         color: 'blue',
+                         width: 2
+                     }),
+                     fill: new ol.style.Fill({
+                         color: 'rgba(0, 0, 255, 0.2)'
+                     })
+                 })
+            ];
+*/
+
+     /*
+    var coord = feature.getGeometry().getCoordinates();
+
+    return [new ol.style.Style({
+         text: new ol.style.Text({
+             text: 'Only text',
+             textAlign: 'center',
+             textBaseline: 'middle',
+             stroke: new ol.style.Stroke({
+                 color: 'red',
+                 width: 3
+             }),
+             fill: new ol.style.Fill({
+                 color: 'rgba(0, 0, 155, 0.3)'
+             })
+         })
+     }), new ol.style.Style({
+         geometry: new ol.geom.Circle([ coord[0], coord[1], 0], 100 ),
+         stroke: new ol.style.Stroke({
+             color: 'blue',
+             width: 2
+         }),
+         fill: new ol.style.Fill({
+             color: 'rgba(0, 0, 255, 0.2)'
+         })
+     })];
+     */
  }
+
 
  function createPolygonStyleOfFeature(feature, resolution ){
 

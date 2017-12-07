@@ -35,7 +35,7 @@
 
     <script type="text/javascript" src="biblemap/src/distanceMeasureControl.js?version=20170820"></script>
     <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170905"></script>
-    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20171109"></script>
+    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20171115"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
     <!-- <script type="text/javascript" src="biblemap/vendor/jquery-1.8.1.js"></script> -->
     <script type="text/javascript" src="biblemap/vendor/json2.js"></script>
@@ -396,6 +396,31 @@
                 <select id ="pathPoiList" name="pathPoiList" size='10' style="overflow-y:scroll; margin-left:40px; width: 123px; height:170px; border: 1px solid #D9D9D9; " ></select>
                 <div style="height: 5px"></div>
             </div>
+            <h3>2D/3D 지도보기</h3>
+            <div class="content" style ="background-color:#FFFFFF; height: 275px;">
+                <div name ="historyBar" style="margin-left:0px; width: 180px; height: 110px; border: 1px solid rgb(217, 217, 217);">
+                <br>
+                    <input type="radio" id="radioView2D"
+                           name="radio2D3D" value="chkView2D" style="margin-left:10px;" checked="checked" >
+                    <label for="radioView2D">2D View</label>
+                    <br>
+                    <br>
+                    <input type="radio" id="radioView3D"
+                           name="radio2D3D" value="chkView3D" style="margin-left:10px;">
+                    <label for="radioView3D">3D View</label>
+                    <br>
+                    <br>
+                    <input type="radio" id="radioViewAll"
+                           name="radio2D3D" value="chkViewAll" style="margin-left:10px;">
+                    <label for="radioViewAll">2D+3D View</label>
+                    <br>
+                    <br>
+                </div>
+            </div>
+
+
+
+
         </div>  <!--  <div id="css3-animated-autoclose" data-collapse>  -->
 
         <br>
@@ -546,8 +571,26 @@
         // alert('ojtiger.com');
 
         tabMenu.selectTab( 'tab1Menu');
-    });
 
+        adjustScrDiv.view2D3DCtrl( "chkView2D" );
+
+        $("input[name=radio2D3D]").change(function() {
+            var radioValue = $(this).val();
+            adjustScrDiv.view2D3DCtrl( radioValue );
+            /*
+            if (radioValue == "chkView2D") {
+                // ConsoleLog("chkView2D!!!");
+                adjustScrDiv.view2D3DCtrl( radioValue );
+            } else if (radioValue == "chkView3D") {
+                // ConsoleLog("chkView3D!!!");
+
+            } else if (radioValue == "chkViewAll") {
+                ConsoleLog("chkViewAll!!!");
+            }
+            */
+        });
+
+    });
 
 
 
@@ -771,6 +814,14 @@
     var adjustScrDiv = (function(){
 
         var bIsFullScr = 'false';
+        var view2D3D = "chkView2D";
+
+        // var map2D_Z = $("#map").css('z-index');
+        // var map3D_Z = $("#map3D").css('z-index');
+
+
+        // $( '#map3D' ).css( "z-index", 2000 );
+        $( '#behindMap2D' ).css( "z-index", 0 );
 
         function fullScrMap(){
             var sidebar = document.getElementById('sidebar');
@@ -800,13 +851,29 @@
             dummy.style.top = (window.innerHeight - 202) + 'px';
             // licenseNotice.style.top = (window.innerHeight - 16) + 'px';
 
-            mapview.style.left = 200+'px';
-            // mapview.style.right = 0 + 'px';
-            mapview.style.right = (( window.innerWidth * 0.5 ) -100) + 'px';
-            mapview.style.bottom = 0 + 'px';
+            if ( view2D3D == "chkViewAll") {
+                $( '#map' ).css( "z-index", 1000 );
+                $( '#map3D' ).css( "z-index", 1000 );
 
-            mapview3D.style.left = (( window.innerWidth * 0.5 )+100) + 'px';
-            mapview3D.style.right = 0 + 'px';
+                mapview.style.left = 200 + 'px';
+                mapview.style.right = (( window.innerWidth * 0.5 ) - 100) + 'px';
+                mapview3D.style.left = (( window.innerWidth * 0.5 )+100) + 'px';
+                mapview3D.style.right = 0 + 'px';
+            }else{
+                if( view2D3D == "chkView2D") {
+                    $( '#map' ).css( "z-index", 2000 );
+                    $( '#map3D' ).css( "z-index", 1000 );
+                }else {
+                    $( '#map' ).css( "z-index", 1000 );
+                    $( '#map3D' ).css( "z-index", 2000 );
+                }
+
+                mapview.style.left = 200 + 'px';
+                mapview.style.right = 0 + 'px';
+                mapview3D.style.left = 200 + 'px';
+                mapview3D.style.right = 0 + 'px';
+            }
+            mapview.style.bottom = 0 + 'px';
             mapview3D.style.bottom = 0 + 'px';
 
             behindMap.style.top = (window.innerHeight - 100) + 'px';
@@ -818,6 +885,7 @@
         }
 
         function normalScrMap(){
+
             var sidebar = document.getElementById('sidebar');
             var toggleBtn = document.getElementById("footerToggle");
             var mapview = document.getElementById('map');
@@ -878,14 +946,43 @@
             sidebar.style.top = 1 + 'px';
             sidebar.style.bottom = 1 + 'px';
             // sidebar.style.bottom = ( window.innerHeight - mapHeight ) + 'px';
-            mapview.style.left = 200+'px';
-            // mapview.style.right = 0 + 'px';
-            mapview.style.right = (( window.innerWidth * 0.5 ) -100) + 'px';
+
+
+            if ( view2D3D == "chkView2D") {
+                $( '#map' ).css( "z-index", 2000 );
+                $( '#map3D' ).css( "z-index", 1000 );
+
+                mapview.style.left = 200+'px';
+                mapview.style.right = 0 + 'px';
+                mapview3D.style.left = 200+'px';
+                mapview3D.style.right = 0 + 'px';
+            }
+            else if ( view2D3D == "chkView3D") {
+
+                $( '#map' ).css( "z-index", 1000 );
+                $( '#map3D' ).css( "z-index", 2000 );
+
+                mapview.style.left = 200+'px';
+                mapview.style.right = 0 + 'px';
+                mapview3D.style.left = 200+'px';
+                mapview3D.style.right = 0 + 'px';
+            }
+            else if( view2D3D == "chkViewAll") {
+
+                $( '#map' ).css( "z-index", 1000 );
+                $( '#map3D' ).css( "z-index", 1000 );
+                $( '#behindMap2D' ).css( "z-index", 0 );
+
+                mapview.style.left = 200+'px';
+                mapview.style.right = (( window.innerWidth * 0.5 ) - 100) + 'px';
+                mapview3D.style.left = (( window.innerWidth * 0.5 )+100) + 'px';
+                mapview3D.style.right = 0 + 'px'
+            }
             mapview.style.top = 0;
             mapview.style.bottom = ( window.innerHeight- mapHeight ) + 'px';
 
-            mapview3D.style.left = (( window.innerWidth * 0.5 )+100) + 'px';
-            mapview3D.style.right = 0 + 'px';
+            // mapview3D.style.left = (( window.innerWidth * 0.5 )+100) + 'px';
+
             mapview3D.style.top = 0;
             mapview3D.style.bottom = ( window.innerHeight- mapHeight ) + 'px';
 
@@ -938,6 +1035,12 @@
 
         }
 
+        function view2D3DControl( value ){
+            view2D3D = value;
+
+            showScrMap();
+        }
+
         function setIsFullScr( setVal ){
             bIsFullScr = setVal;
             showScrMap();
@@ -948,9 +1051,9 @@
             normalScrMap : normalScrMap,
             showScrMap : showScrMap,
             toggleScrMap : toggleScrMap,
-            setIsFullScr : setIsFullScr
+            setIsFullScr : setIsFullScr,
+            view2D3DCtrl : view2D3DControl
         };
-
 
     }());
 
@@ -1142,7 +1245,7 @@ function syncBothMapView() {
     var zoom = bibleMapManager.getView().getZoom();
     var center = bibleMapManager.getView().getCenter();
 
-    behind2D.view.setZoom(zoom);
+    behind2D.view.setZoom(zoom + 2);
     behind2D.view.setCenter(center);
 
     bibleMap.updateSize();
@@ -1628,11 +1731,11 @@ function syncBothMapView() {
             if( curZoom > poiObj.zoomIn ) {
 
                 moveTo(view, [poiObj.x, poiObj.y], curZoom);
-                moveTo( behind2D.view, [poiObj.x, poiObj.y], curZoom);
+                moveTo( behind2D.view, [poiObj.x, poiObj.y], curZoom + 2);
             }
             else {
                 moveTo(view, [poiObj.x, poiObj.y], poiObj.zoomIn);
-                moveTo( behind2D.view, [poiObj.x, poiObj.y], poiObj.zoomIn);
+                moveTo( behind2D.view, [poiObj.x, poiObj.y], poiObj.zoomIn + 2 );
             }
         }
         else {
@@ -1647,7 +1750,7 @@ function syncBothMapView() {
                 }
             });
 
-            flyTo( behind2D.view, [poiObj.x, poiObj.y], zoomIn, function (complete) {
+            flyTo( behind2D.view, [poiObj.x, poiObj.y], zoomIn + 2 , function (complete) {
                 //   flyTo(view, [poiObj.x, poiObj.y], poiObj.zoomIn-1, function (complete) {
                 if (complete == true) {
                 }
