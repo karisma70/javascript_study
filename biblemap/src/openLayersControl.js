@@ -528,8 +528,9 @@ LayerManager.prototype.getPoiObjects = function(){
 };
 
 
+
  function createOverlay( divID ){    // container
-     var overlay = new ol.Overlay(/** @type {olx.OverlayOptions} */ ({
+     var overlay = new ol.Overlay( ({
          element: divID,
          autoPan: true,
          autoPanAnimation: {
@@ -980,19 +981,20 @@ function createLayer( source  ) {
 
          map2DMap = this.map;
 
-         var ol3d = new olcs.OLCesium({map: this.map, target: 'map3D'});
-         var scene = ol3d.getCesiumScene();
+         this.ol3d = new olcs.OLCesium({map: this.map, target: 'map3D'});
+         this.ol3dScene = this.ol3d.getCesiumScene();
+         this.camera = this.ol3dScene.camera;
 
-         scene.screenSpaceCameraController.minimumZoomDistance = 1000;
-         scene.screenSpaceCameraController.maximumZoomDistance = 400000;
-         scene.screenSpaceCameraController._minimumZoomRate = 5; // ←
+         this.ol3dScene.screenSpaceCameraController.minimumZoomDistance = 1000;
+         this.ol3dScene.screenSpaceCameraController.maximumZoomDistance = 400000;
+         this.ol3dScene.screenSpaceCameraController._minimumZoomRate = 5; // ←
 
          var terrainProvider = new Cesium.CesiumTerrainProvider({
              url: '//assets.agi.com/stk-terrain/world',
              requestVertexNormals: false
          });
-         scene.terrainProvider = terrainProvider;
-         ol3d.setEnabled(true);
+         this.ol3dScene.terrainProvider = terrainProvider;
+         this.ol3d.setEnabled(true);
          // window.map2 = ol3d;
 
          //var rmCesiumAttr = function(){
@@ -1000,6 +1002,41 @@ function createLayer( source  ) {
          $e.parent().remove();
          $e.remove();
 
+         this.view3DTilt = function( angle ){
+
+             var pivot = olcs.core.pickBottomPoint(this.ol3dScene);
+             if (!pivot) {
+                 // Could not find the bottom point
+                 return;
+             }
+
+             // var angle = 0.9;
+             var options = {};
+             var transform = Cesium.Matrix4.fromTranslation(pivot);
+             var axis = this.camera.right;
+             var rotateAroundAxis = olcs.core.rotateAroundAxis;
+             rotateAroundAxis( this.camera, -angle, axis, transform, options);
+         };
+
+         // this.view3DTilt( 0.9 );
+
+         /*
+         const scene = ol3d.getCesiumScene();
+         const camera = scene.camera;
+         const pivot = olcs.core.pickBottomPoint(scene);
+         if (!pivot) {
+             // Could not find the bottom point
+             return;
+         }
+
+         var angle = 0.9;
+
+         const options = {};
+         const transform = Cesium.Matrix4.fromTranslation(pivot);
+         const axis = camera.right;
+         const rotateAroundAxis = olcs.core.rotateAroundAxis;
+         rotateAroundAxis(camera, -angle, axis, transform, options);
+        */
 
          this.mapEventPrecompose = function (callBack) {
 
@@ -1044,6 +1081,24 @@ function createLayer( source  ) {
 
  }());
 
+
+/*
+ function tiltAngle(angle) {
+     const scene = this.ol3d_.getCesiumScene();
+     const camera = scene.camera;
+     const pivot = olcs.core.pickBottomPoint(scene);
+     if (!pivot) {
+         // Could not find the bottom point
+         return;
+     }
+
+     const options = {};
+     const transform = Cesium.Matrix4.fromTranslation(pivot);
+     const axis = camera.right;
+     const rotateAroundAxis = olcs.core.rotateAroundAxis;
+     rotateAroundAxis(camera, -angle, axis, transform, options);
+ };
+*/
 
 
  function Create3DMap( map2D, target ) {
