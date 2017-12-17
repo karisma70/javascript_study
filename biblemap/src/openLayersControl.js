@@ -253,8 +253,57 @@
      }
  };
 
+ function create3DPointStyleOfFeature( feature, resolution ){
+
+     var featureStyle = feature.get('style');
+     var coord = feature.getGeometry().getCoordinates();
+
+     return new ol.style.Style({
+         text: new ol.style.Text({
+             text : feature.get('label'),
+           //  font: featureStyle.textStroke.font,
+             font : 'normal 13px Nanum Gothic',
+             textAlign: 'bottom',
+             textBaseline: 'middle',
+             stroke: new ol.style.Stroke({
+                 color: featureStyle.textStroke.outlineColor,
+                 // width: featureStyle.textStroke.outlineWidth
+                 width : 3
+             }),
+             fill: new ol.style.Fill({color: featureStyle.textStroke.color})
+         })
+     });
+
+     /*
+     return [new ol.style.Style({
+         text: new ol.style.Text({
+             text : feature.get('label'),
+             // font: featureStyle.textStroke.font,
+             font : 'normal 15px Nanum Gothic',
+             textAlign: 'center',
+             textBaseline: 'middle',
+             stroke: new ol.style.Stroke({
+                 color: featureStyle.textStroke.outlineColor,
+                 width: featureStyle.textStroke.outlineWidth
+             }),
+             fill: new ol.style.Fill({color: featureStyle.textStroke.color})
+         })
+     }), new ol.style.Style({
+         geometry: new ol.geom.Circle([ coord[0], coord[1], 0], 100 ),
+         stroke: new ol.style.Stroke({
+             color: 'blue',
+             width: 2
+         }),
+         fill: new ol.style.Fill({
+             color: 'rgba(0, 0, 255, 0.2)'
+         })
+     })];
+     */
+ }
+
+
  function createPointStyleOfFeature(feature, resolution) {
-      return new ol.style.Style({
+       return new ol.style.Style({
          /*
           image: new ol.style.Circle({
           radius: 3,
@@ -262,8 +311,8 @@
           stroke: new ol.style.Stroke({color: 'red', width: 1})
           }),
           */
-         text: createTextStyleOfFeature(feature, resolution )
-      });
+          text: createTextStyleOfFeature(feature, resolution )
+       });
 
 /*
      return [ new ol.style.Style({
@@ -941,6 +990,23 @@ function createLayer( source  ) {
  }());
 
 
+ function createSpirographEntity(url, longitude, latitude, height, radiusMedian, radiusSubCircle, durationMedianCircle, durationSubCircle) {
+     var centerPosition = Cesium.Cartographic.fromDegrees(longitude, latitude, height);
+     var spirographPositionProperty = new Cesium.SpirographPositionProperty(centerPosition, radiusMedian, radiusSubCircle,
+         durationMedianCircle, durationSubCircle, cesiumViewer.scene.globe.ellipsoid);
+
+     cesiumViewer.entities.add({
+         name: url,
+         description: 'It is supposed to have a useful desciption here<br />but instead there is just a placeholder to get a larger info box',
+         position: spirographPositionProperty,
+         orientation: new Cesium.VelocityOrientationProperty(spirographPositionProperty, cesiumViewer.scene.globe.ellipsoid),
+         model: {
+             uri: url,
+             minimumPixelSize: 96
+         }
+     });
+ }
+
 
 
  var init3dMap = ( function(){
@@ -948,9 +1014,69 @@ function createLayer( source  ) {
      var mapView = null;
      var map2DMap = null;
 
-     var behindInit2DMap = function() {
+     var selectedFeatures = null;
+
+     var createLabelLayer = function( name, posX, posY ){
+
+         var iconStyle = new ol.style.Style({
+              image: new ol.style.Icon( ({
+              anchor: [0.5, 46],
+              size: [20, 20],
+              scale: 0.15,
+              anchorXUnits: 'fraction',
+              anchorYUnits: 'pixels',
+              // opacity: 0.75,
+              // src: 'data/icon.png'
+              src: 'biblemap/image/location2.png'
+              })),
+             text: new ol.style.Text({
+                 text: name,
+                 font: 'bold 16px Nanum Gothic',
+                 textAlign: 'bottom',
+                 textBaseline: 'middle',
+                 stroke: new ol.style.Stroke({
+                     color: 'rgb(255, 255, 255)',
+                     width: 3
+                 }),
+                 fill: new ol.style.Fill({
+                     //color: 'rgba(0, 0, 155, 0.3)'
+                     color: 'rgb(0, 0, 0)'
+                 })
+             })
+         });
+
+         var labelFeature = new ol.Feature({
+             geometry: new ol.geom.Point([posX, posY])
+         });
+         labelFeature.getGeometry().set('altitudeMode', 'clampToGround');
+         labelFeature.setStyle(iconStyle);
+
+         var vectorSource = new ol.source.Vector({
+             features: [labelFeature ]
+         });
+         var imageVectorSource = new ol.source.ImageVector({
+             source: vectorSource
+         });
+         var labelLayer = new ol.layer.Image({
+             source: imageVectorSource
+         });
+
+         return labelLayer;
+     };
+
+
+     var behindInit2DMap = function( overlay ) {
          this.view = null;
          this.map = null;
+         this.layers = [];
+         this.labelLayer = null;
+
+             this.reflectLayersToMap3D = function(){
+             for( var idx = 0; idx < this.layers.length; idx ++ ) {
+                 var layer = this.layers[idx];
+                 this.map.addLayer( layer );
+             }
+         };
 
          this.view = new ol.View({
              // center: [-9101767, 2822912],
@@ -966,6 +1092,7 @@ function createLayer( source  ) {
          mapView = this.view;
 
          this.map = new ol.Map({
+             // overlays: [overlay],
              layers: [
                  new ol.layer.Tile({
                      source: new ol.source.BingMaps({
@@ -974,27 +1101,62 @@ function createLayer( source  ) {
                      })
                  })
              ],
-             target: 'behindMap2D',
+             // target: 'behindMap2D',
+             target: 'map3D',
+             controls: ol.control.defaults({
+                 attribution: false,
+                 attributionOptions: ({    // @type {olx.control.AttributionOptions}
+                     collapsible: false
+                 }) }),
              // view: olView
              view: this.view
          });
 
          map2DMap = this.map;
 
-         this.ol3d = new olcs.OLCesium({map: this.map, target: 'map3D'});
+         this.selectClick = new ol.interaction.Select({
+             // layers: [ layer명 ]
+             condition: ol.events.condition.click
+         });
+         this.map.addInteraction(this.selectClick);
+         this.addSelectInteraction = function(){
+             this.map.addInteraction(this.selectClick);
+         };
+
+         this.selectFeatureEvent = function (callback) {
+             this.selectClick.on('select', function (evt) {
+                 selectedFeatures = evt.target.getFeatures();
+                 callback(evt);
+             });
+         };
+
+
+      //    this.ol3d = new olcs.OLCesium({map: this.map, target: 'map3D'});
+         this.ol3d = new olcs.OLCesium({map: this.map});
          this.ol3dScene = this.ol3d.getCesiumScene();
          this.camera = this.ol3dScene.camera;
 
+         var  depthTest = this.ol3dScene.globe.depthTestAgainstTerrain;
+         ConsoleLog( "depthTest : " + depthTest);
+
+         // this.ol3dScene.globe.depthTestAgainstTerrain = true;
+
+        // this.ol3dScene.globe.enableLighting = true;
+        //  this.ol3d.extend( Cesium.viewerCesiumNavigationMixin, {});
+
          this.ol3dScene.screenSpaceCameraController.minimumZoomDistance = 1000;
-         this.ol3dScene.screenSpaceCameraController.maximumZoomDistance = 400000;
+         // this.ol3dScene.screenSpaceCameraController.maximumZoomDistance = 400000;
+         this.ol3dScene.screenSpaceCameraController.maximumZoomDistance = 40000000;
          this.ol3dScene.screenSpaceCameraController._minimumZoomRate = 5; // ←
 
          var terrainProvider = new Cesium.CesiumTerrainProvider({
              url: '//assets.agi.com/stk-terrain/world',
+             // url: 'https://assets.agi.com/stk-terrain/v1/tilesets/world/tiles',
              requestVertexNormals: false
          });
          this.ol3dScene.terrainProvider = terrainProvider;
          this.ol3d.setEnabled(true);
+         // this.ol3d.setEnabled( false );
          // window.map2 = ol3d;
 
          //var rmCesiumAttr = function(){
@@ -1018,25 +1180,32 @@ function createLayer( source  ) {
              rotateAroundAxis( this.camera, -angle, axis, transform, options);
          };
 
-         // this.view3DTilt( 0.9 );
+
+         this.create3DLabelLayer = function( name, posX, posY ){
+
+             this.remove3DLabelLayer();
+
+             this.labelLayer = createLabelLayer( name, posX, posY );
+             this.map.addLayer( this.labelLayer );
+         };
+
+         this.remove3DLabelLayer = function(){
+             if( this.labelLayer ) {
+                 this.map.removeLayer(this.labelLayer);
+                 this.labelLayer = null;
+             }
+         };
+
+         this.moveToPos = function( posX, posY ){
+             moveTo( this.view, posX, posY, this.view.getZoom());
+         };
 
          /*
-         const scene = ol3d.getCesiumScene();
-         const camera = scene.camera;
-         const pivot = olcs.core.pickBottomPoint(scene);
-         if (!pivot) {
-             // Could not find the bottom point
-             return;
-         }
-
-         var angle = 0.9;
-
-         const options = {};
-         const transform = Cesium.Matrix4.fromTranslation(pivot);
-         const axis = camera.right;
-         const rotateAroundAxis = olcs.core.rotateAroundAxis;
-         rotateAroundAxis(camera, -angle, axis, transform, options);
-        */
+         this.map.forEachFeatureAtPixel(pixel, function(feature) {
+            //  features.push(feature);
+             ConsoleLog( "... feature ");
+         });
+         */
 
          this.mapEventPrecompose = function (callBack) {
 
@@ -1049,21 +1218,26 @@ function createLayer( source  ) {
                      var visibleRange = layer.get('visibleRange');
                      if (typeof visibleRange !== "undefined") {
 
-                         if (visibleRange.min <= zoom && zoom <= visibleRange.max) {
-                             var historyMap = layer.get('historyShow');
-                             if (historyMap) {
-                                 if (historyMap == 'true')
+                         if( typeof( zoom ) != 'undefined'){
+                             if (visibleRange.min <= zoom && zoom <= visibleRange.max) {
+                                 var historyMap = layer.get('historyShow');
+                                 if (historyMap) {
+                                     if (historyMap == 'true')
+                                         layer.setVisible(true);
+                                     else
+                                         layer.setVisible(false);
+                                 }
+                                 else {
                                      layer.setVisible(true);
-                                 else
-                                     layer.setVisible(false);
+                                 }
+                             }else{
+                                 layer.setVisible(false);
                              }
-                             else {
-                                 layer.setVisible(true);
-                             }
+
+                         }else {
+                             layer.setVisible( true );
                          }
-                         else {
-                             layer.setVisible(false);
-                         }
+
                      }
                  });
 
@@ -1074,8 +1248,8 @@ function createLayer( source  ) {
      };
 
 
-     return function(){
-         var map2D = new behindInit2DMap();
+     return function( overlay ){
+         var map2D = new behindInit2DMap( overlay );
          return map2D;
      }
 

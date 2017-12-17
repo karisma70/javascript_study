@@ -73,8 +73,38 @@ function createFeatureFromWkt( wkt, attrs, bTransform, format, label ) {
         }
     }
 
+    var geom = feature.getGeometry();
+    var coord = geom.getCoordinates();
+
+    // var coord3D = [ coord[0], coord[1], 50 ];
+    // geom.setCoordinates( coord3D );
+
     return feature;
 }
+
+function create3DFeatureFrom2DFeauture( feature2D ){
+
+    // feature2D.getGeometry().set('altitudeMode', 'clampToGround');
+
+    var geom = feature2D.getGeometry();
+    var coord = geom.getCoordinates();
+
+    var feature3D = new ol.Feature( {
+        geometry: new ol.geom.Point( [ coord[0], coord[1] ] )
+    });
+
+  //  feature3D.setProperties( feature2D.getProperties() );
+
+    var geom3D = feature3D.getGeometry();
+    var coord3D = geom3D.getCoordinates();
+
+    feature3D.setProperties( feature2D.getProperties() );
+
+    coord3D = geom3D.getCoordinates();
+
+    return feature3D;
+}
+
 
 function createPoiObj( attrs, shapeRecord, minVisibleLevel ){
     var biblePlace = "";
@@ -129,7 +159,7 @@ function getStringFromAttrs( attrs, field ) {
 }
 
 
-function GMDFileDownload( map, behindMap, shpUrl, layerId, style, paramLayerManager, wholeCompleteCallback ) {
+function GMDFileDownload( map, map3D, shpUrl, layerId, style, paramLayerManager, wholeCompleteCallback ) {
 
     var url = "biblemap/downloadmap/" + shpUrl;
 
@@ -226,7 +256,9 @@ function GMDFileDownload( map, behindMap, shpUrl, layerId, style, paramLayerMana
                                         'style': paramStyle });
                 features.push(feature);
 
-                var cloneFeature = cloneObject( feature );
+                // var cloneFeature = cloneObject( feature );
+                var cloneFeature = create3DFeatureFrom2DFeauture( feature );
+                cloneFeature.getGeometry().set('altitudeMode', 'clampToGround');
                 cloneFeatures.push( cloneFeature );
 
 
@@ -372,6 +404,15 @@ function GMDFileDownload( map, behindMap, shpUrl, layerId, style, paramLayerMana
         layerContainer.layers.push( shapeLayer );
         map.addLayer(  shapeLayer );
 
+        ///////////////////////  3D Map
+        // var cloneShapeLayer = createShapeLayer( cloneFeatures, layerId, style, createTextStyleOfFeature );
+        var cloneShapeLayer = createShapeLayer( cloneFeatures, layerId, style, create3DPointStyleOfFeature );
+
+        if( map3D ) {
+            cloneShapeLayer.set('altitudeMode', 'clampToGround' );
+            map3D.layers.push( cloneShapeLayer );
+        }
+        ////////////////////////
 
         if( layerContainer.totalCount <= layerContainer.layers.length ){
             wholeCompleteCallback( map, layerContainer );
@@ -379,15 +420,7 @@ function GMDFileDownload( map, behindMap, shpUrl, layerId, style, paramLayerMana
             ConsoleLog( "LayerContainer.totalCount : " + layerContainer.totalCount + ", layers.length: " + layerContainer.layers.length );
         }
 
-
-        var cloneShapeLayer = createShapeLayer( cloneFeatures, layerId, style, createStyleFunction );
-
-        if( behindMap ) {
-            behindMap.addLayer( cloneShapeLayer );
-        }
-
         shapeLayer.setZIndex( layerId );
-
 
     };   // end of callback
 

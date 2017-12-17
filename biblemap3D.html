@@ -32,6 +32,8 @@
     <!-- <script type="text/javascript" src="biblemap/openLayers_v4.4.2/ol.js"></script> -->
     <script src="biblemap/ol-cesium-v1.32/Cesium/Cesium.js"></script>
     <script src="biblemap/ol-cesium-v1.32/olcesium.js"></script>
+    <script src="biblemap/cesium_plugin/viewerCesiumNavigationMixin.js"></script>
+    <script src="biblemap/cesium_plugin/SpirographPositionProperty.js"></script>
 
     <script type="text/javascript" src="biblemap/src/distanceMeasureControl.js?version=20170820"></script>
     <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170905"></script>
@@ -467,8 +469,8 @@
 </div>
 
 <!-- <div id="behindMap2D" class="mapview" style="position:absolute; display:none;"> -->
-<div id="behindMap2D" class="mapview" style="position:absolute;">
-</div>
+<!-- <div id="behindMap2D" class="mapview" style="position:absolute;">
+</div> -->
 
 
 <!-- <div id="footerDummy"></div> -->
@@ -684,6 +686,7 @@
      });
      */
 
+    //////////////////////////////////
     $( '#customPopup' ).css( "z-index", 6000 );
 
     var dvPopupContainer = document.getElementById('popup');
@@ -695,6 +698,8 @@
 
     var popupOverlay = createOverlay( dvPopupContainer );    // dvPopupContainer
 
+    ////////////////////////////////////////
+
     var measureBtn = document.createElement('button');
     measureBtn.innerHTML = 'M';
 
@@ -704,6 +709,11 @@
 
     var nextPoiBtn = document.createElement('button');
     nextPoiBtn.innerHTML = '>';
+
+    /*
+    var view3DBtn = document.createElement('button');
+    view3DBtn.innerHTML = '3D';
+    */
 
     var MapMenuClickEvent = function( opt_options ) {
 
@@ -716,6 +726,13 @@
         element.appendChild( br );
         element.appendChild( prevPoiBtn );
         element.appendChild( nextPoiBtn );
+
+        /*
+        br = document.createElement('br');
+        element.appendChild( br );
+        element.appendChild( view3DBtn );
+        */
+
 
         element.setAttribute("id", "mapMenuDiv" );
         $('#mapMenuDiv').css( "z-index", "9000" );
@@ -745,7 +762,7 @@
 
     var bibleMapManager = createMapManager( popupOverlay, 'map' );
 
-    var behind2D = init3dMap();
+    var map3D = init3dMap( null );
 
     var trajectoryData = new TrajectoryData();
 
@@ -800,6 +817,14 @@
         ConsoleLog( "Next Poi Button!!! ");
     }, false );
 
+
+    /*
+    view3DBtn.addEventListener('click', function(){
+        adjustScrDiv.view2D3DCtrl( 'chkView3D'  );
+        ConsoleLog( "Go 3D View!!! ");
+    }, false );
+    */
+
     var selSpeed = document.getElementById('movingSpeed');
     var baseSpeed = 0.0;
     for( var idx = 0; idx < 4; idx ++ ){
@@ -821,13 +846,13 @@
 
 
         // $( '#map3D' ).css( "z-index", 2000 );
-        $( '#behindMap2D' ).css( "z-index", 0 );
+        // $( '#behindMap2D' ).css( "z-index", 0 );
 
         function fullScrMap(){
             var sidebar = document.getElementById('sidebar');
             var mapview = document.getElementById('map');
             var mapview3D = document.getElementById('map3D');
-            var behindMap = document.getElementById('behindMap2D');
+            // var behindMap = document.getElementById('behindMap2D');
 
             var footer = document.getElementById('footer');
             $("#footer").hide();
@@ -876,10 +901,12 @@
             mapview.style.bottom = 0 + 'px';
             mapview3D.style.bottom = 0 + 'px';
 
+            /*
             behindMap.style.top = (window.innerHeight - 100) + 'px';
             behindMap.style.left = (window.innerWidth - 150) + 'px';
             behindMap.style.right = 0 + 'px';
             behindMap.style.bottom = 0 + 'px';
+            */
 
             bibleMap.updateSize();
         }
@@ -890,7 +917,7 @@
             var toggleBtn = document.getElementById("footerToggle");
             var mapview = document.getElementById('map');
             var mapview3D = document.getElementById('map3D');
-            var behindMap = document.getElementById('behindMap2D');
+            // var behindMap = document.getElementById('behindMap2D');
 
             var footer = document.getElementById('footer');
             // var footerDummy = document.getElementById('footerDummy');
@@ -971,7 +998,7 @@
 
                 $( '#map' ).css( "z-index", 1000 );
                 $( '#map3D' ).css( "z-index", 1000 );
-                $( '#behindMap2D' ).css( "z-index", 0 );
+                // $( '#behindMap2D' ).css( "z-index", 0 );
 
                 mapview.style.left = 200+'px';
                 mapview.style.right = (( window.innerWidth * 0.5 ) - 100) + 'px';
@@ -987,12 +1014,12 @@
             mapview3D.style.bottom = ( window.innerHeight- mapHeight ) + 'px';
 
 
-
+/*
             behindMap.style.top = (footerTop - ( 22 + 100 )) + 'px';
             behindMap.style.left = (window.innerWidth - 150) + 'px';
             behindMap.style.right = 0 + 'px';
             behindMap.style.bottom = (footerTop - ( 22 + 160 )) + 'px';
-
+*/
 
             var dummy  = document.getElementById('dummy');
             var licenseNotice = document.getElementById('licenseNotice');
@@ -1245,10 +1272,10 @@ function syncBothMapView() {
     var zoom = bibleMapManager.getView().getZoom();
     var center = bibleMapManager.getView().getCenter();
 
-    behind2D.view.setZoom(zoom + 2);
-    behind2D.view.setCenter(center);
+    map3D.view.setZoom(zoom + 2);
+    map3D.view.setCenter(center);
 
-    behind2D.view3DTilt( 1.1 );
+    map3D.view3DTilt( 1.1 );
 
     bibleMap.updateSize();
 
@@ -1279,7 +1306,7 @@ function syncBothMapView() {
         for( var idx in bibleMapPointLayers ){
             var layer = bibleMapPointLayers[idx];
 
-            new GMDFileDownload( bibleMap, behind2D.map, layer.url, layer.order, layer.style, layerManager, function( ){
+            new GMDFileDownload( bibleMap, map3D, layer.url, layer.order, layer.style, layerManager, function( ){
                 layerManager.sortPoiWords();
                 initTextAutoComplete();
                 // downloadNeedDataList( );
@@ -1296,8 +1323,8 @@ function syncBothMapView() {
                     new GMDFileDownload( bibleMap, null, layer.url, layer.order, layer.style, layerManager, function( ){
                         changeHistoryAdmin( historyAdmin.value );
                         downloadTrajectoryData();
+                        map3D.reflectLayersToMap3D();
 
-                        // syncBothMapView();
                     });
                 }
 
@@ -1403,6 +1430,11 @@ function syncBothMapView() {
         if( trajectory == null )
             return;
 
+        adjustScrDiv.view2D3DCtrl( "chkView2D" );
+        // var radioVal = $(':radio[name="radio2D3D"]:checked').val();
+        $('input:radio[name="radio2D3D"][value="chkView2D"]').prop("checked", true);
+        // name="radio2D3D" value="chkView2D" style="margin-left:10px;" checked="checked" >
+
         function newRouteMoveProcess(){
             routeMove = new RouteMoveProcess(bibleMap, trajectory, layerManager.getPoiObjectArray(), pathTooltip, function( popupPoiArray ){
                 // ConsoleLog( popupPoiArray );
@@ -1462,19 +1494,12 @@ function syncBothMapView() {
         var zoom = bibleMapManager.getView().getZoom();
         $("#zoomLevel").html("zoom level : " + zoom); // + zoom;
 
-        // var center = bibleMapManager.getView().getCenter();
-
-        // behind2D.view.setZoom( zoom+2 );
-        // behind2D.view.setCenter( center );
-
-        /// ConsoleLog("bibleMapManager.mapEventPrecompose!!!!");
-
 
         if( routeMove)
             routeMove.updateMovingSpeed( zoom );
     });
 
-    behind2D.mapEventPrecompose( function(evt){
+    map3D.mapEventPrecompose( function(evt){
 
        // var zoom = behind2D.view.getZoom();
 
@@ -1518,6 +1543,8 @@ function syncBothMapView() {
         var posName = feature.get("label");     //  OpenLayersControl.js 내에  createTextStyleOfFeature 함수에서  text: feature.get('label') 으로 설정되어 있음
         var poiID = feature.get("id");     //  OpenLayersControl.js 내에  createTextStyleOfFeature 함수에서  text: feature.get('label') 으로 설정되어 있음
 
+        var zoom3D = map3D.view.getZoom();
+
         if (posName == null) {      // polygon 레이어를 클릭했을 경우
             posName = feature.get("name");      // History admin polygon에는 name과 name2 필드가 존재함
             if (posName == null)
@@ -1526,60 +1553,61 @@ function syncBothMapView() {
                 posName = "<strong>현재 국가</strong><br>" + "&nbsp;" + posName;
                 dvPopupContent.innerHTML = posName;
                 popupOverlay.setPosition(bibleMapManager.getClickecPos());
+                map3D.create3DLabelLayer( posName, bibleMapManager.getClickecPos()[0], bibleMapManager.getClickecPos()[1] );
+                moveTo( map3D.view, [poiObj.x, poiObj.y], zoom3D );
+
             } else {    // 나머지 폴리곤에 정의된 "name" 필드로 검색하도록 한다
-                // pos = layerManager.getPoiByName(posName);
-                // pos = bibleMapManager.getClickecPos();
                 dvPopupContent.innerHTML = posName;
                 popupOverlay.setPosition(bibleMapManager.getClickecPos());
 
-                /*
-                 requestBibleByWord(posName, function () {
-                 adjustScrDiv.setIsFullScr("false");
-                 });
-                 */
                 var poiArray = layerManager.getPoiObjArrayFromDictionary( posName );
                 if( poiArray.length < 2){
                     var poiObj = poiArray[ 0];
                     layerManager.historyInsertPoi( poiObj );
                     requestPoiContentAndShow( poiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+                    map3D.create3DLabelLayer( null, poiObj.x, poiObj.y );
+                    moveTo( map3D.view, [poiObj.x, poiObj.y], zoom3D );
                 }
             }
         } else {        //  poi Layer를 선택했을 경우
             if (id < 5) {          // 전세계 폴리곤 경계라면...
+                var nationName = posName;
                 posName = "<strong>현재 국가</strong><br>" + "&nbsp;" + posName;
                 dvPopupContent.innerHTML = posName;
                 popupOverlay.setPosition(bibleMapManager.getClickecPos());
+                map3D.create3DLabelLayer( nationName, bibleMapManager.getClickecPos()[0], bibleMapManager.getClickecPos()[1] );
+                moveTo( map3D.view, bibleMapManager.getClickecPos(), zoom3D );
             } else {    // 나머지 폴리곤에 정의된 "name" 필드로 검색하도록 한다
 
                 var poiObj = layerManager.getPoiObjById( poiID );
                 layerManager.historyInsertPoi( poiObj );
                 requestPoiContentAndShow( poiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
-
-                /*
-                 if( poiObj.rangeArray != null ) {
-                 requestBibleByRange( poiObj, function () {
-                 requestPoiContentAndShow( poiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
-                 adjustScrDiv.setIsFullScr("false");
-                 });
-                 }else {
-                 adjustScrDiv.setIsFullScr("false");
-                 requestBibleByWord( poiObj.biblePlace, function () {
-                 requestPoiContentAndShow( poiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
-                 adjustScrDiv.setIsFullScr("false");
-                 });
-                 }
-                 */
-
+                map3D.create3DLabelLayer( null, poiObj.x, poiObj.y );
+                moveTo( map3D.view, [poiObj.x, poiObj.y], zoom3D );
             }
         }
 
     });
 
 
-    dvPopupCloser.onclick = function() {
+    map3D.selectFeatureEvent( function(e) {
+        var selLen = e.selected.length;
+        if (selLen < 1)
+            return;
+
+        ConsoleLog( "map3D Clieck Event!!!");
+
+    });
+
+
+
+        dvPopupCloser.onclick = function() {
         popupOverlay.setPosition(undefined);
         dvPopupCloser.blur();
         dvPopupContent.innerHTML = "";
+
+        map3D.remove3DLabelLayer();
+
         return false;
     };
 
@@ -1719,6 +1747,8 @@ function syncBothMapView() {
             return;
 
         requestPoiContentAndShow( poiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+        map3D.create3DLabelLayer( null, poiObj.x, poiObj.y );
+
         var curZoom = bibleMap.getView().getZoom();
 
         var view = bibleMap.getView();
@@ -1733,11 +1763,11 @@ function syncBothMapView() {
             if( curZoom > poiObj.zoomIn ) {
 
                 moveTo(view, [poiObj.x, poiObj.y], curZoom);
-                moveTo( behind2D.view, [poiObj.x, poiObj.y], curZoom + 2);
+                moveTo( map3D.view, [poiObj.x, poiObj.y], curZoom + 3);
             }
             else {
                 moveTo(view, [poiObj.x, poiObj.y], poiObj.zoomIn);
-                moveTo( behind2D.view, [poiObj.x, poiObj.y], poiObj.zoomIn + 2 );
+                moveTo( map3D.view, [poiObj.x, poiObj.y], poiObj.zoomIn + 3 );
             }
         }
         else {
@@ -1752,7 +1782,7 @@ function syncBothMapView() {
                 }
             });
 
-            flyTo( behind2D.view, [poiObj.x, poiObj.y], zoomIn + 2 , function (complete) {
+            flyTo( map3D.view, [poiObj.x, poiObj.y], zoomIn + 3 , function (complete) {
                 //   flyTo(view, [poiObj.x, poiObj.y], poiObj.zoomIn-1, function (complete) {
                 if (complete == true) {
                 }
