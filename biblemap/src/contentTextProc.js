@@ -295,7 +295,7 @@ function showYoutubeOfPoi( poiObj, overlayObj, popupObj, recvPoiObj ){
 }
 
 
-function layerPopup(el){
+function showNoticePopup(el){
 
     $('#contentDiv').scrollTop(0);
 
@@ -366,6 +366,7 @@ function requestPoiContentAndShow( poiObj, popup, overlay ) {
         }
 
         showBaseInfoPoi();
+        // poiContentsToTab();
 
     }, function () {
         popup.innerHTML = poiText + " ";
@@ -450,19 +451,24 @@ function requestPoiContentAndShow( poiObj, popup, overlay ) {
     };
     */
 
-    showTextPoi = function() {      // tabMenu 에서 정보 보여주기
+    poiContentsToTab = function(){
 
         var infoTab = document.getElementById( 'tab3' );
         infoTab.innerHTML = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + focusPoiObj.id + ')\" style=\"text-decoration:none; font-weight:bold; color: #9C1AC8 \" >' + "[ " + poiText + " ]  " +  '</a>';
 
         var infoObj = { // title : poiText,
-                        content : infoText
+            content : infoText
         };
 
         var strConvText = makeStrongInText( layerManager, focusPoiObj.biblePlace, infoObj );
 
         // infoTab.innerHTML += infoText;
         infoTab.innerHTML += strConvText;
+    };
+
+    showTextPoi = function() {      // tabMenu 에서 정보 보여주기
+
+        poiContentsToTab();
 
         adjustScrDiv.setIsFullScr("false");
 
@@ -477,21 +483,55 @@ function showTextLayerPopup( title, infoText ){
 
     var lineImage = '<div style=\"height: 14px; background: url(biblemap/image/horizon-line.png);\"></div>';
 
-    var popupTitle = document.getElementById( 'poiTitle' );
+    var popupTitle = document.getElementById( 'noticeTitle' );
     popupTitle.innerHTML = "";
     popupTitle.innerHTML += title;
     popupTitle.innerHTML += lineImage;
 
-    var popupContent = document.getElementById( 'poiTextContent' );
+    var popupContent = document.getElementById( 'noticeContent' );
     popupContent.innerHTML = "";
     // popupContent.innerHTML += poiText;
     // popupContent.innerHTML += lineImage + "<br>";
     popupContent.innerHTML += '<br>' + infoText;
 
-    layerPopup( '#customPopup' );
+    showNoticePopup( '#infoPopup' );
 
 }
 
+
+
+function showIntroBibleMap(  ){
+
+    var lineImage = '<div style=\"height: 14px; background: url(biblemap/image/horizon-line.png);\"></div>';
+
+    var popupTitle = document.getElementById( 'noticeTitle' );
+    popupTitle.innerHTML = "공지사항" + lineImage;
+
+    var popupContent = document.getElementById( 'noticeContent' );
+    popupContent.innerHTML = "";
+    // popupContent.innerHTML += poiText;
+    // popupContent.innerHTML += lineImage + "<br>";
+    popupContent.innerHTML += '<br>' + '성경내용 안에는 하나님의 역사가 담겨있습니다 <br>';
+    popupContent.innerHTML += '하나님의 역사는 사실이며 따라서 성경본문에 등장하는 지명은 대부분 실제 존재하는 위치입니다 <br>';
+    popupContent.innerHTML += '지리적 위치에 대한 이해와 더불어 성경을 이해한다면 더욱 큰 확신과 믿음이 생길 것입니다  <br>';
+    popupContent.innerHTML += '여러분들이 성경을 가까이 하며 하나님의 역사를 더욱 깊게 알기 원하신다면 성경지도 웹 서비스가 도움이 될 것입니다.</span>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '본 웹사이트에 포함된 디지털맵 뷰어는 OpenLayers를 기반으로 제작되었으며, OpenLayers의 라이센스는 2-Clause BSD를 따릅니다.</span>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '본 웹사이트에서 표현되는 디지털 맵 데이터의 일부는 OpenStreetMap을 사용하고 있으며, OpenStreetMap의 라이센스는 CC BY-SA 2.0을 따릅니다.</span>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '본 웹사이트에서 제공하는 성경지명 정보 가운데 \'-비전성경사전-\' 출처로 표현되는 내용은 \'(사)두란노서원\'에서, \'-성경지명사전-\' 출처로 표현되는 내용은 \'(사)한국컴퓨터선교회\'에서 웹서비스를 통하여 제공하고 있는 내용임을 알려드립니다.</span>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '본 웹사이트에서 제공되는 위치정보는 일부 오류를 포함할 수 있음을 알려드리며, 공인된 정확한 정보가 수집되는 대로 수정할 것을 알려드립니다.</span>';
+    popupContent.innerHTML += '<br>';
+
+    showNoticePopup( '#infoPopup' );
+
+}
 
 
 
@@ -617,3 +657,108 @@ var BibleChapterList = function() {
     };
 
 };
+
+//////////////////////////////////////////////////////////////
+
+function currentHistoryAdminString( newValue ){
+    var strObj =  getHistoryAdminStringObj( newValue );
+
+    document.getElementById("range").innerHTML = strObj.title;
+    document.getElementById("historyAdminExplain").innerHTML = strObj.text;
+
+    $("#historyAdminExplain").scrollTop(0);
+}
+
+
+function eventHistoryAdmin( newVal ){
+    dvPopupCloser.onclick();
+    /*
+     adjustScrDiv.setIsFullScr("false");
+
+     writeInfoTabHistoryAdmin();
+     */
+
+    changeHistoryAdmin( newVal );
+    showHistoryAdmin();
+}
+
+function writeInfoTabHistoryAdmin(){
+    var infoTab = document.getElementById( 'tab4' );
+
+    var newVal = document.getElementById("historyAdmin").value;
+    var obj =  getHistoryAdminStringObj( newVal );
+
+    var strConvText;
+
+    infoTab.innerHTML = "<strong><font >" + '[ ' + obj.title + ' ]' + "</font></strong>" +'<br>';
+
+    var infoObj = { // title : poiText,
+        content : obj.text
+    };
+
+    if( obj.text ) {
+        strConvText = makeStrongInText( layerManager, "abc", infoObj );
+    }
+
+    infoTab.innerHTML += strConvText;
+}
+
+
+function showHistoryAdmin(){
+
+    writeInfoTabHistoryAdmin();
+
+    // infoTab.innerHTML = obj.text;
+    adjustScrDiv.setIsFullScr("false");
+
+    $("#tab4").scrollTop(0);
+    tabMenu.selectTab('tab4Menu');
+
+}
+
+
+function changeHistoryAdmin( newValue ){
+
+    currentHistoryAdminString( newValue );
+
+    for (idx in layerManager.layerContainer.layers) {
+        var layer = layerManager.layerContainer.layers[idx];
+        if (layer.get('historyShow')) {
+            layer.set('historyShow', 'false');
+        }
+    }
+
+    var historyArray = [5, 6, 7, 8, 9, 10, 11, [ 1, 2, 3, 4 ] ];
+
+    function showHistoryLayer( showId ) {
+        for (idx in layerManager.layerContainer.layers) {
+            var layer = layerManager.layerContainer.layers[idx];
+            var id = layer.get('id');
+            if (showId.length) {    // 현재의 국가는 4개의 레이어를 한꺼번에 켜고 꺼야 한다.
+                for ( var hID in showId) {
+                    var sSubId = showId[hID];
+                    if (id == sSubId) {
+                        if (layer.get('historyShow')) {
+                            layer.set('historyShow', 'true');
+                            break;
+                        }
+                    }
+                }
+            } else {
+                if (id == showId) {
+                    if (layer.get('historyShow')) {
+                        layer.set('historyShow', 'true');
+                        var extent = layer.getSource().getExtent();
+                        var view = bibleMap.getView();
+                        view.fit( extent, bibleMap.getSize() );
+                        break;
+                    } else {
+                        alert(" historyArray[" + showId + "] : " + historyArray[showId] + ", layerID : " + id + "  has not property historyShow!!!");
+                    }
+                }
+            }
+        }
+    }
+
+    showHistoryLayer( historyArray[newValue]);
+}

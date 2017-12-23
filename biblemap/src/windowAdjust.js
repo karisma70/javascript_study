@@ -2,6 +2,119 @@
  * Created by Administrator on 2017-12-23.
  */
 
+/*
+var TabMenu = (function () {
+    $(".tab_content").hide();
+    $(".tab_content:first").show();
+
+    var selMenuString = "";
+
+    $("ul.tabs li").click(function () {
+        selMenuString = $(this).text();
+        ConsoleLog( selMenuString );
+        $("ul.tabs li").removeClass("active").css("color", "#FFFFFF");
+        $(this).addClass("active").css("color", "#000000");
+        $(".tab_content").hide();
+        var activeTab = $(this).attr("rel");
+        // $("#" + activeTab).fadeIn();
+        $("#" + activeTab).show();
+    });
+
+    TabMenuControl = function() {
+        this.selectTab = function (menuID) {
+            // var el = document.getElementById('tab1Menu');
+            var el = document.getElementById(menuID);
+            eventFire(el, 'click');
+        };
+
+        this.getSelectedTabString = function () {
+            return selMenuString;
+        };
+
+        return this;
+    };
+
+    return new TabMenuControl;
+
+}());
+*/
+
+
+function createTabMenu(){
+    $(".tab_content").hide();
+    $(".tab_content:first").show();
+
+    var selMenuString = "";
+
+    $("ul.tabs li").click(function () {
+        selMenuString = $(this).text();
+        ConsoleLog( selMenuString );
+        $("ul.tabs li").removeClass("active").css("color", "#FFFFFF");
+        $(this).addClass("active").css("color", "#000000");
+        $(".tab_content").hide();
+        var activeTab = $(this).attr("rel");
+        // $("#" + activeTab).fadeIn();
+        $("#" + activeTab).show();
+    });
+
+    TabMenuControl = function() {
+        this.selectTab = function (menuID) {
+            // var el = document.getElementById('tab1Menu');
+            var el = document.getElementById(menuID);
+            eventFire(el, 'click');
+        };
+
+        this.getSelectedTabString = function () {
+            return selMenuString;
+        };
+
+        return this;
+    };
+
+    return new TabMenuControl;
+}
+
+
+
+IsExistWord = function( array, word ) {
+    for (var id in array ) {
+        var curObj = array[id];
+        if( curObj.value == word) {
+            return true;
+        }
+    }
+    return false;
+};
+
+// 지명 검색창에 지명 입력시 자동으로 후보단어 표시하기
+function initTextAutoComplete(){
+
+    var currencies = [];
+    var poiDic = layerManager.getPoiDictionaryObj();
+
+    for( prop in poiDic ){
+        if( poiDic.hasOwnProperty(prop) && typeof poiDic[prop] === "object" ){
+            if( IsExistWord( currencies,  prop ) == false) {
+                currencies.push({value: prop});
+            }
+        }
+    }
+
+    $('#biblePlace').autocomplete({
+        lookup: currencies,
+        onSelect: function (suggestion) {
+            // var thehtml = '<strong>Currency Name:</strong> ' + suggestion.value + ' <br> <strong>Symbol:</strong> ' + suggestion.data;
+            // $('#outputcontent').html(thehtml);
+
+            var dvBiblePlace = document.getElementById("biblePlace");
+            dvBiblePlace.value = suggestion.value;
+            searchBiblePlace();
+        }
+    });
+}
+
+
+
 var adjustScrDiv = (function(){
 
     var bIsFullScr = 'false';
@@ -239,13 +352,18 @@ var adjustScrDiv = (function(){
         showScrMap();
     }
 
+    function getCurrent2D3DString(){
+        return view2D3D;
+    }
+
     return {
         fullScrMap : fullScrMap,
         normalScrMap : normalScrMap,
         showScrMap : showScrMap,
         toggleScrMap : toggleScrMap,
         setIsFullScr : setIsFullScr,
-        view2D3DCtrl : view2D3DControl
+        view2D3DCtrl : view2D3DControl,
+        getCurrent2D3DString :getCurrent2D3DString
     };
 
 }());

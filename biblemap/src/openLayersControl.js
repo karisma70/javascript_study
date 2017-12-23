@@ -1070,22 +1070,22 @@ function createLayer( source  ) {
          this.map = null;
          this.layers = [];
          this.labelLayer = null;
+         this.IsReflectAddLayers = false;
 
-             this.reflectLayersToMap3D = function(){
-             for( var idx = 0; idx < this.layers.length; idx ++ ) {
-                 var layer = this.layers[idx];
-                 this.map.addLayer( layer );
+          this.reflectLayersToMap3D = function(){
+             if( this.IsReflectAddLayers == false) {
+                 for (var idx = 0; idx < this.layers.length; idx++) {
+                     var layer = this.layers[idx];
+                     this.map.addLayer(layer);
+                 }
+                 this.IsReflectAddLayers = true;
              }
          };
 
          this.view = new ol.View({
-             // center: [-9101767, 2822912],
              center: [3844176, 3806822],
-             // zoom: 14
              maxZoom: 15,
-             // minZoom: 4,
              minZoom: 4,
-             // zoom: 8
              zoom: 7
          });
 
@@ -1101,14 +1101,12 @@ function createLayer( source  ) {
                      })
                  })
              ],
-             // target: 'behindMap2D',
              target: 'map3D',
              controls: ol.control.defaults({
                  attribution: false,
                  attributionOptions: ({    // @type {olx.control.AttributionOptions}
                      collapsible: false
                  }) }),
-             // view: olView
              view: this.view
          });
 
@@ -1206,6 +1204,34 @@ function createLayer( source  ) {
              ConsoleLog( "... feature ");
          });
          */
+
+
+         this.clickEvent = function (callback) {
+             this.map.on('click', function (evt) {
+                 clickedPos = evt.coordinate;
+                 callback(evt);
+             });
+         };
+
+         /*
+          var selectedFeature;
+
+         this.map.on('click', function(evt){
+
+
+             ConsoleLog( "3D Map Click!!!! ");
+
+             selectedFeature = map2DMap.forEachFeatureAtPixel(
+                 evt.pixel,
+                 function( feature, layer ){
+                     return feature;
+                 }
+             );
+
+             if( selectedFeature ){
+                 ConsoleLog( "Clicked Feature!!!!!!!!");
+             }
+         }); */
 
          this.mapEventPrecompose = function (callBack) {
 

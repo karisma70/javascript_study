@@ -119,3 +119,71 @@ HistoryClickedPoi = function(){
 
     };
 };
+
+
+
+function saveSearchWordsToStorage( ){
+
+    var Obj = {
+        'bibleTitle' : dvBibleTitle.value,
+        'bibleChapter' : dvBibleChapter.value.toString(),
+        'bibleWord' : dvBibleWord.value,
+        'biblePlace' : dvBiblePlace.value
+    };
+
+    var strObj = JSON.stringify( Obj );
+
+    localStorage.setItem( 'bibleMap', strObj );
+}
+
+function getSearchWordsFromStorage(){
+    var strObj = localStorage.getItem( 'bibleMap');
+    if( strObj == null ){
+        $("#bibleTitle" ).val( "7");
+        $("#bibleChapter").val( "1" );
+        return;
+    }
+    var Obj = JSON.parse( strObj );
+    if( Obj == null )
+        return;
+
+    var strText = "";
+    if( Obj.hasOwnProperty('bibleTitle' ) ) {
+        if( typeof( Obj['bibleTitle'] ) == "string")
+            strText = Obj['bibleTitle'];
+    }
+    if( strText == "")
+        strText = "7";
+    $( "#bibleTitle" ).val( strText );
+
+    strText = "";
+    if( Obj.hasOwnProperty('bibleChapter' ) ) {
+        if (typeof( Obj['bibleChapter'] ) == "string")
+            strText = Obj['bibleChapter'];
+    }
+    if( strText == "" ){
+        strText = "1";
+    }
+    $("#bibleChapter").val( strText );
+
+    strText = "";
+    if( Obj.hasOwnProperty('bibleWord' )){
+        if( typeof( Obj['bibleWord'] ) == "string")
+            strText = Obj['bibleWord'];
+    }
+    if( strText == ""){
+        strText = "바울";
+    }
+    $("#bibleWord").val( strText );
+
+    strText = "";
+    if( Obj.hasOwnProperty('biblePlace' )){
+        if( typeof( Obj['biblePlace'] ) == "string")
+            strText = Obj['biblePlace'];
+    }
+    if( strText == "" ){
+        strText = "예루살렘";
+    }
+    $("#biblePlace").val( strText );
+}
+
