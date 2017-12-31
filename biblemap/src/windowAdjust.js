@@ -120,20 +120,177 @@ var adjustScrDiv = (function(){
     var bIsFullScr = 'false';
     var view2D3D = "chkView2D";
 
-    // var map2D_Z = $("#map").css('z-index');
-    // var map3D_Z = $("#map3D").css('z-index');
+    $( '#behindMap2D' ).css( "z-index", -1 );
+
+    var sidebar;
+    var toggleBtn;
+    var mapview;
+    var mapview3D;
+    var behindMap;
+    var turnUpBtn;
+    var turnLeftBtn;
+    var turnRightBtn;
+    var turnDownBtn;
+
+    var compassBtn;
+    var zoomInBtn2D;
+    var zoomOutBtn2D;
+    var beforePoiBtn2D;
+    var afterPoiBtn2D;
+
+    var compassBasX = window.innerWidth - ( 200 + 85 );
+    var compassBasY = 5;
+
+    var baseY = 80;
+
+    var zoomInBtn3D;
+    var zoomOutBtn3D;
+    var measureBtn2D;
+    var beforePoiBtn3D;
+    var afterPoiBtn3D;
+
+    var view2DBtn;
+    var view3DBtn;
+
+    var footer;
+    // var footerDummy = document.getElementById('footerDummy');
+    var tab_contain;
+
+    var container;
+
+    var tab1;
+    var tab2;
+    var tab3;
+    var tab4;
+
+    function updateCompassBaseXY(){
+        compassBasX = window.innerWidth - ( 200 + 85 );
+    }
+
+    function setCompassBtnPos( baseX, baseY ){
+        compassBtn.style.left = baseX + 19 + 'px';
+        compassBtn.style.top = baseY + 18 + 'px';
+
+        turnUpBtn.style.left = baseX + 20 + 'px';
+        turnUpBtn.style.top = baseY + 0 + 'px';
+
+        turnLeftBtn.style.left = baseX + 0 + 'px';
+        turnLeftBtn.style.top = baseY + 19 + 'px';
+
+        turnRightBtn.style.left = baseX + 60 + 'px';
+        turnRightBtn.style.top = baseY + 19 + 'px';
+
+        turnDownBtn.style.left = baseX + 20 + 'px';
+        turnDownBtn.style.top = baseY + 57 + 'px';
+    }
+
+    function initDocumentVar() {
+        sidebar = document.getElementById('sidebar');
+        toggleBtn = document.getElementById("footerToggle");
+        mapview = document.getElementById('map');
+        mapview3D = document.getElementById('map3D');
+        behindMap = document.getElementById('behindMap2D');
+
+        compassBtn = document.getElementById('compassBtn');
+        turnUpBtn = document.getElementById('turnUpBtn');
+        turnLeftBtn = document.getElementById('turnLeftBtn');
+        turnRightBtn = document.getElementById('turnRightBtn');
+        turnDownBtn = document.getElementById('turnDownBtn');
+
+        zoomInBtn3D = document.getElementById('zoomInBtn3D');
+        zoomOutBtn3D = document.getElementById('zoomOutBtn3D');
+        beforePoiBtn3D = document.getElementById('beforePoiBtn3D');
+        afterPoiBtn3D = document.getElementById('afterPoiBtn3D');
 
 
-    // $( '#map3D' ).css( "z-index", 2000 );
-    // $( '#behindMap2D' ).css( "z-index", 0 );
+        zoomInBtn2D = document.getElementById('zoomInBtn2D');
+        zoomOutBtn2D = document.getElementById('zoomOutBtn2D');
+        measureBtn2D = document.getElementById('measureBtn2D');
+        beforePoiBtn2D = document.getElementById('beforePoiBtn2D');
+        afterPoiBtn2D = document.getElementById('afterPoiBtn2D');
+
+        view2DBtn  = document.getElementById('view2DBtn');
+        view3DBtn  = document.getElementById('view3DBtn');
+
+        footer = document.getElementById('footer');
+        // var footerDummy = document.getElementById('footerDummy');
+        tab_contain = document.getElementById("tab_contain");
+
+        container = document.getElementById('container');
+
+        tab1 = document.getElementById("tab1");
+        tab2 = document.getElementById("tab2");
+        tab3 = document.getElementById("tab3");
+        tab4 = document.getElementById("tab4");
+
+        // compassBtn.style.top = 5 +'px';
+        // compassBtn.style.left = (window.innerWidth - ( 200 + 110 )) + 'px';
+
+        setCompassBtnPos( compassBasX, compassBasY );
+
+        zoomInBtn3D.style.top = baseY +'px';
+        zoomInBtn3D.style.left = 5 + 'px';
+        zoomOutBtn3D.style.top = baseY + 27 +'px';
+        zoomOutBtn3D.style.left = 5 + 'px';
+
+        beforePoiBtn3D.style.top = baseY + 80 +'px';
+        beforePoiBtn3D.style.left = 5 + 'px';
+        afterPoiBtn3D.style.top = baseY + 107 +'px';
+        afterPoiBtn3D.style.left = 5 + 'px';
+
+        zoomInBtn2D.style.top = baseY +'px';
+        zoomInBtn2D.style.left = 5 + 'px';
+        zoomOutBtn2D.style.top = baseY + 27 +'px';
+        zoomOutBtn2D.style.left = 5 + 'px';
+
+        measureBtn2D.style.top = baseY + 67 +'px';
+        measureBtn2D.style.left = 5 + 'px';
+
+        beforePoiBtn2D.style.top = baseY + 110 +'px';
+        beforePoiBtn2D.style.left = 5 + 'px';
+        afterPoiBtn2D.style.top = baseY + 137 +'px';
+        afterPoiBtn2D.style.left = 5 + 'px';
+
+
+        view2DBtn.style.top = 5 +'px';
+        view2DBtn.style.left = 5 + 'px';
+        // view2DBtn.style.left = (window.innerWidth - 230) + 'px';
+
+        view3DBtn.style.top = 5 +'px';
+        view3DBtn.style.left = 5 + 'px';
+        // view3DBtn.style.left = (window.innerWidth - 230) + 'px';
+    }
+
+    // val 1010
+    function setZOrder3DViewBtn( val ){
+        $( '#compassBtn' ).css( "z-index",  val );
+
+        $( '#turnUpBtn' ).css( "z-index", val );
+        $( '#turnLeftBtn' ).css( "z-index", val );
+        $( '#turnRightBtn' ).css( "z-index", val );
+        $( '#turnDownBtn' ).css( "z-index", val );
+
+        $( '#zoomInBtn3D' ).css( "z-index",  val);
+        $( '#zoomOutBtn3D' ).css( "z-index",  val);
+        $( '#beforePoiBtn3D' ).css( "z-index", val );
+        $( '#afterPoiBtn3D' ).css( "z-index", val );
+        $( '#view2DBtn' ).css( "z-index", val );
+
+    }
+
+    function setZOrder2DViewBtn( val ) {
+        $('#zoomInBtn2D').css("z-index", val);
+        $('#zoomOutBtn2D').css("z-index", val);
+        $('#measureBtn2D').css("z-index", val);
+        $('#beforePoiBtn2D').css("z-index", val);
+        $('#afterPoiBtn2D').css("z-index", val);
+        $('#view3DBtn').css("z-index", val);
+    }
 
     function fullScrMap(){
-        var sidebar = document.getElementById('sidebar');
-        var mapview = document.getElementById('map');
-        var mapview3D = document.getElementById('map3D');
-        // var behindMap = document.getElementById('behindMap2D');
 
-        var footer = document.getElementById('footer');
+        initDocumentVar();
+
         $("#footer").hide();
 
         // $("#footerDummy").hide();
@@ -155,57 +312,59 @@ var adjustScrDiv = (function(){
         dummy.style.top = (window.innerHeight - 202) + 'px';
         // licenseNotice.style.top = (window.innerHeight - 16) + 'px';
 
+        updateCompassBaseXY();
+        setCompassBtnPos( compassBasX, compassBasY );
+
         if ( view2D3D == "chkViewAll") {
             $( '#map' ).css( "z-index", 1000 );
+
+            $( '#bubblePopup3D' ).css( "z-index", 1000 );
             $( '#map3D' ).css( "z-index", 1000 );
 
-            mapview.style.left = 200 + 'px';
-            mapview.style.right = (( window.innerWidth * 0.5 ) - 100) + 'px';
-            mapview3D.style.left = (( window.innerWidth * 0.5 )+100) + 'px';
-            mapview3D.style.right = 0 + 'px';
+            var compassX = ( window.innerWidth * 0.5 ) -  185;
+            setCompassBtnPos( compassX, compassBasY );
+
+            mapview3D.style.left = 200 + 'px';
+            mapview3D.style.right = (( window.innerWidth * 0.5 ) - 100) + 'px';
+            mapview.style.left = (( window.innerWidth * 0.5 )+100) + 'px';
+            mapview.style.right = 0 + 'px';
+
         }else{
             if( view2D3D == "chkView2D") {
                 $( '#map' ).css( "z-index", 2000 );
+
+                $( '#bubblePopup3D' ).css( "z-index", 1000 );
                 $( '#map3D' ).css( "z-index", 1000 );
             }else {
                 $( '#map' ).css( "z-index", 1000 );
+
+                $( '#bubblePopup3D' ).css( "z-index", 2000 );
                 $( '#map3D' ).css( "z-index", 2000 );
             }
 
-            mapview.style.left = 200 + 'px';
-            mapview.style.right = 0 + 'px';
+
             mapview3D.style.left = 200 + 'px';
             mapview3D.style.right = 0 + 'px';
+            mapview.style.left = 200 + 'px';
+            mapview.style.right = 0 + 'px';
+
         }
         mapview.style.bottom = 0 + 'px';
         mapview3D.style.bottom = 0 + 'px';
 
-        /*
+
          behindMap.style.top = (window.innerHeight - 100) + 'px';
          behindMap.style.left = (window.innerWidth - 150) + 'px';
          behindMap.style.right = 0 + 'px';
          behindMap.style.bottom = 0 + 'px';
-         */
+
 
         bibleMap.updateSize();
     }
 
     function normalScrMap(){
 
-        var sidebar = document.getElementById('sidebar');
-        var toggleBtn = document.getElementById("footerToggle");
-        var mapview = document.getElementById('map');
-        var mapview3D = document.getElementById('map3D');
-        // var behindMap = document.getElementById('behindMap2D');
-
-        var footer = document.getElementById('footer');
-        // var footerDummy = document.getElementById('footerDummy');
-        var tab_contain = document.getElementById( "tab_contain");
-
-        var tab1 = document.getElementById( "tab1");
-        var tab2 = document.getElementById( "tab2");
-        var tab3 = document.getElementById( "tab3");
-        var tab4 = document.getElementById( "tab4");
+        initDocumentVar();
 
         var mapHeight = window.innerHeight * 0.60;
 
@@ -253,36 +412,57 @@ var adjustScrDiv = (function(){
         sidebar.style.bottom = 1 + 'px';
         // sidebar.style.bottom = ( window.innerHeight - mapHeight ) + 'px';
 
+        updateCompassBaseXY();
+        setCompassBtnPos( compassBasX, compassBasY );
+
 
         if ( view2D3D == "chkView2D") {
             $( '#map' ).css( "z-index", 2000 );
+
+            $( '#bubblePopup3D' ).css( "z-index", 1000 );
             $( '#map3D' ).css( "z-index", 1000 );
 
-            mapview.style.left = 200+'px';
-            mapview.style.right = 0 + 'px';
             mapview3D.style.left = 200+'px';
             mapview3D.style.right = 0 + 'px';
+            mapview.style.left = 200+'px';
+            mapview.style.right = 0 + 'px';
+
+            setZOrder3DViewBtn( 1010 );
+            setZOrder2DViewBtn( 2010 );
+
+
         }
         else if ( view2D3D == "chkView3D") {
 
             $( '#map' ).css( "z-index", 1000 );
             $( '#map3D' ).css( "z-index", 2000 );
+            $( '#bubblePopup3D' ).css( "z-index", 2000 );
 
-            mapview.style.left = 200+'px';
-            mapview.style.right = 0 + 'px';
+            setZOrder3DViewBtn( 2010 );
+            setZOrder2DViewBtn( 1010 );
+
             mapview3D.style.left = 200+'px';
             mapview3D.style.right = 0 + 'px';
+            mapview.style.left = 200+'px';
+            mapview.style.right = 0 + 'px';
         }
         else if( view2D3D == "chkViewAll") {
 
             $( '#map' ).css( "z-index", 1000 );
-            $( '#map3D' ).css( "z-index", 1000 );
-            // $( '#behindMap2D' ).css( "z-index", 0 );
 
-            mapview.style.left = 200+'px';
-            mapview.style.right = (( window.innerWidth * 0.5 ) - 100) + 'px';
-            mapview3D.style.left = (( window.innerWidth * 0.5 )+100) + 'px';
-            mapview3D.style.right = 0 + 'px'
+            $( '#bubblePopup3D' ).css( "z-index", 1000 );
+            $( '#map3D' ).css( "z-index", 1000 );
+
+            setZOrder3DViewBtn( 1010 );
+            setZOrder2DViewBtn( 1010 );
+
+            var compassX = ( window.innerWidth * 0.5 ) -  185;
+            setCompassBtnPos( compassX, compassBasY );
+
+            mapview3D.style.left = 200+'px';
+            mapview3D.style.right = (( window.innerWidth * 0.5 ) - 100) + 'px';
+            mapview.style.left = (( window.innerWidth * 0.5 )+100) + 'px';
+            mapview.style.right = 0 + 'px';
         }
         mapview.style.top = 0;
         mapview.style.bottom = ( window.innerHeight- mapHeight ) + 'px';
@@ -293,12 +473,11 @@ var adjustScrDiv = (function(){
         mapview3D.style.bottom = ( window.innerHeight- mapHeight ) + 'px';
 
 
-        /*
-         behindMap.style.top = (footerTop - ( 22 + 100 )) + 'px';
+         behindMap.style.top = (footerTop - ( 62 + 100 )) + 'px';
          behindMap.style.left = (window.innerWidth - 150) + 'px';
          behindMap.style.right = 0 + 'px';
-         behindMap.style.bottom = (footerTop - ( 22 + 160 )) + 'px';
-         */
+         behindMap.style.bottom = (footerTop - ( 0 + 160 )) + 'px';
+
 
         var dummy  = document.getElementById('dummy');
         var licenseNotice = document.getElementById('licenseNotice');
@@ -370,6 +549,48 @@ var adjustScrDiv = (function(){
 
 function toggleScrMap(){
     adjustScrDiv.toggleScrMap();
+}
+
+function Create3DPopupOverlay( overlayCloser, closerEventFunc ) {
+
+    var overlay = null;
+    var localOverlayCloser = null;
+
+    this.overlay = new ol.Overlay({
+        element: document.getElementById('bubblePopup3D')
+    });
+
+    overlay = this.overlay;
+
+/*
+    var dvPopupCloser3D = document.getElementById('popup-closer3D');
+    this.overlayCloser = document.getElementById('popup-closer3D');
+    // this.overlayCloser = document.getElementById('popup-closer');
+    */
+
+    // this.overlayCloser = $("#popup-closer3D");
+    this.overlayCloser = overlayCloser;
+    localOverlayCloser = this.overlayCloser;
+
+    // overlayCloser = this.overlayCloser;
+
+    this.overlayCloser.onclick = function() {
+        overlay.setPosition(undefined);
+        localOverlayCloser.blur();
+
+        /*
+        dvPopupContent.innerHTML = "";
+
+        map3D.remove3DLabelLayer();
+        */
+
+        closerEventFunc();
+
+        return false;
+    };
+
+
+
 }
 
 

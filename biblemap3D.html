@@ -29,17 +29,20 @@
     <script type="text/javascript" src="biblemap/src/trajectoryData.js?version=20170901"></script>
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170829"></script>
 
-    <!-- <script type="text/javascript" src="biblemap/openLayers_v4.1.1/ol.js"></script> -->
-    <!-- <script type="text/javascript" src="biblemap/openLayers_v4.4.2/ol.js"></script> -->
+
     <script src="biblemap/ol-cesium-v1.32/Cesium/Cesium.js"></script>
     <script src="biblemap/ol-cesium-v1.32/olcesium.js"></script>
-    <script src="biblemap/cesium_plugin/viewerCesiumNavigationMixin.js"></script>
-    <script src="biblemap/cesium_plugin/SpirographPositionProperty.js"></script>
+
+    <script src="ol-cesium-725213c/Cesium/Cesium.js"></script>
+    <script src="ol-cesium-725213c/olcesium.js"></script>
+    <!-- <script src="biblemap/cesium_plugin/viewerCesiumNavigationMixin.js"></script>-->
+    <!--<script src="biblemap/cesium_plugin/SpirographPositionProperty.js"></script>-->
 
     <script type="text/javascript" src="biblemap/src/distanceMeasureControl.js?version=20170820"></script>
     <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170905"></script>
     <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20171116"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+    <script type="text/javascript" src="biblemap/src/jQueryRotate.js"></script>
     <!-- <script type="text/javascript" src="biblemap/vendor/jquery-1.8.1.js"></script> -->
     <script type="text/javascript" src="biblemap/vendor/json2.js"></script>
     <script type="text/javascript" src="biblemap/src/jquery.collapse.js"></script>
@@ -52,6 +55,7 @@
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/autocomplete_style.css?version=20170911">
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/popup.css?version=version=20170910">
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/tabMenu.css?version=version=20170916">
+    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/bubblePopup.css?version=version=20171210">
     <!-- <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/biblemap.css?version=version=20170916"> -->
     <!-- <script type="text/javascript" src="biblemap/js/jquery-1.9.1.min.js"></script> -->
     <script type="text/javascript" src="biblemap/js/jquery.autocomplete.min.js"></script>
@@ -172,7 +176,7 @@
             /* margin-right: -200px;
             padding-right: 200px; */
             background-color: #ffffff;
-            border:1px solid grey;
+            /* border:1px solid grey; */
         }
 
         #poiTextContent {
@@ -202,62 +206,7 @@
             background-color: #D0E1EB;
         }
 
-        .ol-popup-content {
-            font-size: 10px;
-            font-family: 'Nanum Gothic';
-            /* font-family: 'hanna', sans-serif; */
 
-        }
-
-        .ol-popup {
-            position: absolute;
-            background-color: white;
-            -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
-            filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #cccccc;
-            bottom: 12px;
-            left: -50px;
-            min-width: 145px;
-
-            -ms-user-select: none;
-            -moz-user-select: -moz-none;
-            -khtml-user-select: none;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-        .ol-popup:after, .ol-popup:before {
-            top: 100%;
-            border: solid transparent;
-            content: " ";
-            height: 0;
-            width: 0;
-            position: absolute;
-            pointer-events: none;
-        }
-        .ol-popup:after {
-            border-top-color: white;
-            border-width: 10px;
-            left: 48px;
-            margin-left: -10px;
-        }
-        .ol-popup:before {
-            border-top-color: #cccccc;
-            border-width: 11px;
-            left: 48px;
-            margin-left: -11px;
-        }
-        .ol-popup-closer {
-            text-decoration: none;
-            position: absolute;
-            top: 2px;
-            right: 8px;
-            font-size : 12px;
-        }
-        .ol-popup-closer:after {
-            content: "✖";
-        }
 
         .measure-distance {
             top: 65px;
@@ -337,9 +286,10 @@
 
 <body>
 <div class="wrapperDiv">
-    <div id="sidebar" style="position:absolute; background-color:rgb( 248, 248, 248  );" >
-        <a href="javascript:showIntroBibleMap();" target="_blank" style="text-decoration:none; vertical-align:middle;"><div id="logo" style="height:32px; background-color:rgb( 59, 89, 153 );"><img src="biblemap/image/biblemap_logo.png" style="width:27px; height:33px; vertical-align:middle" >
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span  style="font-size:11pt; font-weight:bold; color:white; text-align:center;  vertical-align:middle; font: 'Hanna', serif;" >성경지도</span></div></a>
+    <div id="sidebar" style="position:absolute; background-color:rgb( 248, 248, 248  );">
+        <div id="logo" style="height:32px; background-color:rgb( 59, 89, 153 );" onclick="showIntroBibleMap();"><img src="biblemap/image/biblemap_logo.png" style="width:27px; height:33px; vertical-align:middle" >
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span  style="font-size:11pt; font-weight:bold; color:white; text-align:center;  vertical-align:middle; font: 'Hanna', serif;" >성경지도</span></div>
+
         <div class="dummy2" style = "height: 8px;"></div>
         <div class="dummy2" style = "height: 81px;">
             <div id ="bibleSearch" style="font-size:12px; height: 50px">
@@ -410,16 +360,14 @@
                     <input type="radio" id="radioView2D"
                            name="radio2D3D" value="chkView2D" style="margin-left:10px;" checked="checked" >
                     <label for="radioView2D">2D View</label>
-                    <br>
-                    <br>
+                    <br><br>
                     <input type="radio" id="radioView3D"
                            name="radio2D3D" value="chkView3D" style="margin-left:10px;">
-                    <label for="radioView3D">3D View</label>
-                    <br>
-                    <br>
+                    <label for="radioView3D">3D View </label>
+                    <br><br>
                     <input type="radio" id="radioViewAll"
                            name="radio2D3D" value="chkViewAll" style="margin-left:10px;">
-                    <label for="radioViewAll">2D+3D View</label>
+                    <label for="radioViewAll">3D+2D View </label>
                     <br>
                     <br>
                 </div>
@@ -454,7 +402,6 @@
             </div>
         </div>
 
-        <div id="cesiumContainer"></div>
     </div>
 
 
@@ -468,14 +415,34 @@
 </div>
 
 <div id="map" class="mapview" style="position:absolute;">
+    <input id="view3DBtn" type="image" src="biblemap/image/view_3D.png?version=20171008" style="position: absolute; " onclick="setViewMode3D()">
+
+    <input id="zoomInBtn2D" type="image" src="biblemap/image/zoom_in.png?version=20171201" style="position: absolute; "  onclick="map2DZoomIn()">
+    <input id="zoomOutBtn2D" type="image" src="biblemap/image/zoom_out.png?version=20171201" style="position: absolute;" onclick="map2DZoomOut()">
+    <input id="measureBtn2D" type="image" src="biblemap/image/measure_btn.png?version=20171201" style="position: absolute; "  onclick="mesaureToggleBtn()">
+    <input id="beforePoiBtn2D" type="image" src="biblemap/image/before_poi.png?version=20171201" style="position: absolute; "  onclick="beforePoi()">
+    <input id="afterPoiBtn2D" type="image" src="biblemap/image/after_poi.png?version=20171201" style="position: absolute;" onclick="afterPoi()">
 </div>
 
 <div id="map3D" class="mapview" style="position:absolute;">
+    <input id="compassBtn" type="image" src="biblemap/image/compass_icon.png?version=20170905" style="position: absolute; border:0;" onclick="setRotateNorth()">
+    <input id="turnLeftBtn" type="image" src="biblemap/image/turn_left_.png?version=20170905" style="position: absolute; width:18px; height:38px; border:0;" >
+    <input id="turnUpBtn" type="image" src="biblemap/image/turn_up_.png?version=20170905" style="position: absolute; width:37px; height:16px; border:0;" >
+    <input id="turnDownBtn" type="image" src="biblemap/image/turn_down_.png?version=20170905" style="position: absolute; width:37px; height:17px; border:0;" >
+    <input id="turnRightBtn" type="image" src="biblemap/image/turn_right_.png?version=20170905" style="position: absolute; width:17px; height:36px; border:0;" >
+
+    <input id="view2DBtn" type="image" src="biblemap/image/view_2D.png?version=20171007" style="position: absolute; " onclick="setViewMode2DWithSync()">
+
+    <input id="zoomInBtn3D" type="image" src="biblemap/image/zoom_in.png?version=20171201" style="position: absolute; "  onclick="map3DZoomIn()">
+    <input id="zoomOutBtn3D" type="image" src="biblemap/image/zoom_out.png?version=20171201" style="position: absolute;" onclick="map3DZoomOut()">
+    <input id="beforePoiBtn3D" type="image" src="biblemap/image/before_poi.png?version=20171201" style="position: absolute; "  onclick="beforePoi()">
+    <input id="afterPoiBtn3D" type="image" src="biblemap/image/after_poi.png?version=20171201" style="position: absolute;" onclick="afterPoi()">
 </div>
 
 <!-- <div id="behindMap2D" class="mapview" style="position:absolute; display:none;"> -->
-<!-- <div id="behindMap2D" class="mapview" style="position:absolute;">
-</div> -->
+ <div id="behindMap2D" class="mapview" style="position:absolute;">
+
+</div>
 
 
 <!-- <div id="footerDummy"></div> -->
@@ -489,6 +456,7 @@
     </ul>
     <div id ="tab_contain" class="tab_container"  >
         <div id="tab1" class="tab_content">
+            Waiting....
         </div>
         <div id="tab2" class="tab_content">
             검색결과가&nbsp;없습니다 <br> 성경의&nbsp;단어&nbsp;검색&nbsp;버튼을&nbsp;클릭해&nbsp;주세요
@@ -516,6 +484,16 @@
     <div id="popup-content" class="ol-popup-content" style="text-align:center; font-size: 13px;"></div>
 </div>
 
+<div id="bubblePopup3D" class="ol-popup" style="font-size:1.1em;">
+    <!--  <a href="#" id="popup-closer3D" class="ol-popup-closer3D" ></a>  -->
+    <a href ="javascript:closePopup3D()" >
+        <img  src="biblemap/image/bubble-close-icon.png" style="position:absolute; top:2px; right:8px; width:12px; height:12px; ">
+
+    </a>
+    <div style="height: 8px"></div>
+    <div id="popup-content3D" class="ol-popup-content" style="text-align:center; font-size: 13px;"></div>
+</div>
+
 
 <div id="infoPopup" class="pop-layer" style = "width : 550px; height: 520px;" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
     <div class="pop-container" >
@@ -537,26 +515,139 @@
 <script>
     setDebug( true );
 
-   // var downloadPoiComplete = false;
-   // var chkDownloadTimer;
+    var map3DAddLayerTimer;
+    var setGroundLayerTimer;
+    var startSearchBibleTimer;
     var tabMenu = createTabMenu();
-   var curMapViewMode = 'chkView2D';   // "chkView2D" |  "chkView3D"  | "chkViewAll"
+    var curMapViewMode = 'chkView2D';   // "chkView2D" |  "chkView3D"  | "chkViewAll"
 
-    $(document).ready(function(){
 
-      /*  chkDownloadTimer = setInterval( reflectPoiTo3DMap, 3000);
+    function startMap3DAddLayerWithTimer() {
+        map3DAddLayerTimer = setInterval(addLayerTo3DMapOneByOne, 2000);
+        ConsoleLog("startMap3DAddLayerWithTimer()!! ");
+    }
 
-        function reflectPoiTo3DMap() {
-            ConsoleLog( "Timer !!!! reflectPoiTo3DMap");
-            if( downloadPoiComplete == true ){
-                if( map3D ) {
-                    map3D.reflectLayersToMap3D();
-                    clearInterval(chkDownloadTimer);
-                }
+    function startSearchBibleWithTimer(){
+        startSearchBibleTimer = setInterval( startSearchBible, 500);
+    }
+
+    function startSearchBible(){
+        searchBibleChapter( function(){
+            layerManager.layerContainer.totalCount += bibleMapPolygonLayers.length;
+            for( var pid in bibleMapPolygonLayers ) {
+                var layer = bibleMapPolygonLayers[ pid ];
+                ConsoleLog( "layer.url ==> " + layer.url );
+                new GMDFileDownload( bibleMap, null, layer.url, layer.order, layer.style, layerManager, function( ){
+                    changeHistoryAdmin( historyAdmin.value );
+                    downloadTrajectoryData();
+
+                    startMap3DAddLayerWithTimer();
+                    clearInterval( startSearchBibleTimer );
+                });
             }
 
+        } );
+    }
+
+    (function() {
+
+        var turnLeftTimer;
+        var turnRightTimer;
+
+        var turnUpTimer;
+        var turnDownTimer;
+
+        var rotate = 0;
+        var interval = 0.02;
+
+        $('#turnLeftBtn').mousedown(function () {
+            ConsoleLog("turnLeft Down!!!");
+            turnLeftTimer = setInterval( turnLeftAct, 1);
+        }).on('mouseup mouseleave', function () {
+            ConsoleLog("turnLeft Up!!!");
+            clearInterval( turnLeftTimer);
+        });
+
+        function turnLeftAct() {
+            var view3D = map3D.view;
+            rotate = view3D.getRotation();
+            // ConsoleLog("turnLeft Event...... =>  " + rotate );
+            rotate -= interval;
+            view3D.setRotation( rotate );
         }
-        */
+
+
+        $('#turnRightBtn').mousedown(function () {
+            ConsoleLog("turnRight Down!!!");
+            turnRightTimer = setInterval( turnRightAct, 1);
+        }).on('mouseup mouseleave', function () {
+            ConsoleLog("turnRight Up!!!");
+            clearInterval( turnRightTimer);
+        });
+
+        function turnRightAct() {
+
+            var view3D = map3D.view;
+            rotate = view3D.getRotation();
+            // ConsoleLog("turnRight Event...... =>  " + rotate );
+            rotate += interval;
+            view3D.setRotation( rotate );
+        }
+
+
+        $('#turnUpBtn').mousedown(function () {
+            ConsoleLog("turnUp Down!!!");
+            turnUpTimer = setInterval( turnUpAct, 1);
+        }).on('mouseup mouseleave', function () {
+            ConsoleLog("turnUp Up!!!");
+            clearInterval( turnUpTimer);
+        });
+
+        function turnUpAct() {
+            // ConsoleLog("turnUp Event...... ");
+            map3D.view3DTilt( -0.002 );
+        }
+
+        $('#turnDownBtn').mousedown(function () {
+            ConsoleLog("turnDown Down!!!");
+            turnDownTimer = setInterval( turnDownAct, 1);
+        }).on('mouseup mouseleave', function () {
+            ConsoleLog("turnDown Up!!!");
+            clearInterval( turnDownTimer);
+        });
+
+        function turnDownAct() {
+            // ConsoleLog("turnDown Event...... ");
+            map3D.view3DTilt( 0.002 );
+        }
+
+    }());
+
+
+
+    function addLayerTo3DMapOneByOne(){
+        if( map3D == null )
+            return;
+
+        var ret = map3D.memLayerAddToMapOneByOne();
+        if( ret == true ){
+
+            clearInterval( map3DAddLayerTimer );
+            setGroundLayerTimer = setInterval( setGroundLayerOneByOne, 3000 );
+            // map3D.setGroundLayerOneByOne();
+        }
+        else{
+            ConsoleLog("addMap3DAddLayerWithTimer ..........");
+        }
+    }
+
+    function setGroundLayerOneByOne(){
+        if( curMapViewMode != 'chkView2D' )
+            map3D.setGroundLayerOneByOne();
+        popup3DSelfGroundPosition();
+    }
+
+    $(document).ready(function(){
 
         tabMenu.selectTab( 'tab1Menu');
         var oldValue = 'chkView2D';
@@ -578,18 +669,17 @@
             }
             if( radioValue == "chkViewAll"){
                 if( oldValue == 'chkView2D'){
-                    sync3DMapTo2DMap();
+                    sync2DMapTo3DMap();
                 }
                 if( oldValue == 'chkView3D'){
-                    sync2DMapTo3DMap();
+                    sync3DMapTo2DMap();
                 }
             }
 
             oldValue = radioValue;
 
             adjustScrDiv.view2D3DCtrl( radioValue );
-            map3D.reflectLayersToMap3D();
-
+            // map3D.reflectLayersToMap3D();
             /*
             if (radioValue == "chkView2D") {
                 // ConsoleLog("chkView2D!!!");
@@ -606,7 +696,16 @@
     });
 
 
+    var setRotateNorth = function() {
+        // map3D.view3DTilt( 1.1 );
+        // map3D.view.setRotation(0);
+        // map3D.view3DTilt( 1.1 );
 
+        map3D.view.animate({
+           rotation: 0,
+            duration : 500
+        });
+    };
 
 
     function createTrajectory() {
@@ -660,14 +759,121 @@
     $( '#infoPopup' ).css( "z-index", 6000 );
     //////////////////////////////////
 
+
+
     var dvPopupContainer = document.getElementById('bubblePopup');
     dvPopupContainer.setAttribute("id", "popupContainer" );
     $( '#popupContainer' ).css( "z-index", 2000 );
 
+
     var dvPopupContent = document.getElementById('popup-content');
     var dvPopupCloser = document.getElementById('popup-closer');
 
-    var popupOverlay = createOverlay( dvPopupContainer );    // dvPopupContainer
+
+    var popup2D = {
+        name : "2D",
+        overlay : createOverlay( dvPopupContainer ),    // dvPopupContainer
+        content : dvPopupContent,
+        closer : dvPopupCloser
+    };
+
+    popup2D.closer.onclick = function() {
+        popup2D.overlay.setPosition(undefined);
+        popup2D.closer.blur();
+        popup2D.content.innerHTML = "";
+
+       // closePopup3D();
+
+        return false;
+    };
+
+
+    var dvPopupContent3D = document.getElementById('popup-content3D');
+    // var dvPopupCloser3D = document.getElementById('popup-closer3D');
+
+    var overlay3D = new ol.Overlay({
+        element: document.getElementById('bubblePopup3D')
+    });
+
+    var popup3D = {
+        name : "3D",
+        position : [],
+        overlay : overlay3D,    // dvPopupContainer
+        content : dvPopupContent3D
+        //  closer : dvPopupCloser3D
+    };
+
+
+    overlay3D.setGroundPosition = function( position ){
+        var feature = new ol.Feature({
+            geometry: new ol.geom.Point([position[0], position[1]] )
+        });
+
+        var mapCoord = map3D.getMapCoordFromFeature( feature );
+
+        this.setPosition( mapCoord );
+        popup3D.position = mapCoord;
+    };
+
+    popup3DSelfGroundPosition = function(){
+        var pos = overlay3D.getPosition();
+        if( pos != undefined )
+            overlay3D.setGroundPosition( popup3D.position );
+    };
+
+
+    function closePopup3D(){
+        popup3D.overlay.setPosition(undefined);
+        // popup3D.closer.blur();
+        popup3D.content.innerHTML = "";
+    }
+
+    function closePopup2D(){
+        popup2D.closer.onclick();
+    }
+
+    //$( '#bubblePopup3D' ).css( "z-index", $("#bubblePopup").css("z-index") );
+    // $( '#bubblePopup3D' ).css( "z-index", 0 );
+
+/*
+    popup3D.closer.onclick = function() {
+        alert( "aaaa");
+        popup3D.overlay.setPosition(undefined);
+        popup3D.closer.blur();
+        popup3D.content.innerHTML = "";
+
+    //    popup2D.closer.onclick();
+
+        // map3D.remove3DLabelLayer();
+
+        return false;
+    };
+
+
+    dvPopupCloser3D.onclick = function() {
+        alert( "aaaa");
+        popup3D.overlay.setPosition(undefined);
+        popup3D.closer.blur();
+        popup3D.content.innerHTML = "";
+
+        //    popup2D.closer.onclick();
+
+        // map3D.remove3DLabelLayer();
+
+        return false;
+    };
+    */
+
+    function showPopup( position, content ){
+
+        popup2D.content.innerHTML = content;
+        popup2D.overlay.setPosition( position );
+        popup3D.content.innerHTML = content;
+        popup3D.overlay.setGroundPosition( position );
+
+    }
+
+
 
     ////////////////////////////////////////
 
@@ -681,10 +887,6 @@
     var nextPoiBtn = document.createElement('button');
     nextPoiBtn.innerHTML = '>';
 
-    /*
-    var view3DBtn = document.createElement('button');
-    view3DBtn.innerHTML = '3D';
-    */
 
     var MapMenuClickEvent = function( opt_options ) {
 
@@ -698,14 +900,7 @@
         element.appendChild( prevPoiBtn );
         element.appendChild( nextPoiBtn );
 
-        /*
-        br = document.createElement('br');
-        element.appendChild( br );
-        element.appendChild( view3DBtn );
-        */
-
-
-        element.setAttribute("id", "mapMenuDiv" );
+            element.setAttribute("id", "mapMenuDiv" );
         $('#mapMenuDiv').css( "z-index", "9000" );
 
         ol.control.Control.call( this, {
@@ -731,9 +926,9 @@
         getSearchWordsFromStorage();
     } );
 
-    var bibleMapManager = createMapManager( popupOverlay, 'map' );
 
-    var map3D = init3dMap( null );
+    var bibleMapManager = createMapManager( popup2D.overlay, 'map' );
+    var map3D = init3dMap(  popup3D.overlay );
 
     var trajectoryData = new TrajectoryData();
 
@@ -762,6 +957,20 @@
         } );
     }
 
+    function beforePoi(){
+        var poiObj = layerManager.historyPrevPoi();
+        if( poiObj != null )
+            moveToPlaceByPoiObj( poiObj );
+        ConsoleLog( "Prev Poi Button!!! ");
+    }
+
+    function afterPoi(){
+        var poiObj = layerManager.historyNextPoi();
+        if( poiObj != null )
+            moveToPlaceByPoiObj( poiObj );
+        ConsoleLog( "Next Poi Button!!! ");
+    }
+
 
     var layerManager = bibleMapManager.getLayerManager();
     var bibleMap = bibleMapManager.getMap();
@@ -769,24 +978,26 @@
 
     var pathTooltip = new Tooltip( bibleMap, 'tooltip tooltip-static' );
 
-    var mapMenuClickEvent = new MapMenuClickEvent();
-    bibleMap.addControl( mapMenuClickEvent );
+//     var mapMenuClickEvent = new MapMenuClickEvent();
+//    bibleMap.addControl( mapMenuClickEvent );
 
     var measureDistance = new DistanceMeasureControl( bibleMapManager );
     measureBtn.addEventListener('click', measureDistance.toggleMeasureDistance, false);
-    prevPoiBtn.addEventListener('click', function(){
+    prevPoiBtn.addEventListener('click', /* function(){
         var poiObj = layerManager.historyPrevPoi();
         if( poiObj != null )
             moveToPlaceByPoiObj( poiObj );
         ConsoleLog( "Prev Poi Button!!! ");
-    }, false );
+    }*/
+    beforePoi, false );
 
-    nextPoiBtn.addEventListener('click', function(){
+    nextPoiBtn.addEventListener('click', /* function(){
         var poiObj = layerManager.historyNextPoi();
         if( poiObj != null )
             moveToPlaceByPoiObj( poiObj );
         ConsoleLog( "Next Poi Button!!! ");
-    }, false );
+    }*/
+    afterPoi, false );
 
 
     /*
@@ -825,6 +1036,10 @@ function sync2DMapTo3DMap() {
 
     bibleMap.updateSize();
 
+}
+
+function mesaureToggleBtn() {
+    measureDistance.toggleMeasureDistance();
 }
 
 
@@ -873,22 +1088,28 @@ function sync3DMapTo2DMap() {
             new GMDFileDownload( bibleMap, map3D, layer.url, layer.order, layer.style, layerManager, function( ){
                 layerManager.sortPoiWords();
                 initTextAutoComplete();
-                searchBibleChapter( );
-                downloadPoiComplete = true;
+                // map3D.view3DTilt(1.1);
+                startSearchBibleWithTimer();
+                /*
+                searchBibleChapter( function(){
+                    layerManager.layerContainer.totalCount += bibleMapPolygonLayers.length;
+                    for( var pid in bibleMapPolygonLayers ) {
+                        var layer = bibleMapPolygonLayers[ pid ];
+                        ConsoleLog( "layer.url ==> " + layer.url );
+                        new GMDFileDownload( bibleMap, null, layer.url, layer.order, layer.style, layerManager, function( ){
+                            changeHistoryAdmin( historyAdmin.value );
+                            downloadTrajectoryData();
+
+                            startMap3DAddLayerWithTimer();
+                        });
+                    }
+
+                } );*/
+//                startSearchBibleWithTimer();
 
                 $("#bibleWord").focus();
 
-                layerManager.layerContainer.totalCount += bibleMapPolygonLayers.length;
-                for( var pid in bibleMapPolygonLayers ) {
-                    var layer = bibleMapPolygonLayers[ pid ];
-                    ConsoleLog( "layer.url ==> " + layer.url );
-                    new GMDFileDownload( bibleMap, null, layer.url, layer.order, layer.style, layerManager, function( ){
-                        changeHistoryAdmin( historyAdmin.value );
-                        downloadTrajectoryData();
-                        // map3D.reflectLayersToMap3D();
-                        map3D.view3DTilt( 1.1 );
-                    });
-                }
+
 
             } );
         }
@@ -955,7 +1176,8 @@ function sync3DMapTo2DMap() {
 
     function setExtentOfPath() {
 
-        dvPopupCloser.onclick();
+        // dvPopupCloser.onclick();
+        popup2D.closer.onclick();
         adjustScrDiv.setIsFullScr("false");
         var movePath = $("#movePath").val();
         var index = Number(movePath);
@@ -966,14 +1188,37 @@ function sync3DMapTo2DMap() {
     }
 
 
+    // "chkView2D"
+    function setViewMode( viewMode ) {
+        adjustScrDiv.view2D3DCtrl(viewMode );
+        curMapViewMode = viewMode;   // "chkView2D" |  "chkView3D"  | "chkViewAll"
+    }
+
+
+    function setViewMode2DWithSync(){
+
+        setViewMode2D();
+
+        sync3DMapTo2DMap();
+    }
+
+    function setViewMode2D(){
+        setViewMode( 'chkView2D' );
+        $('input:radio[name="radio2D3D"][value=chkView2D]').prop("checked", true);
+    }
+
+
+    function setViewMode3D(){
+        setViewMode( 'chkView3D' );
+        $('input:radio[name="radio2D3D"][value=chkView3D]').prop("checked", true);
+        sync2DMapTo3DMap();
+    }
+
+
     function pathAction( ) {
+        closePopup3D();
+        closePopup2D();
 
-        dvPopupCloser.onclick();
-
-        /*
-         writeInfoTabPathExplain();
-         adjustScrDiv.setIsFullScr("false");
-         */
         showPathExplain();
 
         measureDistance.removeMeasureDraw();
@@ -984,7 +1229,6 @@ function sync3DMapTo2DMap() {
 
         var speed = $("#movingSpeed").val();
 
-        // var movePath = document.getElementById('movePath').value;
         var movePath = $( "#movePath" ).val();
         var index = Number( movePath);
 
@@ -992,15 +1236,17 @@ function sync3DMapTo2DMap() {
         if( trajectory == null )
             return;
 
-        adjustScrDiv.view2D3DCtrl( "chkView2D" );
-        // var radioVal = $(':radio[name="radio2D3D"]:checked').val();
-        $('input:radio[name="radio2D3D"][value="chkView2D"]').prop("checked", true);
-        // name="radio2D3D" value="chkView2D" style="margin-left:10px;" checked="checked" >
+        setViewMode2D();
+
+        var pathArrowLayer = CreatePathArrowLayer( trajectory.data, false );
+        map3D.addPathLayer( pathArrowLayer );
 
         function newRouteMoveProcess(){
             routeMove = new RouteMoveProcess(bibleMap, trajectory, layerManager.getPoiObjectArray(), pathTooltip, function( popupPoiArray ){
                 // ConsoleLog( popupPoiArray );
                 fillPathPoiList( popupPoiArray );
+
+                map3D.createLandMarkOfPath( popupPoiArray );
             });
 
             routeMove.adjustMovingSpeed( speed );
@@ -1047,6 +1293,8 @@ function sync3DMapTo2DMap() {
 
         pathTooltip.allRemove();
 
+        map3D.removePathLayer( );
+
         routeMove = null;
     }
 
@@ -1060,27 +1308,23 @@ function sync3DMapTo2DMap() {
         if( routeMove)
             routeMove.updateMovingSpeed( zoom );
 
-        // ConsoleLog( "Map2D mapEventPrecompose !!!! ");
-
     });
+
 
     map3D.mapEventPrecompose( function(evt){
 
-       // var zoom = behind2D.view.getZoom();
+        var radian = map3D.view.getRotation();
+        var mapAngle = radian * (180/ Math.PI);
+        if( mapAngle < 0 ){
+            mapAngle = 360 + mapAngle;
+        }
 
-        // ConsoleLog( "!!!!!!!!!!! zoom :" + zoom );
-
-        // bibleMapManager.getView().setZoom( zoom -2 );
-
-      //   var center = behind2D.view.getCenter();
-
-        // bibleMapManager.getView().setCenter( center );
-
-      //   ConsoleLog("behind2D.mapEventPrecompose!!!!");
-
-        // ConsoleLog( "Map3D mapEventPrecompose !!!! ");
+        mapAngle = Math.floor( mapAngle );
+        var nAngle = parseInt( mapAngle );
+        $("#compassBtn").rotate( nAngle);
 
     });
+
 
 
     bibleMapManager.clickEvent( function(evt){
@@ -1095,9 +1339,23 @@ function sync3DMapTo2DMap() {
    map3D.clickEvent( function(evt){
         var clickedPos = evt.coordinate;
 
-        ConsoleLog( "Map3D Click!!!! ");
+        // ConsoleLog( "Map3D Click!!!! ");
 
     });
+
+    map3D.map3DClick( function( mapX, mapY ){
+
+        ConsoleLog( "Map3D Click!!!!  mapX : " + mapX + ", mapY : " + mapY );
+
+        var poiObj = findPoiByCoord ( mapX, mapY, layerManager.getPoiObjectArray() );
+        if( poiObj ){
+            var poiObj = layerManager.getPoiObjById( poiObj.id );
+            layerManager.historyInsertPoi( poiObj );
+            requestPoiContentAndShow( poiObj, popup2D, popup3D );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+            // moveToMap3DWithCheck3DShow( poiObj.x, poiObj.y );
+        }
+
+     });
 
 
     bibleMapManager.singleClickEvent( function(evt){
@@ -1130,24 +1388,19 @@ function sync3DMapTo2DMap() {
                 return;
             if (id < 5) {          // 전세계 폴리곤 경계라면...
                 posName = "<strong>현재 국가</strong><br>" + "&nbsp;" + posName;
-                dvPopupContent.innerHTML = posName;
-                popupOverlay.setPosition(bibleMapManager.getClickecPos());
-                map3D.create3DLabelLayer( posName, bibleMapManager.getClickecPos()[0], bibleMapManager.getClickecPos()[1] );
 
-                // moveTo( map3D.view, [poiObj.x, poiObj.y], zoom3D );
+                showPopup( bibleMapManager.getClickecPos(), posName );
                 moveToMap3DWithCheck3DShow( poiObj.x, poiObj.y );
 
             } else {    // 나머지 폴리곤에 정의된 "name" 필드로 검색하도록 한다
-                dvPopupContent.innerHTML = posName;
-                popupOverlay.setPosition(bibleMapManager.getClickecPos());
+
+                showPopup( bibleMapManager.getClickecPos(), posName );
 
                 var poiArray = layerManager.getPoiObjArrayFromDictionary( posName );
                 if( poiArray.length < 2){
                     var poiObj = poiArray[ 0];
                     layerManager.historyInsertPoi( poiObj );
-                    requestPoiContentAndShow( poiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
-                    map3D.create3DLabelLayer( null, poiObj.x, poiObj.y );
-                    // moveTo( map3D.view, [poiObj.x, poiObj.y], zoom3D );
+                    requestPoiContentAndShow( poiObj, popup2D, popup3D );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
                     moveToMap3DWithCheck3DShow( poiObj.x, poiObj.y );
                 }
             }
@@ -1155,18 +1408,13 @@ function sync3DMapTo2DMap() {
             if (id < 5) {          // 전세계 폴리곤 경계라면...
                 var nationName = posName;
                 posName = "<strong>현재 국가</strong><br>" + "&nbsp;" + posName;
-                dvPopupContent.innerHTML = posName;
-                popupOverlay.setPosition(bibleMapManager.getClickecPos());
-                map3D.create3DLabelLayer( nationName, bibleMapManager.getClickecPos()[0], bibleMapManager.getClickecPos()[1] );
-                // moveTo( map3D.view, bibleMapManager.getClickecPos(), zoom3D );
+                showPopup( bibleMapManager.getClickecPos(), posName );
                 moveToMap3DWithCheck3DShow( bibleMapManager.getClickecPos()[0], bibleMapManager.getClickecPos()[1] );
             } else {    // 나머지 폴리곤에 정의된 "name" 필드로 검색하도록 한다
 
                 var poiObj = layerManager.getPoiObjById( poiID );
                 layerManager.historyInsertPoi( poiObj );
-                requestPoiContentAndShow( poiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
-                map3D.create3DLabelLayer( null, poiObj.x, poiObj.y );
-                // moveTo( map3D.view, [poiObj.x, poiObj.y], zoom3D );
+                requestPoiContentAndShow( poiObj, popup2D, popup3D );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
                 moveToMap3DWithCheck3DShow( poiObj.x, poiObj.y );
             }
         }
@@ -1182,43 +1430,6 @@ function sync3DMapTo2DMap() {
         }
     }
 
-/*
-    function moveToMapWithCheck2D3DShow( poiObj ){
-        var view2D3D = adjustScrDiv.getCurrent2D3DString();
-
-        var curZoom2D = bibleMap.getView().getZoom();
-        var view2D = bibleMap.getView();
-        var center2D = view2D.getCenter();
-        var curExtent2D = view2D.calculateExtent(bibleMap.getSize());
-
-        var curZoom3D = map3D.view.getZoom();
-        var view3D = map3D.view;
-        var center3D = view3D.getCenter();
-        var curExtent3D = view3D.calculateExtent( map3D.map.getSize());
-
-        if( view2D3D == 'chkViewAll') {
-            moveTo( view2D.view, [poiObj.x, poiObj.y], curZoom2D );
-            moveTo( view3D.view, [poiObj.x, poiObj.y], curZoom3D );
-        }
-
-
-        var extentLength = getDistance( curExtent[0], curExtent[1], curExtent[2], curExtent[3]);
-        var moveDistance = getDistance( center[0], center[1], poiObj.x, poiObj.y );
-
-        if( moveDistance < extentLength ) {
-            ConsoleLog( "moveTo..... 1");
-            if( curZoom > poiObj.zoomIn ) {
-
-                moveTo(view, [poiObj.x, poiObj.y], curZoom);
-                moveTo( map3D.view, [poiObj.x, poiObj.y], curZoom + 3);
-            }
-            else {
-                moveTo(view, [poiObj.x, poiObj.y], poiObj.zoomIn);
-                moveTo( map3D.view, [poiObj.x, poiObj.y], poiObj.zoomIn + 3 );
-            }
-        }
-    }
-*/
 
 
     map3D.selectFeatureEvent( function(e) {
@@ -1229,16 +1440,6 @@ function sync3DMapTo2DMap() {
         ConsoleLog( "map3D Clieck Event!!!");
 
     });
-
-        dvPopupCloser.onclick = function() {
-        popupOverlay.setPosition(undefined);
-        dvPopupCloser.blur();
-        dvPopupContent.innerHTML = "";
-
-        map3D.remove3DLabelLayer();
-
-        return false;
-    };
 
 
     function searchBiblePlace(){
@@ -1327,63 +1528,27 @@ function sync3DMapTo2DMap() {
         moveToPlaceByPoiObj( poiObj );
     }
 
-
-    /*
-    function moveToPlaceByPoiObj( poiObj ){
-        if( poiObj == null )
-            return;
-
-        requestPoiContentAndShow( poiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
-        map3D.create3DLabelLayer( null, poiObj.x, poiObj.y );
-
-        var curZoom = bibleMap.getView().getZoom();
-
-        var view = bibleMap.getView();
-        var center = view.getCenter();
-        var curExtent = view.calculateExtent(bibleMap.getSize());
-
-        var extentLength = getDistance( curExtent[0], curExtent[1], curExtent[2], curExtent[3]);
-        var moveDistance = getDistance( center[0], center[1], poiObj.x, poiObj.y );
-
-        if( moveDistance < extentLength ) {
-            ConsoleLog( "moveTo..... 1");
-            if( curZoom > poiObj.zoomIn ) {
-
-                moveTo(view, [poiObj.x, poiObj.y], curZoom);
-                moveTo( map3D.view, [poiObj.x, poiObj.y], curZoom + 3);
-            }
-            else {
-                moveTo(view, [poiObj.x, poiObj.y], poiObj.zoomIn);
-                moveTo( map3D.view, [poiObj.x, poiObj.y], poiObj.zoomIn + 3 );
-            }
-        }
-        else {
-            ConsoleLog( "flyTo.....1 ");
-            var zoomIn = poiObj.zoomIn;
-        //    var zoomIn = curZoom;
-            if( zoomIn > 12 )
-                zoomIn = 12;
-            flyTo(view, [poiObj.x, poiObj.y], zoomIn, function (complete) {
-                //   flyTo(view, [poiObj.x, poiObj.y], poiObj.zoomIn-1, function (complete) {
-                if (complete == true) {
-                }
-            });
-
-            flyTo( map3D.view, [poiObj.x, poiObj.y], zoomIn + 3 , function (complete) {
-                //   flyTo(view, [poiObj.x, poiObj.y], poiObj.zoomIn-1, function (complete) {
-                if (complete == true) {
-                }
-            });
-
-        }
+    function map3DZoomIn(){
+        map3D.zoomIn();
     }
-*/
 
-    move2DMapOr3DMap = function( moveDistance, extentLength, view, curZoom, poiObj ) {
+    function map3DZoomOut(){
+        map3D.zoomOut();
+    }
+
+    function map2DZoomIn(){
+        bibleMapManager.zoomIn();
+    }
+
+    function map2DZoomOut(){
+        bibleMapManager.zoomOut();
+    }
+
+
+    move2DMapOr3DMap = function( moveDistance, extentLength, view, curZoom, poiObj, mode ) {
         if (moveDistance < extentLength) {
             ConsoleLog("moveTo..... 1");
             if (curZoom > poiObj.zoomIn) {
-
                 moveTo(view, [poiObj.x, poiObj.y], curZoom);
             }
             else {
@@ -1396,11 +1561,24 @@ function sync3DMapTo2DMap() {
             //    var zoomIn = curZoom;
             if (zoomIn > 12)
                 zoomIn = 12;
-            flyTo(view, [poiObj.x, poiObj.y], zoomIn, function (complete) {
-                //   flyTo(view, [poiObj.x, poiObj.y], poiObj.zoomIn-1, function (complete) {
-                if (complete == true) {
-                }
-            });
+
+            if( mode == "2D") {
+                flyTo(view, [poiObj.x, poiObj.y], zoomIn, function (complete) {
+                    if (complete == true) {
+                    }
+                });
+            } else {
+
+                if( zoomIn <= 5 )
+                    zoomIn = 8;
+
+                zoomIn += 2;
+                // moveTo(view, [poiObj.x, poiObj.y], zoomIn );
+                flyTo(view, [poiObj.x, poiObj.y], zoomIn, function (complete) {
+                    if (complete == true) {
+                    }
+                });
+            }
 
         }
     };
@@ -1409,8 +1587,9 @@ function sync3DMapTo2DMap() {
         if( poiObj == null )
             return;
 
-        requestPoiContentAndShow( poiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
-        map3D.create3DLabelLayer( null, poiObj.x, poiObj.y );
+        // requestPoiContentAndShow( poiObj, dvPopupContent, popupOverlay);     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+        requestPoiContentAndShow( poiObj, popup2D, popup3D );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+        // map3D.create3DLabelLayer( null, poiObj.x, poiObj.y );
 
         var curZoom2D = bibleMap.getView().getZoom();
 
@@ -1428,21 +1607,21 @@ function sync3DMapTo2DMap() {
         var center3D = view3D.getCenter();
         var curExtent3D = view3D.calculateExtent(map3D.map.getSize());
 
-        var extentLength3D = getDistance( curExtent3D[0], curExtent3D[1], curExtent3D[2], curExtent3D[3]);
+        var extentLength3D = getDistance( curExtent3D[0], curExtent3D[1], curExtent3D[2], curExtent3D[3]) * 8;
         var moveDistance3D = getDistance( center3D[0], center3D[1], poiObj.x, poiObj.y );
 
         // "chkView2D" |  "chkView3D"  | "chkViewAll"
         if( curMapViewMode == 'chkView2D' ){
-            move2DMapOr3DMap( moveDistance2D, extentLength2D, view2D, curZoom2D, poiObj);
+            move2DMapOr3DMap( moveDistance2D, extentLength2D, view2D, curZoom2D, poiObj, "2D");
         }
 
         if( curMapViewMode == 'chkView3D' ){
-            move2DMapOr3DMap( moveDistance3D, extentLength3D, view3D, curZoom3D, poiObj);
+            move2DMapOr3DMap( moveDistance3D, extentLength3D, view3D, curZoom3D, poiObj, "3D");
         }
 
         if( curMapViewMode == 'chkViewAll' ){
-            move2DMapOr3DMap( moveDistance2D, extentLength2D, view2D, curZoom2D, poiObj);
-            move2DMapOr3DMap( moveDistance3D, extentLength3D, view3D, curZoom3D, poiObj);
+            move2DMapOr3DMap( moveDistance2D, extentLength2D, view2D, curZoom2D, poiObj, "2D");
+            move2DMapOr3DMap( moveDistance3D, extentLength3D, view3D, curZoom3D, poiObj, "3D");
         }
 
 
@@ -1458,6 +1637,9 @@ function sync3DMapTo2DMap() {
     window.onresize = function(){
         adjustScrDiv.showScrMap();
     };
+
+
+
 
 </script>
 </body>

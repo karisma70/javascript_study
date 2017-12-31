@@ -2,7 +2,17 @@
  * Created by Administrator on 2017-06-23.
  */
 
-function CreatePathArrowLayer( trajectoryArray ) {
+makeLinkedName = function( poiID, placeName ){
+    var strStart = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + poiID + ')\" style=\"text-decoration:none; font-weight:normal; color: #000000;' + '\" >';
+    var linkedPlaceName = strStart;
+    linkedPlaceName += placeName;
+    linkedPlaceName += '</a>';
+
+    return linkedPlaceName;
+};
+
+
+function CreatePathArrowLayer( trajectoryArray, isArrow ) {
 
     var pathArrowStyleFunction = function (feature) {
         var geometry = feature.getGeometry();
@@ -35,8 +45,10 @@ function CreatePathArrowLayer( trajectoryArray ) {
             var rotation = Math.atan2(dy, dx);
             // arrows
 
-            if( vtIdx == 0 ) {
-                styles.push(new ol.style.Style({
+            var styleArrowObj = null;
+
+            if( isArrow == true ) {
+                styleArrowObj = new ol.style.Style({
                     geometry: new ol.geom.Point(end),
                     image: new ol.style.Icon({
                         src: 'biblemap/image/arrow.png',
@@ -44,24 +56,31 @@ function CreatePathArrowLayer( trajectoryArray ) {
                         rotateWithView: true,
                         rotation: -rotation
                     })
-                }));
-                basePos = copyObject( end );
-            }else{
-                var distance = getDistanceArr( basePos, end );
-                if( distance > 100000 || (vtCount - 2) <= vtIdx ){
-                    styles.push(new ol.style.Style({
-                        geometry: new ol.geom.Point(end),
-                        image: new ol.style.Icon({
-                            src: 'biblemap/image/arrow.png',
-                            anchor: [0.75, 0.5],
-                            rotateWithView: true,
-                            rotation: -rotation
-                        })
-                    }));
-                    basePos = copyObject( end );
+                });
+            }/*   else{
+                styleArrowObj = new ol.style.Style({
+                    geometry: new ol.geom.Point(end),
+                    image: new ol.style.Icon({
+                        src: 'biblemap/image/icon.png'
+                        // anchor: [0.75, 0.5],
+                        // rotateWithView: true,
+                        // rotation: -rotation
+                    })
+                });
+            } */
+
+            if( styleArrowObj ) {
+                if (vtIdx == 0) {
+                    styles.push(styleArrowObj);
+                    basePos = copyObject(end);
+                } else {
+                    var distance = getDistanceArr(basePos, end);
+                    if (distance > 100000 || (vtCount - 2) <= vtIdx) {
+                        styles.push(styleArrowObj);
+                        basePos = copyObject(end);
+                    }
                 }
             }
-
             vtIdx ++;
         });
 
@@ -154,14 +173,6 @@ function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, paramToolti
 
     };
 
-    makeLinkedName = function( poiID, placeName ){
-        var strStart = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + poiID + ')\" style=\"text-decoration:none; font-weight:normal; color: #000000;' + '\" >';
-        var linkedPlaceName = strStart;
-        linkedPlaceName += placeName;
-        linkedPlaceName += '</a>';
-
-        return linkedPlaceName;
-    };
 
     drawMoving = function (event) {
 
@@ -198,10 +209,10 @@ function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, paramToolti
                     feature.set('finished', true);
                     pathMovingLayer.setZIndex(18);
 
-                    pathArrowLayer = CreatePathArrowLayer(trajectoryArray);
+                    pathArrowLayer = CreatePathArrowLayer(trajectoryArray, true);
                     pathArrowLayer.setVisible(true);
                     bibleMap.addLayer(pathArrowLayer);
-                    pathArrowLayer.setZIndex(19);
+                    pathArrowLayer.setZIndex(50);
 
                     if (pathMovingLayer) {
                         bibleMap.removeLayer(pathMovingLayer);
