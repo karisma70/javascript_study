@@ -1226,6 +1226,7 @@ function createLayer( source  ) {
          this.addLayerCursor = -10;
          this.setGroundLayerCursor = 0;
          staticOverlay = overlay;
+         staticOverlay = overlay;
          this.overlay = overlay;
 
          this.memLayerAddToMapOneByOne = function(){
@@ -1275,8 +1276,9 @@ function createLayer( source  ) {
               */
 
              this.setGroundLayerCursor ++;
-             if( this.setGroundLayerCursor > this.layers.length -1 )
+             if( this.setGroundLayerCursor > this.layers.length -1 ) {
                  this.setGroundLayerCursor = 0;
+             }
 
              /*
              if( this.pathLayer ){
@@ -1341,6 +1343,15 @@ function createLayer( source  ) {
          this.ol3d = new olcs.OLCesium({map: this.map, target: 'map3D'});
          // this.ol3d = new olcs.OLCesium({map: this.map});
          this.ol3dScene = this.ol3d.getCesiumScene();
+         // this.ol3dScene.skyBox.show = false;   // 동작하지 않음
+         // this.ol3dScene.scene.fxaa = false;         // 동작하지 않음
+         this.ol3dScene.globe.enableLighting = false;
+         this.ol3dScene.skyAtmosphere.show = true;
+         this.ol3dScene.fog.enabled = false;
+         this.ol3dScene.globe.showWaterEffect = true;
+         this.ol3dScene.backgroundColor = Cesium.Color.BLACK;
+         this.ol3dScene.globe.baseColor = Cesium.Color.BLACK;
+
          scene3D = this.ol3dScene;
          this.camera = this.ol3dScene.camera;
 
@@ -1451,7 +1462,9 @@ function createLayer( source  ) {
          var terrainProvider = new Cesium.CesiumTerrainProvider({
              url: '//assets.agi.com/stk-terrain/world',
              // url: 'https://assets.agi.com/stk-terrain/v1/tilesets/world/tiles',
-             requestVertexNormals: false
+             requestWaterMask : true,
+             requestVertexNormals: true
+             // requestWaterMask : true
          });
          this.ol3dScene.terrainProvider = terrainProvider;
          this.ol3d.setEnabled(true);
