@@ -175,8 +175,8 @@ var adjustScrDiv = (function(){
 
         var compassY = baseY + 30;
 
-        compassBtn.style.left = baseX + 19 + 'px';
-        compassBtn.style.top = compassY + 18 + 'px';
+        compassBtn.style.left = baseX + 9 + 'px';
+        compassBtn.style.top = compassY + 7 + 'px';
 
         turnUpBtn.style.left = baseX + 20 + 'px';
         turnUpBtn.style.top = compassY + 0 + 'px';

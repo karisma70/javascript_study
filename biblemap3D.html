@@ -426,8 +426,10 @@
 
 <div id="map3D" class="mapview" style="position:absolute;">
 
-    <input id="compassBtn" type="image" src="biblemap/image/compass_icon.png?version=20170905"
-           style="position: absolute; border:0;" onclick="setRotateNorth()">
+    <input id="compassBtn" type="image" src="biblemap/image/compass.png?version=20170930"
+           onmouseover="this.src='biblemap/image/compass_.png?version=20170930';"
+           onmouseout="this.src='biblemap/image/compass.png?version=20170930';"
+           style="position: absolute; border:0; width: 60px; height: 60px;"  onclick="setRotateNorth()">
     <input id="turnLeftBtn" type="image" src="biblemap/image/turn_left_.png?version=20170905"
            onmouseover="this.src='biblemap/image/turn_left__.png?version=20170905';"
            onmouseout="this.src='biblemap/image/turn_left_.png?version=20170905';"
@@ -445,12 +447,12 @@
            onmouseout="this.src='biblemap/image/turn_right_.png?version=20170905';"
            style="position: absolute; width:17px; height:36px; border:0;" >
 
-    <input id="homeBtn" type="image" src="biblemap/image/home.png?version=20170905"
-           onmouseover="this.src='biblemap/image/home_.png?version=20170905';"
-           onmouseout="this.src='biblemap/image/home.png?version=20170905';"
+    <input id="homeBtn" type="image" src="biblemap/image/home.png?version=20170930"
+           onmouseover="this.src='biblemap/image/home_.png?version=20170930';"
+           onmouseout="this.src='biblemap/image/home.png?version=20170930';"
            style="position: absolute; border:0; width:30px; height: 30px;" onclick="gotoHome()">
 
-    <input id="view2DBtn" type="image" src="biblemap/image/view_2D.png?version=20171007" style="position: absolute; " onclick="setViewMode2D()">
+    <input id="view2DBtn" type="image" src="biblemap/image/view_2D.png?version=20171007" style="position: absolute; " onclick="setViewMode2DWithSync()">
 
     <input id="zoomInBtn3D" type="image" src="biblemap/image/zoom_in.png?version=20171201" style="position: absolute; "  onclick="map3DZoomIn()">
     <input id="zoomOutBtn3D" type="image" src="biblemap/image/zoom_out.png?version=20171201" style="position: absolute;" onclick="map3DZoomOut()">
