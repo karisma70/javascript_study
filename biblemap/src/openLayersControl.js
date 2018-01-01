@@ -98,12 +98,13 @@
 
          { url : 'level_9_poi',  order: 23, style: {
              visibleRange : { max : 25 , min : 9 },
-             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px Nanum Gothic', color: "white", outlineColor : "#9b490d", outlineWidth : 2  } }
+             // textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px Nanum Gothic', color: "white", outlineColor : "#9b490d", outlineWidth : 2  } }   // 191970
+             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px Nanum Gothic', color: "white", outlineColor : "#191970", outlineWidth : 3  } }   // 191970
          },
 
          { url : 'level_7_poi',  order: 24, style: {
              visibleRange : { max : 25 , min : 7 },
-             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px Nanum Gothic', color: "white", outlineColor : "#3737FF", outlineWidth : 2  } }  //3e636a
+             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px Nanum Gothic', color: "white", outlineColor : "#3737FF", outlineWidth : 3  } }  //3e636a
          },
 
          { url: 'level_6_poi',  order: 25, style: {
@@ -731,6 +732,13 @@ function isExistStringPropInObj( obj, prop ) {
 }
 
 
+ function gotoHome_( view2D, view3D ){
+
+     moveTo( view2D, [3844176, 3806822 ], 7 );
+     moveTo( view3D, [3844176, 3806822 ], 9 );
+ }
+
+
  function addAllLayersToMap( map, layerContainer ){
      layerContainer.layers.sort( function( layerA, layerB ){
          var aID = layerA.get( 'id' );
@@ -1229,6 +1237,16 @@ function createLayer( source  ) {
          staticOverlay = overlay;
          this.overlay = overlay;
 
+         this.memWholeLayerAddToMap = function(){
+             for( var idx = 0 ; idx < this.layers.length; idx ++  ) {
+                 var layer = this.layers[ idx ];
+                 var id = layer.get("id");
+                 this.map.addLayer(layer);
+
+              }
+             // map3D.view3DTilt(1.1);
+         };
+
          this.memLayerAddToMapOneByOne = function(){
 
              ConsoleLog( "memLayerAddToMapOneByOne( " + this.addLayerCursor + " ).........");
@@ -1257,6 +1275,16 @@ function createLayer( source  ) {
          };
 
 
+         this.setGroundWholeLayer = function(){
+
+             for( var idx = 0; idx < this.layers.length; idx ++  ) {
+                 var layer = this.layers[idx];
+                 set3DGroundLayer( layer );
+             }
+
+         };
+
+
          this.setGroundLayerOneByOne = function(){
 
              ConsoleLog( "setGroundLayerOneByOne( " + this.setGroundLayerCursor + " ).........");
@@ -1278,7 +1306,10 @@ function createLayer( source  ) {
              this.setGroundLayerCursor ++;
              if( this.setGroundLayerCursor > this.layers.length -1 ) {
                  this.setGroundLayerCursor = 0;
+                 return true;
              }
+
+             return false;
 
              /*
              if( this.pathLayer ){
@@ -1488,6 +1519,16 @@ function createLayer( source  ) {
              var options = {};
              var transform = Cesium.Matrix4.fromTranslation(pivot);
              var axis = this.camera.right;
+             var rotateAroundAxis = olcs.core.rotateAroundAxis;
+             rotateAroundAxis( this.camera, -angle, axis, transform, options);
+
+             ConsoleLog( "pivot " + pivot.x + "," + pivot.y + ", " + pivot.z + ",  axix " + axis.x + ", " + axis.y + ", " + axis.z );
+         };
+
+         this.view3DTilt_ = function( angle, pivot ){
+             var options = {};
+             var axis = this.camera.right;
+             var transform = Cesium.Matrix4.fromTranslation(pivot);
              var rotateAroundAxis = olcs.core.rotateAroundAxis;
              rotateAroundAxis( this.camera, -angle, axis, transform, options);
          };

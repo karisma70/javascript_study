@@ -132,6 +132,7 @@ var adjustScrDiv = (function(){
     var turnRightBtn;
     var turnDownBtn;
 
+    var homeBtn;
     var compassBtn;
     var zoomInBtn2D;
     var zoomOutBtn2D;
@@ -168,20 +169,26 @@ var adjustScrDiv = (function(){
     }
 
     function setCompassBtnPos( baseX, baseY ){
+
+        homeBtn.style.left = baseX + 25 +'px';
+        homeBtn.style.top = baseY + 'px';
+
+        var compassY = baseY + 30;
+
         compassBtn.style.left = baseX + 19 + 'px';
-        compassBtn.style.top = baseY + 18 + 'px';
+        compassBtn.style.top = compassY + 18 + 'px';
 
         turnUpBtn.style.left = baseX + 20 + 'px';
-        turnUpBtn.style.top = baseY + 0 + 'px';
+        turnUpBtn.style.top = compassY + 0 + 'px';
 
         turnLeftBtn.style.left = baseX + 0 + 'px';
-        turnLeftBtn.style.top = baseY + 19 + 'px';
+        turnLeftBtn.style.top = compassY + 19 + 'px';
 
         turnRightBtn.style.left = baseX + 60 + 'px';
-        turnRightBtn.style.top = baseY + 19 + 'px';
+        turnRightBtn.style.top = compassY + 19 + 'px';
 
         turnDownBtn.style.left = baseX + 20 + 'px';
-        turnDownBtn.style.top = baseY + 57 + 'px';
+        turnDownBtn.style.top = compassY + 57 + 'px';
     }
 
     function initDocumentVar() {
@@ -191,6 +198,7 @@ var adjustScrDiv = (function(){
         mapview3D = document.getElementById('map3D');
         behindMap = document.getElementById('behindMap2D');
 
+        homeBtn = document.getElementById('homeBtn');
         compassBtn = document.getElementById('compassBtn');
         turnUpBtn = document.getElementById('turnUpBtn');
         turnLeftBtn = document.getElementById('turnLeftBtn');
@@ -263,6 +271,7 @@ var adjustScrDiv = (function(){
 
     // val 1010
     function setZOrder3DViewBtn( val ){
+        $( '#homeBtn' ).css( "z-index",  val );
         $( '#compassBtn' ).css( "z-index",  val );
 
         $( '#turnUpBtn' ).css( "z-index", val );

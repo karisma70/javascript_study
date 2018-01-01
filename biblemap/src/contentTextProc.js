@@ -548,6 +548,12 @@ function showIntroBibleMap(  ){
     popupContent.innerHTML += '본 웹사이트에서 표현되는 디지털 맵 데이터의 일부는 OpenStreetMap을 사용하고 있으며, OpenStreetMap의 라이센스는 CC BY-SA 2.0을 따릅니다.</span>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '본 웹사이트에 포함된 디지털맵 뷰어는 Cesium과 ol-cesium를 기반으로 제작되었으며, Cesium v1.32의 라이센스는 Apache License 2.0를 따릅니다.</span>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '본 웹사이트에서 표현되는 DEM 데이터는 STK World Terrain 이며, EU에서 자금을 조달 한 코페르니쿠스 © Analytical Graphics, Inc., © CGIAR-CSI 에서 제공하는 정보입니다.</span>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '본 웹사이트에서 제공하는 성경지명 정보 가운데 \'-비전성경사전-\' 출처로 표현되는 내용은 \'(사)두란노서원\'에서, \'-성경지명사전-\' 출처로 표현되는 내용은 \'(사)한국컴퓨터선교회\'에서 웹서비스를 통하여 제공하고 있는 내용임을 알려드립니다.</span>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';

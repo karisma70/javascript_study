@@ -425,13 +425,32 @@
 </div>
 
 <div id="map3D" class="mapview" style="position:absolute;">
-    <input id="compassBtn" type="image" src="biblemap/image/compass_icon.png?version=20170905" style="position: absolute; border:0;" onclick="setRotateNorth()">
-    <input id="turnLeftBtn" type="image" src="biblemap/image/turn_left_.png?version=20170905" style="position: absolute; width:18px; height:38px; border:0;" >
-    <input id="turnUpBtn" type="image" src="biblemap/image/turn_up_.png?version=20170905" style="position: absolute; width:37px; height:16px; border:0;" >
-    <input id="turnDownBtn" type="image" src="biblemap/image/turn_down_.png?version=20170905" style="position: absolute; width:37px; height:17px; border:0;" >
-    <input id="turnRightBtn" type="image" src="biblemap/image/turn_right_.png?version=20170905" style="position: absolute; width:17px; height:36px; border:0;" >
 
-    <input id="view2DBtn" type="image" src="biblemap/image/view_2D.png?version=20171007" style="position: absolute; " onclick="setViewMode2DWithSync()">
+    <input id="compassBtn" type="image" src="biblemap/image/compass_icon.png?version=20170905"
+           style="position: absolute; border:0;" onclick="setRotateNorth()">
+    <input id="turnLeftBtn" type="image" src="biblemap/image/turn_left_.png?version=20170905"
+           onmouseover="this.src='biblemap/image/turn_left__.png?version=20170905';"
+           onmouseout="this.src='biblemap/image/turn_left_.png?version=20170905';"
+           style="position: absolute; width:18px; height:38px; border:0;" >
+    <input id="turnUpBtn" type="image" src="biblemap/image/turn_up_.png?version=20170905"
+           onmouseover="this.src='biblemap/image/turn_up__.png?version=20170905';"
+           onmouseout="this.src='biblemap/image/turn_up_.png?version=20170905';"
+           style="position: absolute; width:37px; height:16px; border:0;" >
+    <input id="turnDownBtn" type="image" src="biblemap/image/turn_down_.png?version=20170905"
+           onmouseover="this.src='biblemap/image/turn_down__.png?version=20170905';"
+           onmouseout="this.src='biblemap/image/turn_down_.png?version=20170905';"
+           style="position: absolute; width:37px; height:17px; border:0;" >
+    <input id="turnRightBtn" type="image" src="biblemap/image/turn_right_.png?version=20170905"
+           onmouseover="this.src='biblemap/image/turn_right__.png?version=20170905';"
+           onmouseout="this.src='biblemap/image/turn_right_.png?version=20170905';"
+           style="position: absolute; width:17px; height:36px; border:0;" >
+
+    <input id="homeBtn" type="image" src="biblemap/image/home.png?version=20170905"
+           onmouseover="this.src='biblemap/image/home_.png?version=20170905';"
+           onmouseout="this.src='biblemap/image/home.png?version=20170905';"
+           style="position: absolute; border:0; width:30px; height: 30px;" onclick="gotoHome()">
+
+    <input id="view2DBtn" type="image" src="biblemap/image/view_2D.png?version=20171007" style="position: absolute; " onclick="setViewMode2D()">
 
     <input id="zoomInBtn3D" type="image" src="biblemap/image/zoom_in.png?version=20171201" style="position: absolute; "  onclick="map3DZoomIn()">
     <input id="zoomOutBtn3D" type="image" src="biblemap/image/zoom_out.png?version=20171201" style="position: absolute;" onclick="map3DZoomOut()">
@@ -495,13 +514,13 @@
 </div>
 
 
-<div id="infoPopup" class="pop-layer" style = "width : 550px; height: 520px;" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
+<div id="infoPopup" class="pop-layer" style = "width : 550px; height: 620px;" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
     <div class="pop-container" >
         <div>
             <span id ="noticeTitle" style="font-size:12pt; text-align:center;">
            </span>
         </div>
-        <div id ="contentDiv" style = "overflow-y:scroll; width : 510px; height: 400px;">
+        <div id ="contentDiv" style = "overflow-y:scroll; line-height:24px; width: 510px; height: 500px;">
             <span id ="noticeContent" style="font-size:11pt; text-align:center;">
            </span>
         </div>
@@ -523,9 +542,27 @@
 
 
     function startMap3DAddLayerWithTimer() {
-        map3DAddLayerTimer = setInterval(addLayerTo3DMapOneByOne, 2000);
+        map3DAddLayerTimer = setInterval(addLayerTo3DMapOneByOne, 500);
         ConsoleLog("startMap3DAddLayerWithTimer()!! ");
     }
+
+
+/*
+    function startMap3DAddLayer(){
+        setCursorByID('map','wait');
+        setCursorByID('map3D','wait');
+
+        map3D.memWholeLayerAddToMap();
+        map3D.setGroundWholeLayer();
+
+        map3D.view3DTilt(1.1);
+
+        setCursorByID('map','default');
+        setCursorByID('map3D','default');
+
+        setGroundLayerTimer = setInterval( setGroundPopup, 3000 );
+    }
+    */
 
     function startSearchBibleWithTimer(){
         startSearchBibleTimer = setInterval( startSearchBible, 500);
@@ -542,6 +579,7 @@
                     downloadTrajectoryData();
 
                     startMap3DAddLayerWithTimer();
+                    // startMap3DAddLayer();
                     clearInterval( startSearchBibleTimer );
                 });
             }
@@ -575,6 +613,7 @@
             rotate -= interval;
             view3D.setRotation( rotate );
         }
+
 
 
         $('#turnRightBtn').mousedown(function () {
@@ -629,25 +668,50 @@
         if( map3D == null )
             return;
 
+        setCursorByID('map','wait');
+        setCursorByID('map3D','wait');
+
         var ret = map3D.memLayerAddToMapOneByOne();
         if( ret == true ){
 
             clearInterval( map3DAddLayerTimer );
-            setGroundLayerTimer = setInterval( setGroundLayerOneByOne, 3000 );
-            // map3D.setGroundLayerOneByOne();
+            setGroundLayerTimer = setInterval( setGroundPopup, 100 );
+            map3D.setGroundWholeLayer();
+
+            setCursorByID('map','default');
+            setCursorByID('map3D','default');
         }
         else{
             ConsoleLog("addMap3DAddLayerWithTimer ..........");
         }
     }
 
-    function setGroundLayerOneByOne(){
-        if( curMapViewMode != 'chkView2D' )
-            map3D.setGroundLayerOneByOne();
-        popup3DSelfGroundPosition();
+
+    function setGroundPopup(){
+
+        if( curMapViewMode != 'chkView2D' ) {
+            // if( map3D.setGroundPopup() == true )
+               //  clearInterval( setGroundLayerTimer );
+            popup3DSelfGroundPosition();
+        }
+
     }
 
+
+    function setCursorByID( id, cursorStyle ) {
+        var elem;
+        if (document.getElementById ){
+            elem = document.getElementById(id);
+            if(elem) {
+                if (elem.style)
+                    elem.style.cursor = cursorStyle;
+            }
+        }
+    }
+
+
     $(document).ready(function(){
+
 
         tabMenu.selectTab( 'tab1Menu');
         var oldValue = 'chkView2D';
@@ -1421,6 +1485,25 @@ function sync3DMapTo2DMap() {
 
     });
 
+
+    function gotoHome( ){
+        closePopup2D();
+        closePopup3D();
+        gotoHome_( bibleMapManager.getView(), map3D.view );
+        setRotateNorth();
+
+        var pivot = { x:4444090.267634998,
+                        y: 3058088.2612847225,
+                        z: 3391385.4960272433 };
+        var axis = {  x: -0.5668782255161677,
+                     y: 0.8238016007726867,
+                    z: -1.9428902930940  };
+
+
+        // map3D.view3DTilt_( 1.1, pivot );
+
+        // map3D.view3DTilt( -1.1 );
+    }
 
     function moveToMap3DWithCheck3DShow( posX, posY ){
         var zoom3D = map3D.view.getZoom();
