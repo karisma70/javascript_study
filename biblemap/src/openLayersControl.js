@@ -578,7 +578,7 @@ LayerManager.prototype.getPoiObjects = function(){
 };
 
 
-
+/*
  function createOverlay( divID ){    // container
      var overlay = new ol.Overlay( ({
          element: divID,
@@ -589,7 +589,7 @@ LayerManager.prototype.getPoiObjects = function(){
      }));
      return overlay;
  }
-
+*/
 
 function flyTo( view, location, zoomIn, done) {
     zoomIn = Math.floor( zoomIn );

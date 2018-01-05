@@ -30,8 +30,8 @@
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170829"></script>
 
 
-    <script src="biblemap/ol-cesium-v1.32/Cesium/Cesium.js"></script>
-    <script src="biblemap/ol-cesium-v1.32/olcesium.js"></script>
+    <!--<script src="biblemap/ol-cesium-v1.32/Cesium/Cesium.js"></script> -->
+    <!--<script src="biblemap/ol-cesium-v1.32/olcesium.js"></script> -->
 
     <script src="ol-cesium-725213c/Cesium/Cesium.js"></script>
     <script src="ol-cesium-725213c/olcesium.js"></script>
@@ -415,20 +415,38 @@
 </div>
 
 <div id="map" class="mapview" style="position:absolute;">
-    <input id="view3DBtn" type="image" src="biblemap/image/view_3D.png?version=20171008" style="position: absolute; " onclick="setViewMode3D()">
+    <input id="view3DBtn" type="image" src="biblemap/image/view_3D.png?version=20171202"
+           onmouseover="this.src='biblemap/image/view_3D_.png?version=20171203';"
+           onmouseout="this.src='biblemap/image/view_3D.png?version=20171202';"
+           style="position: absolute; " onclick="setViewMode3D()">
 
-    <input id="zoomInBtn2D" type="image" src="biblemap/image/zoom_in.png?version=20171201" style="position: absolute; "  onclick="map2DZoomIn()">
-    <input id="zoomOutBtn2D" type="image" src="biblemap/image/zoom_out.png?version=20171201" style="position: absolute;" onclick="map2DZoomOut()">
-    <input id="measureBtn2D" type="image" src="biblemap/image/measure_btn.png?version=20171201" style="position: absolute; "  onclick="mesaureToggleBtn()">
-    <input id="beforePoiBtn2D" type="image" src="biblemap/image/before_poi.png?version=20171201" style="position: absolute; "  onclick="beforePoi()">
-    <input id="afterPoiBtn2D" type="image" src="biblemap/image/after_poi.png?version=20171201" style="position: absolute;" onclick="afterPoi()">
+    <input id="zoomInBtn2D" type="image" src="biblemap/image/Zoom-In-icon.png?version=20171202" style="position: absolute; width:28px; height: 28px;"
+           onmouseover="this.src='biblemap/image/Zoom-In-icon_.png?version=20171203';"
+           onmouseout="this.src='biblemap/image/Zoom-In-icon.png?version=20171202';"
+           onclick="map2DZoomIn()">
+    <input id="zoomOutBtn2D" type="image" src="biblemap/image/Zoom-Out-icon.png?version=20171201" style="position: absolute; width:28px; height: 28px;"
+           onmouseover="this.src='biblemap/image/Zoom-Out-icon_.png?version=20171203';"
+           onmouseout="this.src='biblemap/image/Zoom-Out-icon2.png?version=20171202';"
+           onclick="map2DZoomOut()">
+
+    <input id="measureBtn2D" type="image" src="biblemap/image/measure_btn.png?version=20171201" style="position: absolute;" onclick="mesaureToggleBtn()">
+           <!-- onmouseover="this.src='biblemap/image/measure_btn_.png';"  onmouseout="this.src='biblemap/image/measure_btn.png';"
+           onclick="mesaureToggleBtn()">  -->
+    <input id="beforePoiBtn2D" type="image" src="biblemap/image/before_poi2.png?version=20171201" style="position: absolute; width:25px; height:25px; "
+           onmouseover="this.src='biblemap/image/before_poi2_.png?version=20171203';"
+           onmouseout="this.src='biblemap/image/before_poi2.png?version=20171202';"
+           onclick="beforePoi()">
+    <input id="afterPoiBtn2D" type="image" src="biblemap/image/after_poi2.png?version=20171201" style="position: absolute;width:25px; height:25px;"
+           onmouseover="this.src='biblemap/image/after_poi2_.png?version=20171203';"
+           onmouseout="this.src='biblemap/image/after_poi2.png?version=20171202';"
+           onclick="afterPoi()">
 </div>
 
 <div id="map3D" class="mapview" style="position:absolute;">
 
-    <input id="compassBtn" type="image" src="biblemap/image/compass.png?version=20170930"
-           onmouseover="this.src='biblemap/image/compass_.png?version=20170930';"
-           onmouseout="this.src='biblemap/image/compass.png?version=20170930';"
+    <input id="compassBtn" type="image" src="biblemap/image/compass2.png?version=20170930"
+           onmouseover="this.src='biblemap/image/compass2_.png?version=20170930';"
+           onmouseout="this.src='biblemap/image/compass2.png?version=20170930';"
            style="position: absolute; border:0; width: 60px; height: 60px;"  onclick="setRotateNorth()">
     <input id="turnLeftBtn" type="image" src="biblemap/image/turn_left_.png?version=20170905"
            onmouseover="this.src='biblemap/image/turn_left__.png?version=20170905';"
@@ -452,12 +470,28 @@
            onmouseout="this.src='biblemap/image/home.png?version=20170930';"
            style="position: absolute; border:0; width:30px; height: 30px;" onclick="gotoHome()">
 
-    <input id="view2DBtn" type="image" src="biblemap/image/view_2D.png?version=20171007" style="position: absolute; " onclick="setViewMode2DWithSync()">
+    <input id="view2DBtn" type="image" src="biblemap/image/view_2D.png?version=20171007" style="position: absolute; "
+           onmouseover="this.src='biblemap/image/view_2D_.png?version=20171203';"
+           onmouseout="this.src='biblemap/image/view_2D.png?version=20171203';"
+           onclick="setViewMode2DWithSync()">
 
-    <input id="zoomInBtn3D" type="image" src="biblemap/image/zoom_in.png?version=20171201" style="position: absolute; "  onclick="map3DZoomIn()">
-    <input id="zoomOutBtn3D" type="image" src="biblemap/image/zoom_out.png?version=20171201" style="position: absolute;" onclick="map3DZoomOut()">
-    <input id="beforePoiBtn3D" type="image" src="biblemap/image/before_poi.png?version=20171201" style="position: absolute; "  onclick="beforePoi()">
-    <input id="afterPoiBtn3D" type="image" src="biblemap/image/after_poi.png?version=20171201" style="position: absolute;" onclick="afterPoi()">
+    <input id="zoomInBtn3D" type="image" src="biblemap/image/Zoom-In-icon.png?version=20171202" style="position: absolute; width:28px; height: 28px;"
+           onmouseover="this.src='biblemap/image/Zoom-In-icon_.png?version=20171203';"
+           onmouseout="this.src='biblemap/image/Zoom-In-icon.png?version=20171202';"
+           onclick="map3DZoomIn()">
+    <input id="zoomOutBtn3D" type="image" src="biblemap/image/Zoom-Out-icon.png?version=20171201" style="position: absolute; width:28px; height: 28px;"
+           onmouseover="this.src='biblemap/image/Zoom-Out-icon_.png?version=20171203';"
+           onmouseout="this.src='biblemap/image/Zoom-Out-icon2.png?version=20171202';"
+           onclick="map3DZoomOut()">
+    <input id="beforePoiBtn3D" type="image" src="biblemap/image/before_poi2.png?version=20171201" style="position: absolute; width:25px; height:25px; "
+           onmouseover="this.src='biblemap/image/before_poi2_.png?version=20171203';"
+           onmouseout="this.src='biblemap/image/before_poi2.png?version=20171202';"
+           onclick="beforePoi()">
+    <input id="afterPoiBtn3D" type="image" src="biblemap/image/after_poi2.png?version=20171201" style="position: absolute;width:25px; height:25px;"
+           onmouseover="this.src='biblemap/image/after_poi2_.png?version=20171203';"
+           onmouseout="this.src='biblemap/image/after_poi2.png?version=20171202';"
+           onclick="afterPoi()">
+
 </div>
 
 <!-- <div id="behindMap2D" class="mapview" style="position:absolute; display:none;"> -->
@@ -544,7 +578,7 @@
 
 
     function startMap3DAddLayerWithTimer() {
-        map3DAddLayerTimer = setInterval(addLayerTo3DMapOneByOne, 500);
+        map3DAddLayerTimer = setInterval(addLayerTo3DMapOneByOne, 1);
         ConsoleLog("startMap3DAddLayerWithTimer()!! ");
     }
 
@@ -572,6 +606,7 @@
 
     function startSearchBible(){
         searchBibleChapter( function(){
+            startMap3DAddLayerWithTimer();
             layerManager.layerContainer.totalCount += bibleMapPolygonLayers.length;
             for( var pid in bibleMapPolygonLayers ) {
                 var layer = bibleMapPolygonLayers[ pid ];
@@ -580,7 +615,7 @@
                     changeHistoryAdmin( historyAdmin.value );
                     downloadTrajectoryData();
 
-                    startMap3DAddLayerWithTimer();
+                    // startMap3DAddLayerWithTimer();
                     // startMap3DAddLayer();
                     clearInterval( startSearchBibleTimer );
                 });
@@ -675,7 +710,6 @@
 
         var ret = map3D.memLayerAddToMapOneByOne();
         if( ret == true ){
-
             clearInterval( map3DAddLayerTimer );
             setGroundLayerTimer = setInterval( setGroundPopup, 100 );
             map3D.setGroundWholeLayer();
@@ -835,10 +869,22 @@
     var dvPopupContent = document.getElementById('popup-content');
     var dvPopupCloser = document.getElementById('popup-closer');
 
+    function createOverlay( divID ){    // container
+        var overlay = new ol.Overlay( ({
+            element: divID,
+            autoPan: true,
+            autoPanAnimation: {
+                duration: 250
+            }
+        }));
+        return overlay;
+    }
+
+    var overlay = createOverlay( dvPopupContainer );
 
     var popup2D = {
         name : "2D",
-        overlay : createOverlay( dvPopupContainer ),    // dvPopupContainer
+        overlay : overlay,
         content : dvPopupContent,
         closer : dvPopupCloser
     };
@@ -1105,7 +1151,18 @@ function sync2DMapTo3DMap() {
 }
 
 function mesaureToggleBtn() {
-    measureDistance.toggleMeasureDistance();
+
+    var img1 = "biblemap/image/measure_btn.png";
+    var img2 = "biblemap/image/measure_btn_toggle.png";
+
+    var measureBtn = document.getElementById("measureBtn2D");
+
+    var measureMode = measureDistance.toggleMeasureDistance();
+
+    if( measureMode == true )
+        measureBtn.src = img2;
+    else
+        measureBtn.src = img1;
 }
 
 
@@ -1153,6 +1210,7 @@ function sync3DMapTo2DMap() {
 
             new GMDFileDownload( bibleMap, map3D, layer.url, layer.order, layer.style, layerManager, function( ){
                 layerManager.sortPoiWords();
+                sync2DMapTo3DMap();
                 initTextAutoComplete();
                 // map3D.view3DTilt(1.1);
                 startSearchBibleWithTimer();

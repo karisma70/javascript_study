@@ -86,11 +86,15 @@ function DistanceMeasureControl( paramMapManager ){
     };
 
     this.toggleMeasureDistance = function(){
+
+        var measureMode = false;
+
         if( measureDraw == null ) {
             mapManager.removeSelectInteraction();
             coordString = '';
             addInteraction();
             map.addControl( mousePosControl );
+            measureMode = true;
         }
         else {
             mapManager.addSelectInteraction();
@@ -98,7 +102,10 @@ function DistanceMeasureControl( paramMapManager ){
             measureDraw = null;
             coordString = '';
             map.removeControl( mousePosControl );
+            measureMode = false
         }
+
+        return measureMode;
     };
 
     this.IsActive = function(){
