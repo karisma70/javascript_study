@@ -1485,10 +1485,10 @@ function createLayer( source  ) {
 
 
          //this.ol3dScene.screenSpaceCameraController.minimumZoomDistance = 1000;
-         this.ol3dScene.screenSpaceCameraController.minimumZoomDistance = 500;
+         this.ol3dScene.screenSpaceCameraController.minimumZoomDistance = 200;
 
-         this.ol3dScene.screenSpaceCameraController.maximumZoomDistance = 40000000;
-         this.ol3dScene.screenSpaceCameraController._minimumZoomRate = 5; // ←
+         this.ol3dScene.screenSpaceCameraController.maximumZoomDistance = 4000000;
+         this.ol3dScene.screenSpaceCameraController._minimumZoomRate = 0.3; // ←
 
          var terrainProvider = new Cesium.CesiumTerrainProvider({
              url: '//assets.agi.com/stk-terrain/world',

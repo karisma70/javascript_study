@@ -51,7 +51,8 @@ function CreatePathArrowLayer( trajectoryArray, isArrow ) {
                 styleArrowObj = new ol.style.Style({
                     geometry: new ol.geom.Point(end),
                     image: new ol.style.Icon({
-                        src: 'biblemap/image/arrow.png',
+                        // src: 'biblemap/image/arrow.png',
+                        src: 'biblemap/image/arrow2.png',
                         anchor: [0.75, 0.5],
                         rotateWithView: true,
                         rotation: -rotation

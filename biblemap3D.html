@@ -11,7 +11,8 @@
     <!-- <link rel="stylesheet" href="https://openlayers.org/en/v4.1.1/css/ol.css" type="text/css"> -->
     <link rel="stylesheet" href="https://openlayers.org/en/v4.4.2/css/ol.css" type="text/css">
     <link rel="stylesheet" href="biblemap/css/expandmenu.css?version=20170917">
-    <link rel="stylesheet" href="biblemap/ol-cesium-v1.32/ol.css" type="text/css">
+    <!-- <link rel="stylesheet" href="biblemap/ol-cesium-v1.32/ol.css" type="text/css"> -->
+    <link rel="stylesheet" href="ol-cesium/ol.css" type="text/css">
 
     <meta name="viewport" content="width=device-width">
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
@@ -25,7 +26,7 @@
     <script type="text/javascript" src="biblemap/src/propertyDB.js?version=20170813"></script>
 
     <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20171109"></script>
-    <script type="text/javascript" src="biblemap/src/routePlay.js?version=20170905"></script>
+    <script type="text/javascript" src="biblemap/src/routePlay.js?version=20171205"></script>
     <script type="text/javascript" src="biblemap/src/trajectoryData.js?version=20170901"></script>
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170829"></script>
 
@@ -33,14 +34,14 @@
     <!--<script src="biblemap/ol-cesium-v1.32/Cesium/Cesium.js"></script> -->
     <!--<script src="biblemap/ol-cesium-v1.32/olcesium.js"></script> -->
 
-    <script src="ol-cesium-725213c/Cesium/Cesium.js"></script>
-    <script src="ol-cesium-725213c/olcesium.js"></script>
+    <script src="ol-cesium/Cesium/Cesium.js"></script>
+    <script src="ol-cesium/olcesium.js"></script>
     <!-- <script src="biblemap/cesium_plugin/viewerCesiumNavigationMixin.js"></script>-->
     <!--<script src="biblemap/cesium_plugin/SpirographPositionProperty.js"></script>-->
 
     <script type="text/javascript" src="biblemap/src/distanceMeasureControl.js?version=20170820"></script>
     <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170905"></script>
-    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20171116"></script>
+    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20171216"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
     <script type="text/javascript" src="biblemap/src/jQueryRotate.js"></script>
     <!-- <script type="text/javascript" src="biblemap/vendor/jquery-1.8.1.js"></script> -->
@@ -415,10 +416,10 @@
 </div>
 
 <div id="map" class="mapview" style="position:absolute;">
-    <input id="view3DBtn" type="image" src="biblemap/image/view_3D.png?version=20171202"
+    <input id="view3DBtn" type="image" src="biblemap/image/view_3D.png?version=20171205"
            onmouseover="this.src='biblemap/image/view_3D_.png?version=20171203';"
-           onmouseout="this.src='biblemap/image/view_3D.png?version=20171202';"
-           style="position: absolute; " onclick="setViewMode3D()">
+           onmouseout="this.src='biblemap/image/view_3D.png?version=20171205';"
+           style="position: absolute; width:35px; height:35px;" onclick="setViewMode3D()">
 
     <input id="zoomInBtn2D" type="image" src="biblemap/image/Zoom-In-icon.png?version=20171202" style="position: absolute; width:28px; height: 28px;"
            onmouseover="this.src='biblemap/image/Zoom-In-icon_.png?version=20171203';"
@@ -432,11 +433,11 @@
     <input id="measureBtn2D" type="image" src="biblemap/image/measure_btn.png?version=20171201" style="position: absolute;" onclick="mesaureToggleBtn()">
            <!-- onmouseover="this.src='biblemap/image/measure_btn_.png';"  onmouseout="this.src='biblemap/image/measure_btn.png';"
            onclick="mesaureToggleBtn()">  -->
-    <input id="beforePoiBtn2D" type="image" src="biblemap/image/before_poi2.png?version=20171201" style="position: absolute; width:25px; height:25px; "
+    <input id="beforePoiBtn2D" type="image" src="biblemap/image/before_poi2.png?version=20171201" style="position: absolute; width:28px; height:28px; "
            onmouseover="this.src='biblemap/image/before_poi2_.png?version=20171203';"
            onmouseout="this.src='biblemap/image/before_poi2.png?version=20171202';"
            onclick="beforePoi()">
-    <input id="afterPoiBtn2D" type="image" src="biblemap/image/after_poi2.png?version=20171201" style="position: absolute;width:25px; height:25px;"
+    <input id="afterPoiBtn2D" type="image" src="biblemap/image/after_poi2.png?version=20171201" style="position: absolute;width:28px; height:28px;"
            onmouseover="this.src='biblemap/image/after_poi2_.png?version=20171203';"
            onmouseout="this.src='biblemap/image/after_poi2.png?version=20171202';"
            onclick="afterPoi()">
@@ -447,7 +448,7 @@
     <input id="compassBtn" type="image" src="biblemap/image/compass2.png?version=20170930"
            onmouseover="this.src='biblemap/image/compass2_.png?version=20170930';"
            onmouseout="this.src='biblemap/image/compass2.png?version=20170930';"
-           style="position: absolute; border:0; width: 60px; height: 60px;"  onclick="setRotateNorth()">
+           style="position: absolute; border:0; width: 60px; height: 60px; opacity:0.7;"  onclick="setRotateNorth()">
     <input id="turnLeftBtn" type="image" src="biblemap/image/turn_left_.png?version=20170905"
            onmouseover="this.src='biblemap/image/turn_left__.png?version=20170905';"
            onmouseout="this.src='biblemap/image/turn_left_.png?version=20170905';"
@@ -470,7 +471,7 @@
            onmouseout="this.src='biblemap/image/home.png?version=20170930';"
            style="position: absolute; border:0; width:30px; height: 30px;" onclick="gotoHome()">
 
-    <input id="view2DBtn" type="image" src="biblemap/image/view_2D.png?version=20171203" style="position: absolute; "
+    <input id="view2DBtn" type="image" src="biblemap/image/view_2D.png?version=20171203" style="position: absolute; width: 35px; height:35px;"
            onmouseover="this.src='biblemap/image/view_2D_.png?version=20171204';"
            onmouseout="this.src='biblemap/image/view_2D.png?version=20171203';"
            onclick="setViewMode2DWithSync()">
@@ -483,11 +484,11 @@
            onmouseover="this.src='biblemap/image/Zoom-Out-icon_.png?version=20171203';"
            onmouseout="this.src='biblemap/image/Zoom-Out-icon.png?version=20171202';"
            onclick="map3DZoomOut()">
-    <input id="beforePoiBtn3D" type="image" src="biblemap/image/before_poi2.png?version=20171201" style="position: absolute; width:25px; height:25px; "
+    <input id="beforePoiBtn3D" type="image" src="biblemap/image/before_poi2.png?version=20171201" style="position: absolute; width:28px; height:28px; "
            onmouseover="this.src='biblemap/image/before_poi2_.png?version=20171203';"
            onmouseout="this.src='biblemap/image/before_poi2.png?version=20171202';"
            onclick="beforePoi()">
-    <input id="afterPoiBtn3D" type="image" src="biblemap/image/after_poi2.png?version=20171201" style="position: absolute;width:25px; height:25px;"
+    <input id="afterPoiBtn3D" type="image" src="biblemap/image/after_poi2.png?version=20171201" style="position: absolute;width:28px; height:28px;"
            onmouseover="this.src='biblemap/image/after_poi2_.png?version=20171203';"
            onmouseout="this.src='biblemap/image/after_poi2.png?version=20171202';"
            onclick="afterPoi()">
@@ -568,7 +569,7 @@
 
 
 <script>
-    setDebug( true );
+    setDebug( false );
 
     var map3DAddLayerTimer;
     var setGroundLayerTimer;
