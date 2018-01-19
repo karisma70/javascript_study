@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="UTF-8">
     <title>Bible Map</title>
     <link rel="shortcut icon" href="http://www.biblemap.or.kr/favicon.ico" type="image/x-icon"/>
@@ -283,9 +282,12 @@
             /* border-top-color: #FBFE38; */
         }
     </style>
+
 </head>
 
 <body>
+
+
 <div class="wrapperDiv">
     <div id="sidebar" style="position:absolute; background-color:rgb( 248, 248, 248  );">
         <div id="logo" style="height:32px; background-color:rgb( 59, 89, 153 );" onclick="showIntroBibleMap();"><img src="biblemap/image/biblemap_logo.png" style="width:27px; height:33px; vertical-align:middle" >
@@ -569,7 +571,7 @@
 
 
 <script>
-    setDebug( false );
+    setDebug( true );
 
     var map3DAddLayerTimer;
     var setGroundLayerTimer;
@@ -746,9 +748,13 @@
         }
     }
 
+    var scaleBtnFunc2D = null;
+    var scaleBtnFunc3D = null;
 
     $(document).ready(function(){
 
+        scaleBtnFunc2D = createScaleBtns( "map", 4, 15 );
+        scaleBtnFunc3D = createScaleBtns( "map3D", 4, 18 );
 
         tabMenu.selectTab( 'tab1Menu');
         var oldValue = 'chkView2D';
@@ -861,7 +867,6 @@
     //////////////////////////////////
 
 
-
     var dvPopupContainer = document.getElementById('bubblePopup');
     dvPopupContainer.setAttribute("id", "popupContainer" );
     $( '#popupContainer' ).css( "z-index", 2000 );
@@ -895,14 +900,11 @@
         popup2D.closer.blur();
         popup2D.content.innerHTML = "";
 
-       // closePopup3D();
-
         return false;
     };
 
 
     var dvPopupContent3D = document.getElementById('popup-content3D');
-    // var dvPopupCloser3D = document.getElementById('popup-closer3D');
 
     var overlay3D = new ol.Overlay({
         element: document.getElementById('bubblePopup3D')
@@ -945,37 +947,6 @@
         popup2D.closer.onclick();
     }
 
-    //$( '#bubblePopup3D' ).css( "z-index", $("#bubblePopup").css("z-index") );
-    // $( '#bubblePopup3D' ).css( "z-index", 0 );
-
-/*
-    popup3D.closer.onclick = function() {
-        alert( "aaaa");
-        popup3D.overlay.setPosition(undefined);
-        popup3D.closer.blur();
-        popup3D.content.innerHTML = "";
-
-    //    popup2D.closer.onclick();
-
-        // map3D.remove3DLabelLayer();
-
-        return false;
-    };
-
-
-    dvPopupCloser3D.onclick = function() {
-        alert( "aaaa");
-        popup3D.overlay.setPosition(undefined);
-        popup3D.closer.blur();
-        popup3D.content.innerHTML = "";
-
-        //    popup2D.closer.onclick();
-
-        // map3D.remove3DLabelLayer();
-
-        return false;
-    };
-    */
 
     function showPopup( position, content ){
 
@@ -985,44 +956,6 @@
         popup3D.overlay.setGroundPosition( position );
 
     }
-
-
-
-    ////////////////////////////////////////
-
-    var measureBtn = document.createElement('button');
-    measureBtn.innerHTML = 'M';
-
-
-    var prevPoiBtn = document.createElement('button');
-    prevPoiBtn.innerHTML = '<';
-
-    var nextPoiBtn = document.createElement('button');
-    nextPoiBtn.innerHTML = '>';
-
-
-    var MapMenuClickEvent = function( opt_options ) {
-
-        var options = opt_options || {};
-
-        var element = document.createElement( 'div');
-        element.className = 'measure-distance ol-unselectable ol-control';
-        element.appendChild( measureBtn );
-        var br = document.createElement('br');
-        element.appendChild( br );
-        element.appendChild( prevPoiBtn );
-        element.appendChild( nextPoiBtn );
-
-            element.setAttribute("id", "mapMenuDiv" );
-        $('#mapMenuDiv').css( "z-index", "9000" );
-
-        ol.control.Control.call( this, {
-            element: element,
-            target: options.target
-        });
-    };
-
-    ol.inherits( MapMenuClickEvent, ol.control.Control );
 
 
     var bibleChapterList = new BibleChapterList();
@@ -1091,34 +1024,8 @@
 
     var pathTooltip = new Tooltip( bibleMap, 'tooltip tooltip-static' );
 
-//     var mapMenuClickEvent = new MapMenuClickEvent();
-//    bibleMap.addControl( mapMenuClickEvent );
-
     var measureDistance = new DistanceMeasureControl( bibleMapManager );
-    measureBtn.addEventListener('click', measureDistance.toggleMeasureDistance, false);
-    prevPoiBtn.addEventListener('click', /* function(){
-        var poiObj = layerManager.historyPrevPoi();
-        if( poiObj != null )
-            moveToPlaceByPoiObj( poiObj );
-        ConsoleLog( "Prev Poi Button!!! ");
-    }*/
-    beforePoi, false );
 
-    nextPoiBtn.addEventListener('click', /* function(){
-        var poiObj = layerManager.historyNextPoi();
-        if( poiObj != null )
-            moveToPlaceByPoiObj( poiObj );
-        ConsoleLog( "Next Poi Button!!! ");
-    }*/
-    afterPoi, false );
-
-
-    /*
-    view3DBtn.addEventListener('click', function(){
-        adjustScrDiv.view2D3DCtrl( 'chkView3D'  );
-        ConsoleLog( "Go 3D View!!! ");
-    }, false );
-    */
 
     var selSpeed = document.getElementById('movingSpeed');
     var baseSpeed = 0.0;
@@ -1423,12 +1330,13 @@ function sync3DMapTo2DMap() {
         routeMove = null;
     }
 
-    var mainMapEvent = true;
 
     bibleMapManager.mapEventPrecompose( function(evt){
         var zoom = bibleMapManager.getView().getZoom();
-        $("#zoomLevel").html("zoom level : " + zoom); // + zoom;
+        $("#zoomLevel").html("zoom level : " + zoom ); // + zoom;
 
+        // scaleBtnEventTimer2D = setInterval( scaleBtnEvent2D, 1);
+        scaleBtnFunc2D( zoom );
 
         if( routeMove)
             routeMove.updateMovingSpeed( zoom );
@@ -1447,6 +1355,10 @@ function sync3DMapTo2DMap() {
         mapAngle = Math.floor( mapAngle );
         var nAngle = parseInt( mapAngle );
         $("#compassBtn").rotate( nAngle);
+
+
+        var zoom = map3D.view.getZoom();
+        scaleBtnFunc3D( zoom );
 
     });
 
@@ -1775,6 +1687,7 @@ function sync3DMapTo2DMap() {
 
     window.onload = function(){
         adjustScrDiv.normalScrMap();
+
         downloadGeometries();
     };
 
@@ -1782,9 +1695,131 @@ function sync3DMapTo2DMap() {
         adjustScrDiv.showScrMap();
     };
 
+    function createScaleBtns( divID, min, max  ) {
+
+        var baseY = 260;
+        var minLevel = min;
+        var maxLevel = max;
+        var mapViewId = divID;
+
+        var levelLen = maxLevel - minLevel +1;
+
+        var imgSrc1 = "biblemap/image/scale_btn.png";       // normal
+        var imgSrc2 = "biblemap/image/scale_btn_.png";      // over
+        var imgSrc3 = "biblemap/image/scale_btn__.png";     // click
+
+        var clickedNumber = -1;
+
+        var btnArr = [];
+
+        function createScaleBtn( idx ) {
+            var mapView = document.getElementById( divID );
+            var btn = document.createElement("input");
+            btn.src = imgSrc1;
+            btn.type = "image";
+            var strIdx = idx + "";
+            btn.setAttribute('clicked', "false" );
+            btn.setAttribute('id', strIdx );
+            btn.setAttribute('width', '28px');
+            btn.setAttribute('height', '8px');
+            btn.style.position = "absolute";
+            btn.style.top = baseY + (idx * 8 ) + "px";
+            btn.style.left = "5px";
+
+            btn.addEventListener('mouseover', mouseOverFunc, false );
+            btn.addEventListener('mouseout', mouseOutFunc, false );
+
+            function mouseOverFunc(){
+                btn.src = imgSrc2;
+            }
+
+            function mouseOutFunc(){
+                var clicked = btn.getAttribute('clicked');
+
+                if( clicked == "true" ) {
+                    btn.src = imgSrc3;
+                    ConsoleLog( "mouseOut clicked !! " + clicked + ", src3" );
+                }
+                else {
+                    btn.src = imgSrc1;
+                    ConsoleLog( "mouseOut clicked !! " + clicked + ", src1" );
+                }
+            }
+
+            btn.onclick = function( evt ) {
+
+                if (clickedNumber > -1)
+                    clearBtn(clickedNumber);
+
+                var clickIdx = this.getAttribute('id');
+                clickedNumber = parseInt(clickIdx);
+
+                ConsoleLog("Clicked!!! " + clickIdx);
+
+                var zoomLevel = parseInt(clickIdx) + minLevel;
+
+                btn.setAttribute('clicked', "true");
+                this.src = imgSrc3;
+
+                if (mapViewId == "map") {
+                    if( popup2D.content.innerHTML != "" ) {
+                        ConsoleLog("clicked Popup!! " + popup2D.content.innerHTML);
+                        _moveTo( bibleMapManager.getView(), popup2D.overlay.getPosition(), zoomLevel, 600);
+                    }else{
+                        var center = bibleMapManager.getView().getCenter();
+                        _moveTo(bibleMapManager.getView(), center, zoomLevel, 600);
+                    }
+
+                } else {
+                    if (popup3D.content.innerHTML != "") {
+                        _moveTo(map3D.view, popup3D.position, zoomLevel, 600);
+                    }
+                    else {
+                        var center = map3D.view.getCenter();
+                        _moveTo(map3D.view, center, zoomLevel, 600);
+                    }
+                }
+            };
+
+            btnArr.push( btn );
+
+            mapView.appendChild(btn);
+        }
+
+        function clearBtn( idx ){
+           var btn = btnArr[idx];
+            btn.src = imgSrc1;
+            btn.setAttribute('clicked', "false" );
+        }
 
 
+        for( var idx = 0; idx < levelLen ; idx ++ ) {
+            createScaleBtn( idx );
+        }
+
+        return function( viewLevel ){
+
+            if( viewLevel > maxLevel )
+                return;
+
+            var level = Math.floor( viewLevel );
+
+            var adjustLevel = level - minLevel;
+
+         //   clearAllBtn();
+
+            if( clickedNumber > -1 )
+                clearBtn( clickedNumber );
+
+            clickedNumber = adjustLevel;
+
+            var btn = btnArr[ adjustLevel ];
+            btn.setAttribute('clicked', "true" );
+            btn.src = imgSrc3;
+        }
+    }
 
 </script>
+
 </body>
 </html>
