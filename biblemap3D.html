@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Bible Map</title>
+
     <link rel="shortcut icon" href="http://www.biblemap.or.kr/favicon.ico" type="image/x-icon"/>
     <link rel="icon" href="http://www.biblemap.or.kr/favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" type="text/css" media="all" href="http://fonts.googleapis.com/earlyaccess/nanumgothic.css">
@@ -24,7 +25,7 @@
     <script type="text/javascript" src="biblemap/src/GMDFileReader.js?version=20170901"></script>
     <script type="text/javascript" src="biblemap/src/propertyDB.js?version=20170813"></script>
 
-    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20171109"></script>
+    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20171221"></script>
     <script type="text/javascript" src="biblemap/src/routePlay.js?version=20171205"></script>
     <script type="text/javascript" src="biblemap/src/trajectoryData.js?version=20170901"></script>
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170829"></script>
@@ -40,7 +41,7 @@
 
     <script type="text/javascript" src="biblemap/src/distanceMeasureControl.js?version=20170820"></script>
     <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170905"></script>
-    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20171216"></script>
+    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20171230"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
     <script type="text/javascript" src="biblemap/src/jQueryRotate.js"></script>
     <!-- <script type="text/javascript" src="biblemap/vendor/jquery-1.8.1.js"></script> -->
@@ -72,6 +73,7 @@
             -webkit-user-select : none;
             -moz-user-select : none;
             user-select: none;
+
         }
 
         html, body {
@@ -294,7 +296,7 @@
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span  style="font-size:11pt; font-weight:bold; color:white; text-align:center;  vertical-align:middle; font: 'Hanna', serif;" >성경지도</span></div>
 
         <div class="dummy2" style = "height: 8px;"></div>
-        <div class="dummy2" style = "height: 81px;">
+        <div class="dummy2" style = "height:178px;">
             <div id ="bibleSearch" style="font-size:12px; height: 50px">
                 <select id ="bibleTitle"  class="customSelect" name="bibleTitle" style="margin-left: 46px; width: 120px; height:21px; " ></select>
                 <div style="height: 4px"></div>
@@ -309,30 +311,35 @@
                 <span style="margin-left: 18px; font-size:12px;">단어</span><input type="text" id ="bibleWord" size="12" style="padding-left: 5px; margin-left: 3px; width:90px; height:21px; font-size:12px;"  value="바울" onkeypress="if(event.keyCode==13) searchBibleWord();">
                 <input type="button" class="button" value="검색" style="position: absolute; margin-left: 2px;" onclick="searchBibleWord()">
             </div>
-        </div>
-        <!-- <div id="css3-animated-autoclose" data-collapse> -->
-        <div id="accordion-example" data-collapse="accordion">
-            <h3 class="open" >지명검색</h3>
-            <div class="content" style ="width:198px; height: 100px; background-color:#FFFFFF;">
-                <span style="margin-left: 10px; font-size:12px;">지명</span>
-                <input type="text" name="currency" class="biginput" id="biblePlace" size="12"
-                       style="padding-left: 5px; margin-left:3px; width: 90px; height:20px; font-size:12px; font:'Nanum Gothic'; " value="갈릴리 호수" onkeypress="if(event.keyCode==13) searchBiblePlace();">
+
+             <div style="height: 14px; background: url(biblemap/image/horizon-line_2.png);"></div>
+
+            <div class="content" style ="position: absolute; width:198px; top: 130px; height: 85px; background-color:#FFFFFF;">
+                <span style="margin-left: 18px;  font-size:12px;">지명</span>
+                <input type="text" name="currency" class="biginput" id="biblePlace" size="16"
+                       style="padding-left: 5px; margin-left: 3px; width: 110px; height:20px; font-size:12px; font:'Nanum Gothic'; " value="갈릴리 호수" onkeypress="if(event.keyCode==13) searchBiblePlace();">
                 <input type="button" class="button" value="검색" style="position: absolute; vertical-align:center; margin-left: 2px;" onclick="searchBiblePlace()">
                 <div style="height: 4px"></div>
                 <!-- <div id ="searchedPoiList" rows= "5" style="border:1px solid grey; margin-left:10px; height: 60px; width: 163px; font-size:13px ; clear: both;"></div>  -->
                 <select id ="searchedPoiList" name="searchedPoiList" size='3' style="overflow:hidden; margin-left:35px; width: 123px; height:52px; border: 1px solid #D9D9D9; " ></select>
             </div>
-            <h3>시대별 경계 영역</h3>
-            <div class="content" style ="background-color:#FFFFFF; height: 275px;">
+
+        </div>
+        <!-- <div id="css3-animated-autoclose" data-collapse> -->
+        <div id="accordion-example" data-collapse="accordion">
+            <h3 class="open">시대별 경계 영역</h3>
+            <div class="content" style ="background-color:#FFFFFF; height: 105px;">
                 <span id ="range" style="margin-left: 20px; font-size:12px; vertical-align:middle;">현재의 국가</span>
                 <div style="height: 8px"></div>
                 <div name ="historyBar" style="margin-left:0px; width: 180px; height: 34px; border: 1px solid rgb(217, 217, 217);">
-                    <input id="historyAdmin" type ="range" style = "margin-left: 10px; top: 5px; width:160px; height: 30px; font-size:12px; border: none;" min = "0" max = "7" value = "7" onchange="eventHistoryAdmin(this.value)" onclick="eventHistoryAdmin(this.value)" >
+                    <input id="historyAdmin" type ="range" style = "margin-left: 10px; top: 5px; width:160px; height: 30px; font-size:12px; border: none;" min = "0" max = "8" value = "8" onchange="eventHistoryAdmin(this.value)" onclick="eventHistoryAdmin(this.value)" >
                     &nbsp;&nbsp;&nbsp;
                 </div>
+                <!--
                 <div style="height: 8px"></div>
                 <div id="historyAdminExplain" style ="overflow-y:scroll; margin-left: 0px; width : 180px; height: 160px; line-height: 1.6em; border: 1px solid #A7A4A4; font-family: 'Nanum Gothic';" >
                 </div>
+                -->
                 <div style="height:5px;"></div>
                 <div>
                     <input type="image" src="biblemap/image/show-info-icon.png?version=20170905" style="position:absolute; margin-left: 160px; width:20px; height:20px; vertical-align:middle" onclick="showHistoryAdmin()">
@@ -571,7 +578,7 @@
 
 
 <script>
-    setDebug( true );
+    setDebug( false );
 
     var map3DAddLayerTimer;
     var setGroundLayerTimer;

@@ -71,7 +71,16 @@
          fillColor : 'rgba( 255, 255, 255, 0.001)',
          lineStroke : {  color: [255, 255, 255], width : 0, opacity: 0.01  },
          textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
+     },
+
+     { url : 'history/History_BC6', order: 12, style: {
+         historyShow : 'false',
+         visibleRange : { max : 9, min : 5 },
+         fillColor : 'rgba( 255, 255, 255, 0.001)',
+         lineStroke : {  color: [255, 255, 255], width : 0, opacity: 0.01  },
+         textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 0px 굴림'  }}    // label 출력 안함
      }
+
 
  ];
 
