@@ -238,25 +238,25 @@ var adjustScrDiv = (function(){
 
         zoomInBtn3D.style.top = baseY +'px';
         zoomInBtn3D.style.left = 5 + 'px';
-        zoomOutBtn3D.style.top = baseY + 27 +'px';
+        zoomOutBtn3D.style.top = baseY + 23 +'px';
         zoomOutBtn3D.style.left = 5 + 'px';
 
-        beforePoiBtn3D.style.top = baseY + 80 +'px';
+        beforePoiBtn3D.style.top = baseY + 70 +'px';
         beforePoiBtn3D.style.left = 5 + 'px';
-        afterPoiBtn3D.style.top = baseY + 107 +'px';
+        afterPoiBtn3D.style.top = baseY + 93 +'px';
         afterPoiBtn3D.style.left = 5 + 'px';
 
         zoomInBtn2D.style.top = baseY +'px';
         zoomInBtn2D.style.left = 5 + 'px';
-        zoomOutBtn2D.style.top = baseY + 27 +'px';
+        zoomOutBtn2D.style.top = baseY + 23 +'px';
         zoomOutBtn2D.style.left = 5 + 'px';
 
-        measureBtn2D.style.top = baseY + 67 +'px';
+        measureBtn2D.style.top = baseY + 56 +'px';
         measureBtn2D.style.left = 5 + 'px';
 
-        beforePoiBtn2D.style.top = baseY + 110 +'px';
+        beforePoiBtn2D.style.top = baseY + 90 +'px';
         beforePoiBtn2D.style.left = 5 + 'px';
-        afterPoiBtn2D.style.top = baseY + 137 +'px';
+        afterPoiBtn2D.style.top = baseY + 113 +'px';
         afterPoiBtn2D.style.left = 5 + 'px';
 
 
@@ -362,10 +362,17 @@ var adjustScrDiv = (function(){
         mapview3D.style.bottom = 0 + 'px';
 
 
-         behindMap.style.top = (window.innerHeight - 100) + 'px';
+
          behindMap.style.left = (window.innerWidth - 150) + 'px';
          behindMap.style.right = 0 + 'px';
-         behindMap.style.bottom = 0 + 'px';
+
+
+        // behindMap.style.top = (window.innerHeight ) + 'px';
+        // behindMap.style.bottom = (window.innerHeight - 100) + 'px';
+
+        behindMap.style.top = 0 + 'px';
+        //behindMap.style.bottom = (footerTop - ( 0 + 160 )) + 'px';
+        behindMap.style.bottom = ( window.innerHeight- 100) + 'px';
 
 
         bibleMap.updateSize();
@@ -482,10 +489,14 @@ var adjustScrDiv = (function(){
         mapview3D.style.bottom = ( window.innerHeight- mapHeight ) + 'px';
 
 
-         behindMap.style.top = (footerTop - ( 62 + 100 )) + 'px';
+
          behindMap.style.left = (window.innerWidth - 150) + 'px';
          behindMap.style.right = 0 + 'px';
-         behindMap.style.bottom = (footerTop - ( 0 + 160 )) + 'px';
+
+         //behindMap.style.top = (footerTop - ( 62 + 100 )) + 'px';
+         behindMap.style.top = 0 + 'px';
+         //behindMap.style.bottom = (footerTop - ( 0 + 160 )) + 'px';
+        behindMap.style.bottom = ( window.innerHeight- 100) + 'px';
 
 
         var dummy  = document.getElementById('dummy');
