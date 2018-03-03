@@ -25,7 +25,7 @@
     <script type="text/javascript" src="biblemap/src/GMDFileReader.js?version=20170901"></script>
     <script type="text/javascript" src="biblemap/src/propertyDB.js?version=20170813"></script>
 
-    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20171221"></script>
+    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20180121"></script>
     <script type="text/javascript" src="biblemap/src/routePlay.js?version=20171205"></script>
     <script type="text/javascript" src="biblemap/src/trajectoryData.js?version=20170901"></script>
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170829"></script>
@@ -54,9 +54,9 @@
 
 
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/autocomplete_style.css?version=20170911">
-    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/popup.css?version=version=20170910">
-    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/tabMenu.css?version=version=20170916">
-    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/bubblePopup.css?version=version=20171210">
+    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/popup.css?version=20170910">
+    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/tabMenu.css?version=20170916">
+    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/bubblePopup.css?version=20171210">
     <!-- <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/biblemap.css?version=version=20170916"> -->
     <!-- <script type="text/javascript" src="biblemap/js/jquery-1.9.1.min.js"></script> -->
     <script type="text/javascript" src="biblemap/js/jquery.autocomplete.min.js"></script>
@@ -553,7 +553,7 @@
 
 
 <div>
-    <img src="biblemap/image/hideBible.png2017905" id="footerToggle" name="img" style="position:absolute; width:50px; height:12px;" onclick="toggleScrMap()">
+    <img src="biblemap/image/hideBible.png?version=2017905" id="footerToggle" name="img" style="position:absolute; width:50px; height:12px;" onclick="toggleScrMap()">
 </div>
 
 <div id="bubblePopup" class="ol-popup" style="font-size:1.1em;">
@@ -1230,7 +1230,7 @@ function sync3DMapTo2DMap() {
 
         // dvPopupCloser.onclick();
         popup2D.closer.onclick();
-        adjustScrDiv.setIsFullScr("false");
+        // adjustScrDiv.setIsFullScr("true");
         var movePath = $("#movePath").val();
         var index = Number(movePath);
         var extent = trajectoryData.getExtent(index);
@@ -1271,7 +1271,8 @@ function sync3DMapTo2DMap() {
         closePopup3D();
         closePopup2D();
 
-        showPathExplain();
+        // showPathExplain();
+        adjustScrDiv.setIsFullScr("true");
 
         measureDistance.removeMeasureDraw();
 

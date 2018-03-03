@@ -748,7 +748,8 @@ function eventHistoryAdmin( newVal ){
      */
 
     changeHistoryAdmin( newVal );
-    showHistoryAdmin();
+    // showHistoryAdmin();
+    infoHistoryAdmin();
 
     setViewMode2D();
 }
@@ -775,16 +776,31 @@ function writeInfoTabHistoryAdmin(){
 }
 
 
+function infoHistoryAdmin(){
+    // showHistoryAdmin();
+
+    $("#tab4").scrollTop(0);
+    tabMenu.selectTab('tab4Menu');
+
+    adjustScrDiv.setIsFullScr("true");
+
+    var val = document.getElementById("historyAdmin").value;
+    changeHistoryAdmin( val );
+
+    setViewMode2D();
+}
+
+
 function showHistoryAdmin(){
 
     writeInfoTabHistoryAdmin();
 
     // infoTab.innerHTML = obj.text;
     adjustScrDiv.setIsFullScr("false");
+    // adjustScrDiv.setIsFullScr("true");
 
     $("#tab4").scrollTop(0);
     tabMenu.selectTab('tab4Menu');
-
 }
 
 
