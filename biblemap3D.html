@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -41,7 +42,7 @@
 
     <script type="text/javascript" src="biblemap/src/distanceMeasureControl.js?version=20170820"></script>
     <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170905"></script>
-    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20171230"></script>
+    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20180201"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
     <script type="text/javascript" src="biblemap/src/jQueryRotate.js"></script>
     <!-- <script type="text/javascript" src="biblemap/vendor/jquery-1.8.1.js"></script> -->
@@ -50,7 +51,7 @@
     <script type="text/javascript" src="biblemap/src/jquery.collapse_storage.js"></script>
     <script type="text/javascript" src="biblemap/src/jquery.collapse_cookie_storage.js"></script>
 
-    <script type="text/javascript" src="biblemap/src/windowAdjust.js?version=20180101"></script>
+    <script type="text/javascript" src="biblemap/src/windowAdjust.js?version=20180201"></script>
 
 
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/autocomplete_style.css?version=20170911">
@@ -313,16 +314,16 @@
                 <input type="button" class="button" value="검색" style="position: absolute; margin-left: 2px;" onclick="searchBibleWord()">
             </div>
 
-             <div style="height: 14px; background: url(biblemap/image/horizon-line_2.png);"></div>
+            <div style="height: 14px; background: url(biblemap/image/horizon-line_2.png);"></div>
 
             <div class="content" style ="position: absolute; width:198px; top: 130px; height: 85px; background-color:#FFFFFF;">
                 <span style="margin-left: 18px;  font-size:12px;">지명</span>
                 <input type="text" name="currency" class="biginput" id="biblePlace" size="16"
-                       style="padding-left: 5px; margin-left: 3px; width: 110px; height:20px; font-size:12px; font:'Nanum Gothic'; " value="갈릴리 호수" onkeypress="if(event.keyCode==13) searchBiblePlace();">
+                       style="padding-left: 3px; margin-left: 0px; height:21px; font-size:12px; font:'Nanum Gothic'; " value="갈릴리 호수" onkeypress="if(event.keyCode==13) searchBiblePlace();">
                 <input type="button" class="button" value="검색" style="position: absolute; vertical-align:center; margin-left: 2px;" onclick="searchBiblePlace()">
                 <div style="height: 4px"></div>
                 <!-- <div id ="searchedPoiList" rows= "5" style="border:1px solid grey; margin-left:10px; height: 60px; width: 163px; font-size:13px ; clear: both;"></div>  -->
-                <select id ="searchedPoiList" name="searchedPoiList" size='3' style="overflow:hidden; margin-left:35px; width: 123px; height:52px; border: 1px solid #D9D9D9; " ></select>
+                <select id ="searchedPoiList" name="searchedPoiList" size='3' style="overflow:hidden; padding-left: 3px; margin-left:41px; width: 143px; height:52px; border: 1px solid #D9D9D9; " ></select>
             </div>
 
         </div>
@@ -367,7 +368,7 @@
             <h3>2D/3D 지도보기</h3>
             <div class="content" style ="background-color:#FFFFFF; height: 275px;">
                 <div name ="historyBar" style="margin-left:0px; width: 180px; height: 110px; border: 1px solid rgb(217, 217, 217);">
-                <br>
+                    <br>
                     <input type="radio" id="radioView2D"
                            name="radio2D3D" value="chkView2D" style="margin-left:10px;" checked="checked" >
                     <label for="radioView2D">2D View</label>
@@ -392,7 +393,7 @@
         <br>
         <br>
 
-        <!--
+<!--
         <div>
             <br>
             &nbsp&nbsp<input id="createTrajectory" type ="button" value="생성" onclick="createTrajectory()" >
@@ -401,8 +402,7 @@
             <div id = "zoomLevel">ZoomLevel</div>
             <div id = "mousePosition">MousePos</div>
         </div>
-        -->
-
+-->
         <br>
 
         <div id ="dummy" class = "dummy" style="position: absolute; top:56px; width: 198px; height: 200px;">
@@ -452,8 +452,8 @@
            onclick="map2DZoomOut()">
 
     <input id="measureBtn2D" type="image" src="biblemap/image/measure_btn.png?version=20171201" style="border:1px solid grey; width:23px; height: 23px; position: absolute;" onclick="mesaureToggleBtn()">
-           <!-- onmouseover="this.src='biblemap/image/measure_btn_.png';"  onmouseout="this.src='biblemap/image/measure_btn.png';"
-           onclick="mesaureToggleBtn()">  -->
+    <!-- onmouseover="this.src='biblemap/image/measure_btn_.png';"  onmouseout="this.src='biblemap/image/measure_btn.png';"
+    onclick="mesaureToggleBtn()">  -->
     <input id="beforePoiBtn2D" type="image" src="biblemap/image/before_poi2.png?version=20171201" style="border:1px solid grey; position: absolute; width:23px; height:23px; "
            onmouseover="this.src='biblemap/image/before_poi2_.png?version=20171203';"
            onmouseout="this.src='biblemap/image/before_poi2.png?version=20171202';"
@@ -518,7 +518,7 @@
 </div>
 
 <!-- <div id="behindMap2D" class="mapview" style="position:absolute; display:none;"> -->
- <div id="behindMap2D" class="mapview" style="position:absolute;">
+<div id="behindMap2D" class="mapview" style="position:absolute;">
 
 </div>
 
@@ -606,22 +606,22 @@
     }
 
 
-/*
-    function startMap3DAddLayer(){
-        setCursorByID('map','wait');
-        setCursorByID('map3D','wait');
+    /*
+     function startMap3DAddLayer(){
+     setCursorByID('map','wait');
+     setCursorByID('map3D','wait');
 
-        map3D.memWholeLayerAddToMap();
-        map3D.setGroundWholeLayer();
+     map3D.memWholeLayerAddToMap();
+     map3D.setGroundWholeLayer();
 
-        map3D.view3DTilt(1.1);
+     map3D.view3DTilt(1.1);
 
-        setCursorByID('map','default');
-        setCursorByID('map3D','default');
+     setCursorByID('map','default');
+     setCursorByID('map3D','default');
 
-        setGroundLayerTimer = setInterval( setGroundPopup, 3000 );
-    }
-    */
+     setGroundLayerTimer = setInterval( setGroundPopup, 3000 );
+     }
+     */
 
     function startSearchBibleWithTimer(){
         startSearchBibleTimer = setInterval( startSearchBible, 500);
@@ -750,7 +750,7 @@
 
         if( curMapViewMode != 'chkView2D' ) {
             // if( map3D.setGroundPopup() == true )
-               //  clearInterval( setGroundLayerTimer );
+            //  clearInterval( setGroundLayerTimer );
             popup3DSelfGroundPosition();
         }
 
@@ -808,16 +808,16 @@
             adjustScrDiv.view2D3DCtrl( radioValue );
             // map3D.reflectLayersToMap3D();
             /*
-            if (radioValue == "chkView2D") {
-                // ConsoleLog("chkView2D!!!");
-                adjustScrDiv.view2D3DCtrl( radioValue );
-            } else if (radioValue == "chkView3D") {
-                // ConsoleLog("chkView3D!!!");
+             if (radioValue == "chkView2D") {
+             // ConsoleLog("chkView2D!!!");
+             adjustScrDiv.view2D3DCtrl( radioValue );
+             } else if (radioValue == "chkView3D") {
+             // ConsoleLog("chkView3D!!!");
 
-            } else if (radioValue == "chkViewAll") {
-                ConsoleLog("chkViewAll!!!");
-            }
-            */
+             } else if (radioValue == "chkViewAll") {
+             ConsoleLog("chkViewAll!!!");
+             }
+             */
         });
 
     });
@@ -829,7 +829,7 @@
         // map3D.view3DTilt( 1.1 );
 
         map3D.view.animate({
-           rotation: 0,
+            rotation: 0,
             duration : 500
         });
     };
@@ -1060,56 +1060,56 @@
 
 
     ///////////////////////////////////////
-function sync2DMapTo3DMap() {
-    // bibleMap.updateSize();
+    function sync2DMapTo3DMap() {
+        // bibleMap.updateSize();
 
-    var zoom = bibleMapManager.getView().getZoom();
-    if( typeof( zoom ) != 'undefined') {
-    }else{
-        zoom = 14;
+        var zoom = bibleMapManager.getView().getZoom();
+        if( typeof( zoom ) != 'undefined') {
+        }else{
+            zoom = 14;
+        }
+
+        var center = bibleMapManager.getView().getCenter();
+
+        map3D.view.setZoom(zoom + 1);
+        map3D.view.setCenter(center);
+
+        bibleMap.updateSize();
+
     }
 
-    var center = bibleMapManager.getView().getCenter();
+    function mesaureToggleBtn() {
 
-    map3D.view.setZoom(zoom + 1);
-    map3D.view.setCenter(center);
+        var img1 = "biblemap/image/measure_btn.png";
+        var img2 = "biblemap/image/measure_btn_toggle.png";
 
-    bibleMap.updateSize();
+        var measureBtn = document.getElementById("measureBtn2D");
 
-}
+        var measureMode = measureDistance.toggleMeasureDistance();
 
-function mesaureToggleBtn() {
-
-    var img1 = "biblemap/image/measure_btn.png";
-    var img2 = "biblemap/image/measure_btn_toggle.png";
-
-    var measureBtn = document.getElementById("measureBtn2D");
-
-    var measureMode = measureDistance.toggleMeasureDistance();
-
-    if( measureMode == true )
-        measureBtn.src = img2;
-    else
-        measureBtn.src = img1;
-}
-
-
-function sync3DMapTo2DMap() {
-    // bibleMap.updateSize();
-
-    var zoom = map3D.view.getZoom();
-    if( typeof( zoom ) != 'undefined' ) {
-    }else{
-        zoom = 16;
+        if( measureMode == true )
+            measureBtn.src = img2;
+        else
+            measureBtn.src = img1;
     }
 
-    var center = map3D.view.getCenter();
 
-    bibleMapManager.getView().setZoom(zoom - 1);
-    bibleMapManager.getView().setCenter(center);
+    function sync3DMapTo2DMap() {
+        // bibleMap.updateSize();
 
-    bibleMap.updateSize();
-}
+        var zoom = map3D.view.getZoom();
+        if( typeof( zoom ) != 'undefined' ) {
+        }else{
+            zoom = 16;
+        }
+
+        var center = map3D.view.getCenter();
+
+        bibleMapManager.getView().setZoom(zoom - 1);
+        bibleMapManager.getView().setCenter(center);
+
+        bibleMap.updateSize();
+    }
 
 
     var downloadGeometries = function(){
@@ -1143,20 +1143,20 @@ function sync3DMapTo2DMap() {
                 // map3D.view3DTilt(1.1);
                 startSearchBibleWithTimer();
                 /*
-                searchBibleChapter( function(){
-                    layerManager.layerContainer.totalCount += bibleMapPolygonLayers.length;
-                    for( var pid in bibleMapPolygonLayers ) {
-                        var layer = bibleMapPolygonLayers[ pid ];
-                        ConsoleLog( "layer.url ==> " + layer.url );
-                        new GMDFileDownload( bibleMap, null, layer.url, layer.order, layer.style, layerManager, function( ){
-                            changeHistoryAdmin( historyAdmin.value );
-                            downloadTrajectoryData();
+                 searchBibleChapter( function(){
+                 layerManager.layerContainer.totalCount += bibleMapPolygonLayers.length;
+                 for( var pid in bibleMapPolygonLayers ) {
+                 var layer = bibleMapPolygonLayers[ pid ];
+                 ConsoleLog( "layer.url ==> " + layer.url );
+                 new GMDFileDownload( bibleMap, null, layer.url, layer.order, layer.style, layerManager, function( ){
+                 changeHistoryAdmin( historyAdmin.value );
+                 downloadTrajectoryData();
 
-                            startMap3DAddLayerWithTimer();
-                        });
-                    }
+                 startMap3DAddLayerWithTimer();
+                 });
+                 }
 
-                } );*/
+                 } );*/
 //                startSearchBibleWithTimer();
 
                 $("#bibleWord").focus();
@@ -1394,7 +1394,7 @@ function sync3DMapTo2DMap() {
     });
 
 
-   map3D.clickEvent( function(evt){
+    map3D.clickEvent( function(evt){
         var clickedPos = evt.coordinate;
 
         // ConsoleLog( "Map3D Click!!!! ");
@@ -1413,7 +1413,7 @@ function sync3DMapTo2DMap() {
             // moveToMap3DWithCheck3DShow( poiObj.x, poiObj.y );
         }
 
-     });
+    });
 
 
     bibleMapManager.singleClickEvent( function(evt){
@@ -1487,11 +1487,11 @@ function sync3DMapTo2DMap() {
         setRotateNorth();
 
         var pivot = { x:4444090.267634998,
-                        y: 3058088.2612847225,
-                        z: 3391385.4960272433 };
+            y: 3058088.2612847225,
+            z: 3391385.4960272433 };
         var axis = {  x: -0.5668782255161677,
-                     y: 0.8238016007726867,
-                    z: -1.9428902930940  };
+            y: 0.8238016007726867,
+            z: -1.9428902930940  };
 
 
         // map3D.view3DTilt_( 1.1, pivot );
@@ -1503,7 +1503,7 @@ function sync3DMapTo2DMap() {
         var zoom3D = map3D.view.getZoom();
         var view2D3D = adjustScrDiv.getCurrent2D3DString();
         if( view2D3D == 'chkViewAll' || view2D3D == 'chkView3D'){
-           moveTo( map3D.view, [posX, posY ], zoom3D );
+            moveTo( map3D.view, [posX, posY ], zoom3D );
         }
     }
 
@@ -1816,7 +1816,7 @@ function sync3DMapTo2DMap() {
         }
 
         function clearBtn( idx ){
-           var btn = btnArr[idx];
+            var btn = btnArr[idx];
             btn.src = imgSrc1;
             btn.setAttribute('clicked', "false" );
         }
@@ -1835,7 +1835,7 @@ function sync3DMapTo2DMap() {
 
             var adjustLevel = level - minLevel;
 
-         //   clearAllBtn();
+            //   clearAllBtn();
 
             if( clickedNumber > -1 )
                 clearBtn( clickedNumber );

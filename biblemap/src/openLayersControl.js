@@ -806,11 +806,13 @@ function createLayer( source  ) {
          this.layerManager = new LayerManager();
          this.view = view;
 
+         var collControls = new ol.Collection();
+
          this.map = new ol.Map({
              overlays: [overlay],
              target: targetMap,      // taret: 'map'
 
-             /*
+        /*
              controls: ol.control.defaults({
                  attribution: false,
                  attributionOptions: ({    // @type {olx.control.AttributionOptions}
@@ -818,7 +820,10 @@ function createLayer( source  ) {
                  })
              }).extend([ this.scaleLineControl ]),
              */
-             controls : [ ],
+
+             controls: collControls.extend([ this.scaleLineControl ]),
+
+             // controls : [ ],
              view: this.view
          });
 
@@ -1611,6 +1616,10 @@ function createLayer( source  ) {
              var poiObj = popupPoiArray[0];
              //this.create3DLabelLayer( name, posX, posY );
              this.create3DLabelLayer( poiObj.biblePlace, poiObj.x, poiObj.y );
+         };
+
+         this.getMap = function () {
+             return this.map;
          };
 
 

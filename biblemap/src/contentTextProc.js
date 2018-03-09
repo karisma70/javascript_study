@@ -513,7 +513,8 @@ function requestPoiContentAndShow( poiObj, popup2D, popup3D ) {
     poiContentsToTab = function(){
 
         var infoTab = document.getElementById( 'tab3' );
-        infoTab.innerHTML = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + focusPoiObj.id + ')\" style=\"text-decoration:none; font-weight:bold; color: #9C1AC8 \" >' + "[ " + poiText + " ]  " +  '</a>';
+        // infoTab.innerHTML = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + focusPoiObj.id + ')\" style=\"text-decoration:none; font-weight:bold;' + "font-size:\'20px;\'" + 'color: #9C1AC8 \" >' + "[ " + poiText + " ]  " +  '</a>';
+        infoTab.innerHTML = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + focusPoiObj.id + ')\" style=\"text-decoration:none; font-weight:bold;' + "font-size:\'30px\';" + 'color: #000000 \" >' + "[ " + poiText + " ]  " +  '</a>';
 
         var infoObj = { // title : poiText,
             content : infoText

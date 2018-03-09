@@ -376,6 +376,7 @@ var adjustScrDiv = (function(){
 
 
         bibleMap.updateSize();
+        map3D.map.updateSize();
     }
 
     function normalScrMap(){
@@ -506,6 +507,7 @@ var adjustScrDiv = (function(){
         dummy.style.top = (window.innerHeight - 202) + 'px';
 
         bibleMap.updateSize();
+        map3D.map.updateSize();
     }
 
 
