@@ -47,11 +47,78 @@ function searchBibleWord(){
 }
 
 
+function mobileSearchBibleWord(){
+    if( dvBibleWord.value == "" ){
+        return;
+    }
+
+    // saveSearchWordsToStorage();
+
+    // adjustScrDiv.setIsFullScr("false");
+
+    var searchWord = dvBibleWord.value;
+    // searchWord = " "+removeSpaceInWord( searchWord );
+    searchWord = removeSpaceInWord( searchWord );
+
+    var searchParam = {
+        type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
+        option: {}
+    };
+    searchParam.option.content= { $regex : searchWord };   // db.getCollection('bible').find({content: { $regex : "바울" } } );
+
+    beforeChapterSearchParam = { type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
+        option: { "title": "",
+            "chapter" : ""
+        }
+    };
+
+    tabMenu.selectTab('tab2Menu');
+
+    reqeustAndShowContents( '#tab2', searchParam, -1, function( param, resObj ){
+        if( resObj.length < 1 ) {
+            ConsoleLog( "검색결과가 없어서 재검색!!!");
+            var placeWord = param.option.content.$regex;
+            var biblePlace = layerManager.getPoiByName(placeWord).biblePlace;
+            param.option.content = {$regex: biblePlace};
+
+            reqeustAndShowContents( '#tab2', param, -1, function( param, resObj ){
+                // moveToPlaceByWord( param.option.content.$regex );
+            } );
+        } else {
+            // moveToPlaceByWord( param.option.content.$regex );
+        }
+    } );
+
+    $("#menu").removeClass("open");
+
+}
+
+
+
+function mobileDecreaseBibleChapter(){
+    var chapter = parseInt( dvBibleChapter.value);
+    chapter -= 1;
+    dvBibleChapter.value = String( chapter );
+    // mobileSearchBibleChapter();
+    // $("#menu").removeClass("open");
+    makeSearchChapterParam();
+}
+
+
 function decreaseBibleChapter(){
     var chapter = parseInt( dvBibleChapter.value);
     chapter -= 1;
     dvBibleChapter.value = String( chapter );
     searchBibleChapter();
+}
+
+function mobileIncreaseBibleChapter(){
+    var chapter = parseInt( dvBibleChapter.value);
+    chapter += 1;
+    dvBibleChapter.value = String( chapter );
+    // mobileSearchBibleChapter();
+    // $("#menu").removeClass("open");
+    makeSearchChapterParam();
 }
 
 function increaseBibleChapter(){
@@ -61,9 +128,7 @@ function increaseBibleChapter(){
     searchBibleChapter();
 }
 
-
-function searchBibleChapter( callback ){
-
+function makeSearchChapterParam(){
     var searchParam = {
         type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
         option: {}
@@ -123,6 +188,35 @@ function searchBibleChapter( callback ){
         // consistSearchOpt( "chapter", dvBibleChapter );
         searchParam.option["chapter"] = parseInt( dvBibleChapter.value );
     }
+
+    return searchParam;
+}
+
+
+function mobileSearchBibleChapter( callback ){
+
+    var searchParam = makeSearchChapterParam();
+
+    saveSearchWordsToStorage();
+
+    $("#menu").removeClass("open");
+
+    tabMenu.selectTab('tab1Menu');
+
+    reqeustAndShowContents('#tab1', searchParam, -1, function(){
+        // adjustScrDiv.setIsFullScr("false");
+        if( callback ){
+            callback();
+        }
+    } );
+
+
+
+}
+
+function searchBibleChapter( callback ){
+
+    var searchParam = makeSearchChapterParam();
 
     saveSearchWordsToStorage();
 
