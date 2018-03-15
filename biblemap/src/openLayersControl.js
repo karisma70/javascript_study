@@ -798,6 +798,8 @@ function createLayer( source  ) {
 
      var tempLineLayer = null;
      var tempLineInteract = null;
+     var bingMapSource = null;
+     var bingMapDrawInter = null;
 
      function MapManager(overlay, targetMap, view) {
          this.scaleLineControl = new ol.control.ScaleLine();
@@ -837,16 +839,18 @@ function createLayer( source  ) {
          function InitWmsLayer( paramMap) {
              // var wmsDemLayer = createLayer( new ol.source.Stamen( { layer: 'terrain-background' }) ) ;
 
+             bingMapSource = new ol.source.BingMaps({
+                 key: 'Aj2EBKlpTb_8cxuPEs0OHBBoiplb0HYYaOb8DVHTyCK7dduQSzMTv1i9gb4WwnP2',
+                 imagerySet: "Aerial"
+                 // use maxZoom 19 to see stretched tiles instead of the BingMaps
+                 // "no photos at this zoom level" tiles
+                 // maxZoom: 19
+             });
+
              var wmsDemLayer = new ol.layer.Tile({
                  visible: false,
                  preload: Infinity,
-                 source: new ol.source.BingMaps({
-                     key: 'Aj2EBKlpTb_8cxuPEs0OHBBoiplb0HYYaOb8DVHTyCK7dduQSzMTv1i9gb4WwnP2',
-                     imagerySet: "Aerial"
-                     // use maxZoom 19 to see stretched tiles instead of the BingMaps
-                     // "no photos at this zoom level" tiles
-                     // maxZoom: 19
-                 })
+                 source: bingMapSource
              });
 
 
@@ -909,6 +913,12 @@ function createLayer( source  ) {
                  });
 
                  callBack(evt);
+             });
+         };
+
+         this.mapEventPostcompose = function( callback ){
+             this.map.on('postcompose', function(evt){
+                 callback( evt );
              });
          };
 
@@ -996,28 +1006,8 @@ function createLayer( source  ) {
 
                  interactionStyleCallback( vertices );
 
-                 /*
-                 geometry.forEachSegment(function(start, end) {
-                     var dx = end[0] - start[0];
-                     var dy = end[1] - start[1];
-                     var rotation = Math.atan2(dy, dx);
-                     // arrows
-                     styles.push(new ol.style.Style({
-                         geometry: new ol.geom.Point(end),
-                         image: new ol.style.Icon({
-                             //  src: 'https://openlayers.org/en/v4.2.0/examples/data/arrow.png',
-                             src: 'image/arrow.png',
-                             anchor: [0.75, 0.5],
-                             rotateWithView: true,
-                             rotation: -rotation
-                         })
-                     }));
-                 });
-                 */
-
                  return styles;
              };
-
 
              var tempVtr = new ol.source.Vector();
 
@@ -1030,11 +1020,13 @@ function createLayer( source  ) {
 
              tempLineInteract = new ol.interaction.Draw({
                  source: tempVtr,
-                 type: /** @type {ol.geom.GeometryType} */ ('LineString')
+                 type: ('LineString')
              });
 
              this.map.addInteraction( tempLineInteract );
+
          };
+
 
          this.removeTrajectoryInteraction = function(){
              if( tempLineLayer ) {

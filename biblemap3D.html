@@ -26,6 +26,8 @@
     <script type="text/javascript" src="biblemap/src/GMDFileReader.js?version=20170901"></script>
     <script type="text/javascript" src="biblemap/src/propertyDB.js?version=20170813"></script>
 
+    <script type="text/javascript" src="biblemap/src/makeHrefText.js?version=20180121"></script>
+    <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20180121"></script>
     <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20180121"></script>
     <script type="text/javascript" src="biblemap/src/routePlay.js?version=20171205"></script>
     <script type="text/javascript" src="biblemap/src/trajectoryData.js?version=20170901"></script>
@@ -980,18 +982,21 @@
 
     var bibleChapterList = new BibleChapterList();
 
-    bibleChapterList.requestBibleChapter( function(){
-        for( var order = 1; order <= bibleChapterList.getCount(); order ++  ) {
-            var chapter = document.createElement("option");
-            var obj =  bibleChapterList.getChapterByNumber( order );
-            chapter.text = obj.title;
-            chapter.value = obj.bookNumber;
-            dvBibleTitle.appendChild( chapter );
-        }
+    bibleChapterList.setCallback( function(){
+            downloadGeometries();
 
-        getSearchWordsFromStorage();
-    } );
+            for( var order = 1; order <= bibleChapterList.getCount(); order ++  ) {
+                var chapter = document.createElement("option");
+                var obj =  bibleChapterList.getChapterByNumber( order );
+                chapter.text = obj.title;
+                chapter.value = obj.bookNumber;
+                dvBibleTitle.appendChild( chapter );
+            }
 
+            getSearchWordsFromStorage();
+    });
+
+    // bibleChapterList.requestBibleChapter( );
 
     var bibleMapManager = createMapManager( popup2D.overlay, 'map' );
     var map3D = init3dMap(  popup3D.overlay );
@@ -1709,7 +1714,8 @@
     window.onload = function(){
         adjustScrDiv.normalScrMap();
 
-        downloadGeometries();
+        // downloadGeometries();
+        bibleChapterList.requestBibleChapter( );
     };
 
     window.onresize = function(){

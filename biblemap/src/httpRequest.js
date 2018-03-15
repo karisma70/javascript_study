@@ -118,3 +118,134 @@ var httpRequest = (function(){
         */
     }
 }());
+
+
+function requestPoiInfo( poiObj, recvFunc,  noRecvFunc){
+    var searchParam = {
+        type: "Poi",     // book, chapter, paragraph 등으로 구성된 검색
+        option: {}
+    };
+
+    // searchParam.option["name"] = poiName;
+    searchParam.option["name"] = poiObj.biblePlace;
+    if( poiObj.title != "" ){
+        searchParam.option["title"] = poiObj.title;
+    }
+
+    var jsonStr = JSON.stringify( searchParam );
+
+    httpRequest("POST", jsonStr, function( http ) {
+        var resObj = JSON.parse( http.responseText );
+
+        if( resObj.result != "undefined" && resObj.result == "fail" ){
+            ConsoleLog("requestPoiInfo() Fail!!!   param: " + jsonStr );
+            if( noRecvFunc ){
+                noRecvFunc( resObj );
+            }
+            return;
+        }
+
+        if (resObj.length != "undefined") {    // 배열로 받아올 경우
+            if( resObj.length < 1){
+                noRecvFunc( resObj );
+                return;
+            }
+            for( idx in resObj ){
+                var poiObj = resObj[idx];
+                recvFunc( poiObj );
+                break;                  // 여러개 받아오더라도 하나만 처리하도록 한다.
+            }
+        }
+        else{
+            recvFunc( resObj );
+        }
+
+    });
+}
+
+
+var BibleChapterList = function() {
+
+    var chapterArray = [];
+    var callbackFunc = null;
+
+    this.setCallback = function ( callback ){
+        callbackFunc = callback;
+    };
+
+    setChapterArray = function(  objList ){
+        // chapterArray = [];
+
+        for (var idx in objList ) {
+            var chapter = objList[idx];
+            chapterArray.push( chapter );
+        }
+    };
+
+    this.getCount = function(){
+        return chapterArray.length;
+    };
+
+    this.getChapterByNumber = function( number ){
+        for( var idx in  chapterArray ){
+            var chapter = chapterArray[ idx ];
+            if( chapter.bookNumber == number ){
+                return chapter;
+            }
+        }
+        return null;
+    };
+
+    this.getBookNumberByName = function( chapterName ){
+        for( var idx in chapterArray ){
+            var chapter = chapterArray[idx];
+            if( chapter.title == chapterName ){
+                return chapter.bookNumber;
+            }
+        }
+        return -1;
+    };
+
+
+    this.getChapterByShortName = function( chapterName ){
+        for( var idx in chapterArray ){
+            var chapter = chapterArray[idx];
+            if( chapter.shortTitle == chapterName ){
+                return chapter;
+            }
+        }
+        return -1;
+    };
+
+    // this.requestBibleChapter = function( callback ){
+    this.requestBibleChapter = function( ){
+        var searchParam = {
+            type: "ChapterList",
+            option: {}
+        };
+
+        var jsonStr = JSON.stringify( searchParam );
+        // ConsoleLog( "send param : " + jsonStr );
+
+        httpRequest("POST", jsonStr, function( http ) {
+            var resObj = JSON.parse(http.responseText);
+
+            if( resObj.result != "undefined" && resObj.result == "fail" ){
+                ConsoleLog( "request ChapterList!!! " + resObj.error );
+            }
+            else {
+                if (resObj.length != "undefined") {    // 배열로 받아올 경우
+                    setChapterArray( resObj );
+                }else{
+                    ConsoleLog( "Bible ChapterList Receive Error!!");
+                }
+            }
+
+            if( callbackFunc )
+                callbackFunc();
+
+        }) ;
+
+    };
+
+};
