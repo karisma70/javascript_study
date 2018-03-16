@@ -95,6 +95,8 @@ function mobileRequestPoiContentAndShow( poiObj, popup2D ) {
 
     showTextPoi = function() {      // tabMenu 에서 정보 보여주기
 
+        footerMenu.middle();
+
         poiContentsToTab();
 
         $("#tab3").scrollTop(0);
@@ -103,6 +105,9 @@ function mobileRequestPoiContentAndShow( poiObj, popup2D ) {
     };
 
     showYoutubePoi2D = function() {
+
+        footerMenu.bottom();
+
         // var scriptRef = "<a href =\"javascript:showBaseInfoPoi()\"' >";
         var scriptRef = "<a href =\"javascript:showBaseInfoPoi2D()\" >";
         var foldIcon = "<img src=\"biblemap/image/fold-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">";

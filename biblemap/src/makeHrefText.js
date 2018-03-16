@@ -105,7 +105,7 @@ function makeStrongInText( LayerManager, searchWord, recvObj ) {
     }
 
 
-    if( boolFind == false){
+    if( searchWord.length > 0 &&  boolFind == false){
         bibleText = makeHrefWordInText( LayerManager, searchWord, bibleTitle, bibleText, "#DF0101", false );  // 보라색, 검색어이긴 하지만 지도 데이터에 없을때 빨간색
     }
 

@@ -41,6 +41,7 @@
 
     <script type="text/javascript" src="biblemap/src/m_searchBible.js?version=20170901"></script>
     <script type="text/javascript" src="biblemap/js/jquery.autocomplete.min.js"></script>
+    <script type="text/javascript" src="biblemap/src/m_windowAdjust.js"></script>
 
 
 
@@ -130,6 +131,14 @@
             border: 1px solid rgb(217, 217, 217);
         }
 
+        .divContent{
+            line-height: 1.7em;
+            font-size:1.3em ;
+            clear: both;
+            /* text-align:center;  */
+            font-family: 'Nanum Gothic';
+        }
+
     </style>
 
 </head>
@@ -207,15 +216,14 @@
         <li id="tab3Menu" rel="tab3">지명정보</li>
 
     </ul>
-    <div id ="tab_contain" class="tab_container"  >
-        <div id="tab1" class="tab_content">
-            <!-- <div id = "bibleContentTitle"><span style="position: absolute; left: 3px;  font-size:1.3em;">마태복음 1장</span></div>
-            <div id="bibleContent" style="position: absolute; top: 20px; left: 3px;  font-size:1.3em;">
-            Waiting....
-            </div> -->
-            Waiting....
+    <div id ="tab_contain" class="tab_container" >
+        <!-- <div id = "bibleContentTitle" style="font-size:1.3em; text-align:center; font:'Nanum Gothic';">마태복음 1장</div>  -->
+        <div id = "tab1Title" class="divContent" style="padding-left: 40px;  font-size: 1.4em; top:-6px; overflow-x:hidden; border-bottom: 1px solid rgb(216, 216, 216);" >
         </div>
-        <div id="tab2" class="tab_content" >
+
+        <div id="tab1" class="tab_content" style="padding-left: 5px;">
+        </div>
+        <div id="tab2" class="tab_content" style="padding-left: 5px;" >
             검색결과가&nbsp;없습니다 <br> 성경의&nbsp;단어&nbsp;검색&nbsp;버튼을&nbsp;클릭해&nbsp;주세요
         </div>
         <div id="tab3" class="tab_content" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
@@ -223,6 +231,9 @@
         </div>
 
     </div>
+    <input id ="footUpArrow" type="image" src="biblemap/image/up_arrow.png?version=20170905" style="position: absolute; left: 250px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerUp()">
+    <input id ="footDownArrow" type="image" src="biblemap/image/down_arrow.png?version=20170905" style="position: absolute; left: 280px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerDown()">
+
     <!-- .tab_container -->
 </div>
 
@@ -235,16 +246,40 @@
 <script>
 
     setDebug( true );
-
-    /*
-    var dvSearchedPoiList = document.getElementById('searchedPoiList');
-    var tempString1 = "<a href =\'javascript:clearSearchPlaceWord()\' style=\'text-decoration:none; color:rgb(0,0,0); text-align : left;\'>베다니1</a><br>";
-    var tempString2 = "<a href =\'javascript:clearSearchPlaceWord()\' style=\'text-decoration:none; color:rgb(0,0,0); text-align : left;\'>베다니2</a><br>";
-    dvSearchedPoiList.innerHTML = tempString1+ tempString2 ;
-    */
-
     $("#searchedPoiList").hide();
 
+    var footerMenu = createFooterMenu();
+
+    function footerDown(){
+        var mode = footerMenu.getMode();
+        if( mode == "top"){
+            footerMenu.middle();
+        }
+        else if( mode == "middle"){
+            footerMenu.bottom();
+        }else if( mode == "bottom" ){
+            alert("!!!");
+        }
+    }
+
+    function footerUp(){
+        var mode = footerMenu.getMode();
+        if( mode == "bottom"){
+            footerMenu.middle();
+        }
+        else if( mode == "middle"){
+            footerMenu.top();
+        }else if( mode == "top" ){
+            alert("!!!");
+        }
+    }
+
+    function footerShow(){
+        var mode = footerMenu.getMode();
+        if( mode == "bottom" || mode == "hide" ){
+            footerMenu.middle();
+        }
+    }
 
     var downloadGeomTimer = null;
     var IsDownload = false;
@@ -380,6 +415,9 @@
         popup2D.closer.blur();
         popup2D.content.innerHTML = "";
 
+        if( footerMenu.getMode() == "middle" )
+            footerMenu.bottom();
+
         return false;
     };
 
@@ -434,11 +472,17 @@
 
         $("ul.tabs li").click(function () {
             selMenuString = $(this).text();
-            ConsoleLog( selMenuString );
+            ConsoleLog( "tab Click !!! select : " + selMenuString );
             $("ul.tabs li").removeClass("active").css("color", "#FFFFFF");
             $(this).addClass("active").css("color", "#000000");
             $(".tab_content").hide();
+            if( selMenuString == "성경본문"){
+                $("#tab1Title").show();
+            }else{
+                $("#tab1Title").hide();
+            }
             var activeTab = $(this).attr("rel");
+            ConsoleLog( "tab Click !!! rel Active : " + activeTab );
             // $("#" + activeTab).fadeIn();
             $("#" + activeTab).show();
         });
@@ -463,6 +507,7 @@
 
     var tabMenu = createTabMenu();
 
+    /*
     var footer = document.getElementById('footer');
     var mapView = document.getElementById('map');
 
@@ -473,6 +518,7 @@
     var tab2 = document.getElementById("tab2");
     var tab3 = document.getElementById("tab3");
     var tab4 = document.getElementById("tab4");
+    */
 
 
     $(window).on("orientationchange", function(event) {
@@ -480,18 +526,21 @@
         if( window.matchMedia("(orientation: portrait)").matches){
             // alert("가로");
             console.log("세로");
-            middleFooter();
+            // middleFooter();
+            footerMenu.showControl();
         }else if( window.matchMedia("(orientation: landscape)").matches){
             // alert("세로");
             console.log("가로");
             setTimeout( function(){ window.scrollTo(0, 1); }, 100 );
-            middleFooter();
+            // middleFooter();
+            footerMenu.showControl();
         }
 
     });
 
     $(document).ready(function(){
-        middleFooter();
+        // middleFooter();
+        footerMenu.showControl();
         tabMenu.selectTab( 'tab1Menu');
 
         ConsoleLog("window.ready!!!");
@@ -499,49 +548,10 @@
 
 
     window.onresize = function(){
-        middleFooter();
+        // middleFooter();
+        footerMenu.showControl();
     };
 
-    function middleFooter(){
-        var mapHeight = window.innerHeight * 0.50;
-
-        mapView.style.left = 0 + 'px';
-        mapView.style.right = 0 + 'px';
-        mapView.style.top = 41 + 'px';
-        mapView.style.bottom = ( window.innerHeight- mapHeight +1 ) + 'px';
-
-        $("#footer").show();
-        footer.style.top = mapHeight + 1 + 'px';
-        footer.style.left = 0+'px';
-        footer.style.right = 0 +'px';
-        footer.style.bottom =  0 + 'px';
-
-        tabMenuBar.style.top = 5 +'px';
-        tabMenuBar.style.left = 0+'px';
-
-        tab_contain.style.top = 38 +'px';
-        tab_contain.style.left = 0+'px';
-        tab_contain.style.right = 0 + 'px';
-        tab_contain.style.bottom = 5 + 'px';
-
-        tab1.style.top = 0 +'px';
-        tab1.style.left = 0+'px';
-        tab1.style.right = 0 + 'px';
-        tab1.style.bottom = 5 + 'px';
-
-        tab2.style.top = 0 +'px';
-        tab2.style.left = 0+'px';
-        tab2.style.right = 0 + 'px';
-        tab2.style.bottom = 5 + 'px';
-
-        tab3.style.top = 0 +'px';
-        tab3.style.left = 15+'px';
-        tab3.style.right = 5 + 'px';
-        tab3.style.bottom = 5 + 'px';
-
-        bibleMap.updateSize();
-
-    }
 
     IsExistWord = function( array, word ) {
         for (var id in array ) {
@@ -593,12 +603,11 @@
 
             new GMDFileDownload( bibleMap, null, layer.url, layer.order, layer.style, layerManager, function( ){
                 layerManager.sortPoiWords();
-                 mobileSearchBibleChapter( );
+                 // mobileSearchBibleChapter( );
                 initTextAutoComplete();
             } );
         }
 
-       // mobileSearchBibleChapter();
     };
 
 
@@ -662,6 +671,9 @@
 
     function hideMenuAndMoveToPoiID( poiID ){
         $("#menu").removeClass("open");
+        if( footerMenu.getMode() == "top" || footerMenu.getMode() == "middle")
+            footerMenu.bottom();
+
         moveToPlaceByPoiID( poiID );
     }
 
@@ -670,6 +682,9 @@
     function moveToPlaceByPoiID( poiID ){
         if( poiID == null )
             return;
+
+        if( footerMenu.getMode() == "top" )
+            footerMenu.middle();
 
         var poiObj = layerManager.getPoiObjById( poiID );
 
