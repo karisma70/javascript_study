@@ -1,0 +1,36 @@
+.close {
+    width : 40px;
+    height : 40px;
+    position : absolute;
+    right : 0px;
+    /* left: 40px;  */
+    top : 0px;
+    z-index : 1;
+    /* background-image : url("http://s1.daumcdn.net/cfs.tistory/custom/blog/204/2048858/skin/images/close.png");  */
+    background-image : url("../image/m_menu_close.png");
+    /* background-size : 50%;  */
+    background-repeat : no-repeat;
+    background-position : center;
+    cursor : pointer;
+}
+#menu {
+    width : 250px;
+    height : 100%;
+    position : fixed;
+    top : 0px;
+    /* right : -152px;  */
+    left : -250px;
+    z-index : 10;
+    /* border : 1px solid #c9c9c9; */
+    border-right: 1px solid rgb(216, 216, 216);
+    background-color : white;
+    text-align : center;
+    transition: All 0.2s ease;
+    -webkit-transition: All 0.2s ease;
+    -moz-transition: All 0.2s ease;
+    -o-transition: All 0.2s ease;
+}
+#menu.open {
+    /* right : 0px;  */
+    left: 0px;
+}
