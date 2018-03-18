@@ -283,7 +283,7 @@ function showIntroBibleMap(  ){
 
 
     // dvInfoClose.style.top = winHeight - 60 + 'px';
-    dvInfoClose.style.left = ( winWidth - 80 ) + 'px';
+    dvInfoClose.style.left = ( winWidth - 90 ) + 'px';
     dvInfoClose.style.top = (winHeight - 70) + 'px';
     // dvInfoClose.style.right = winWidth - 20 + 'px';
     // dvInfoClose.style.bottom =  winHeight - 20 + 'px';
@@ -298,9 +298,9 @@ function showIntroBibleMap(  ){
     popupContent.innerHTML = "";
     // popupContent.innerHTML += poiText;
     // popupContent.innerHTML += lineImage + "<br>";
-    popupContent.innerHTML += '성경내용 안에는 하나님의 역사가 담겨있습니다 <br>';
+    popupContent.innerHTML += '성경에는 하나님의 역사가 담겨있습니다 <br>';
     popupContent.innerHTML += '하나님의 역사는 사실이며 따라서 성경본문에 등장하는 지명은 대부분 실제 존재하는 위치입니다 <br>';
-    popupContent.innerHTML += '성서지리에 대한 이해와 더불어 성경을 이해한다면 하나님에 대한 더욱 큰 확신과 믿음이 생길 것입니다  <br>';
+    popupContent.innerHTML += '성서지리에 대한 이해와 더불어 성경을 읽는다면 하나님에 대한 더욱 큰 확신과 믿음이 생길 것입니다  <br>';
     popupContent.innerHTML += '여러분들이 성경을 가까이 하며 하나님의 역사를 더욱 깊게 알기 원하신다면 성경지도 웹 서비스가 도움이 될 것입니다.</span>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
@@ -316,7 +316,14 @@ function showIntroBibleMap(  ){
     popupContent.innerHTML += '본 웹사이트에서 제공되는 위치정보는 일부 오류를 포함할 수 있음을 알려드리며, 공인된 정확한 정보가 수집되는 대로 수정할 것을 알려드립니다.</span>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '본 웹사이트는 비영리 단체인 \'Mission Wide\'에서 운영 및 관리되고 있으며, \'Mission Wide\'는 성경지리를 웹 서비스로 제공하는 비영리 단체입니다.</span>';
+    popupContent.innerHTML += '본 웹사이트는 \'Mission Wide\'가 개발 및 운영, 관리하고 있으며, \'Mission Wide\'는 성경지리를 웹 서비스로 제공하는 비영리 단체입니다.</span>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '\'Mission Wide\' 연락처 </span>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '이메일: missionwide@naver.com</span>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<a href= \"https://blog.naver.com/bible-map\" style=\"text-decoration:none; font-weight:bold; color:#464646;\">' + '블로그: blog.naver.com/bible-map</a></span>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
 

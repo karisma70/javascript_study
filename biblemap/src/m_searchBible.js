@@ -181,7 +181,7 @@ function appendReceiveMsg( tabID, resObj, strConvText, paragraph ){
         }
         strChapterLinkWithBibleContent = "<td width = \"25\" " + reverseColor + " >" + resObj.paragraph + "</td>" + "<td" + " " + reverseColor + ">" + strConvText + "</td>";
     }else if( tabID == '#tab2' ) {
-        strChapterLinkWithBibleContent = "<td width = \"75\" >" + '<a href= "javascript:requestBibleWithShortChapter( \'' + resObj.shortTitle + '\',' + resObj.chapter + ',' + resObj.paragraph + ' )\" ' +
+        strChapterLinkWithBibleContent = "<td width = \"82\" >" + '<a href= "javascript:requestBibleWithShortChapter( \'' + resObj.shortTitle + '\',' + resObj.chapter + ',' + resObj.paragraph + ' )\" ' +
             'style=\"text-decoration:none; font-weight:bold; color:#464646;\">'
             + resObj.shortTitle + " " + resObj.chapter + ":" + resObj.paragraph + "</a>" + "</td>"
             + "<td>" + strConvText + "</td>";
