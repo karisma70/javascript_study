@@ -15,6 +15,7 @@
     <!-- <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/popup.css?version=20170910">  -->
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/m_tabMenu.css?version=20170916">
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/bubblePopup.css?version=20171210">
+    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/m_popup.css?version=20170910">
 
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
@@ -148,12 +149,14 @@
 
     <div id="titlebar" style="position:absolute; left:0px; top:0px; height:40px;  background-color:rgb( 59, 89, 153  );">
         <h1 align="center" style="position:absolute; top: 5px; color:white; " >성경지도</h1>
-        <input type="image" src="biblemap/image/biblemap_logo.png" style="position:absolute; left:0px; top:0px; width:45px; height:45px; vertical-align:middle; border:0;" onclick="openMenu()">
+        <!-- <input type="image" src="biblemap/image/biblemap_logo.png" style="position:absolute; left:0px; top:0px; width:45px; height:45px; vertical-align:middle; border:0;" onclick="openMenu()">  -->
+        <input type="image" src="biblemap/image/m_menu_open.png" style="position:absolute; left:0px; top:0px; width:45px; height:45px; vertical-align:middle; border:0;" onclick="openMenu()">
+        <input id ="bibleMapLogo" type="image" src="biblemap/image/biblemap_logo.png" style="position:absolute; top:0px; width:43px; height:43px; vertical-align:middle; border:0;" onclick="showIntroBibleMap()">
     </div>
 </div>
 
-<div id="menu">
-    <div id="logo" style="height:40px; background-color:rgb( 59, 89, 153 );" onclick="showIntroBibleMap();">
+<div id="sideMenu">
+    <div id="logo" style="height:40px; background-color:rgb( 59, 89, 153 );" >
         <h1 align="center" style="position:absolute; height:35px; top: 5px; color:white; " >검색메뉴</h1>
     </div>
     <div class="close" >
@@ -165,7 +168,8 @@
         <input type="number" class="chapterNum" id ="bibleChapter" style="position: absolute; padding-left: 5px; left: 76px; top: 40px;  width: 40px; height: 30px; font-size:1.3em;" value="1">
         <span style="position: absolute; left: 120px; top: 44px; font-size:1.3em;">장</span>
         <input type="image" src="biblemap/image/right_arrow.png?version=20170905" style="position: absolute;  left: 145px;  top:40px; width:30px; height:30px; vertical-align:middle;" onclick="mobileIncreaseBibleChapter()">
-        <input type="image" src="biblemap/image/m_search_btn2.png?version=20170905" style="position: absolute; left: 190px;  top:40px; width:30px; height:30px; vertical-align:middle; "  onclick="mobileSearchBibleChapter()">
+        <input type="image" src="biblemap/image/m_search_btn2.png?version=20170905" style="position: absolute; left: 190px;  top:40px; width:30px; height:30px; vertical-align:middle; border:none;"
+                onclick="mobileSearchBibleChapter( footerMenuMiddle )">
     </div>
 
     <div name="searchWord" style="position:absolute; left: 10px; top:130px; width: 230px; height: 50px; ">
@@ -179,26 +183,26 @@
         <input id ="bibleWord" type="text"  class="customInput" maxlength="9" style="position: absolute; padding-left: 5px; padding-right:50px; left: 40px; width:150px; height:30px; font-size:1.3em; vertical-align:middle;"  value="바울"  />
 
         <input type="image" src="biblemap/image/m_text_clear.png?version=20170905" style="position: absolute; left: 163px;  top:3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="clearSearchBibleWord()">
-        <input type="image" src="biblemap/image/m_search_btn2.png?version=20170905" style="position: absolute; left: 192px;  top:3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="mobileSearchBibleWord()">
+        <input type="image" src="biblemap/image/m_search_btn2.png?version=20170905" style="position: absolute; left: 192px;  top:0px; width:30px; height:30px; vertical-align:middle; border:none;"  onclick="mobileSearchBibleWord()">
     </div>
 
     <div style="position:absolute; top: 165px; width: 249px; height: 14px; background: url(biblemap/image/horizon-line_2.png);"></div>
 
     <div class="content" style ="position: absolute; left: 10px; width:230px; top: 190px; height: 85px; ">
-        <span style="position: absolute; left: 3px;  font-size:1.3em;">지명</span>
+        <span style="position: absolute; top: 4px; left: 3px;  font-size:1.3em;">지명</span>
         <!-- <input id="biblePlace" type="text" name="currency" class="biginput"  size="16" maxlength="9"  -->
 
             <input id="biblePlace" type="text" name="currency" class="biginput"  size="16" maxlength="9"
                style="position: absolute; padding-left: 5px; left: 40px; width: 150px; height:30px; font-size:1.3em; font:'Nanum Gothic'; " value="갈릴리 호수" />
 
         <input type="image" src="biblemap/image/m_text_clear.png?version=20170905" style="position: absolute; left: 163px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="clearSearchPlaceWord()">
-        <input type="image" src="biblemap/image/m_search_btn2.png?version=20170905" style="position: absolute; left: 192px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none; "  onclick="mobileSearchBiblePlace()">
+        <input type="image" src="biblemap/image/location4.png?version=20170906" style="position: absolute; left: 196px;  top: 0px; width:20px; height:30px; vertical-align:middle; border:none; "  onclick="mobileSearchBiblePlace()">
         <div style="height: 4px"></div>
         <!--
         <select id ="searchedPoiList" class="customSelect" name="searchedPoiList" style="position: absolute; overflow:hidden; left: 0px; top:40px; width: 160px; height:30px; border: 1px solid #D9D9D9; " ></select>
         <input type="image" src="biblemap/image/m_search_btn2.png?version=20170905" style="position: absolute; left: 170px; top:40px; width:30px; height:30px; vertical-align:middle; "  onclick="searchPoiList()">
         -->
-        <div id ="searchedPoiList" rows= "5" style="border:1px solid rgb(217, 217, 217); overflow:scroll; position: absolute; left:40px; top: 40px; height: 80px; width: 170px; padding-left: 5px; font-size:1.3em ;text-align : left; ">
+        <div id ="searchedPoiList" rows= "5" style="border:1px solid rgb(217, 217, 217); overflow:scroll; position: absolute; left:42px; top: 40px; height: 80px; width: 170px; padding-left: 5px; font-size:1.3em ;text-align : left; ">
           <!--  <a href ="javascript:clearSearchPlaceWord()" style="text-decoration:none; color:rgb(0,0,0); text-align : left;">베다니1</a><br>
             <a href ="javascript:clearSearchPlaceWord()" style="text-decoration:none; color:rgb(0,0,0); text-align : left;">베다니2</a><br> -->
         </div>
@@ -217,19 +221,24 @@
 
     </ul>
     <div id ="tab_contain" class="tab_container" >
-        <!-- <div id = "bibleContentTitle" style="font-size:1.3em; text-align:center; font:'Nanum Gothic';">마태복음 1장</div>  -->
-        <div id = "tab1Title" class="divContent" style="padding-left: 40px;  font-size: 1.4em; top:-6px; overflow-x:hidden; border-bottom: 1px solid rgb(216, 216, 216);" >
+        <div id = "tab1Title" class="divContent" style="padding-left: 40px;  font-size: 1.5em; top:-6px; overflow-x:hidden; border-bottom: 1px solid rgb(240, 240, 240);" >
+        <!-- <div id = "tab1Title" class="divContent" style="padding-left: 40px;  font-size: 1.4em; top:-6px; overflow-x:hidden; " > -->
         </div>
 
-        <div id="tab1" class="tab_content" style="padding-left: 5px;">
+        <div id="tab1" class="tab_content" style="padding-left: 5px; font-size: 1.5em;">
         </div>
-        <div id="tab2" class="tab_content" style="padding-left: 5px;" >
-            검색결과가&nbsp;없습니다 <br> 성경의&nbsp;단어&nbsp;검색&nbsp;버튼을&nbsp;클릭해&nbsp;주세요
+        <div id="tab2" class="tab_content" style="padding-left: 5px; font-size: 1.5em;" >
+            검색결과가&nbsp;없습니다 <br> 메뉴를&nbsp;선택하고&nbsp;성경의&nbsp;단어&nbsp;검색&nbsp;버튼을&nbsp;클릭해&nbsp;주세요
         </div>
-        <div id="tab3" class="tab_content" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
+        <div id="tab3" class="tab_content" style="padding-left: 5px; font-size: 1.5em;" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
             검색결과가&nbsp;없습니다 <br> 지도상의&nbsp;지명을&nbsp;클릭하고&nbsp;아이콘&nbsp;'i'를&nbsp;클릭해&nbsp;주세요
         </div>
 
+    </div>
+    <div id = "missionWideIntro" style="height:40px;" >
+        <input id ="missionWideLogo" type="image" src="biblemap/image/mission_wide_logo.png?version=20170905" style="position: absolute; left: 5px;  top: 0px; width:155px; height:30px; vertical-align:middle; border:none;" >
+        <div style="position:absolute; padding-left: 165px; top: 8px; font-size: 1.4em; color: rgb( 70, 70, 70);">기부/후원 안내</div>
+        <!--       onclick="clearSearchPlaceWord()">  -->
     </div>
     <input id ="footUpArrow" type="image" src="biblemap/image/up_arrow.png?version=20170905" style="position: absolute; left: 250px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerUp()">
     <input id ="footDownArrow" type="image" src="biblemap/image/down_arrow.png?version=20170905" style="position: absolute; left: 280px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerDown()">
@@ -243,10 +252,37 @@
     <div id="popup-content" class="ol-popup-content" style="text-align:center; font-size: 13px;"></div>
 </div>
 
+
+<!-- <div id="infoPopup" class="pop-layer" style = "width : 550px; height: 620px;" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >  -->
+<div id="infoPopup" class="pop-layer" style = "width : 90%; height: 90%;" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
+    <div class="pop-container" >
+        <div>
+            <span id ="noticeTitle" style="font-size:1.3em; ">
+           </span>
+
+        </div>
+
+        <div id ="contentDiv" style = "position: absolute; overflow-y:scroll; line-height:24px; border-left: 1px solid #DDD;  border-right: 1px solid #DDD; border-bottom: 1px solid #DDD;">
+        <!-- <div id ="contentDiv" style = "overflow-y:scroll; line-height:24px; ">  -->
+            <span id ="noticeContent" style="font-size:1.3em; text-align:center; ">
+           </span>
+        </div>
+        <div id ="noticeClose" class="btn-r" style = "position: absolute;" >
+            <a href="#" class="btn-layerClose">Close</a>
+        </div>
+
+
+    </div>
+</div>
+
 <script>
 
     setDebug( true );
+
+    checkLocalStorageEnabled();
+
     $("#searchedPoiList").hide();
+
 
     var footerMenu = createFooterMenu();
 
@@ -328,27 +364,11 @@
             dvBibleTitle.appendChild( chapter );
         }
 
-
-        // getSearchWordsFromStorage();
+        getSearchWordsFromStorage();
+        mobileSearchBibleChapter();
     } );
 
     // bibleChapterList.requestBibleChapter();
-
-    /*
-    bibleChapterList.requestBibleChapter( function(){
-        for( var order = 1; order <= bibleChapterList.getCount(); order ++  ) {
-            var chapter = document.createElement("option");
-            var obj =  bibleChapterList.getChapterByNumber( order );
-            chapter.text = obj.title;
-            chapter.value = obj.bookNumber;
-            dvBibleTitle.appendChild( chapter );
-        }
-
-        // getSearchWordsFromStorage();
-    } );
-    */
-
-
 
     dvBibleTitle.addEventListener("change", function(e){
         dvBibleChapter.value = "1";
@@ -379,7 +399,7 @@
 
     // $("#searchedPoiList").click( function(){
     function searchPoiList() {
-        $("#menu").removeClass("open");
+        $("#sideMenu").removeClass("open");
         moveToPlaceSelPoiTitle("#searchedPoiList");
     }
     // });
@@ -452,12 +472,12 @@
     ///////////////////////////////////////////////////
 
     function openMenu(){
-        $("#menu").addClass("open");
-        document.getElementById("menu").focus();
+        $("#sideMenu").addClass("open");
+        document.getElementById("sideMenu").focus();
     }
 
     $(".close").click(function() {
-        $("#menu").removeClass("open");
+        $("#sideMenu").removeClass("open");
         document.getElementById("map").focus();
     });
 
@@ -476,6 +496,7 @@
             $("ul.tabs li").removeClass("active").css("color", "#FFFFFF");
             $(this).addClass("active").css("color", "#000000");
             $(".tab_content").hide();
+
             if( selMenuString == "성경본문"){
                 $("#tab1Title").show();
             }else{
@@ -639,7 +660,7 @@
 
         dvBiblePlace.value = removeSpaceInWord(dvBiblePlace.value);
 
-        // saveSearchWordsToStorage();
+        saveSearchWordsToStorage();
 
         var dvSearchedPoiList = document.getElementById("searchedPoiList");
         dvSearchedPoiList.innerHTML = "";
@@ -670,7 +691,7 @@
     }
 
     function hideMenuAndMoveToPoiID( poiID ){
-        $("#menu").removeClass("open");
+        $("#sideMenu").removeClass("open");
         if( footerMenu.getMode() == "top" || footerMenu.getMode() == "middle")
             footerMenu.bottom();
 

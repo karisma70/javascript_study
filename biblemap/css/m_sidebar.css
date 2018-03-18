@@ -13,7 +13,7 @@
     background-position : center;
     cursor : pointer;
 }
-#menu {
+#sideMenu {
     width : 250px;
     height : 100%;
     position : fixed;
@@ -30,7 +30,7 @@
     -moz-transition: All 0.2s ease;
     -o-transition: All 0.2s ease;
 }
-#menu.open {
+#sideMenu.open {
     /* right : 0px;  */
     left: 0px;
 }

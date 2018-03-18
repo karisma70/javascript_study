@@ -121,16 +121,139 @@ HistoryClickedPoi = function(){
 };
 
 
-function isLocalStorageEnabled() {
+function setCookie( cookieName, value, duration ){
+    var expDate = new Date();
+    expDate.setDate( expDate.getDate() + duration );
+
+    var strVal = value + ';  expires=' + expDate.toUTCString();
+    document.cookie = cookieName + '=' + strVal + ';';
+    alert(  document.cookie );
+}
+
+
+/*
+function getCookie( cookieName ){
+
+    alert(document.cookie);
+
+    var strSplit = document.cookie.split(';');
+
+    for (var i = 0; i < strSplit.length; i++) {
+        var strRow = strSplit[i].substr(0, strSplit[i].indexOf('='));
+        strRowVal = strSplit[i].substr( strSplit[i].indexOf('=') + 1);
+        strRow = strRow.replace(/^\s+|\s+$/g, ''); // 앞과 뒤의 공백 제거하기
+        if ( strRow == cookieName) {
+            // alert(  strRowVal );
+            return strRowVal ; // unescape로 디코딩 후 값 리턴
+        }
+    }
+
+    return "";
+}
+*/
+
+function getCookie( cookieName ) {
+    var search = cookieName + "=";
+    var cookie = document.cookie;
+
+    // 현재 쿠키가 존재할 경우
+    if (cookie.length > 0) {
+        // 해당 쿠키명이 존재하는지 검색한 후 존재하면 위치를 리턴.
+        startIndex = cookie.indexOf(cookieName);
+
+        // 만약 존재한다면
+        if (startIndex != -1){
+            startIndex += cookieName.length;
+            endIndex = cookie.indexOf( ";", startIndex );
+
+            if( endIndex == -1)
+                endIndex = cookie.length;
+
+            return cookie.substring( startIndex + 1, endIndex );
+        }
+    }
+
+    return "";
+
+}
+
+
+function saveSearchWordsToCookie( ) {
+
+    var Obj = {
+        'bibleTitle': dvBibleTitle.value,
+        'bibleChapter': dvBibleChapter.value.toString(),
+        'bibleWord': dvBibleWord.value,
+        'biblePlace': dvBiblePlace.value
+    };
+
+    var strObj = JSON.stringify(Obj);
+    alert("json => " + strObj );
+
+    setCookie( 'bibleMap', strObj, 1 );
+    alert( "getCookie : " + getCookie( 'bibleMap') );
+}
+
+
+function getSearchWordsFromCookie( ) {
+
+    var strText = getCookie('bibleMap' );
+    if( strText == "" )
+        return;
+
+    var Obj = JSON.parse( strText );
+    if( Obj == null )
+        return;
+
+    var strText = "";
+    if( Obj.hasOwnProperty('bibleTitle' ) ) {
+        if( typeof( Obj['bibleTitle'] ) == "string")
+            strText = Obj['bibleTitle'];
+    }
+    if( strText == "")
+        strText = "7";
+    $( "#bibleTitle" ).val( strText );
+
+    strText = "";
+    if( Obj.hasOwnProperty('bibleChapter' ) ) {
+        if (typeof( Obj['bibleChapter'] ) == "string")
+            strText = Obj['bibleChapter'];
+    }
+    if( strText == "" ){
+        strText = "1";
+    }
+    $("#bibleChapter").val( strText );
+
+    strText = "";
+    if( Obj.hasOwnProperty('bibleWord' )){
+        if( typeof( Obj['bibleWord'] ) == "string")
+            strText = Obj['bibleWord'];
+    }
+    if( strText == ""){
+        strText = "바울";
+    }
+    $("#bibleWord").val( strText );
+
+    strText = "";
+    if( Obj.hasOwnProperty('biblePlace' )){
+        if( typeof( Obj['biblePlace'] ) == "string")
+            strText = Obj['biblePlace'];
+    }
+    if( strText == "" ){
+        strText = "예루살렘";
+    }
+    $("#biblePlace").val( strText );
+
+}
+
+
+function checkLocalStorageEnabled() {
 
     if( 'localStorage' in window && window.localStorage !== null ) {
-        alert("localstorage is not nul l!!");
-
         try {
             var mod = '__storage_test__';
             localStorage.setItem(mod, mod);
             localStorage.removeItem(mod);
-            alert("localstorage can use setItem l!!");
             return true;
         } catch (e) {
             alert("localstorage cannot use setItem l!!");
@@ -138,32 +261,29 @@ function isLocalStorageEnabled() {
         }
     }else{
         alert("localStorage is not support!!");
+        return false;
     }
 }
 
+
 function saveSearchWordsToStorage( ){
 
-    if( 'localStorage' in window && window.localStorage !== null ) {
-        var Obj = {
-            'bibleTitle': dvBibleTitle.value,
-            'bibleChapter': dvBibleChapter.value.toString(),
-            'bibleWord': dvBibleWord.value,
-            'biblePlace': dvBiblePlace.value
-        };
-
-        var strObj = JSON.stringify(Obj);
-        // alert("JSON : " + strObj );
-        var storage = window.localStorage;
-
-        try {
-            storage.setItem('bibleMap', strObj);
-        }catch( ex ){
-            alert( "This browser is not support for localStorage!!");
-        }
+    if( checkLocalStorageEnabled() == false ) {
+        return;
     }
-    else{
-        alert("This browser cannot use localStorage!!");
-    }
+
+    var Obj = {
+        'bibleTitle': dvBibleTitle.value,
+        'bibleChapter': dvBibleChapter.value.toString(),
+        'bibleWord': dvBibleWord.value,
+        'biblePlace': dvBiblePlace.value
+    };
+
+    var strObj = JSON.stringify(Obj);
+    // alert("JSON : " + strObj );
+    var storage = window.localStorage;
+
+    storage.setItem('bibleMap', strObj);
 }
 
 function getSearchWordsFromStorage(){

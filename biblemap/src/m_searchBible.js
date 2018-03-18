@@ -11,7 +11,7 @@ function mobileDecreaseBibleChapter(){
 
 function mobileDecreaseBibleChapterAndGo(){
     mobileDecreaseBibleChapter();
-    mobileSearchBibleChapter();
+    mobileSearchBibleChapter( footerMenuMiddle );
 }
 
 
@@ -25,10 +25,15 @@ function mobileIncreaseBibleChapter(){
 }
 
 
-function mobileIncreaseBibleChapterAndGo() {
+function footerMenuMiddle(){
+    if( footerMenu.getMode() == "bottom" || footerMenu.getMode() == "hide")
+        footerMenu.middle();
+}
 
+
+function mobileIncreaseBibleChapterAndGo() {
     mobileIncreaseBibleChapter();
-    mobileSearchBibleChapter();
+    mobileSearchBibleChapter(  footerMenuMiddle );
 }
 
 
@@ -39,12 +44,7 @@ function mobileSearchBibleWord(){
         return;
     }
 
-
-    // alert("mobileSearchBibleWord!!!");
-
-    // saveSearchWordsToStorage();
-
-    // adjustScrDiv.setIsFullScr("false");
+    saveSearchWordsToStorage();
 
     var searchWord = dvBibleWord.value;
     // searchWord = " "+removeSpaceInWord( searchWord );
@@ -82,7 +82,7 @@ function mobileSearchBibleWord(){
         }
     } );
 
-    $("#menu").removeClass("open");
+    $("#sideMenu").removeClass("open");
 
 }
 
@@ -156,21 +156,15 @@ function mobileSearchBibleChapter( callback ){
 
     var searchParam = makeSearchChapterParam();
 
-    //   saveSearchWordsToStorage();
+    saveSearchWordsToStorage();
 
-    $("#menu").removeClass("open");
+    $("#sideMenu").removeClass("open");
 
     tabMenu.selectTab('tab1Menu');
 
     reqeustAndShowContents('#tab1', searchParam, -1, function(){
-    // reqeustAndShowContents('#tabContent1', searchParam, -1, function(){
-        // adjustScrDiv.setIsFullScr("false");
         if( callback ){
             callback();
-        }
-
-        if( footerMenu.getMode() == "bottom" || footerMenu.getMode() == "hide" ){
-            footerMenu.middle();
         }
 
     } );
@@ -268,7 +262,7 @@ function reqeustAndShowContents( paramTabID, searchParam , paramParagraph, compl
         $(tabID).append( "<br></table >");
 
         if( tabID == '#tab1' && paragraph > 0 ){
-            $(tabID).scrollTop( (paragraph -1)* 67 );
+            $(tabID).scrollTop( (paragraph -1)* 59 );
         }
         else
             $(tabID).scrollTop(0);
