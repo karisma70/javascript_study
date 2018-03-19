@@ -26,6 +26,7 @@ var createFooterMenu = (function() {
 
          var missionWideIntro = document.getElementById("missionWideIntro");
 
+
          function setLogoPosition(){
              logo.style.left =  (window.innerWidth - 45) + 'px';
              logo.style.right = 0 + 'px';
@@ -127,6 +128,7 @@ var createFooterMenu = (function() {
              mapView.style.bottom = 41 + 'px';
 
              footer.style.top = (window.innerHeight - 40) + 'px';
+             /* footer.style.top = ( document.body.scrollHeight - 40) + 'px';  */
              footer.style.left = 0 + 'px';
              footer.style.right = 0 + 'px';
              footer.style.bottom = 0 + 'px';
@@ -201,6 +203,7 @@ var createFooterMenu = (function() {
             mapView.style.right = 0 + 'px';
             mapView.style.top = 41 + 'px';
             mapView.style.bottom = 0 + 'px';
+
 
             $("#footer").hide();
 
@@ -331,4 +334,60 @@ function showIntroBibleMap(  ){
 
     // window.open("licenseNotice.html?version=20170920", "notice of license", "width=400, height=400, top=0, left=0, location=no, directories=no,resizable=no,status=no,toolbar=no,menubar=no, scrollbars=yes" );
 
+}
+
+
+function showDownloading(){
+
+    $("#downloadingDiv").show();
+
+    var downloading = document.getElementById("downloadingDiv");
+
+    downloading.style.left = ((window.innerWidth * 0.5 ) - 80) + 'px';
+    downloading.style.right = ((window.innerWidth * 0.5 ) - 80) + 'px';
+    downloading.style.top = ((window.innerHeight * 0.5 ) - 80) + 'px';
+    downloading.style.top = ((window.innerHeight * 0.5 ) - 80) + 'px';
+}
+
+
+/*
+function showDownloading(){
+    $("#downloadingDiv").show();
+
+    $("#downloadingDiv").fakeLoader({
+        timeToHide:1200, // 로딩중에 걸리는 시간, 1000은 1초
+        bgColor:"#f8f8f8", // 배경색
+        spinner:"spinner2" // 로딩중으로 원하는 로딩이미지타입
+    });
+}
+*/
+
+function hideDownloading(){
+    $("#downloadingDiv").hide();
+}
+
+
+
+function disableDIV( elemID ){   // "divID"
+
+    document.getElementById( elemID ).disabled = true;
+    var nodes = document.getElementById( elemID ).getElementsByTagName('*');
+    for(var i = 0; i < nodes.length; i++){
+        nodes[i].disabled = true;
+    }
+
+
+    // $("#footer").attr( 'disabled', true);
+}
+
+function enableDIV( elemID ){   // "divID"
+
+    document.getElementById( elemID ).disabled = false;
+    var nodes = document.getElementById( elemID ).getElementsByTagName('*');
+    for(var i = 0; i < nodes.length; i++){
+        nodes[i].disabled = false;
+    }
+
+
+    // $("#footer").removeAttr( 'disabled');
 }

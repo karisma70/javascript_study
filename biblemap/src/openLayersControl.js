@@ -707,6 +707,37 @@ function moveTo( view, location, zoomIn, done ) {
 
      zoomIn = Math.floor( zoomIn );
 
+     _moveToPos( view, location, zoomIn, duration, done );
+
+     /*
+     var parts = 2;
+     var called = false;
+
+     function callback(complete) {
+         --parts;
+         if (called) {
+             return;
+         }
+         if (parts === 0 || !complete) {
+             called = true;
+             if( done )
+                 done(complete);
+         }
+     }
+
+     view.animate({
+         center: location,
+         zoom : zoomIn,
+         duration: duration
+     }, callback );
+     */
+ }
+
+
+ function _moveToPos( view, location, zoomIn, duration, done ) {
+     // if( zoomIn < 10 )
+     //  zoomIn = 10;
+
      var parts = 2;
      var called = false;
 

@@ -261,8 +261,12 @@ function reqeustAndShowContents( paramTabID, searchParam , paramParagraph, compl
         }
         $(tabID).append( "<br></table >");
 
-        if( tabID == '#tab1' && paragraph > 0 ){
-            $(tabID).scrollTop( (paragraph -1)* 59 );
+        if( tabID == '#tab1'){
+            if( paragraph > 0 ){
+                $(tabID).scrollTop((paragraph - 1) * 71);
+            }else {
+                $(tabID).scrollTop(0);
+            }
         }
         else
             $(tabID).scrollTop(0);

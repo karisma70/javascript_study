@@ -4,7 +4,7 @@
 function mobileRequestPoiContentAndShow( poiObj, popup2D ) {
 
     var youtube = "";
-    var focusPoiObj = poiObj;
+    focusPoiObj = poiObj;
     var infoText = "";
     var poiText = poiObj.biblePlace;
 
@@ -102,6 +102,8 @@ function mobileRequestPoiContentAndShow( poiObj, popup2D ) {
         $("#tab3").scrollTop(0);
         tabMenu.selectTab('tab3Menu');
 
+        setCenterFocusedPOI( focusPoiObj );
+
     };
 
     showYoutubePoi2D = function() {
@@ -135,4 +137,10 @@ function mobileRequestPoiContentAndShow( poiObj, popup2D ) {
         popup2D.overlay.setPosition( [poiObj.x, poiObj.y] );
     };
 
+}
+
+
+function setCenterFocusedPOI( focusedPoiObj ){
+    var zoom = bibleMapManager.getView().getZoom();
+    _moveToPos( bibleMapManager.getView(), [focusedPoiObj.x, focusedPoiObj.y], zoom, 600);
 }
