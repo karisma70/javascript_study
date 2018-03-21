@@ -194,7 +194,7 @@ function requestPoiContentAndShow( poiObj, popup2D, popup3D ) {
     var textRef = "<a href =\"javascript:showTextPoi()\"' >";
     var textIcon = "<img src=\"biblemap/image/text-icon.png?version=20170904\" style=\"width:20px; height:20px; vertical-align:middle;\">";
 
-    var lineImage = '<div style=\"height: 14px; background: url(biblemap/image/horizon-line.png);\"></div>';
+    var lineImage = '<div style=\"height: 5px; background: url(biblemap/image/horizon-line_2.png);\"></div>';
 
     requestPoiInfo( poiObj, function ( recvPoiObj) {
         if ( recvPoiObj.hasOwnProperty("youtube")) {

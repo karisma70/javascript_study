@@ -244,8 +244,8 @@ function GMDFileDownload( map, map3D, shpUrl, layerId, style, paramLayerManager,
                 // var moveLevel = ( paramStyle.visibleRange.min + paramStyle.visibleRange.max ) /2 ;
                 // moveLevel = Math.floor(moveLevel) -2;
                 var moveLevel = paramStyle.visibleRange.min +1;
-                if( moveLevel > 11 )
-                    moveLevel = 11;
+                if( moveLevel > 12 )
+                    moveLevel = paramStyle.visibleRange.min;
 
                 var poiobj = createPoiObj( attrs, record, moveLevel );    //  bible, title, range 에 해당하는 필드로 poi 오브젝트를 생성한다
                 poiobj = layerManager.insertPoiObj( poiobj );

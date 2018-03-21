@@ -1,0 +1,70 @@
+.ol-popup-content {
+    font-size: 1.4em;
+    font-family: 'Nanum Gothic';
+    /* font-family: 'hanna', sans-serif; */
+
+}
+
+.ol-popup {
+    position: absolute;
+    background-color: white;
+    -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+    filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+    padding: 9px;
+    border-radius: 6px;
+    border: 1px solid #cccccc;
+    bottom: 12px;
+    left: -50px;
+    min-width: 168px;
+
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.ol-popup:after, .ol-popup:before {
+    top: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+.ol-popup:after {
+    border-top-color: white;
+    border-width: 5px;
+    left: 48px;
+    margin-left: -5px;
+}
+.ol-popup:before {
+    border-top-color: #cccccc;
+    border-width: 6px;
+    left: 48px;
+    margin-left: -6px;
+}
+.ol-popup-closer {
+    text-decoration: none;
+    position: absolute;
+    top: -5px;
+    right: 8px;
+    font-size : 1.2em;
+    color : rgb( 150, 150, 150);
+}
+.ol-popup-closer:after {
+    content: "✖";
+    color : rgb( 150, 150, 150);
+}
+
+
+.ol-popup-closer3D {
+    text-decoration: none;
+    position: absolute;
+    top: 2px;
+    right: 8px;
+    font-size : 14px;
+}
+.ol-popup-closer3D:after {
+    content: "X";
+}

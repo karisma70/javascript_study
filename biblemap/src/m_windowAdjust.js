@@ -19,13 +19,31 @@ var createFooterMenu = (function() {
          var tab1 = document.getElementById("tab1");
          var tab2 = document.getElementById("tab2");
          var tab3 = document.getElementById("tab3");
-         var tab4 = document.getElementById("tab4");
 
          var upArrow = document.getElementById("footUpArrow");
          var downArrow = document.getElementById("footDownArrow");
 
          var missionWideIntro = document.getElementById("missionWideIntro");
 
+         var compassBtn = document.getElementById("compassBtn");
+         var zoomInBtn = document.getElementById("zoomInBtn2D");
+         var zoomOutBtn = document.getElementById("zoomOutBtn2D");
+         var homeBtn = document.getElementById("homeBtn");
+
+
+         compassBtn.style.top = 10 + 'px';
+         compassBtn.style.left = (window.innerWidth - 45 ) + 'px';
+
+         zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
+         zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
+         homeBtn.style.left = (window.innerWidth - 40 ) + 'px';
+
+         function setZOrder2DViewBtn( val ) {
+             $('#compassBtn').css("z-index", val);
+             $('#zoomInBtn2D').css("z-index", val);
+             $('#zoomOutBtn2D').css("z-index", val);
+             $('#homeBtn').css("z-index", val);
+         }
 
          function setLogoPosition(){
              logo.style.left =  (window.innerWidth - 45) + 'px';
@@ -51,14 +69,13 @@ var createFooterMenu = (function() {
              tab2.style.right = 0 + 'px';
              tab2.style.bottom = 5 + 'px';
 
-             tab3.style.top = 0 + 'px';
+             tab3.style.top = 35 + 'px';
              tab3.style.left = 15 + 'px';
              tab3.style.right = 5 + 'px';
              tab3.style.bottom = 5 + 'px';
          }
 
          this.mode = "hide";    // "hide", "bottom", "middle", "top";
-         // this.mode = "middle";    // "hide", "bottom", "middle", "top";
 
          this.setMode = function( paramMode ){
             this.mode = paramMode;
@@ -87,6 +104,7 @@ var createFooterMenu = (function() {
 
 
          this.top = function(){
+
              this.mode = "top";
              var mapHeight = window.innerHeight * 0.50;
 
@@ -94,6 +112,9 @@ var createFooterMenu = (function() {
              mapView.style.right = 0 + 'px';
              mapView.style.top = 41 + 'px';
              mapView.style.bottom = ( window.innerHeight - mapHeight + 1 ) + 'px';
+
+             compassBtn.style.top = 10 + 'px';
+             compassBtn.style.left = (window.innerWidth - 45 ) + 'px';
 
              footer.style.top = 81 + 'px';
              footer.style.left = 0 + 'px';
@@ -117,17 +138,33 @@ var createFooterMenu = (function() {
              downArrow.style.left = window.innerWidth - 40 + 'px';
              downArrow.style.right = 0 + 'px';
              downArrow.style.bottom = 0 + 'px';
+
+             setZOrder2DViewBtn( 2010 );
          };
 
          this.bottom = function(){
+
+
              this.mode = "bottom";
 
              mapView.style.left = 0 + 'px';
              mapView.style.right = 0 + 'px';
              mapView.style.top = 41 + 'px';
-             mapView.style.bottom = 41 + 'px';
+             mapView.style.bottom = 40 + 'px';
 
-             footer.style.top = (window.innerHeight - 40) + 'px';
+             compassBtn.style.top = 10 + 'px';
+             compassBtn.style.left = (window.innerWidth - 45 ) + 'px';
+
+             homeBtn.style.top = ( window.innerHeight - 220 ) + 'px';
+             zoomInBtn.style.top = ( window.innerHeight - 180 ) + 'px';
+             zoomOutBtn.style.top = (window.innerHeight - 140 ) + 'px';
+
+             zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
+             zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
+             homeBtn.style.left = (window.innerWidth - 40 ) + 'px';
+
+
+             footer.style.top = (window.innerHeight - 41) + 'px';
              /* footer.style.top = ( document.body.scrollHeight - 40) + 'px';  */
              footer.style.left = 0 + 'px';
              footer.style.right = 0 + 'px';
@@ -155,18 +192,32 @@ var createFooterMenu = (function() {
              upArrow.style.bottom = 2 + 'px';
 
              bibleMap.updateSize();
+
+             setZOrder2DViewBtn( 2010 );
          };
 
         this.middle = function(){
+
             this.mode = "middle";
             var mapHeight = window.innerHeight * 0.50;
 
             mapView.style.left = 0 + 'px';
             mapView.style.right = 0 + 'px';
             mapView.style.top = 41 + 'px';
-            mapView.style.bottom = ( window.innerHeight - mapHeight + 1 ) + 'px';
+            mapView.style.bottom = ( window.innerHeight - mapHeight - 1 ) + 'px';
 
-            footer.style.top = mapHeight + 1 + 'px';
+            compassBtn.style.top = 10 + 'px';
+            compassBtn.style.left = (window.innerWidth - 45 ) + 'px';
+
+            homeBtn.style.top = ( window.innerHeight - mapHeight - 180 ) + 'px';
+            zoomInBtn.style.top = ( window.innerHeight - mapHeight - 140 ) + 'px';
+            zoomOutBtn.style.top = (window.innerHeight - mapHeight - 100 ) + 'px';
+
+            zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
+            zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
+            homeBtn.style.left = (window.innerWidth - 40 ) + 'px';
+
+            footer.style.top = mapHeight + 'px';
             footer.style.left = 0 + 'px';
             footer.style.right = 0 + 'px';
             footer.style.bottom = 0 + 'px';
@@ -193,9 +244,12 @@ var createFooterMenu = (function() {
             $("#missionWideIntro").hide();
 
             $("#footer").show();
+
+            setZOrder2DViewBtn( 2010 );
         };
 
         this.hide = function(){
+
             this.mode = "hide";
             var mapHeight = window.innerHeight * 0.50;
 
@@ -203,6 +257,17 @@ var createFooterMenu = (function() {
             mapView.style.right = 0 + 'px';
             mapView.style.top = 41 + 'px';
             mapView.style.bottom = 0 + 'px';
+
+            compassBtn.style.top = 10 + 'px';
+            compassBtn.style.left = (window.innerWidth - 45 ) + 'px';
+
+            homeBtn.style.top = ( window.innerHeight - 180 ) + 'px';
+            zoomInBtn.style.top = (window.innerHeight - 140 ) + 'px';
+            zoomOutBtn.style.top = (window.innerHeight - 100 ) + 'px';
+
+            zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
+            zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
+            homeBtn.style.left = (window.innerWidth - 40 ) + 'px';
 
 
             $("#footer").hide();
@@ -216,6 +281,8 @@ var createFooterMenu = (function() {
             upArrow.style.bottom = 0 + 'px';
 
             bibleMap.updateSize();
+
+            setZOrder2DViewBtn( 2010 );
 
         };
 
@@ -326,16 +393,19 @@ function showIntroBibleMap(  ){
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '이메일: missionwide@naver.com</span>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '<a href= \"https://blog.naver.com/bible-map\" style=\"text-decoration:none; font-weight:bold; color:#464646;\">' + '블로그: blog.naver.com/bible-map</a></span>';
+    popupContent.innerHTML += '<a href= \"javascript:gotoBibleMapBlog()\" style=\"text-decoration:none; font-weight:bold; color:#464646;\">' + '블로그: blog.naver.com/bible-map</a></span>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
 
     showNoticePopup( '#infoPopup' );
 
     // window.open("licenseNotice.html?version=20170920", "notice of license", "width=400, height=400, top=0, left=0, location=no, directories=no,resizable=no,status=no,toolbar=no,menubar=no, scrollbars=yes" );
-
 }
 
+
+function gotoBibleMapBlog(){
+    window.open("http://blog.naver.com/bible-map");
+}
 
 function showDownloading(){
 
@@ -391,3 +461,19 @@ function enableDIV( elemID ){   // "divID"
 
     // $("#footer").removeAttr( 'disabled');
 }
+
+
+
+function preventDIV( strDiv ){
+    var div = document.getElementById( strDiv );
+
+    div.addEventListener('touchmove', function (e) {
+        var touchLen = e.touches.length;
+        if( touchLen > 1){
+            e.preventDefault();
+        }
+    }, false);
+
+
+}
+

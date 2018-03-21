@@ -172,23 +172,30 @@ function mobileSearchBibleChapter( callback ){
 
 
 function appendReceiveMsg( tabID, resObj, strConvText, paragraph ){
+
+    // var lineImage = '<div style=\"height: 4px; background: url(biblemap/image/horizon-line_small.png);\"></div>';
+    // var lineImage = '<tr style=\"height:5px;\"><td><img src=\"biblemap/image/horizon-line_small.png\" style=\"width : 100px; height:4px; vertical-align:middle\" ></td></tr>';
+    var lineImage = '<tr bgcolor=\"#ddd\"><td colspan=\"2\" style=\"height:2px;\"></td></tr>';
+
     $(tabID).append( "<tr>");
     var strChapterLinkWithBibleContent = "";
     if( tabID == '#tab1') {
-        var reverseColor = '';
+        var reverseColor = 'style=\'background-color:rgb(238, 238, 238);\'';
         if( paragraph == resObj.paragraph ){
             reverseColor = 'style=\'background-color:rgb(210, 210, 210);\'';
         }
         strChapterLinkWithBibleContent = "<td width = \"25\" " + reverseColor + " >" + resObj.paragraph + "</td>" + "<td" + " " + reverseColor + ">" + strConvText + "</td>";
     }else if( tabID == '#tab2' ) {
         strChapterLinkWithBibleContent = "<td width = \"82\" >" + '<a href= "javascript:requestBibleWithShortChapter( \'' + resObj.shortTitle + '\',' + resObj.chapter + ',' + resObj.paragraph + ' )\" ' +
-            'style=\"text-decoration:none; font-weight:bold; color:#464646;\">'
+            'style=\"text-decoration:none; font-weight:bold; color:#2D479C;\">'
             + resObj.shortTitle + " " + resObj.chapter + ":" + resObj.paragraph + "</a>" + "</td>"
             + "<td>" + strConvText + "</td>";
     }
 
     $(tabID).append( strChapterLinkWithBibleContent );
     $(tabID).append( "</tr>");
+    // $(tabID).append( lineImage );
+
 }// end of function
 
 
@@ -214,14 +221,13 @@ function reqeustAndShowContents( paramTabID, searchParam , paramParagraph, compl
         }
 
         if( searchParam.type != "Word" ) {
-            $("#tab1Title").empty();
-            $("#tab1Title").append( searchParam.option.title + "&nbsp;&nbsp;&nbsp;" );
-            $("#tab1Title").append('<input type=\"image\" src=\"biblemap/image/left_arrow.png?version=20170905\" style=\"width:22px; height:26px; vertical-align:middle; \" onclick=\"mobileDecreaseBibleChapterAndGo()\">' );
-            $("#tab1Title").append( "&nbsp;&nbsp;" + searchParam.option.chapter + "장&nbsp;&nbsp;" );
-            //$("#tab1Title").append( strTitle );
-            $("#tab1Title").append( '<input type=\"image\" src=\"biblemap/image/right_arrow.png?version=20170905\" style=\"top: -5px; width:22px; height:26px; vertical-align:middle; \" onclick=\"mobileIncreaseBibleChapterAndGo()\">' );
-        }
 
+            $('#tabBibleBook').empty();
+            $("#tabBibleBook").append( searchParam.option.title + "&nbsp;&nbsp;&nbsp;" );
+
+            $('#tabBibleChapter').empty();
+            $("#tabBibleChapter").append( "&nbsp;&nbsp;" + searchParam.option.chapter + "장&nbsp;&nbsp;" );
+        }
 
         if( resObj.result != "undefined" && resObj.result == "fail" ){
             $(tabID).append( resObj.error + "\r\n" );
@@ -282,11 +288,14 @@ function reqeustAndShowContents( paramTabID, searchParam , paramParagraph, compl
 function requestBibleWithShortChapter( shortTitle, chapterNum, paragraph ){
 
     var chapter = bibleChapterList.getChapterByShortName( shortTitle );
+
+    /*
     if( chapter.bookNumber > 0 ) {
         dvBibleTitle.value = chapter.bookNumber.toString();
     }
 
     dvBibleChapter.value = chapterNum;
+    */
 
     var searchParam = {
         type: "Args",     // book, chapter, paragraph 등으로 구성된 검색

@@ -14,7 +14,7 @@ function mobileRequestPoiContentAndShow( poiObj, popup2D ) {
     var textRef = "<a href =\"javascript:showTextPoi()\" >";
     var textIcon = "<img src=\"biblemap/image/text-icon.png?version=20170904\" style=\"width:20px; height:20px; vertical-align:middle;\">";
 
-    var lineImage = '<div style=\"height: 14px; background: url(biblemap/image/horizon-line.png);\"></div>';
+    var lineImage = '<div style=\"height: 4px; background: url(biblemap/image/horizon-line_small.png);\"></div>';
 
     requestPoiInfo( poiObj, function ( recvPoiObj) {
         if ( recvPoiObj.hasOwnProperty("youtube")) {
@@ -72,16 +72,22 @@ function mobileRequestPoiContentAndShow( poiObj, popup2D ) {
         }
         var strLen = ( title.length * 12) + 35;
         popup.content.innerHTML += lineImage;
-        popup.content.innerHTML += '<br>';
-        popup.content.innerHTML += "<span style=\'font-size:10pt;\'>" + title + "</span>";
+        // popup.content.innerHTML += '<br>';
+        popup.content.innerHTML += "<span style=\'font-size:1.0em;\'>" + title + "</span>";
     };
 
 
     poiContentsToTab = function(){
 
+        $('#tab3Title').empty();
+
+        var strPoiTitle = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + focusPoiObj.id + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: #2682E8 \" >' + '#'+ poiText + '  ' + '</a>';
+
+        $("#tab3Title").append( strPoiTitle );
+
         var infoTab = document.getElementById( 'tab3' );
-        // infoTab.innerHTML = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + focusPoiObj.id + ')\" style=\"text-decoration:none; font-weight:bold;' + "font-size:\'20px;\'" + 'color: #9C1AC8 \" >' + "[ " + poiText + " ]  " +  '</a>';
-        infoTab.innerHTML = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + focusPoiObj.id + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: #2682E8 \" >' + '#'+ poiText + '  ' + '</a>';
+
+//        infoTab.innerHTML = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + focusPoiObj.id + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: #2682E8 \" >' + '#'+ poiText + '  ' + '</a>';
 
         var infoObj = { // title : poiText,
             content : infoText
@@ -90,7 +96,8 @@ function mobileRequestPoiContentAndShow( poiObj, popup2D ) {
         var strConvText = makeStrongInText( layerManager, focusPoiObj.biblePlace, infoObj );
 
         // infoTab.innerHTML += infoText;
-        infoTab.innerHTML += strConvText;
+        infoTab.innerHTML = strConvText;
+
     };
 
     showTextPoi = function() {      // tabMenu 에서 정보 보여주기
@@ -99,8 +106,8 @@ function mobileRequestPoiContentAndShow( poiObj, popup2D ) {
 
         poiContentsToTab();
 
-        $("#tab3").scrollTop(0);
         tabMenu.selectTab('tab3Menu');
+        $("#tab3").scrollTop(0);
 
         setCenterFocusedPOI( focusPoiObj );
 
