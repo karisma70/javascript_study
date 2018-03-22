@@ -59,7 +59,7 @@ var createFooterMenu = (function() {
              tab_contain.style.right = 0 + 'px';
              tab_contain.style.bottom = 5 + 'px';
 
-             tab1.style.top = 35 + 'px';
+             tab1.style.top = 30 + 'px';
              tab1.style.left = 0 + 'px';
              tab1.style.right = 0 + 'px';
              tab1.style.bottom = 5 + 'px';
@@ -69,10 +69,10 @@ var createFooterMenu = (function() {
              tab2.style.right = 0 + 'px';
              tab2.style.bottom = 5 + 'px';
 
-             tab3.style.top = 35 + 'px';
-             tab3.style.left = 15 + 'px';
-             tab3.style.right = 5 + 'px';
-             tab3.style.bottom = 5 + 'px';
+             tab3.style.top = 30 + 'px';
+             tab3.style.left = 0 + 'px';
+             tab3.style.right = 0 + 'px';
+             tab3.style.bottom = 0 + 'px';
          }
 
          this.mode = "hide";    // "hide", "bottom", "middle", "top";
@@ -464,7 +464,7 @@ function enableDIV( elemID ){   // "divID"
 
 
 
-function preventDIV( strDiv ){
+function preventZoomInDIV( strDiv ){
     var div = document.getElementById( strDiv );
 
     div.addEventListener('touchmove', function (e) {

@@ -833,6 +833,13 @@ function createLayer( source  ) {
      var selectedFeatures = null;
      var interactionStyleCallback = null;
 
+     /*
+     var iconLayer = null;
+     var iconFeature = null;
+     var iconStyle = null;
+     */
+     var iconLayer = null;
+
      var tempLineLayer = null;
      var tempLineInteract = null;
      var bingMapSource = null;
@@ -1074,6 +1081,56 @@ function createLayer( source  ) {
                  this.map.removeInteraction( tempLineInteract);
                  tempLineInteract = null;
                  this.map.render();
+             }
+         };
+
+
+         this.createPoiIcon = function( poiObj ){
+
+             this.destroyPoiIcon();
+
+             var iconFeature = new ol.Feature({
+                 geometry: new ol.geom.Point([poiObj.x, poiObj.y]),
+                 // name: poiObj.biblePlace,
+                 population: 4000,
+                 rainfall: 500
+             });
+
+             var iconStyle = new ol.style.Style({
+                 image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+                     // anchor: [0.5, 46],
+                     anchor: [0.5, 35],
+                     anchorXUnits: 'fraction',
+                     anchorYUnits: 'pixels',
+                     // src: 'https://openlayers.org/en/v4.6.5/examples/data/icon.png'
+                     // size : [ 50, 50 ],
+                     // scale: 0.5,
+                     src: 'biblemap/image/location9.png'
+                 }))
+             });
+
+             iconFeature.setProperties({  'id' : poiObj.id,
+                                        'label' : poiObj.biblePlace });
+
+             iconFeature.setStyle(iconStyle);
+
+             var iconVectorSource = new ol.source.Vector({
+                 features: [iconFeature]
+             });
+
+             iconLayer = new ol.layer.Vector({
+                 source: iconVectorSource
+             });
+             iconLayer.setVisible( true );
+             iconLayer.setZIndex( 1000 );
+
+             this.map.addLayer( iconLayer );
+         };
+
+         this.destroyPoiIcon = function(){
+             if( iconLayer ){
+                 this.map.removeLayer( iconLayer );
+                 iconLayer = null;
              }
          };
 

@@ -401,6 +401,7 @@ function GMDFileDownload( map, map3D, shpUrl, layerId, style, paramLayerManager,
         }
 
         var shapeLayer = createShapeLayer( features, layerId, style, createStyleFunction );
+        shapeLayer.setVisible( false );
         layerContainer.layers.push( shapeLayer );
         map.addLayer(  shapeLayer );
 

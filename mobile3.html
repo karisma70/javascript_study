@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="biblemap/css/m_sidebar.css?version=20170916" type="text/css">
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/bubblePopup.css?version=20171210">        <!-- 지도상의 버블 팝업 -->
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/m_autocomplete_style.css?version=20170911">
-    <link rel="stylesheet" href="biblemap/css/fakeLoader.css">
+    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/m_tooltip.css?version=20170911">
 
     <!-- <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/autocomplete_style.css?version=20170911">  -->
     <!-- <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/popup.css?version=20170910">  -->
@@ -51,7 +51,7 @@
     <script type="text/javascript" src="biblemap/src/m_searchBible.js?version=20170901"></script>
     <script type="text/javascript" src="biblemap/js/jquery.autocomplete.min.js"></script>
     <script type="text/javascript" src="biblemap/src/m_windowAdjust.js"></script>
-    <script type="text/javascript" src="biblemap/js/fakeLoader.min.js"></script>
+    <script type="text/javascript" src="biblemap/src/m_poiTooltip.js"></script>
 
     <style stype="text/css">
         ::-webkit-scrollbar {
@@ -194,7 +194,7 @@
 
     <div style="position:absolute; top: 165px; width: 249px; height: 14px; background: url(biblemap/image/horizon-line_2.png);"></div>
 
-    <div class="content" style ="position: absolute; left: 10px; width:230px; top: 190px; height: 85px; ">
+    <div id="biblePlaceDiv" class="content" style ="position: absolute; left: 10px; width:230px; top: 190px; height: 85px; ">
         <span style="position: absolute; top: 4px; left: 3px;  font-size:1.3em;">지명</span>
         <!-- <input id="biblePlace" type="text" name="currency" class="biginput"  size="16" maxlength="9"  -->
 
@@ -242,23 +242,23 @@
      <!-- </div>  -->
     <div id ="tab_contain" class="tab_container" >
         <!-- <div id = "tab1Title" class="divContent" style="padding-left: 40px;  font-size: 1.5em; top:-6px; overflow-x:hidden; border-bottom: 1px solid rgb(240, 240, 240);" >  -->
-        <div id = "tab1Title" class="divContent" style="padding-left: 40px;  font-size: 1.2em; top:-6px; overflow-x:hidden; " >
-            <span id ="tabBibleBook" style="position: absolute; left: 20px; top: 0px; width:120px; font-size:1.2em; text-align:right;" ></span>
-            <input id="tabDecBible" type="image" src="biblemap/image/left_arrow.png?version=20170905" style="position: absolute; left: 140px; width:22px; height:26px; vertical-align:middle; " onclick="mobileDecreaseBibleChapterAndGo()">
-            <span id ="tabBibleChapter" style="position: absolute; left: 165px; top: 0px; font-size:1.2em;">장</span>
-            <input id="tabIncBible" type="image" src="biblemap/image/right_arrow.png?version=20170905" style="position: absolute; left: 215px; top: 0px; width:22px; height:26px; vertical-align:middle;" onclick="mobileIncreaseBibleChapterAndGo()">
+        <div id = "tab1Title" class="divContent" style="padding-left: 20px;  font-size: 1.2em; top:-6px; height: 33px; overflow-x:hidden; " >
+            <span id ="tabBibleBook" style="position: absolute; left: 5px; top: 0px; width:120px; font-size:1.2em; text-align:right;" ></span>
+            <input id="tabDecBible" type="image" src="biblemap/image/left_arrow.png?version=20170905" style="position: absolute; left: 130px; width:22px; height:26px; vertical-align:middle; " onclick="mobileDecreaseBibleChapterAndGo()">
+            <span id ="tabBibleChapter" style="position: absolute; left: 155px; width:50px; top: 0px; font-size:1.2em; text-align:center;">장</span>
+            <input id="tabIncBible" type="image" src="biblemap/image/right_arrow.png?version=20170905" style="position: absolute; left: 205px; top: 0px; width:22px; height:26px; vertical-align:middle;" onclick="mobileIncreaseBibleChapterAndGo()">
         </div>
 
-        <div id = "tab3Title" class="divContent" style="padding-left: 10px;  font-size: 1.5em; top:-6px; overflow-x:hidden; " >
-        </div>
+        <!-- <div id = "tab3Title" class="divContent" style="padding-left: 10px;  font-size: 1.5em; top:-6px; height: 35px; overflow-x:hidden; border-bottom:4px solid rgb(230, 230, 230);" > </div>  -->
+        <div id = "tab3Title" class="divContent" style="padding-left: 10px;  font-size: 1.5em; top:-6px; height: 35px; overflow-x:hidden; " > </div>
 
-        <div id="tab1" class="tab_content" style="padding-left: 5px; ">
+        <div id="tab1" class="tab_content" style="padding-left: 5px; border-top: 1px solid rgb(225, 225, 225);">
         </div>
         <div id="tab2" class="tab_content" style="padding-left: 5px; " >
-            검색결과가&nbsp;없습니다 <br> 메뉴를&nbsp;선택하고&nbsp;성경의&nbsp;단어&nbsp;검색&nbsp;버튼을&nbsp;클릭해&nbsp;주세요
+            단어 검색결과가&nbsp;없습니다 <br> 메뉴를&nbsp;선택하고&nbsp;성경의&nbsp;단어&nbsp;검색&nbsp;버튼을&nbsp;클릭해&nbsp;주세요
         </div>
-        <div id="tab3" class="tab_content" style="left: -5px; padding-left: 5px; background-color:rgb(238, 238, 238);"  >
-            검색결과가&nbsp;없습니다 <br> 지도상의&nbsp;지명을&nbsp;클릭하고&nbsp;아이콘&nbsp;'i'를&nbsp;클릭해&nbsp;주세요
+        <div id="tab3" class="tab_content" style="left: -5px; padding-left: 5px; background-color:rgb(245, 245, 245); border-top:1px solid rgb(225, 225, 225);"  >
+            지명 정보의 검색결과가&nbsp; 없습니다 <br> 지도상의&nbsp;지명을&nbsp;클릭하고&nbsp;아이콘'i'를&nbsp;클릭해&nbsp;주세요&nbsp;
         </div>
     </div>
 
@@ -316,80 +316,14 @@
     dummy.innerHTML = "하하하하";
     */
 
-    preventDIV( 'sideMenu' );
-    preventDIV( 'titlebar' );
-    preventDIV( 'footer' );
-    preventDIV('tab1Title');
-    preventDIV('infoPopup');
+    preventZoomInDIV( 'sideMenu' );
+    preventZoomInDIV( 'titlebar' );
+    preventZoomInDIV( 'footer' );
+    preventZoomInDIV('tab1Title');
+    preventZoomInDIV('infoPopup');
+    preventZoomInDIV('biblePlaceDiv');
 
-    /*
-    var dvSideMenu = document.getElementById('sideMenu');
-
-    dvSideMenu.addEventListener('touchmove', function (event) {
-        event.preventDefault();
-    }, false);
-
-    var lastTap = 0;
-
-    var dvTitleBar = document.getElementById('titlebar');
-
-    dvTitleBar.addEventListener('touchmove', function (event) {
-        event.preventDefault();
-    }, false);
-
-
-    var dvFooter = document.getElementById('footer');
-    dvFooter.addEventListener('touchmove', function (e) {
-        var touchLen = e.touches.length;
-        if( touchLen > 1){
-            e.preventDefault();
-        }
-    }, false);
-    */
-
-    /*
-    var dvTab1 = document.getElementById('tab1');
-    var startx = 0;
-    var starty = 0;
-
-    dvTab1.addEventListener('touchstart', function (e) {
-        var touchLen = e.touches.length;
-        var touchobj = e.changedTouches[0];  // reference first touch point (ie: first finger)
-        startx = parseInt(touchobj.clientX);  // get x position of touch point relative to left edge of browser
-        starty = parseInt(touchobj.clientY);  // get x position of touch point relative to left edge of browser
-        dummy.innerHTML = 'touchstart count : ' + touchLen  +  '<br>';
-        dummy.innerHTML += 'Status: touchstart<br> ClientX: ' + startx + 'px';
-    }, false);
-
-    dvTab1.addEventListener('touchend', function (e) {
-        var touchobj = e.changedTouches[0];  // reference first touch point (ie: first finger)
-        startx = parseInt(touchobj.clientX);  // get x position of touch point relative to left edge of browser
-        dummy.innerHTML = 'Status: touchend<br> Resting x coordinate: ' + touchobj.clientX + 'px';
-    }, false);
-
-
-    dvTab1.addEventListener('touchmove', function (e) {
-        var touchLen = e.touches.length;
-        if( touchLen > 1){
-            e.preventDefault();
-        }
-    }, false);
-    */
-
-    ////////////////////////////////////////
-
-    /*
-    var dvTab1Title = document.getElementById('tab1Title');
-    dvTab1Title.addEventListener('touchmove', function (event) {
-        var touchLen = e.touches.length;
-        if( touchLen > 1){
-            event.preventDefault();
-        }
-    }, false);
-    */
-
-
-    (function(){
+    (function(){        // prevent for double tap
         var lastTap = 0;
         var timeout;
 
@@ -419,6 +353,7 @@
         $('#tabDecBible').on('touched click', preventEvent );
         $('#tabIncBible').on('touched click', preventEvent );
 
+        // $('#biblePlaceDiv').on('touched click', preventEvent );
     }());
 
 
@@ -604,6 +539,9 @@
     var layerManager = bibleMapManager.getLayerManager();
     var bibleMap = bibleMapManager.getMap();
 
+    var poiTooltip = new mapTooltip( bibleMap, 'tooltip tooltip-static' );
+
+
     function startDownloadGeometries(){
         downloadGeomTimer = setInterval(downloadGeometries, 100);
     }
@@ -667,6 +605,13 @@
             }
             if( selMenuString == "지명정보"){
                 $("#tab3Title").show();
+                /*
+                var infoTab3 = document.getElementById( 'tab3' );
+                if( infoTab3.innerHTML.length > 10 )
+                    $("#tab3Title").show();
+                else{
+                    alert("검색결과가 없습니다 지도상의 지명을 클릭하고 아이콘 \'i\'를 클릭해 주세요");
+                }*/
             }else{
                 $("#tab3Title").hide();
             }
@@ -804,7 +749,6 @@
 
 
     function showPopup( position, content ){
-
         popup2D.content.innerHTML = content;
         popup2D.overlay.setPosition( position );
     }
@@ -926,6 +870,7 @@
         var clickedPos = evt.coordinate;
         // $("#mousePosition").html( "Pos X: " + clickedPos[0] + ", Y:" + clickedPos[1] ); // + zoom;
 
+        closeTooltip();
         ConsoleLog( "Map2D Click!!!! ");
 
     });

@@ -180,7 +180,7 @@ function appendReceiveMsg( tabID, resObj, strConvText, paragraph ){
     $(tabID).append( "<tr>");
     var strChapterLinkWithBibleContent = "";
     if( tabID == '#tab1') {
-        var reverseColor = 'style=\'background-color:rgb(238, 238, 238);\'';
+        var reverseColor = 'style=\'background-color:rgb(245, 245, 245);\'';
         if( paragraph == resObj.paragraph ){
             reverseColor = 'style=\'background-color:rgb(210, 210, 210);\'';
         }

@@ -1,6 +1,138 @@
 /**
  * Created by Administrator on 2018-03-15.
  */
+
+poiContentsToTab = function( infoText ){
+
+    $('#tab3Title').empty();
+
+    var strPoiTitle = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + focusPoiObj.id + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: #2682E8 \" >' + '#'+ focusPoiObj.biblePlace + '  ' + '</a>';
+
+    $("#tab3Title").append( strPoiTitle );
+
+    var infoTab = document.getElementById( 'tab3' );
+
+    var infoObj = { // title : poiText,
+        content : infoText
+    };
+
+    var strConvText = makeStrongInText( layerManager, focusPoiObj.biblePlace, infoObj );
+
+    // infoTab.innerHTML += infoText;
+    infoTab.innerHTML = strConvText;
+
+};
+
+
+makeLinkedName = function( poiID, placeName, youtube, infoText ){
+
+    var strRet = "";
+
+    var youtubeRef2D = "<a href =\"javascript:showPoiYoutubeInTooltip()\" >";
+    var youtubeIcon = "<img src=\"biblemap/image/camera-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">";
+    var strLinkYoutube = youtubeRef2D + youtubeIcon + "</a>";
+
+    var textRef = "<a href =\"javascript:showPoiInfoInTab()\" >";
+    var textIcon = "<img src=\"biblemap/image/text-icon.png?version=20170904\" style=\"width:20px; height:20px; vertical-align:middle;\">";
+
+    var strLinkTextInfo = textRef + textIcon + "</a>";
+
+    var strLinkPoiLabel = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + poiID + ')\" style=\"text-decoration:none; font-weight:bold; font-size:1.3em; vertical-align:middle; color: rgb( 110, 110, 110 ) ;' + '\" >' + placeName + '</a>';
+
+    if( youtube != null && youtube !== "" ){
+        strRet = strLinkYoutube + "&nbsp;&nbsp;&nbsp;"
+    }
+    strRet += strLinkPoiLabel;
+    if( infoText != null && infoText !== "" ) {
+        strRet += "&nbsp;&nbsp;&nbsp;" + strLinkTextInfo;
+    }
+
+    return strRet;
+};
+
+
+function mobileRequestPoiContentAndShow( paramPoiObj, popup2D ) {
+
+    focusPoiObj = paramPoiObj;
+
+    var youtube = "";
+    var infoText = "";
+    var titleText = "";
+    var labelText = "";
+
+    requestPoiInfo( focusPoiObj, function ( recvPoiObj) {
+
+        youtube = "";
+        infoText = "";
+        titleText = "";
+        labelText = "";
+
+        if ( recvPoiObj.hasOwnProperty("youtube")) {
+            youtube = recvPoiObj["youtube"];
+        }
+
+        if ( recvPoiObj.hasOwnProperty("text")) {
+            infoText = recvPoiObj["text"];
+        }
+
+        if( recvPoiObj.title !== undefined ) {
+            if(  recvPoiObj.title !== "" )
+                titleText = recvPoiObj.title;
+        }
+
+        showPoiTooltip();
+        // poiContentsToTab();
+
+    }, function () {    // POI의 상세정보가 없을 경우
+
+      //  poiTooltip.create( poiObj.biblePlace, linkedPlaceName, [poiObj.x, poiObj.y]);
+        youtube = "";
+        infoText = "";
+
+        showPoiTooltip();
+
+        // labelText = makeLinkedName( focusPoiObj.id, focusPoiObj.biblePlace, null, null );
+        // poiTooltip.create( focusPoiObj.biblePlace, labelText, [focusPoiObj.x, focusPoiObj.y]);
+    });
+
+    showPoiTooltip = function(){
+
+        if( titleText !== "")
+            labelText = makeLinkedName( focusPoiObj.id, titleText, youtube, infoText );
+        else
+            labelText = makeLinkedName( focusPoiObj.id, focusPoiObj.biblePlace, youtube, infoText );
+        poiTooltip.create( focusPoiObj.biblePlace, labelText, [focusPoiObj.x, focusPoiObj.y]);
+    };
+
+    showPoiInfoInTab = function() {      // tabMenu 에서 정보 보여주기
+
+        footerMenu.middle();
+
+        poiContentsToTab( infoText );
+
+        tabMenu.selectTab('tab3Menu');
+        $("#tab3").scrollTop(0);
+
+        setCenterFocusedPOI( focusPoiObj );
+
+        bibleMapManager.createPoiIcon( focusPoiObj );
+    };
+
+    showPoiYoutubeInTooltip = function() {
+
+        footerMenu.bottom();
+
+        labelText = makeLinkedName( focusPoiObj.id, focusPoiObj.biblePlace, null, null );
+        var foldIcon = '<a href =\"javascript:showPoiTooltip()\" >' + '<img src=\"biblemap/image/fold-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">' + '</a>';
+        labelText += '&nbsp;&nbsp;' + foldIcon;
+        labelText += '<br>';
+        labelText += "<iframe width=\"220\" height=\"150\" src=\"" + youtube + "\" frameborder = \"0\" allowfullscreen></iframe>";
+        poiTooltip.create( focusPoiObj.biblePlace, labelText, [focusPoiObj.x, focusPoiObj.y]);
+    }
+}
+
+
+/*
 function mobileRequestPoiContentAndShow( poiObj, popup2D ) {
 
     var youtube = "";
@@ -145,7 +277,7 @@ function mobileRequestPoiContentAndShow( poiObj, popup2D ) {
     };
 
 }
-
+*/
 
 function setCenterFocusedPOI( focusedPoiObj ){
     var zoom = bibleMapManager.getView().getZoom();
