@@ -6,7 +6,10 @@ poiContentsToTab = function( infoText ){
 
     $('#tab3Title').empty();
 
-    var strPoiTitle = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + focusPoiObj.id + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: #2682E8 \" >' + '#'+ focusPoiObj.biblePlace + '  ' + '</a>';
+    var strPoiTitle = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + focusPoiObj.id + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: #2682E8 \" >'
+        // +'#'+
+        + '<img src ="biblemap/image/location16.png" style=\"height:26px; vertical-align:top;\">&nbsp;' +
+        focusPoiObj.biblePlace + '  ' + '</a>';
 
     $("#tab3Title").append( strPoiTitle );
 
@@ -28,11 +31,11 @@ makeLinkedName = function( poiID, placeName, youtube, infoText ){
 
     var strRet = "";
 
-    var youtubeRef2D = "<a href =\"javascript:showPoiYoutubeInTooltip()\" >";
+    var youtubeRef2D = "<a href =\"javascript:showPoiYoutubeInTooltip(" +  poiID + ",'" + youtube +"')\" >";
     var youtubeIcon = "<img src=\"biblemap/image/camera-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">";
     var strLinkYoutube = youtubeRef2D + youtubeIcon + "</a>";
 
-    var textRef = "<a href =\"javascript:showPoiInfoInTab()\" >";
+    var textRef = "<a href =\"javascript:showPoiInfoInTab(" +  poiID + ")\" >";
     var textIcon = "<img src=\"biblemap/image/text-icon.png?version=20170904\" style=\"width:20px; height:20px; vertical-align:middle;\">";
 
     var strLinkTextInfo = textRef + textIcon + "</a>";
@@ -51,60 +54,88 @@ makeLinkedName = function( poiID, placeName, youtube, infoText ){
 };
 
 
-function mobileRequestPoiContentAndShow( paramPoiObj, popup2D ) {
+function mobileRequestPoiContentAndShow( paramPoiObj, callback ) {
 
-    focusPoiObj = paramPoiObj;
+    var selectedPoiObj = paramPoiObj;
 
     var youtube = "";
     var infoText = "";
     var titleText = "";
     var labelText = "";
 
-    requestPoiInfo( focusPoiObj, function ( recvPoiObj) {
+    showDownloading();
+
+    requestPoiInfo( selectedPoiObj, function ( recvPoiInfo ) {
+
+        hideDownloading();
 
         youtube = "";
         infoText = "";
         titleText = "";
         labelText = "";
 
-        if ( recvPoiObj.hasOwnProperty("youtube")) {
-            youtube = recvPoiObj["youtube"];
+        if ( recvPoiInfo.hasOwnProperty("youtube")) {
+            youtube = recvPoiInfo["youtube"];
         }
 
-        if ( recvPoiObj.hasOwnProperty("text")) {
-            infoText = recvPoiObj["text"];
+        if ( recvPoiInfo.hasOwnProperty("text")) {
+            infoText = recvPoiInfo["text"];
         }
 
-        if( recvPoiObj.title !== undefined ) {
-            if(  recvPoiObj.title !== "" )
-                titleText = recvPoiObj.title;
+        if( recvPoiInfo.title !== undefined ) {
+            if(  recvPoiInfo.title !== "" )
+                titleText = recvPoiInfo.title;
         }
 
-        showPoiTooltip();
+        showPoiTooltip( selectedPoiObj.id );
         // poiContentsToTab();
 
+        if( callback )
+            callback();
+
     }, function () {    // POI의 상세정보가 없을 경우
+
+        hideDownloading();
 
       //  poiTooltip.create( poiObj.biblePlace, linkedPlaceName, [poiObj.x, poiObj.y]);
         youtube = "";
         infoText = "";
 
-        showPoiTooltip();
+        showPoiTooltip( selectedPoiObj.id );
+
+        if( callback )
+            callback();
 
         // labelText = makeLinkedName( focusPoiObj.id, focusPoiObj.biblePlace, null, null );
         // poiTooltip.create( focusPoiObj.biblePlace, labelText, [focusPoiObj.x, focusPoiObj.y]);
     });
 
-    showPoiTooltip = function(){
+    showPoiTooltip = function( poiID ){
+
+        var poiObj = layerManager.getPoiObjById( poiID );
 
         if( titleText !== "")
-            labelText = makeLinkedName( focusPoiObj.id, titleText, youtube, infoText );
+            labelText = makeLinkedName( selectedPoiObj.id, titleText, youtube, infoText );
         else
-            labelText = makeLinkedName( focusPoiObj.id, focusPoiObj.biblePlace, youtube, infoText );
-        poiTooltip.create( focusPoiObj.biblePlace, labelText, [focusPoiObj.x, focusPoiObj.y]);
+            labelText = makeLinkedName( selectedPoiObj.id, selectedPoiObj.biblePlace, youtube, infoText );
+
+
+        if ( focusPoiObj != null) {
+            if (poiObj.id == focusPoiObj.id) {
+                poiTooltip.create(selectedPoiObj.biblePlace, labelText, [selectedPoiObj.x, selectedPoiObj.y], true);
+            }
+            else
+                poiTooltip.create( selectedPoiObj.biblePlace, labelText, [selectedPoiObj.x, selectedPoiObj.y], false);
+        }
+        else
+            poiTooltip.create( selectedPoiObj.biblePlace, labelText, [selectedPoiObj.x, selectedPoiObj.y], false);
     };
 
-    showPoiInfoInTab = function() {      // tabMenu 에서 정보 보여주기
+    showPoiInfoInTab = function( poiID ) {      // tabMenu 에서 정보 보여주기
+
+        var poiObj = layerManager.getPoiObjById( poiID );
+        setFocusPoiObj( poiObj );
+        bibleMapManager.createPoiIcon( poiObj );        // focus POI Icon 만들기
 
         footerMenu.middle();
 
@@ -113,23 +144,34 @@ function mobileRequestPoiContentAndShow( paramPoiObj, popup2D ) {
         tabMenu.selectTab('tab3Menu');
         $("#tab3").scrollTop(0);
 
-        setCenterFocusedPOI( focusPoiObj );
-
-        bibleMapManager.createPoiIcon( focusPoiObj );
+        setCenterFocusedPOI( poiObj );
+        poiTooltip.create( poiObj.biblePlace, labelText, [poiObj.x, poiObj.y], true);
     };
-
-    showPoiYoutubeInTooltip = function() {
-
-        footerMenu.bottom();
-
-        labelText = makeLinkedName( focusPoiObj.id, focusPoiObj.biblePlace, null, null );
-        var foldIcon = '<a href =\"javascript:showPoiTooltip()\" >' + '<img src=\"biblemap/image/fold-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">' + '</a>';
-        labelText += '&nbsp;&nbsp;' + foldIcon;
-        labelText += '<br>';
-        labelText += "<iframe width=\"220\" height=\"150\" src=\"" + youtube + "\" frameborder = \"0\" allowfullscreen></iframe>";
-        poiTooltip.create( focusPoiObj.biblePlace, labelText, [focusPoiObj.x, focusPoiObj.y]);
-    }
 }
+
+
+function setFocusPoiObj( poiObj ){
+    focusPoiObj = poiObj;
+}
+
+
+showPoiYoutubeInTooltip = function( poiID, youtubeLink ) {
+
+    var poiObj = layerManager.getPoiObjById( poiID );
+
+    footerMenu.bottom();
+
+    labelText = makeLinkedName( poiObj.id, poiObj.biblePlace, null, null );
+    var foldIcon = '<a href =\"javascript:showPoiTooltip(' +  poiID + ')\" >' + '<img src=\"biblemap/image/fold-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">' + '</a>';
+    labelText += '&nbsp;&nbsp;' + foldIcon;
+    labelText += '<br>';
+    labelText += "<iframe width=\"220\" height=\"180\" src=\"" + youtubeLink + "\" frameborder = \"0\" allowfullscreen></iframe>";
+
+    if( focusPoiObj !== null && poiObj.id == focusPoiObj.id )
+        poiTooltip.create( poiObj.biblePlace, labelText, [poiObj.x, poiObj.y], true);
+    else
+        poiTooltip.create( poiObj.biblePlace, labelText, [poiObj.x, poiObj.y], false);
+};
 
 
 /*

@@ -11,7 +11,11 @@ function mapTooltip( paramMap, cssClassName ) {
 
     var zOrder = 0;
 
-    this.create = function( poiName, linkedText, coord){
+    this.create = function( poiName, linkedText, coord, isFocus){
+
+        var posY = -11;
+        if( isFocus == true)
+            posY = - 40;
 
         this.allRemove();
 
@@ -37,7 +41,7 @@ function mapTooltip( paramMap, cssClassName ) {
 
         tooltip.setPosition(coord);
        //  tooltip.setOffset([0, -7]);
-        tooltip.setOffset([0, -11]);
+        tooltip.setOffset([0, posY ]);
 
         this.tooltipArray.push( tooltip);
         zOrder +=1;

@@ -209,7 +209,12 @@ function reqeustAndShowContents( paramTabID, searchParam , paramParagraph, compl
     var paragraph = paramParagraph;
     var jsonStr = JSON.stringify( searchParam );
 
+    showDownloading();
+
     httpRequest("POST", jsonStr, function( http ){
+
+        hideDownloading();
+
         $(tabID).empty();
 
         var resObj = JSON.parse( http.responseText );
@@ -289,13 +294,13 @@ function requestBibleWithShortChapter( shortTitle, chapterNum, paragraph ){
 
     var chapter = bibleChapterList.getChapterByShortName( shortTitle );
 
-    /*
+
     if( chapter.bookNumber > 0 ) {
         dvBibleTitle.value = chapter.bookNumber.toString();
     }
 
     dvBibleChapter.value = chapterNum;
-    */
+
 
     var searchParam = {
         type: "Args",     // book, chapter, paragraph 등으로 구성된 검색

@@ -637,8 +637,10 @@ function flyTo( view, location, zoomIn, done) {
 
     // zoomIn += 1;
 
+    /*
     if( zoomIn < 8 )
         zoomIn = 8;
+        */
 
     function callback(complete) {
         --parts;
@@ -711,7 +713,7 @@ function moveTo( view, location, zoomIn, done ) {
      // if( zoomIn < 10 )
      //  zoomIn = 10;
 
-     zoomIn = Math.floor( zoomIn );
+//     zoomIn = Math.floor( zoomIn );
 
      _moveToPos( view, location, zoomIn, duration, done );
 
@@ -1097,17 +1099,18 @@ function createLayer( source  ) {
              });
 
              var iconStyle = new ol.style.Style({
-                 image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+                 image: new ol.style.Icon( ({
                      // anchor: [0.5, 46],
-                     anchor: [0.5, 35],
+                     anchor: [0.55, 34],
                      anchorXUnits: 'fraction',
                      anchorYUnits: 'pixels',
                      // src: 'https://openlayers.org/en/v4.6.5/examples/data/icon.png'
                      // size : [ 50, 50 ],
                      // scale: 0.5,
-                     src: 'biblemap/image/location9.png'
+                     src: 'biblemap/image/location16.png'
                  }))
              });
+
 
              iconFeature.setProperties({  'id' : poiObj.id,
                                         'label' : poiObj.biblePlace });
@@ -1125,6 +1128,7 @@ function createLayer( source  ) {
              iconLayer.setZIndex( 1000 );
 
              this.map.addLayer( iconLayer );
+           //  this.map.updateSize();
          };
 
          this.destroyPoiIcon = function(){
@@ -1139,7 +1143,8 @@ function createLayer( source  ) {
 
      return function( overlay, cssMap ){
          // return new MapManager( overlay, cssMap, createView( [3942321.454123089, 3792452.570684223], 15, 4, 8 ) );
-         return new MapManager( overlay, cssMap, createView( [3844176, 3806822], 15, 4, 7 ) );
+         //return new MapManager( overlay, cssMap, createView( [3844176, 3806822], 15, 4, 7 ) );
+         return new MapManager( overlay, cssMap, createView( [3937988, 3763366 ], 15, 4, 7 ) );
      }
 
  }());

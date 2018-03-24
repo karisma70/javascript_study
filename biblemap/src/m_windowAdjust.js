@@ -368,32 +368,42 @@ function showIntroBibleMap(  ){
     popupContent.innerHTML = "";
     // popupContent.innerHTML += poiText;
     // popupContent.innerHTML += lineImage + "<br>";
-    popupContent.innerHTML += '성경에는 하나님의 역사가 담겨있습니다 <br>';
-    popupContent.innerHTML += '하나님의 역사는 사실이며 따라서 성경본문에 등장하는 지명은 대부분 실제 존재하는 위치입니다 <br>';
-    popupContent.innerHTML += '성서지리에 대한 이해와 더불어 성경을 읽는다면 하나님에 대한 더욱 큰 확신과 믿음이 생길 것입니다  <br>';
-    popupContent.innerHTML += '여러분들이 성경을 가까이 하며 하나님의 역사를 더욱 깊게 알기 원하신다면 성경지도 웹 서비스가 도움이 될 것입니다.</span>';
+    popupContent.innerHTML += '성경에는 하나님의 역사가 담겨있습니다.';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '하나님의 역사는 사실이며 따라서 성경본문에 등장하는 지명은 대부분 실제 존재하는 위치입니다.';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '성서지리에 대한 이해와 더불어 성경을 읽는다면 하나님에 대한 더욱 큰 확신과 믿음이 생길 것입니다.';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '여러분들이 성경을 가까이 하며 하나님의 역사를 더욱 깊게 알기 원하신다면 성경지도 웹 서비스가 도움이 될 것입니다.';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '본 웹사이트에 포함된 디지털맵 뷰어는 OpenLayers를 기반으로 제작되었으며, OpenLayers의 라이센스는 2-Clause BSD를 따릅니다.</span>';
+    popupContent.innerHTML += '본 웹사이트에 포함된 디지털맵 뷰어는 OpenLayers를 기반으로 제작되었으며, OpenLayers의 라이센스는 2-Clause BSD를 따릅니다.';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '본 웹사이트에서 표현되는 디지털 맵 데이터의 일부는 OpenStreetMap을 사용하고 있으며, OpenStreetMap의 라이센스는 CC BY-SA 2.0을 따릅니다.</span>';
+    popupContent.innerHTML += '본 웹사이트에서 표현되는 디지털 맵 데이터의 일부는 \'마이크로소프트\'가 제공하는 \'Bing Maps\'를 사용하고 있으며, \'Bing Maps\'를 사용하여 본 웹서비스를 제공하는 \'Mission Wide\'는 \'Bing Maps\'에 관한 라이선스 조항을 준수합니다';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '본 웹서비스를 사용하는 사용자는 아래 링크로 제공하는 라이센스 규정을 준수해야 합니다.';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<a href=\"javascript:gotoBinMapLincense()\" style=\"text-decoration:none; font-weight:bold; color:#2E59BF;\">' + '링크:  Bing Maps 라이센스 규정</a>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '본 웹사이트에서 제공하는 성경지명 정보 가운데 \'-비전성경사전-\' 출처로 표현되는 내용은 \'(사)두란노서원\'에서, \'-성경지명사전-\' 출처로 표현되는 내용은 \'(사)한국컴퓨터선교회\'에서 웹서비스를 통하여 제공하고 있는 내용임을 알려드립니다.</span>';
+    popupContent.innerHTML += '본 웹사이트에서 표현되는 디지털 맵 데이터의 일부는 OpenStreetMap을 사용하고 있으며, OpenStreetMap의 라이센스는 CC BY-SA 2.0을 따릅니다.';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '본 웹사이트에서 제공되는 위치정보는 일부 오류를 포함할 수 있음을 알려드리며, 공인된 정확한 정보가 수집되는 대로 수정할 것을 알려드립니다.</span>';
+    popupContent.innerHTML += '본 웹사이트에서 제공하는 성경지명 정보 가운데 \'-비전성경사전-\' 출처로 표현되는 내용은 \'(사)두란노서원\'에서, \'-성경지명사전-\' 출처로 표현되는 내용은 \'(사)한국컴퓨터선교회\'에서 웹서비스를 통하여 제공하고 있는 내용임을 알려드립니다.';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '본 웹사이트는 \'Mission Wide\'가 개발 및 운영, 관리하고 있으며, \'Mission Wide\'는 성경지리를 웹 서비스로 제공하는 비영리 단체입니다.</span>';
+    popupContent.innerHTML += '본 웹사이트에서 제공되는 위치정보는 일부 오류를 포함할 수 있음을 알려드리며, 공인된 정확한 정보가 수집되는 대로 수정할 것을 알려드립니다.';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '\'Mission Wide\' 연락처 </span>';
+    popupContent.innerHTML += '본 웹사이트는 \'Mission Wide\'가 개발 및 운영, 관리하고 있으며, \'Mission Wide\'는 성경지리를 웹 서비스로 제공하는 비영리 단체입니다.';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '이메일: missionwide@naver.com</span>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '<a href= \"javascript:gotoBibleMapBlog()\" style=\"text-decoration:none; font-weight:bold; color:#464646;\">' + '블로그: blog.naver.com/bible-map</a></span>';
+    popupContent.innerHTML += '\'Mission Wide\' 연락처';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '이메일: missionwide@naver.com';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<a href= \"javascript:gotoBibleMapBlog()\" style=\"text-decoration:none; font-weight:bold; color:#2E59BF;\">' + '블로그: blog.naver.com/bible-map</a>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
 
@@ -405,6 +415,10 @@ function showIntroBibleMap(  ){
 
 function gotoBibleMapBlog(){
     window.open("http://blog.naver.com/bible-map");
+}
+
+function gotoBinMapLincense(){
+    window.open("https://www.microsoft.com/en-us/maps/product");
 }
 
 function showDownloading(){
