@@ -853,6 +853,7 @@ function createLayer( source  ) {
 
          this.layerManager = new LayerManager();
          this.view = view;
+         this.mapExtent = null;
 
          var collControls = new ol.Collection();
 
@@ -875,8 +876,15 @@ function createLayer( source  ) {
              view: this.view
          });
 
-         // var zoomSlider = new ol.control.ZoomSlider();
-         // this.map.addControl( zoomSlider );
+         this.mapExtent = this.map.getView().calculateExtent( this.map.getSize());
+         this.mapExtent[0]= this.mapExtent[0] - 190000;
+         this.mapExtent[1]= this.mapExtent[1] - 190000;
+         this.mapExtent[2]= this.mapExtent[2] + 190000;
+         this.mapExtent[3]= this.mapExtent[3] + 190000;
+
+         this.getMapBaseExtent = function(){
+           return this.mapExtent;
+         };
 
          bibleMap = this.map;
 

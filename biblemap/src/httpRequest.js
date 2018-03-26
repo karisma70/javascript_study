@@ -59,7 +59,7 @@ var httpRequest = (function(){
                 if (e.target.status == 200) {
                     callback(xmlhttp);
                 } else {
-                    alert( "Error!!!  code : " + e.target.status );
+                    alert( "통신이 원활하지 않습니다 네트웍 상태를 확인해 주세요  Error Code : " + e.target.status );
                 }
             }
         };

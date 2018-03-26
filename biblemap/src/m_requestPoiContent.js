@@ -6,10 +6,21 @@ poiContentsToTab = function( infoText ){
 
     $('#tab3Title').empty();
 
-    var strPoiTitle = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + focusPoiObj.id + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: #2682E8 \" >'
-        // +'#'+
-        + '<img src ="biblemap/image/location16.png" style=\"height:26px; vertical-align:top;\">&nbsp;' +
+    // var strPoiTitle = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + "\'" + focusPoiObj.id + "\'" + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: #2682E8 \" >'
+    var strPoiTitle = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + "\'" + focusPoiObj.id + "\'" + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: rgb( 90, 90, 90)\" >'
+        + '<img src ="biblemap/image/location3.png" style=\"height:26px; vertical-align:top;\">&nbsp;&nbsp;&nbsp;' +
         focusPoiObj.biblePlace + '  ' + '</a>';
+
+    var strSearchWord = '<a href=' + '"javascript:bibleSearchByWord( ' + "\'" + focusPoiObj.biblePlace + "\'" + ')\">';
+    strSearchWord += '&nbsp;&nbsp;&nbsp;<img src ="biblemap/image/m_search_btn2.png" style=\"height:28px; vertical-align:top;\">&nbsp;' + '</a>';
+
+
+    /*
+        strPoiTitle +='<a href=' + '"javascript:bibleSearchByWord( ' + '\"' + focusPoiObj.biblePlace + '\"'+ ')\">';
+        strPoiTitle += '&nbsp;&nbsp;&nbsp;<img src ="biblemap/image/bible_search5.png" style=\"height:26px; vertical-align:top;\">&nbsp;' + '</a>';
+        */
+
+    strPoiTitle += strSearchWord;
 
     $("#tab3Title").append( strPoiTitle );
 
@@ -114,10 +125,13 @@ function mobileRequestPoiContentAndShow( paramPoiObj, callback ) {
 
         var poiObj = layerManager.getPoiObjById( poiID );
 
-        if( titleText !== "")
-            labelText = makeLinkedName( selectedPoiObj.id, titleText, youtube, infoText );
-        else
-            labelText = makeLinkedName( selectedPoiObj.id, selectedPoiObj.biblePlace, youtube, infoText );
+        if( titleText !== ""){
+            // labelText = makeLinkedName( selectedPoiObj.id, titleText, youtube, infoText );
+            labelText = makeLinkedName(selectedPoiObj.id, selectedPoiObj.biblePlace, youtube, infoText);
+        }
+        else {
+            labelText = makeLinkedName(selectedPoiObj.id, selectedPoiObj.biblePlace, youtube, infoText);
+        }
 
 
         if ( focusPoiObj != null) {

@@ -389,3 +389,13 @@ function getInternetExplorerVersion() {
     return rv;
 }
 
+function IsIntersectExtent( extent, mapX, mapY ){
+    if( extent[0] < mapX && extent[2] > mapX  ){
+        if( extent[1] < mapY && extent[3] > mapY ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+

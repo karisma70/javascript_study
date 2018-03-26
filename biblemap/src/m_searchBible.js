@@ -50,6 +50,19 @@ function mobileSearchBibleWord(){
     // searchWord = " "+removeSpaceInWord( searchWord );
     searchWord = removeSpaceInWord( searchWord );
 
+    bibleSearchByWord( searchWord );
+
+    $("#sideMenu").removeClass("open");
+}
+
+function bibleSearchByPlace( placeName ){
+    bibleSearchByWord( placeName );
+
+    // $("#tab2").scrollTop(0);
+}
+
+
+function bibleSearchByWord( searchWord ){
     var searchParam = {
         type: "Word",     // book, chapter, paragraph 등으로 구성된 검색
         option: {}
@@ -80,10 +93,10 @@ function mobileSearchBibleWord(){
         } else {
             // moveToPlaceByWord( param.option.content.$regex );
         }
+
+        $("#tab2").scrollTop(0);
+
     } );
-
-    $("#sideMenu").removeClass("open");
-
 }
 
 
@@ -154,6 +167,12 @@ function makeSearchChapterParam(){
 
 function mobileSearchBibleChapter( callback ){
 
+    if(isNaN( dvBibleChapter.value ) == true) {
+        alert( "숫자를 입력해 주세요");
+        $("#bibleChapter").focus();
+        return;
+    }
+
     var searchParam = makeSearchChapterParam();
 
     saveSearchWordsToStorage();
@@ -187,7 +206,7 @@ function appendReceiveMsg( tabID, resObj, strConvText, paragraph ){
         strChapterLinkWithBibleContent = "<td width = \"25\" " + reverseColor + " >" + resObj.paragraph + "</td>" + "<td" + " " + reverseColor + ">" + strConvText + "</td>";
     }else if( tabID == '#tab2' ) {
         strChapterLinkWithBibleContent = "<td width = \"82\" >" + '<a href= "javascript:requestBibleWithShortChapter( \'' + resObj.shortTitle + '\',' + resObj.chapter + ',' + resObj.paragraph + ' )\" ' +
-            'style=\"text-decoration:none; font-weight:bold; color:#2D479C;\">'
+            'style=\"text-decoration:none; font-weight:bold; color:#0D63DB;\">'
             + resObj.shortTitle + " " + resObj.chapter + ":" + resObj.paragraph + "</a>" + "</td>"
             + "<td>" + strConvText + "</td>";
     }
@@ -215,11 +234,18 @@ function reqeustAndShowContents( paramTabID, searchParam , paramParagraph, compl
 
         hideDownloading();
 
+        var rightRecCount = 0;
+
         $(tabID).empty();
 
         var resObj = JSON.parse( http.responseText );
         if( resObj.length < 1 ){
             $(tabID).append("검색된 결과가 없습니다.");
+            if( searchParam.type == "Word"){
+                alert("검색된 결과가 없습니다 검색어를 다시 입력해 주세요!");
+                gotoSearchWord();
+            }
+
             if( completeCallback )
                 completeCallback( searchParam, resObj );
             return;
@@ -245,6 +271,7 @@ function reqeustAndShowContents( paramTabID, searchParam , paramParagraph, compl
                 for ( var idx in resObj) {
                     if( searchParam.type == "Word" ){
                         if( examinRightWordinText( searchParam.option.content.$regex, resObj[idx].content ) == true ){
+                            rightRecCount ++;
                             var searchWord = removeSpaceInWord( searchParam.option.content.$regex );
                             var strConvText = makeStrongInText( layerManager, searchWord, resObj[idx] );
                             appendReceiveMsg( tabID, resObj[idx], strConvText, paragraph );
@@ -259,6 +286,7 @@ function reqeustAndShowContents( paramTabID, searchParam , paramParagraph, compl
             } else {        // 수신받은 데이터가 배열이 아니고 하나만 있을 경우
                 if( searchParam.type == "Word" ){
                     if( examinRightWordinText( searchParam.option.content.$regex, resObj.content ) == true ) {
+                        rightRecCount ++;
                         var searchWord = removeSpaceInWord( searchParam.option.content.$regex );
                         var strConvText = makeStrongInText( layerManager, searchWord, resObj );
                         appendReceiveMsg( tabID, resObj, strConvText, paragraph );
@@ -270,6 +298,12 @@ function reqeustAndShowContents( paramTabID, searchParam , paramParagraph, compl
                 }
             }
         }
+
+        if( searchParam.type == "Word" && rightRecCount == 0 ) {
+            alert("검색된 결과가 없습니다 검색어를 다시 입력해 주세요!");
+            gotoSearchWord();
+        }
+
         $(tabID).append( "<br></table >");
 
         if( tabID == '#tab1'){

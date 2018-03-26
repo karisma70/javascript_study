@@ -23,17 +23,20 @@ var mobileBibleMapPointLayers = [
     },
 
 
+
     { url : 'level_9_poi',  order: 22, style: {
         visibleRange : { max : 25 , min : 8.5 },
         // textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px Nanum Gothic', color: "white", outlineColor : "#9b490d", outlineWidth : 2  } }   // 191970
         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 15px Nanum Gothic', color: "white", outlineColor : "#191970", outlineWidth : 1  } }   // 191970
     },
 
+
     { url: 'history/History_12Sect_poi',  order: 13, style: {
         visibleRange : { max : 9.5, min : 7.5 },
         // textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px Nanum Gothic', color: '#E7E5E5', outlineColor : '#5F0291', outlineWidth : 3  }}
         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 15px Nanum Gothic', color: "#E7E5E5", outlineColor : "#5F0291", outlineWidth : 1  } }  //3e636a
     },
+
 
     { url : 'level_7_poi',  order: 24, style: {
         visibleRange : { max : 25 , min : 7 },

@@ -31,8 +31,8 @@ var createFooterMenu = (function() {
          var homeBtn = document.getElementById("homeBtn");
 
 
-         compassBtn.style.top = 10 + 'px';
-         compassBtn.style.left = (window.innerWidth - 45 ) + 'px';
+         compassBtn.style.top = 5 + 'px';
+         compassBtn.style.left = (window.innerWidth - 50 ) + 'px';
 
          zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
          zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
@@ -113,8 +113,8 @@ var createFooterMenu = (function() {
              mapView.style.top = 41 + 'px';
              mapView.style.bottom = ( window.innerHeight - mapHeight + 1 ) + 'px';
 
-             compassBtn.style.top = 10 + 'px';
-             compassBtn.style.left = (window.innerWidth - 45 ) + 'px';
+             compassBtn.style.top = 5 + 'px';
+             compassBtn.style.left = (window.innerWidth - 50 ) + 'px';
 
              footer.style.top = 81 + 'px';
              footer.style.left = 0 + 'px';
@@ -152,11 +152,11 @@ var createFooterMenu = (function() {
              mapView.style.top = 41 + 'px';
              mapView.style.bottom = 40 + 'px';
 
-             compassBtn.style.top = 10 + 'px';
-             compassBtn.style.left = (window.innerWidth - 45 ) + 'px';
+             compassBtn.style.top = 5 + 'px';
+             compassBtn.style.left = (window.innerWidth - 50 ) + 'px';
 
              homeBtn.style.top = ( window.innerHeight - 220 ) + 'px';
-             zoomInBtn.style.top = ( window.innerHeight - 180 ) + 'px';
+             zoomInBtn.style.top = ( window.innerHeight - 176 ) + 'px';
              zoomOutBtn.style.top = (window.innerHeight - 140 ) + 'px';
 
              zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
@@ -206,11 +206,11 @@ var createFooterMenu = (function() {
             mapView.style.top = 41 + 'px';
             mapView.style.bottom = ( window.innerHeight - mapHeight - 1 ) + 'px';
 
-            compassBtn.style.top = 10 + 'px';
-            compassBtn.style.left = (window.innerWidth - 45 ) + 'px';
+            compassBtn.style.top = 5 + 'px';
+            compassBtn.style.left = (window.innerWidth - 50 ) + 'px';
 
             homeBtn.style.top = ( window.innerHeight - mapHeight - 180 ) + 'px';
-            zoomInBtn.style.top = ( window.innerHeight - mapHeight - 140 ) + 'px';
+            zoomInBtn.style.top = ( window.innerHeight - mapHeight - 136 ) + 'px';
             zoomOutBtn.style.top = (window.innerHeight - mapHeight - 100 ) + 'px';
 
             zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
@@ -258,11 +258,11 @@ var createFooterMenu = (function() {
             mapView.style.top = 41 + 'px';
             mapView.style.bottom = 0 + 'px';
 
-            compassBtn.style.top = 10 + 'px';
-            compassBtn.style.left = (window.innerWidth - 45 ) + 'px';
+            compassBtn.style.top = 5 + 'px';
+            compassBtn.style.left = (window.innerWidth - 50 ) + 'px';
 
             homeBtn.style.top = ( window.innerHeight - 180 ) + 'px';
-            zoomInBtn.style.top = (window.innerHeight - 140 ) + 'px';
+            zoomInBtn.style.top = (window.innerHeight - 136 ) + 'px';
             zoomOutBtn.style.top = (window.innerHeight - 100 ) + 'px';
 
             zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
