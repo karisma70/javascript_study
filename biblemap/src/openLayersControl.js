@@ -549,8 +549,13 @@ LayerManager.prototype.getPoiObjectArray = function(){
              var rangeArray = poiObj.rangeArray;
              if (rangeArray) {
                  for (var rIdx in rangeArray) {
-                     if( bibleTitle == rangeArray[rIdx] )
-                        return poiObj;
+                     if( bibleTitle != undefined ) {
+                         if (bibleTitle == rangeArray[rIdx])
+                             return poiObj;
+                     }else{
+                         return poiObj;
+                     }
+
                  }
              }
          }
@@ -560,8 +565,12 @@ LayerManager.prototype.getPoiObjectArray = function(){
          var rangeArray = poiObj.rangeArray;
          if (rangeArray) {
              for (var rIdx in rangeArray) {
-                 if (bibleTitle == rangeArray[rIdx])
-                     return poiObj;
+                 if( bibleTitle != undefined ) {
+                     if (bibleTitle == rangeArray[rIdx])
+                         return poiObj;
+                 }else{
+                 return poiObj;
+                }
              }
              return null;
          } else{
@@ -1152,7 +1161,7 @@ function createLayer( source  ) {
      return function( overlay, cssMap ){
          // return new MapManager( overlay, cssMap, createView( [3942321.454123089, 3792452.570684223], 15, 4, 8 ) );
          //return new MapManager( overlay, cssMap, createView( [3844176, 3806822], 15, 4, 7 ) );
-         return new MapManager( overlay, cssMap, createView( [3937988, 3763366 ], 15, 4, 7 ) );
+         return new MapManager( overlay, cssMap, createView( [3937988, 3763366 ], 15, 4, 7.4 ) );
      }
 
  }());

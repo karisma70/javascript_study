@@ -170,18 +170,18 @@
 <body>
 
 <div class="wrapperDiv">
-    <div id="titlebar" style="position:absolute; left:0px; top:0px; height:40px;  background-color:rgb( 59, 89, 153  );">
+    <div id="titlebar" style="position:absolute; left:0px; top:0px; height:40px;  background-color:rgb( 32, 67, 109  );">
     <!-- <div id="titlebar" style="position:absolute; left:0px; top:0px; height:40px;  background-color:rgb( 77, 162, 253 );">  -->
-        <h1 align="center" style="position:absolute; top: 5px; color:white; background: rgb( 59, 89, 153 ); " >성경지도</h1>
+        <h1 align="center" style="position:absolute; top: 5px; color:white; background: rgb( 32, 67, 109 ); " >성경지도</h1>
         <!-- <input type="image" src="biblemap/image/biblemap_logo.png" style="position:absolute; left:0px; top:0px; width:45px; height:45px; vertical-align:middle; border:0;" onclick="openMenu()">  -->
-        <input type="image" src="biblemap/image/m_menu_open.png" style="position:absolute; left:0px; top:0px; width:45px; height:45px; vertical-align:middle; border:0;" onclick="openMenu()">
-        <input id ="bibleMapLogo" type="image" src="biblemap/image/biblemap_logo.png" style="position:absolute; top:0px; width:43px; height:43px; vertical-align:middle; border:0;" onclick="showIntroBibleMap()">
+        <input type="image" src="biblemap/image/m_menu_open.png" style="position:absolute; left:5px; top:5px; width:35px; height:30px; vertical-align:middle; border:0;" onclick="openMenu()">
+        <input id ="bibleMapLogo" type="image" src="biblemap/image/biblemap_logo.png" style="position:absolute; top:0px; width:41opx; height:41px; vertical-align:middle; border:0;" onclick="showIntroBibleMap()">
     </div>
 </div>
 
 <!-- <div id="sideMenu"  oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >  -->
  <div id="sideMenu"  >
-    <div id="logo" style="height:40px; background-color:rgb( 77, 162, 253 );" >
+    <div id="logo" style="height:40px; background-color:rgb( 65, 140, 255 );" >
         <h1 align="center" style="position:absolute; height:35px; top: 5px; color:white; " >검색메뉴</h1>
     </div>
     <div class="close" >
@@ -189,11 +189,11 @@
 
     <div id ="bibleSearch" style="position:absolute; left: 10px; top:50px; height: 100px; ">
         <select id ="bibleTitle"  class="customSelect" name="bibleTitle" style="position: absolute; left: 40px; top:5px; width: 180px; height:32px; font-size:1.5em;" ></select>
-        <input id ="decChapter" type="image" src="biblemap/image/left_arrow.png?version=20170905" style="position: absolute; left: 40px; top:40px; width:30px; height:30px; vertical-align:middle; " onclick="mobileDecreaseBibleChapter()">
+        <input id ="decChapter" type="image" src="biblemap/image/left_arrow.png?version=20170906" style="position: absolute; left: 40px; top:40px; width:30px; height:30px; vertical-align:middle; " onclick="mobileDecreaseBibleChapter()">
         <!-- <input id ="bibleChapter" type="number" class="chapterNum"  style="position: absolute; padding-left: 5px; left: 76px; top: 40px;  width: 40px; height: 30px; font-size:1.5em;" value="1" onchange="examineNumber()">  -->
         <input id ="bibleChapter" type="tel" class="chapterNum"  style="position: absolute; padding-left: 5px; left: 76px; top: 40px;  width: 40px; height: 30px; font-size:1.5em;" value="1" >
         <span style="position: absolute; left: 120px; top: 44px; font-size:1.5em;">장</span>
-        <input id ="incChapter" type="image" src="biblemap/image/right_arrow.png?version=20170905" style="position: absolute;  left: 145px;  top:40px; width:30px; height:30px; vertical-align:middle;" onclick="mobileIncreaseBibleChapter()">
+        <input id ="incChapter" type="image" src="biblemap/image/right_arrow.png?version=20170906" style="position: absolute;  left: 145px;  top:40px; width:30px; height:30px; vertical-align:middle;" onclick="mobileIncreaseBibleChapter()">
         <input type="image" src="biblemap/image/m_search_btn2.png?version=20170905" style="position: absolute; left: 190px;  top:40px; width:30px; height:30px; vertical-align:middle; border:none;"
                 onclick="mobileSearchBibleChapter( footerMenuMiddle )">
     </div>
@@ -223,7 +223,7 @@
                style="position: absolute; padding-left: 5px; left: 40px; width: 150px; height:30px; font-size:1.5em; font:'Nanum Gothic'; " value="갈릴리 호수" />
 
         <input type="image" src="biblemap/image/m_text_clear.png?version=20170905" style="position: absolute; left: 163px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="clearSearchPlaceWord()">
-        <input type="image" src="biblemap/image/location3.png?version=20170906" style="position: absolute; left: 196px;  top: 0px; width:20px; height:30px; vertical-align:middle; border:none; "  onclick="mobileSearchBiblePlace()">
+        <input type="image" src="biblemap/image/location3.png?version=20170908" style="position: absolute; left: 196px;  top: 0px; width:20px; height:30px; vertical-align:middle; border:none; "  onclick="mobileSearchBiblePlace()">
         <div style="height: 4px"></div>
         <!--
         <select id ="searchedPoiList" class="customSelect" name="searchedPoiList" style="position: absolute; overflow:hidden; left: 0px; top:40px; width: 160px; height:30px; border: 1px solid #D9D9D9; " ></select>
@@ -239,15 +239,15 @@
 
 <div id="map" class="mapview" style="position:absolute; top:41px;" >
 
- <!--   <div id="dummy" style="position:absolute; left:50px; top:0px; height:100px; background-color: white;">테스트</div>  -->
+    <!-- <div id="dummy" style="position:absolute; left:50px; top:0px; height:30px; background-color: white;">테스트</div>  -->
 
     <input id="compassBtn" type="image" src="biblemap/image/compass3.png?version=20170930"  style="position: absolute; border:0; width: 55px; height: 55px;"  onclick="setRotateNorth()">
 
     <!-- <input id="zoomInBtn2D" type="image" src="biblemap/image/m_zoom_in.png?version=20171204"  style="border:1px solid #A0A0A0; position: absolute; width:35px; height: 35px; border:none;"  -->
-    <input id="zoomInBtn2D" type="image" src="biblemap/image/plus_btn2.png?version=20171204"  style="position: absolute; width:35px; height: 35px; border:none;"
+    <input id="zoomInBtn2D" type="image" src="biblemap/image/plus_btn2.png?version=20171204"  style="position: absolute; width:35px; height: 35px; border:1px solid rgb(170, 170, 170);"
            onclick="map2DZoomIn()">
     <!-- <input id="zoomOutBtn2D" type="image" src="biblemap/image/m_zoom_out.png?version=20171204" style="border:1px solid grey;  position: absolute; width:35px; height: 35px; border:none;"-->
-    <input id="zoomOutBtn2D" type="image" src="biblemap/image/minus_btn2.png?version=20171204" style="position: absolute; width:35px; height: 35px; border:none;"
+    <input id="zoomOutBtn2D" type="image" src="biblemap/image/minus_btn2.png?version=20171204" style="position: absolute; width:35px; height: 35px; border:1px solid rgb(170, 170, 170);"
            onclick="map2DZoomOut()">
     <input id="homeBtn" type="image" src="biblemap/image/home.png?version=20170930"
            style="position: absolute; width:35px; height: 35px; border:none;" onclick="gotoHome()">
@@ -265,21 +265,21 @@
         <!-- <div id = "tab1Title" class="divContent" style="padding-left: 40px;  font-size: 1.5em; top:-6px; overflow-x:hidden; border-bottom: 1px solid rgb(240, 240, 240);" >  -->
         <div id = "tab1Title" class="divContent" style="padding-left: 20px; font-weight: bold; font-size: 1.25em; top:-6px; height: 33px; overflow-x:hidden; color: rgb( 90, 90, 90 );" >
             <span id ="tabBibleBook" style="position: absolute; left: 5px; top: 0px; width:120px; font-size:1.2em; text-align:right;" ></span>
-            <input id="tabDecBible" type="image" src="biblemap/image/left_arrow.png?version=20170905" style="position: absolute; left: 130px; width:22px; height:26px; vertical-align:middle; " onclick="mobileDecreaseBibleChapterAndGo()">
+            <input id="tabDecBible" type="image" src="biblemap/image/left_arrow.png?version=20170907" style="position: absolute; left: 130px; width:22px; height:26px; vertical-align:middle; " onclick="mobileDecreaseBibleChapterAndGo()">
             <span id ="tabBibleChapter" style="position: absolute; left: 150px; width:70px; top: 0px; font-size:1.2em; text-align:center;">장</span>
-            <input id="tabIncBible" type="image" src="biblemap/image/right_arrow.png?version=20170905" style="position: absolute; left: 215px; top: 0px; width:22px; height:26px; vertical-align:middle;" onclick="mobileIncreaseBibleChapterAndGo()">
+            <input id="tabIncBible" type="image" src="biblemap/image/right_arrow.png?version=20170907" style="position: absolute; left: 215px; top: 0px; width:22px; height:26px; vertical-align:middle;" onclick="mobileIncreaseBibleChapterAndGo()">
         </div>
 
         <!-- <div id = "tab3Title" class="divContent" style="padding-left: 10px;  font-size: 1.5em; top:-6px; height: 35px; overflow-x:hidden; border-bottom:4px solid rgb(230, 230, 230);" > </div>  -->
         <div id = "tab3Title" class="divContent" style="padding-left: 10px;  font-size: 1.5em; top:-6px; height: 35px; overflow-x:hidden; color: rgb( 90, 90, 90 ); " > </div>
 
-        <div id="tab1" class="tab_content" style="padding-left: 5px; border-top: 1px solid rgb(225, 225, 225); -webkit-overflow-scrolling:touch;">
+        <div id="tab1" class="tab_content" style="padding-left: 5px; padding-right:5px; border-top: 1px solid rgb(225, 225, 225); -webkit-overflow-scrolling:touch;">
         </div>
-        <div id="tab2" class="tab_content" style="padding-left: 5px; -webkit-overflow-scrolling:touch;" >
+        <div id="tab2" class="tab_content" style="padding-left: 5px; padding-right:5px;  -webkit-overflow-scrolling:touch;" >
             성경&nbsp;단어&nbsp;검색&nbsp;버튼을&nbsp;클릭해&nbsp;주세요 <br>
             <a href ="javascript:gotoSearchWord()" style="text-decoration:none; font-weight: bold; fong-size: 1.5em; color:rgb(47, 145, 253); text-align : left;">→ 바로가기 클릭!!</a><br>
         </div>
-        <div id="tab3" class="tab_content" style="left: -5px; padding-left: 5px; background-color:rgb(245, 245, 245); border-top:1px solid rgb(225, 225, 225); -webkit-overflow-scrolling:touch; "  >
+        <div id="tab3" class="tab_content" style="left: -5px; padding-left: 5px; padding-right:5px;  background-color:rgb(245, 245, 245); border-top:1px solid rgb(225, 225, 225); -webkit-overflow-scrolling:touch; "  >
             지명 정보의 검색결과가&nbsp; 없습니다 <br> 지도상의&nbsp;지명을&nbsp;클릭하고&nbsp;아이콘'i'를&nbsp;클릭해&nbsp;주세요&nbsp;
         </div>
     </div>
@@ -289,8 +289,8 @@
         <!-- <div style="position:absolute; padding-left: 165px; top: 8px; font-size: 1.4em; color: rgb( 70, 70, 70);">기부/후원 안내</div> -->
         <!--       onclick="clearSearchPlaceWord()">  -->
     </div>
-    <input id ="footUpArrow" type="image" src="biblemap/image/up_arrow.png?version=20170905" style="position: absolute; left: 250px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerUp()">
-    <input id ="footDownArrow" type="image" src="biblemap/image/down_arrow.png?version=20170905" style="position: absolute; left: 280px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerDown()">
+    <input id ="footUpArrow" type="image" src="biblemap/image/up_arrow.png?version=20170910" style="position: absolute; left: 250px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerUp()">
+    <input id ="footDownArrow" type="image" src="biblemap/image/down_arrow.png?version=20170910" style="position: absolute; left: 280px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerDown()">
 
     <!-- .tab_container -->
 </div>
@@ -350,12 +350,12 @@
     */
 
 
-/*
+
+    /*
     $( '#dummy' ).css( "z-index", 2000 );
     var dummy = document.getElementById( 'dummy' );
     dummy.innerHTML = "하하하하";
     */
-
 
     preventZoomInDIV( 'sideMenu' );
     preventZoomInDIV( 'titlebar' );
@@ -673,11 +673,14 @@
             IsDownload = true;
         }
 
-        /*
+
         var curZoom = bibleMap.getView().getZoom();
+        /*
         dummy.innerHTML = "zoom : " + curZoom;
         dummy.innerHTML += '<br>';
+        */
 
+        /*
         var view2D = bibleMap.getView();
         var center2D = view2D.getCenter();
         dummy.innerHTML += "X: " + center2D[0] + "," + "Y:" + center2D[1];
@@ -1010,7 +1013,12 @@ _
                     }
                 });
             }else{
-                moveTo(view, [poiObj.x, poiObj.y], poiZoomIn );
+                if(IsIntersectExtent( mapExtent, poiObj.x, poiObj.y ) == true) {    // 현재 지도 영역 이내에 있으면
+                    moveTo(view, [poiObj.x, poiObj.y], curZoom );
+                }
+                else {
+                    moveTo(view, [poiObj.x, poiObj.y], poiZoomIn);
+                }
             }
         }
 
@@ -1147,7 +1155,7 @@ _
 
     function gotoHome(){
         //moveTo( bibleMapManager.getView(), [3844176, 3806822 ], 7 );
-        moveTo( bibleMapManager.getView(), [3937988, 3763366 ], 7 );
+        moveTo( bibleMapManager.getView(), [3937988, 3763366 ], 7.4  );
         setRotateNorth();
     }
 

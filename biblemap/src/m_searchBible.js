@@ -230,12 +230,19 @@ function reqeustAndShowContents( paramTabID, searchParam , paramParagraph, compl
 
     showDownloading();
 
+    /*
+    $(tabID).on('scroll touchmove mousewheel', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+    });
+    */
+
     httpRequest("POST", jsonStr, function( http ){
 
         hideDownloading();
 
         var rightRecCount = 0;
-
         $(tabID).empty();
 
         var resObj = JSON.parse( http.responseText );
@@ -248,6 +255,8 @@ function reqeustAndShowContents( paramTabID, searchParam , paramParagraph, compl
 
             if( completeCallback )
                 completeCallback( searchParam, resObj );
+
+            // $(tabID).off('scroll touchmove mousewheel');
             return;
         }
 
@@ -299,6 +308,7 @@ function reqeustAndShowContents( paramTabID, searchParam , paramParagraph, compl
             }
         }
 
+
         if( searchParam.type == "Word" && rightRecCount == 0 ) {
             alert("검색된 결과가 없습니다 검색어를 다시 입력해 주세요!");
             gotoSearchWord();
@@ -315,6 +325,8 @@ function reqeustAndShowContents( paramTabID, searchParam , paramParagraph, compl
         }
         else
             $(tabID).scrollTop(0);
+
+        // $(tabID).off('scroll touchmove mousewheel');
 
         if( completeCallback )
             completeCallback( searchParam, resObj );

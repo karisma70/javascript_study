@@ -26,19 +26,66 @@ function makeHrefWordInText( LayerManager, strWord, bibleTitle, bibleText, color
     var strongStart = "<strong><font color='" + color + "'>";
     var strongEnd = "</font></strong>";
 
+    /*
+    bibleText = "Iye Abarim <br>요단 동쪽에 위치한 광야라는 뜻으로 성경에는 \'모압 앞 해돋는 편 광야\’로 묘사되어 있는데 이는 모압 동남편의 변방 불모지로서 대부분 암석이 많은 지역이었다";
+    strWord = "모압";
+    */
+
+    if( strWord == '가이사랴 빌립보'){
+        ConsoleLog("Debuging Here!!!");
+    }
+
+    if( strWord == '가이사랴'){
+        ConsoleLog("Debuging Here!!!");
+    }
+
+    if( strWord == '빌립보'){
+        ConsoleLog("Debuging Here!!!");
+    }
+
+
     var strPos = bibleText.indexOf(strWord);
     if (strPos == -1) {
         return bibleText;
     }
 
-    if (strPos > 0 && bibleText.substring(strPos - 1, strPos) != " ") {
-        if( bibleText.substring(strPos-1, strPos) != "'" )
+    /*
+    if( strPos > 0){
+        if (bibleText.substring(strPos - 1, strPos) != ">"){
             return bibleText;
+        }
+
+        if( bibleText.substring(strPos - 1, strPos) != " " ) {
+            if( bibleText.substring(strPos-1, strPos) != "'" ||  )
+                return bibleText;
+    }*/
+
+
+    if (strPos > 0 && bibleText.substring(strPos - 1, strPos) != " " ) {
+        if( bibleText.substring(strPos-1, strPos) !== ">" ) {
+            if( bibleText.substring(strPos-1, strPos) !== "\'") {
+                // return bibleText;
+                var strRet = bibleText.substring(0, strPos + strWord.length);
+                var nextString = bibleText.substring( strPos, strPos + strWord.length + 4);
+                var hrefPos  = nextString.indexOf("</a>");
+                if( hrefPos > -1 ){
+                    strRet += bibleText.substring( strPos + strWord.length,  strPos + strWord.length + 4 );
+                    strRet += makeHrefWordInText(LayerManager, strWord, bibleTitle, bibleText.substring(strPos + ( strWord.length + 5), bibleText.length), color);
+                }else {
+                    strRet += makeHrefWordInText(LayerManager, strWord, bibleTitle, bibleText.substring(strPos + ( strWord.length + 1), bibleText.length), color);
+                }
+                return strRet;
+            }
+        }
     }
+
+    /*
     if( strPos > 0 &&  ( bibleText.substring(strPos-1, strPos) == ">" || bibleText.substring( strPos + strWord.length, strPos + strWord.length + 1 ) == "<") ) {       // 이미 발견된 단어이므로 스킵
         return bibleText;
     }
+    */
 
+    /*
     var firstFoundedPos = bibleText.indexOf("\')");       // 이미 검색된 결과가 있으면 그냥 리턴
     if( firstFoundedPos == (strPos +strWord.length) ) {
         var tempStrText = bibleText.substring( firstFoundedPos + 4, bibleText.length);
@@ -47,8 +94,27 @@ function makeHrefWordInText( LayerManager, strWord, bibleTitle, bibleText, color
         var secondFoundedPos = tempStrText.indexOf("</a>");
         if( secondFoundedPos == (strPos +strWord.length)){
             return bibleText;
+            // var strRet = bibleText.substring(0, strPos);
+            // strRet += makeHrefWordInText(  LayerManager, strWord, bibleTitle, bibleText.substring( strPos + strWord.length, bibleText.length ), color );
+            // return strRet;
         }
+    }*/
+
+    var strExamineWord = bibleText.substring(strPos-3, strPos);
+
+    var firstFoundedPos = strExamineWord.indexOf('\" >');       // 이미 검색된 결과가 있으면 그냥 리턴
+    if( firstFoundedPos >= 0 ) {
+        strExamineWord = bibleText.substring(strPos, strPos + 15);
+        var secondFoundedPos = strExamineWord.indexOf('</a>');       // 이미 검색된 결과가 있으면 그냥 리턴
+        if( secondFoundedPos >= 0 )
+            return bibleText;
     }
+
+    strExamineWord = bibleText.substring(strPos, strPos+strWord.length +4);
+    secondFoundedPos = strExamineWord.indexOf('</a>');       // 이미 검색된 결과가 있으면 그냥 리턴
+    if( secondFoundedPos >= 0 )
+        return bibleText;
+
 
     var strStrong = bibleText.substring(0, strPos);
 

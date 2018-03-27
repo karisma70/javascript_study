@@ -14,12 +14,18 @@ html, body {
     font-size: 12px;
 }
 h1{
-    background: rgb( 59, 89, 153 );
+    /* background: rgb( 59, 89, 153 );   */
+    /* background: rgb( 77, 162, 253 );  */
     height: 50px;
     width: 100%;
     vertical-align:middle; /*middle centred*/
-
 }
+
+input{
+    -webkit-appearance: none;
+    -webkit-border-radius: 0;
+}
+
 .wrapperDiv{
     /* overflow:hidden; */
     /* border:1px solid red; */
@@ -57,6 +63,13 @@ h1{
     /* border:1px solid black;  */
 }
 
+ol{
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+li { list-style-type : none }
 
 
 

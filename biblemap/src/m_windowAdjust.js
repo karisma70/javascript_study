@@ -46,7 +46,7 @@ var createFooterMenu = (function() {
          }
 
          function setLogoPosition(){
-             logo.style.left =  (window.innerWidth - 45) + 'px';
+             logo.style.left =  (window.innerWidth - 43) + 'px';
              logo.style.right = 0 + 'px';
          }
 
@@ -156,7 +156,7 @@ var createFooterMenu = (function() {
              compassBtn.style.left = (window.innerWidth - 50 ) + 'px';
 
              homeBtn.style.top = ( window.innerHeight - 220 ) + 'px';
-             zoomInBtn.style.top = ( window.innerHeight - 176 ) + 'px';
+             zoomInBtn.style.top = ( window.innerHeight - 172 ) + 'px';
              zoomOutBtn.style.top = (window.innerHeight - 140 ) + 'px';
 
              zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
@@ -210,7 +210,7 @@ var createFooterMenu = (function() {
             compassBtn.style.left = (window.innerWidth - 50 ) + 'px';
 
             homeBtn.style.top = ( window.innerHeight - mapHeight - 180 ) + 'px';
-            zoomInBtn.style.top = ( window.innerHeight - mapHeight - 136 ) + 'px';
+            zoomInBtn.style.top = ( window.innerHeight - mapHeight - 133 ) + 'px';
             zoomOutBtn.style.top = (window.innerHeight - mapHeight - 100 ) + 'px';
 
             zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
@@ -228,12 +228,12 @@ var createFooterMenu = (function() {
             $("#footDownArrow").show();
 
             upArrow.style.top = 0 + 'px';
-            upArrow.style.left = window.innerWidth - 57 + 'px';
+            upArrow.style.left = window.innerWidth - 66 + 'px';
             upArrow.style.right = 0 + 'px';
             upArrow.style.bottom = 0 + 'px';
 
             downArrow.style.top = 0 + 'px';
-            downArrow.style.left = window.innerWidth - 29 + 'px';
+            downArrow.style.left = window.innerWidth - 32 + 'px';
             downArrow.style.right = 0 + 'px';
             downArrow.style.bottom = 0 + 'px';
 
@@ -262,7 +262,7 @@ var createFooterMenu = (function() {
             compassBtn.style.left = (window.innerWidth - 50 ) + 'px';
 
             homeBtn.style.top = ( window.innerHeight - 180 ) + 'px';
-            zoomInBtn.style.top = (window.innerHeight - 136 ) + 'px';
+            zoomInBtn.style.top = (window.innerHeight - 133 ) + 'px';
             zoomOutBtn.style.top = (window.innerHeight - 100 ) + 'px';
 
             zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
