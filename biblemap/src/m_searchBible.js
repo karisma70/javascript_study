@@ -1,39 +1,60 @@
 
-function mobileDecreaseBibleChapter(){
+function menuDecreaseBibleChapter(){
     var chapter = parseInt( dvBibleChapter.value);
     chapter -= 1;
     dvBibleChapter.value = String( chapter );
-    // mobileSearchBibleChapter();
-    // $("#menu").removeClass("open");
-    makeSearchChapterParam();
 
+    var objChapter =  adjustBibleBookChapter( parseInt( dvBibleTitle.value), parseInt( dvBibleChapter.value) );
+
+    dvBibleTitle.value = objChapter.bookNum.toString();
+    dvBibleChapter.value = objChapter.chapterNum.toString();
+
+    // makeSearchChapterParam();
 }
 
-function mobileDecreaseBibleChapterAndGo(){
-    mobileDecreaseBibleChapter();
-    mobileSearchBibleChapter( footerMenuMiddle );
+function tabDecreaseBibleChapterAndSearch(){
+
+    searchBibleChapterNum -= 1;
+    var objChapter =  adjustBibleBookChapter( searchBibleBookNum, searchBibleChapterNum );
+    searchBibleBookNum = objChapter.bookNum;
+    searchBibleChapterNum = objChapter.chapterNum;
+
+    tabSearchBibleChapter();
 }
 
 
-function mobileIncreaseBibleChapter(){
+function menuIncreaseBibleChapter(){
     var chapter = parseInt( dvBibleChapter.value);
     chapter += 1;
     dvBibleChapter.value = String( chapter );
-    // mobileSearchBibleChapter();
-    // $("#menu").removeClass("open");
-    makeSearchChapterParam();
+
+    var objChapter =  adjustBibleBookChapter( parseInt( dvBibleTitle.value), parseInt( dvBibleChapter.value) );
+
+    dvBibleTitle.value = objChapter.bookNum.toString();
+    dvBibleChapter.value = objChapter.chapterNum.toString();
+
+    // makeSearchChapterParam();
+
+    searchBibleBookNum = objChapter.bookNum;
+    searchBibleChapterNum = objChapter.chapterNum;
 }
+
+
+function tabIncreaseBibleChapterAndSearch() {
+
+    searchBibleChapterNum += 1;
+    var objChapter =  adjustBibleBookChapter( searchBibleBookNum, searchBibleChapterNum );
+    searchBibleBookNum = objChapter.bookNum;
+    searchBibleChapterNum = objChapter.chapterNum;
+
+    tabSearchBibleChapter( );
+}
+
 
 
 function footerMenuMiddle(){
     if( footerMenu.getMode() == "bottom" || footerMenu.getMode() == "hide")
         footerMenu.middle();
-}
-
-
-function mobileIncreaseBibleChapterAndGo() {
-    mobileIncreaseBibleChapter();
-    mobileSearchBibleChapter(  footerMenuMiddle );
 }
 
 
@@ -99,7 +120,7 @@ function bibleSearchByWord( searchWord ){
     } );
 }
 
-
+/*
 function makeSearchChapterParam(){
     var searchParam = {
         type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
@@ -157,15 +178,63 @@ function makeSearchChapterParam(){
 
         }
 
-        // consistSearchOpt( "chapter", dvBibleChapter );
         searchParam.option["chapter"] = parseInt( dvBibleChapter.value );
     }
 
     return searchParam;
 }
+*/
 
 
-function mobileSearchBibleChapter( callback ){
+function adjustBibleBookChapter( bookNum, chapterNum ){
+
+    var retChapterObj = {
+        bookTitle: "",
+        bookNum : 0,     // book, chapter, paragraph 등으로 구성된 검색
+        chapterNum : 0
+    };
+
+    var chapter = bibleChapterList.getChapterByNumber( bookNum );
+    retChapterObj.bookTitle = chapter.title;
+    retChapterObj.bookNum = bookNum;
+    retChapterObj.chapterNum = chapterNum;
+
+    if( chapterNum == 0 ){
+        if( chapter.bookNumber <= 1) {      // 창세기 이면
+            retChapterObj.bookNum = 1;
+            retChapterObj.chapterNum = 1;
+        }else {
+            var beforeChapter = bibleChapterList.getChapterByNumber( chapter.bookNumber -1 );
+            retChapterObj.bookTitle = beforeChapter.title;
+            retChapterObj.bookNum = beforeChapter.bookNumber;
+            retChapterObj.chapterNum = beforeChapter.lastNum;
+        }
+    }else {
+        if (chapter.lastNum < chapterNum) {
+            if (( chapter.lastNum + 1 ) == chapterNum) {
+                var nextChapter = bibleChapterList.getChapterByNumber(chapter.bookNumber + 1);
+                if (nextChapter) {
+                    retChapterObj.bookTitle = nextChapter.title;
+                    retChapterObj.bookNum = nextChapter.bookNumber;
+                    retChapterObj.chapterNum = 1;
+                } else {
+                    retChapterObj.chapterNum = chapter.lastNum.toString();
+                }
+            } else {
+                retChapterObj.chapterNum = chapter.lastNum.toString();
+            }
+        }
+    }
+
+    return retChapterObj;
+}
+
+
+
+function menuSearchBibleChapter( callback ){
+
+    searchBibleBookNum =  parseInt( dvBibleTitle.value);
+    searchBibleChapterNum = parseInt( dvBibleChapter.value);
 
     if(isNaN( dvBibleChapter.value ) == true) {
         alert( "숫자를 입력해 주세요");
@@ -173,7 +242,18 @@ function mobileSearchBibleChapter( callback ){
         return;
     }
 
-    var searchParam = makeSearchChapterParam();
+    // var searchParam = makeSearchChapterParam();
+    var objChapter =  adjustBibleBookChapter( parseInt( dvBibleTitle.value), parseInt( dvBibleChapter.value) );
+    dvBibleTitle.value = objChapter.bookNum.toString();
+    dvBibleChapter.value = objChapter.chapterNum.toString();
+
+    var searchParam = {
+        type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
+        option: {}
+    };
+
+    searchParam.option["title"] = objChapter.bookTitle;
+    searchParam.option["chapter"] = objChapter.chapterNum;
 
     saveSearchWordsToStorage();
 
@@ -189,11 +269,32 @@ function mobileSearchBibleChapter( callback ){
     } );
 }
 
+function tabSearchBibleChapter(){
+
+    var objChapter =  adjustBibleBookChapter( searchBibleBookNum, searchBibleChapterNum );
+
+    var searchParam = {
+        type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
+        option: {}
+    };
+
+    searchParam.option["title"] = objChapter.bookTitle;
+    searchParam.option["chapter"] = objChapter.chapterNum;
+
+    $("#sideMenu").removeClass("open");
+
+    reqeustAndShowContents('#tab1', searchParam, -1, function(){
+        if( callback ){
+            callback();
+        }
+
+    } );
+
+}
+
 
 function appendReceiveMsg( tabID, resObj, strConvText, paragraph ){
 
-    // var lineImage = '<div style=\"height: 4px; background: url(biblemap/image/horizon-line_small.png);\"></div>';
-    // var lineImage = '<tr style=\"height:5px;\"><td><img src=\"biblemap/image/horizon-line_small.png\" style=\"width : 100px; height:4px; vertical-align:middle\" ></td></tr>';
     var lineImage = '<tr bgcolor=\"#ddd\"><td colspan=\"2\" style=\"height:2px;\"></td></tr>';
 
     $(tabID).append( "<tr>");
@@ -238,11 +339,13 @@ function reqeustAndShowContents( paramTabID, searchParam , paramParagraph, compl
     });
     */
 
+    var rightRecCount = 0;
+    $(tabID).empty();
+    $(tabID).empty("서버로에 데이터 요청중....");
+
     httpRequest("POST", jsonStr, function( http ){
 
         hideDownloading();
-
-        var rightRecCount = 0;
         $(tabID).empty();
 
         var resObj = JSON.parse( http.responseText );
@@ -340,13 +443,8 @@ function requestBibleWithShortChapter( shortTitle, chapterNum, paragraph ){
 
     var chapter = bibleChapterList.getChapterByShortName( shortTitle );
 
-
-    if( chapter.bookNumber > 0 ) {
-        dvBibleTitle.value = chapter.bookNumber.toString();
-    }
-
-    dvBibleChapter.value = chapterNum;
-
+    searchBibleBookNum = chapter.bookNumber;
+    searchBibleChapterNum = chapterNum;
 
     var searchParam = {
         type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
@@ -356,7 +454,6 @@ function requestBibleWithShortChapter( shortTitle, chapterNum, paragraph ){
         }
     };
 
-    saveSearchWordsToStorage();
 
     tabMenu.selectTab('tab1Menu');
 

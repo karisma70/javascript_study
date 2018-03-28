@@ -189,13 +189,13 @@
 
     <div id ="bibleSearch" style="position:absolute; left: 10px; top:50px; height: 100px; ">
         <select id ="bibleTitle"  class="customSelect" name="bibleTitle" style="position: absolute; left: 40px; top:5px; width: 180px; height:32px; font-size:1.5em;" ></select>
-        <input id ="decChapter" type="image" src="biblemap/image/left_arrow.png?version=20170906" style="position: absolute; left: 40px; top:40px; width:30px; height:30px; vertical-align:middle; " onclick="mobileDecreaseBibleChapter()">
+        <input id ="decChapter" type="image" src="biblemap/image/left_arrow.png?version=20170906" style="position: absolute; left: 40px; top:40px; width:30px; height:30px; vertical-align:middle; " onclick="menuDecreaseBibleChapter()">
         <!-- <input id ="bibleChapter" type="number" class="chapterNum"  style="position: absolute; padding-left: 5px; left: 76px; top: 40px;  width: 40px; height: 30px; font-size:1.5em;" value="1" onchange="examineNumber()">  -->
         <input id ="bibleChapter" type="tel" class="chapterNum"  style="position: absolute; padding-left: 5px; left: 76px; top: 40px;  width: 40px; height: 30px; font-size:1.5em;" value="1" >
         <span style="position: absolute; left: 120px; top: 44px; font-size:1.5em;">장</span>
-        <input id ="incChapter" type="image" src="biblemap/image/right_arrow.png?version=20170906" style="position: absolute;  left: 145px;  top:40px; width:30px; height:30px; vertical-align:middle;" onclick="mobileIncreaseBibleChapter()">
+        <input id ="incChapter" type="image" src="biblemap/image/right_arrow.png?version=20170906" style="position: absolute;  left: 145px;  top:40px; width:30px; height:30px; vertical-align:middle;" onclick="menuIncreaseBibleChapter()">
         <input type="image" src="biblemap/image/m_search_btn2.png?version=20170905" style="position: absolute; left: 190px;  top:40px; width:30px; height:30px; vertical-align:middle; border:none;"
-                onclick="mobileSearchBibleChapter( footerMenuMiddle )">
+                onclick="menuSearchBibleChapter( footerMenuMiddle )">
     </div>
 
     <!-- <div name="searchWord" style="position:absolute; left: 10px; top:130px; width: 230px; height: 50px; ">  -->
@@ -265,9 +265,9 @@
         <!-- <div id = "tab1Title" class="divContent" style="padding-left: 40px;  font-size: 1.5em; top:-6px; overflow-x:hidden; border-bottom: 1px solid rgb(240, 240, 240);" >  -->
         <div id = "tab1Title" class="divContent" style="padding-left: 20px; font-weight: bold; font-size: 1.25em; top:-6px; height: 33px; overflow-x:hidden; color: rgb( 90, 90, 90 );" >
             <span id ="tabBibleBook" style="position: absolute; left: 5px; top: 0px; width:120px; font-size:1.2em; text-align:right;" ></span>
-            <input id="tabDecBible" type="image" src="biblemap/image/left_arrow.png?version=20170907" style="position: absolute; left: 130px; width:22px; height:26px; vertical-align:middle; " onclick="mobileDecreaseBibleChapterAndGo()">
+            <input id="tabDecBible" type="image" src="biblemap/image/left_arrow.png?version=20170907" style="position: absolute; left: 130px; width:22px; height:26px; vertical-align:middle; " onclick="tabDecreaseBibleChapterAndSearch()">
             <span id ="tabBibleChapter" style="position: absolute; left: 150px; width:70px; top: 0px; font-size:1.2em; text-align:center;">장</span>
-            <input id="tabIncBible" type="image" src="biblemap/image/right_arrow.png?version=20170907" style="position: absolute; left: 215px; top: 0px; width:22px; height:26px; vertical-align:middle;" onclick="mobileIncreaseBibleChapterAndGo()">
+            <input id="tabIncBible" type="image" src="biblemap/image/right_arrow.png?version=20170907" style="position: absolute; left: 215px; top: 0px; width:22px; height:26px; vertical-align:middle;" onclick="tabIncreaseBibleChapterAndSearch()">
         </div>
 
         <!-- <div id = "tab3Title" class="divContent" style="padding-left: 10px;  font-size: 1.5em; top:-6px; height: 35px; overflow-x:hidden; border-bottom:4px solid rgb(230, 230, 230);" > </div>  -->
@@ -289,8 +289,8 @@
         <!-- <div style="position:absolute; padding-left: 165px; top: 8px; font-size: 1.4em; color: rgb( 70, 70, 70);">기부/후원 안내</div> -->
         <!--       onclick="clearSearchPlaceWord()">  -->
     </div>
-    <input id ="footUpArrow" type="image" src="biblemap/image/up_arrow.png?version=20170910" style="position: absolute; left: 250px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerUp()">
-    <input id ="footDownArrow" type="image" src="biblemap/image/down_arrow.png?version=20170910" style="position: absolute; left: 280px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerDown()">
+    <input id ="footUpArrow" type="image" src="biblemap/image/up_arrow.png?version=20170916" style="position: absolute; left: 250px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerUp()">
+    <input id ="footDownArrow" type="image" src="biblemap/image/down_arrow.png?version=20170916" style="position: absolute; left: 280px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerDown()">
 
     <!-- .tab_container -->
 </div>
@@ -331,6 +331,9 @@
 <script>
 
     setDebug( true );
+
+    var searchBibleBookNum = 0;
+    var searchBibleChapterNum = 0;
 
     /*
     var userAgent = navigator.userAgent.toLowerCase();
@@ -848,7 +851,7 @@
 
             new GMDFileDownload( bibleMap, null, layer.url, layer.order, layer.style, layerManager, function( ){
                 layerManager.sortPoiWords();
-                 mobileSearchBibleChapter( );
+                 menuSearchBibleChapter( );
                 initTextAutoComplete();
                 // hideDownloading();
                 setTimeout( hideDownloading, 500);
