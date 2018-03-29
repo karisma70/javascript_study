@@ -74,6 +74,8 @@ function mobileSearchBibleWord(){
     bibleSearchByWord( searchWord );
 
     $("#sideMenu").removeClass("open");
+
+    footerMenu.top();
 }
 
 function bibleSearchByPlace( placeName ){
