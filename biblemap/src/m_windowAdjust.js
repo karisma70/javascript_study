@@ -8,6 +8,13 @@ var createFooterMenu = (function() {
 
      function CreateFooter(){
 
+         alert( "pixel Ratio : " + window.devicePixelRatio ) ;
+
+         alert( "screenWidth : " + window.screen.width ) ;
+
+         alert( "innerWidth : " + window.innerWidth ) ;
+         alert( "OuterWidth : " + window.outerWidth ) ;
+
          var footer = document.getElementById('footer');
          var mapView = document.getElementById('map');
 
@@ -336,9 +343,7 @@ function showNoticePopup(el){
 }
 
 
-
-function showIntroBibleMap(  ){
-
+function adjustPopupWindow(){
     var winWidth = window.innerWidth * 0.9;
     var winHeight = window.innerHeight * 0.9;
 
@@ -351,13 +356,13 @@ function showIntroBibleMap(  ){
     dvInfoContent.style.right = 20 + 'px';
     dvInfoContent.style.bottom =  50 + 'px';
 
-
-    // dvInfoClose.style.top = winHeight - 60 + 'px';
     dvInfoClose.style.left = ( winWidth - 90 ) + 'px';
     dvInfoClose.style.top = (winHeight - 70) + 'px';
-    // dvInfoClose.style.right = winWidth - 20 + 'px';
-    // dvInfoClose.style.bottom =  winHeight - 20 + 'px';
+}
 
+function showIntroBibleMap(  ){
+
+    adjustPopupWindow();
 
     var lineImage = '<div style=\"height: 14px; background: url(biblemap/image/horizon-line.png);\"></div>';
 
@@ -382,15 +387,16 @@ function showIntroBibleMap(  ){
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '본 웹사이트에서 표현되는 디지털 맵 데이터의 일부는 \'마이크로소프트\'가 제공하는 \'Bing Maps\'를 사용하고 있으며, \'Bing Maps\'를 사용하여 본 웹서비스를 제공하는 \'Mission Wide\'는 \'Bing Maps\'에 관한 라이선스 조항을 준수합니다';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '본 웹서비스를 사용하는 사용자는 아래 링크로 제공하는 라이센스 규정을 준수해야 합니다.';
+    popupContent.innerHTML += '본 웹서비스를 사용하는 사용자는 아래 사이트에서 제공하는 라이센스 규정을 준수해야 합니다.';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '<a href=\"javascript:gotoBinMapLincense()\" style=\"text-decoration:none; font-weight:bold; color:#2E59BF;\">' + '링크:  Bing Maps 라이센스 규정</a>';
+    // popupContent.innerHTML += '<a href=\"javascript:gotoBinMapLincense()\" style=\"text-decoration:none; font-weight:bold; color:#2E59BF;\">' + '링크:  Bing Maps 라이센스 규정</a>';
+    popupContent.innerHTML += 'https://www.microsoft.com/en-us/maps/product';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '본 웹사이트에서 표현되는 디지털 맵 데이터의 일부는 OpenStreetMap을 사용하고 있으며, OpenStreetMap의 라이센스는 CC BY-SA 2.0을 따릅니다.';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '본 웹사이트에서 제공하는 성경지명 정보 가운데 \'-비전성경사전-\' 출처로 표현되는 내용은 \'(사)두란노서원\'에서, \'-성경지명사전-\' 출처로 표현되는 내용은 \'(사)한국컴퓨터선교회\'에서 웹서비스를 통하여 제공하고 있는 내용임을 알려드립니다.';
+    popupContent.innerHTML += '본 웹사이트에서 제공하는 성경지명 정보 가운데 \'-비전성경사전-\' 출처로 표현되는 내용은 \'(사)두란노서원\'에서 제공하고 있는 내용임을 알려드립니다.';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '본 웹사이트에서 제공되는 위치정보는 일부 오류를 포함할 수 있음을 알려드리며, 공인된 정확한 정보가 수집되는 대로 수정할 것을 알려드립니다.';
@@ -410,6 +416,39 @@ function showIntroBibleMap(  ){
     showNoticePopup( '#infoPopup' );
 
     // window.open("licenseNotice.html?version=20170920", "notice of license", "width=400, height=400, top=0, left=0, location=no, directories=no,resizable=no,status=no,toolbar=no,menubar=no, scrollbars=yes" );
+}
+
+
+function showIntroMissionWide(  ) {
+
+    adjustPopupWindow();
+
+    var lineImage = '<div style=\"height: 14px; background: url(biblemap/image/horizon-line.png);\"></div>';
+
+    var popupTitle = document.getElementById('noticeTitle');
+    popupTitle.innerHTML = "미션와이드 개요" + lineImage;
+
+    var popupContent = document.getElementById('noticeContent');
+    popupContent.innerHTML = "";
+
+    popupContent.innerHTML += '\'미션와이드\'는 성경말씀에 대한 관심과 이해를 높이기 위해 설립된 비영리단체입니다.';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '\'미션와이드\'의 목적은 성경 관련 여러 정보를 공유할 수 있는 미디어 매체 기반의 플랫폼을 제공함으로써, 하나님의 말씀에 대한 확신과 강건한 믿음을 갖도록 다리 역할을 하는 것입니다. ';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '본 바이블 맵 서비스는 여러분들의 소중한 기부와 후원을 통하여 운영되고 있습니다.';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '여러분들의 많은 성원 부탁드립니다.';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '< 기부/후원 계좌 안내 >';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '신한은행 : 100-032-560142';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '예금주 : 미션와이드';
+    popupContent.innerHTML += '<br>';
+
+    showNoticePopup( '#infoPopup' );
 }
 
 

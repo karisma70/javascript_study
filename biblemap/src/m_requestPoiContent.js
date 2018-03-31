@@ -8,17 +8,21 @@ poiContentsToTab = function( infoText ){
 
     // var strPoiTitle = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + "\'" + focusPoiObj.id + "\'" + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: #2682E8 \" >'
     var strPoiTitle = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + "\'" + focusPoiObj.id + "\'" + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: rgb( 90, 90, 90)\" >'
-        + '<img src ="biblemap/image/location3.png?version=20170908" style=\"height:24px; vertical-align:top;\">&nbsp;&nbsp;' +
+        + '<img src ="biblemap/image/poi_location.png?version=20170908" style=\"height:26px; vertical-align:top;\">&nbsp;&nbsp;' +
         focusPoiObj.biblePlace + '  ' + '</a>';
 
     var strSearchWord = '<a href=' + '"javascript:bibleSearchByWord( ' + "\'" + focusPoiObj.biblePlace + "\'" + ')\">';
     strSearchWord += '&nbsp;&nbsp;&nbsp;<img src ="biblemap/image/m_search_btn2.png" style=\"position: absolute; top: -2px; height:28px; vertical-align:top;\">&nbsp;' + '</a>';
 
-
     /*
-        strPoiTitle +='<a href=' + '"javascript:bibleSearchByWord( ' + '\"' + focusPoiObj.biblePlace + '\"'+ ')\">';
-        strPoiTitle += '&nbsp;&nbsp;&nbsp;<img src ="biblemap/image/bible_search5.png" style=\"height:26px; vertical-align:top;\">&nbsp;' + '</a>';
-        */
+    strSearchWord += '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+    strSearchWord += '<a href=' + '"javascript:beforePoi()\">';
+    strSearchWord += '<img src="biblemap/image/before_poi2.png?version=20171201" style="border:1px solid grey;  width:28px; height:28px; vertical-align:top;\">&nbsp;' + '</a>';
+    strSearchWord += '&nbsp;&nbsp;';
+    strSearchWord += '<a href=' + '"javascript:afterPoi()\">';
+    strSearchWord += '<img src="biblemap/image/after_poi2.png?version=20171201" style="border:1px solid grey;  width:28px; height:28px; vertical-align:top;\">&nbsp;' + '</a>';
+    */
+
 
     strPoiTitle += strSearchWord;
 
@@ -47,7 +51,8 @@ makeLinkedName = function( poiID, placeName, youtube, infoText ){
     var strLinkYoutube = youtubeRef2D + youtubeIcon + "</a>";
 
     var textRef = "<a href =\"javascript:showPoiInfoInTab(" +  poiID + ")\" >";
-    var textIcon = "<img src=\"biblemap/image/text-icon.png?version=20170904\" style=\"width:20px; height:20px; vertical-align:middle;\">";
+    // var textIcon = "<img src=\"biblemap/image/text-icon.png?version=20170904\" style=\"width:20px; height:20px; vertical-align:middle;\">";
+    var textIcon = "<img src=\"biblemap/image/text-icon3.png?version=20170906\" style=\"width:20px; height:20px; vertical-align:middle;\">";
 
     var strLinkTextInfo = textRef + textIcon + "</a>";
 
@@ -148,8 +153,9 @@ function mobileRequestPoiContentAndShow( paramPoiObj, callback ) {
     showPoiInfoInTab = function( poiID ) {      // tabMenu 에서 정보 보여주기
 
         var poiObj = layerManager.getPoiObjById( poiID );
-        setFocusPoiObj( poiObj );
         bibleMapManager.createPoiIcon( poiObj );        // focus POI Icon 만들기
+
+        setFocusPoiObj( poiObj );
 
         footerMenu.middle();
 
@@ -158,8 +164,8 @@ function mobileRequestPoiContentAndShow( paramPoiObj, callback ) {
         tabMenu.selectTab('tab3Menu');
         $("#tab3").scrollTop(0);
 
-        setCenterFocusedPOI( poiObj );
         poiTooltip.create( poiObj.biblePlace, labelText, [poiObj.x, poiObj.y], true);
+        moveCenterFocusedPOI( poiObj );
     };
 }
 
@@ -188,7 +194,7 @@ showPoiYoutubeInTooltip = function( poiID, youtubeLink ) {
 };
 
 
-function setCenterFocusedPOI( focusedPoiObj ){
+function moveCenterFocusedPOI( focusedPoiObj ){
     var zoom = bibleMapManager.getView().getZoom();
-    _moveToPos( bibleMapManager.getView(), [focusedPoiObj.x, focusedPoiObj.y], zoom, 600);
+    _moveToPos( bibleMapManager.getView(), [focusedPoiObj.x, focusedPoiObj.y], zoom, 200);
 }

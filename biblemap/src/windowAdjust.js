@@ -513,6 +513,8 @@ var adjustScrDiv = (function(){
 
     function showScrMap( ){
 
+        ConsoleLog( "showScrMap()!!!!");
+
         var img1 = "biblemap/image/hideBible.png?version=20170905";
         var img2 = "biblemap/image/showBible.png?version=20170905";
 

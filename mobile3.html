@@ -1,8 +1,10 @@
 <!doctype html>
 <html>
 <head>
-    <!-- <meta charset="UTF-8">  -->
-    <meta name="viewport" content="width=device-width, maximum-scale=1.0 minimum-scale=1.0 initial-scale=1.0 user-scalable=0" charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0 minimum-scale=1.0 initial-scale=1.0 user-scalable=no" charset="UTF-8">
+    <meta name="format-detection" content="telephone=no">
     <meta name="mobile-web-app-capable" content="yes">
     <!--
     <meta name="HandheldFriendly" content="true">
@@ -223,7 +225,7 @@
                style="position: absolute; padding-left: 5px; left: 40px; width: 150px; height:30px; font-size:1.5em; font:'Nanum Gothic'; " value="갈릴리 호수" />
 
         <input type="image" src="biblemap/image/m_text_clear.png?version=20170905" style="position: absolute; left: 163px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="clearSearchPlaceWord()">
-        <input type="image" src="biblemap/image/location3.png?version=20170908" style="position: absolute; left: 196px;  top: 0px; width:20px; height:30px; vertical-align:middle; border:none; "  onclick="mobileSearchBiblePlace()">
+        <input type="image" src="biblemap/image/poi_location.png?version=20170908" style="position: absolute; left: 196px;  top: 0px; width:30px; height:30px; vertical-align:middle; border:none; "  onclick="mobileSearchBiblePlace()">
         <div style="height: 4px"></div>
         <!--
         <select id ="searchedPoiList" class="customSelect" name="searchedPoiList" style="position: absolute; overflow:hidden; left: 0px; top:40px; width: 160px; height:30px; border: 1px solid #D9D9D9; " ></select>
@@ -239,7 +241,7 @@
 
 <div id="map" class="mapview" style="position:absolute; top:41px;" >
 
-    <!-- <div id="dummy" style="position:absolute; left:50px; top:0px; height:30px; background-color: white;">테스트</div>  -->
+    <!-- <div id="dummy" style="position:absolute; left:50px; top:0px; height:20px; background-color: white;">테스트</div>  -->
 
     <input id="compassBtn" type="image" src="biblemap/image/compass3.png?version=20170930"  style="position: absolute; border:0; width: 55px; height: 55px;"  onclick="setRotateNorth()">
 
@@ -273,24 +275,25 @@
         <!-- <div id = "tab3Title" class="divContent" style="padding-left: 10px;  font-size: 1.5em; top:-6px; height: 35px; overflow-x:hidden; border-bottom:4px solid rgb(230, 230, 230);" > </div>  -->
         <div id = "tab3Title" class="divContent" style="padding-left: 10px;  font-size: 1.5em; top:-6px; height: 35px; overflow-x:hidden; color: rgb( 90, 90, 90 ); " > </div>
 
-        <div id="tab1" class="tab_content" style="padding-left: 5px; padding-right:5px; border-top: 1px solid rgb(225, 225, 225); -webkit-overflow-scrolling:touch;">
+        <div id="tab1" class="tab_content" style="padding-left: 5px; border-top: 1px solid rgb(225, 225, 225); -webkit-overflow-scrolling:touch;">
         </div>
-        <div id="tab2" class="tab_content" style="padding-left: 5px; padding-right:5px;  -webkit-overflow-scrolling:touch;" >
+        <div id="tab2" class="tab_content" style="padding-left: 5px; -webkit-overflow-scrolling:touch;" >
             성경&nbsp;단어&nbsp;검색&nbsp;버튼을&nbsp;클릭해&nbsp;주세요 <br>
             <a href ="javascript:gotoSearchWord()" style="text-decoration:none; font-weight: bold; fong-size: 1.5em; color:rgb(47, 145, 253); text-align : left;">→ 바로가기 클릭!!</a><br>
         </div>
-        <div id="tab3" class="tab_content" style="left: -5px; padding-left: 5px; padding-right:5px;  background-color:rgb(245, 245, 245); border-top:1px solid rgb(225, 225, 225); -webkit-overflow-scrolling:touch; "  >
+        <!-- <div id="tab3" class="tab_content" style="left: -5px; padding-left: 5px; padding-right:5px;  background-color:rgb(245, 245, 245); border-top:1px solid rgb(225, 225, 225); -webkit-overflow-scrolling:touch; "  >  -->
+        <div id="tab3" class="tab_content" style="left: -5px; padding-left: 5px; padding-right:5px;  border-top:1px solid rgb(215, 215, 215); -webkit-overflow-scrolling:touch; "  >
             지명 정보의 검색결과가&nbsp; 없습니다 <br> 지도상의&nbsp;지명을&nbsp;클릭하고&nbsp;아이콘'i'를&nbsp;클릭해&nbsp;주세요&nbsp;
         </div>
     </div>
 
     <div id = "missionWideIntro" style="height:40px;" >
-        <input id ="missionWideLogo" type="image" src="biblemap/image/mission_wide_logo.png?version=20170905" style="position: absolute; left: 15px;  top: 3px; width:160px; height:30px; vertical-align:middle; border:none;" >
+        <input id ="missionWideLogo" type="image" src="biblemap/image/mission_wide_logo.png?version=20170905" style="position: absolute; left: 15px;  top: 3px; width:160px; height:30px; vertical-align:middle; border:none;"  onclick="showIntroMissionWide()" >
         <!-- <div style="position:absolute; padding-left: 165px; top: 8px; font-size: 1.4em; color: rgb( 70, 70, 70);">기부/후원 안내</div> -->
         <!--       onclick="clearSearchPlaceWord()">  -->
     </div>
-    <input id ="footUpArrow" type="image" src="biblemap/image/up_arrow.png?version=20170916" style="position: absolute; left: 250px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerUp()">
-    <input id ="footDownArrow" type="image" src="biblemap/image/down_arrow.png?version=20170916" style="position: absolute; left: 280px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerDown()">
+    <input id ="footUpArrow" type="image" src="biblemap/image/up_arrow.png?version=20170918" style="position: absolute; left: 250px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerUp()">
+    <input id ="footDownArrow" type="image" src="biblemap/image/down_arrow.png?version=20170918" style="position: absolute; left: 280px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerDown()">
 
     <!-- .tab_container -->
 </div>
@@ -332,33 +335,27 @@
 
     setDebug( true );
 
+    <!-- $( '#dummy' ).css( "z-index", 100 );   -->
+
+    /*
+    document.body.addEventListener('touchstart', function(e) {
+        if (e.target.nodeName === 'INPUT') {
+            this.style.pointerEvents = 'none';
+        }
+    });
+
+    document.body.pointerEvents = 'auto';
+    */
+
+    /*
+    $('#footer').bind('swipeLeft swipeRight', function(event){
+            alert("left or right");
+            event.stopPropagation();
+      });
+*/
+
     var searchBibleBookNum = 0;
     var searchBibleChapterNum = 0;
-
-    /*
-    var userAgent = navigator.userAgent.toLowerCase();
-    if(userAgent.match('iphone')) {
-        alert("iphone!!!");
-        // document.write('<link rel="apple-touch-icon-precomposed" href="biblemap/image/biblemap_logo_114x114.png" >');
-        document.write('<link rel=\"apple-touch-icon\" sizes=\"146x146\" href=\"biblemap/image/biblemap_logo_114x114.png?version=20180214\" />');
-    } else if(userAgent.match('ipad')) { // sizes="72*72"
-        document.write('<link href=\"biblemap/image/biblemap_logo_124x117.png\" rel=\"apple-touch-icon\" >');
-    } else if(userAgent.match('ipod')) {
-        document.write('<link href=\"biblemap/image/biblemap_logo_124x117.png\" rel=\"apple-touch-icon\">');
-    } else if(userAgent.match('android')) {
-        document.write('<link href=\"biblemap/image/biblemap_logo_124x117.png\" rel=\"shortcut icon\">');
-    } else {
-        document.write('<link href=\"biblemap/image/biblemap_logo_124x117.png\" rel=\"shortcut icon\">');
-    }
-    */
-
-
-
-    /*
-    $( '#dummy' ).css( "z-index", 2000 );
-    var dummy = document.getElementById( 'dummy' );
-    dummy.innerHTML = "하하하하";
-    */
 
     preventZoomInDIV( 'sideMenu' );
     preventZoomInDIV( 'titlebar' );
@@ -397,6 +394,7 @@
         $('#tabDecBible').on('touched click', preventEvent );
         $('#tabIncBible').on('touched click', preventEvent );
 
+         $('#infoPopup').on('touched click', preventEvent );
         // $('#biblePlaceDiv').on('touched click', preventEvent );
     }());
 
@@ -441,13 +439,6 @@
     }());
 
 
-    /*
-    document.documentElement.addEventListener('touchmove', function (event) {
-        event.preventDefault();
-    }, false);
-    */
-
-    showDownloading();
 
     $( '#bubblePopup' ).css( "z-index", 10 );
     $( '#zoomInBtn2D' ).css( "z-index", 100 );
@@ -554,7 +545,11 @@
     var bibleChapterList = new BibleChapterList();
 
     bibleChapterList.setCallback( function(){
-        startDownloadGeometries();
+
+        showDownloading();
+        // startDownloadGeometries();
+
+        downloadGeometries();
 
         for( var order = 1; order <= bibleChapterList.getCount(); order ++  ) {
             var chapter = document.createElement("option");
@@ -565,7 +560,7 @@
         }
 
         getSearchWordsFromStorage();
-        // mobileSearchBibleChapter();
+
     } );
 
     // bibleChapterList.requestBibleChapter();
@@ -650,9 +645,11 @@
     var poiTooltip = new mapTooltip( bibleMap, 'tooltip tooltip-static' );
 
 
+    /*
     function startDownloadGeometries(){
         downloadGeomTimer = setInterval(downloadGeometries, 100);
     }
+    */
 
     bibleMapManager.mapEventPrecompose( function(evt){
 
@@ -678,12 +675,11 @@
 
 
         var curZoom = bibleMap.getView().getZoom();
-        /*
-        dummy.innerHTML = "zoom : " + curZoom;
-        dummy.innerHTML += '<br>';
-        */
+
+        // dummy.innerHTML = "zoom : " + curZoom;
 
         /*
+         dummy.innerHTML += '<br>';
         var view2D = bibleMap.getView();
         var center2D = view2D.getCenter();
         dummy.innerHTML += "X: " + center2D[0] + "," + "Y:" + center2D[1];
@@ -842,7 +838,7 @@
 
     var downloadGeometries = function(){
 
-        clearInterval( downloadGeomTimer );
+        // clearInterval( downloadGeomTimer );
 
         layerManager.layerContainer.totalCount = mobileBibleMapPointLayers.length;
 
@@ -854,7 +850,7 @@
                  menuSearchBibleChapter( );
                 initTextAutoComplete();
                 // hideDownloading();
-                setTimeout( hideDownloading, 500);
+                setTimeout( hideDownloading, 1000);
             } );
         }
 
@@ -924,7 +920,7 @@
             poiObj = poiArray[0];
             hideMenuAndMoveToPoiID( poiObj.id );
         }
-_
+
     }
 
     function hideMenuAndMoveToPoiID( poiID ){
@@ -932,7 +928,8 @@ _
         if( footerMenu.getMode() == "top" || footerMenu.getMode() == "middle")
             footerMenu.bottom();
 
-        moveToPlaceByPoiID( poiID );
+        // moveToPlaceByPoiID( poiID );
+        deepMoveToPlaceByPoiID( poiID );
     }
 
 
@@ -946,10 +943,25 @@ _
 
         var poiObj = layerManager.getPoiObjById( poiID );
 
-        layerManager.historyInsertPoi( poiObj );
-
         moveToPlaceByPoiObj( poiObj );
     }
+
+
+    function deepMoveToPlaceByPoiID( poiID ){
+        if( poiID == null )
+            return;
+
+        if( footerMenu.getMode() == "top" )
+            footerMenu.middle();
+
+        var poiObj = layerManager.getPoiObjById( poiID );
+
+        layerManager.historyInsertPoi( poiObj );
+
+        deepMoveToPlaceByPoiObj( poiObj );
+    }
+
+
 
 
     function moveToPlaceByPoiObj( poiObj ){
@@ -971,6 +983,37 @@ _
         ///////////////////////////////////////////////////////////
 
          moveMap( moveDistance2D, extentLength2D, view2D, curZoom2D, poiObj );
+    }
+
+    function deepMoveToPlaceByPoiObj( poiObj ){
+
+        mobileRequestPoiContentAndShow( poiObj );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+
+        var view = bibleMap.getView();
+
+        var mapExtent = bibleMap.getView().calculateExtent(bibleMap.getSize());
+        var mapExtentDistance = getDistance( mapExtent[0],mapExtent[1], mapExtent[2], mapExtent[3] );
+        var mapCenter =  bibleMap.getView().getCenter();
+        var poiDistance = getDistance( mapCenter[0], mapCenter[1], poiObj.x, poiObj.y );
+
+        var isFar = false;
+        if( mapExtentDistance < poiDistance ) {
+            isFar = true;
+        }
+
+        var poiZoomIn = poiObj.zoomIn -1;
+        if( poiZoomIn > 11 )
+            poiZoomIn += 1;
+
+        if( isFar ){
+            flyTo(view, [poiObj.x, poiObj.y], poiZoomIn, function (complete) {
+                if (complete == true) {
+                }
+            });
+        }
+        else {
+            moveTo(view, [poiObj.x, poiObj.y], poiZoomIn);
+        }
     }
 
 
@@ -998,7 +1041,7 @@ _
 
             // if( curZoom < poiZoomIn ){
             var tolerance = Math.abs( curZoom - poiZoomIn );
-            if( tolerance > 1){
+            if( tolerance > 2){
                 poiZoomIn = ( curZoom + poiZoomIn ) / 2.0;
             }else{
                 poiZoomIn = curZoom;
@@ -1102,7 +1145,7 @@ _
             if (focusPoiObj !== null && focusPoiObj.id == poiID ) {
                 footerMenu.middle();
 
-                setCenterFocusedPOI( focusPoiObj );
+                moveCenterFocusedPOI( focusPoiObj );
 
                 // poiContentsToTab(infoText);
                 tabMenu.selectTab('tab3Menu');
@@ -1128,7 +1171,6 @@ _
                 var poiArray = layerManager.getPoiObjArrayFromDictionary( posName );
                 if( poiArray.length < 2){
                     var poiObj = poiArray[ 0];
-                    layerManager.historyInsertPoi( poiObj );
                     mobileRequestPoiContentAndShow( poiObj, showPoiInfoInTab  );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
                 }
             }
@@ -1140,7 +1182,6 @@ _
             } else {    // 나머지 폴리곤에 정의된 "name" 필드로 검색하도록 한다
 
                 var poiObj = layerManager.getPoiObjById( poiID );
-                layerManager.historyInsertPoi( poiObj );
                 mobileRequestPoiContentAndShow( poiObj , showPoiInfoInTab );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
             }
         }
@@ -1170,6 +1211,20 @@ _
         });
 
     };
+
+
+    function beforePoi(){
+        var poiObj = layerManager.historyPrevPoi();
+        if( poiObj != null )
+            moveToPlaceByPoiObj( poiObj );
+    }
+
+
+    function afterPoi(){
+        var poiObj = layerManager.historyNextPoi();
+        if( poiObj != null )
+            moveToPlaceByPoiObj( poiObj );
+    }
 
 
 

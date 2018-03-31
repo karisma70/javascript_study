@@ -593,7 +593,7 @@
 
 
 <script>
-    setDebug( false );
+    setDebug( true );
 
     var map3DAddLayerTimer;
     var setGroundLayerTimer;
@@ -630,8 +630,10 @@
     }
 
     function startSearchBible(){
+
         searchBibleChapter( function(){
-            startMap3DAddLayerWithTimer();
+
+            // startMap3DAddLayerWithTimer();
             layerManager.layerContainer.totalCount += bibleMapPolygonLayers.length;
             for( var pid in bibleMapPolygonLayers ) {
                 var layer = bibleMapPolygonLayers[ pid ];
@@ -642,7 +644,13 @@
 
                     // startMap3DAddLayerWithTimer();
                     // startMap3DAddLayer();
-                    clearInterval( startSearchBibleTimer );
+
+                    map3D.memWholeLayerAddToMap();
+
+                    setCursorByID('map','default');
+                    setCursorByID('map3D','default');
+
+                //     clearInterval( startSearchBibleTimer );
                 });
             }
 
@@ -1118,6 +1126,10 @@
 
 
     var downloadGeometries = function(){
+
+        setCursorByID('map','wait');
+        setCursorByID('map3D','wait');
+
         var flag = 0;
 
         var historyAdmin = document.getElementById("historyAdmin");
@@ -1146,7 +1158,9 @@
                 sync2DMapTo3DMap();
                 initTextAutoComplete();
                 // map3D.view3DTilt(1.1);
-                startSearchBibleWithTimer();
+                // startSearchBibleWithTimer();
+                startSearchBible();
+
                 /*
                  searchBibleChapter( function(){
                  layerManager.layerContainer.totalCount += bibleMapPolygonLayers.length;
