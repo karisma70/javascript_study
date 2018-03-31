@@ -8,12 +8,14 @@ var createFooterMenu = (function() {
 
      function CreateFooter(){
 
+         /*
          alert( "pixel Ratio : " + window.devicePixelRatio ) ;
 
          alert( "screenWidth : " + window.screen.width ) ;
 
          alert( "innerWidth : " + window.innerWidth ) ;
          alert( "OuterWidth : " + window.outerWidth ) ;
+         */
 
          var footer = document.getElementById('footer');
          var mapView = document.getElementById('map');
@@ -39,7 +41,7 @@ var createFooterMenu = (function() {
 
 
          compassBtn.style.top = 5 + 'px';
-         compassBtn.style.left = (window.innerWidth - 50 ) + 'px';
+         compassBtn.style.left = (window.innerWidth - 43 ) + 'px';
 
          zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
          zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
@@ -121,7 +123,7 @@ var createFooterMenu = (function() {
              mapView.style.bottom = ( window.innerHeight - mapHeight + 1 ) + 'px';
 
              compassBtn.style.top = 5 + 'px';
-             compassBtn.style.left = (window.innerWidth - 50 ) + 'px';
+             compassBtn.style.left = (window.innerWidth - 43 ) + 'px';
 
              footer.style.top = 81 + 'px';
              footer.style.left = 0 + 'px';
@@ -160,7 +162,7 @@ var createFooterMenu = (function() {
              mapView.style.bottom = 40 + 'px';
 
              compassBtn.style.top = 5 + 'px';
-             compassBtn.style.left = (window.innerWidth - 50 ) + 'px';
+             compassBtn.style.left = (window.innerWidth - 43 ) + 'px';
 
              homeBtn.style.top = ( window.innerHeight - 220 ) + 'px';
              zoomInBtn.style.top = ( window.innerHeight - 172 ) + 'px';
@@ -214,7 +216,7 @@ var createFooterMenu = (function() {
             mapView.style.bottom = ( window.innerHeight - mapHeight - 1 ) + 'px';
 
             compassBtn.style.top = 5 + 'px';
-            compassBtn.style.left = (window.innerWidth - 50 ) + 'px';
+            compassBtn.style.left = (window.innerWidth - 43 ) + 'px';
 
             homeBtn.style.top = ( window.innerHeight - mapHeight - 180 ) + 'px';
             zoomInBtn.style.top = ( window.innerHeight - mapHeight - 133 ) + 'px';
@@ -266,7 +268,7 @@ var createFooterMenu = (function() {
             mapView.style.bottom = 0 + 'px';
 
             compassBtn.style.top = 5 + 'px';
-            compassBtn.style.left = (window.innerWidth - 50 ) + 'px';
+            compassBtn.style.left = (window.innerWidth - 43 ) + 'px';
 
             homeBtn.style.top = ( window.innerHeight - 180 ) + 'px';
             zoomInBtn.style.top = (window.innerHeight - 133 ) + 'px';
