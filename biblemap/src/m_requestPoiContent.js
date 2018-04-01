@@ -2,26 +2,16 @@
  * Created by Administrator on 2018-03-15.
  */
 
-poiContentsToTab = function( infoText ){
+function writePoiContentsToTab( infoText ){
 
     $('#tab3Title').empty();
 
-    // var strPoiTitle = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + "\'" + focusPoiObj.id + "\'" + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: #2682E8 \" >'
     var strPoiTitle = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + "\'" + focusPoiObj.id + "\'" + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: rgb( 90, 90, 90)\" >'
         + '<img src ="biblemap/image/poi_location.png?version=20170908" style=\"height:26px; vertical-align:top;\">&nbsp;&nbsp;' +
         focusPoiObj.biblePlace + '  ' + '</a>';
 
     var strSearchWord = '<a href=' + '"javascript:bibleSearchByWord( ' + "\'" + focusPoiObj.biblePlace + "\'" + ')\">';
     strSearchWord += '&nbsp;&nbsp;&nbsp;<img src ="biblemap/image/m_search_btn2.png" style=\"position: absolute; top: -2px; height:28px; vertical-align:top;\">&nbsp;' + '</a>';
-
-    /*
-    strSearchWord += '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-    strSearchWord += '<a href=' + '"javascript:beforePoi()\">';
-    strSearchWord += '<img src="biblemap/image/before_poi2.png?version=20171201" style="border:1px solid grey;  width:28px; height:28px; vertical-align:top;\">&nbsp;' + '</a>';
-    strSearchWord += '&nbsp;&nbsp;';
-    strSearchWord += '<a href=' + '"javascript:afterPoi()\">';
-    strSearchWord += '<img src="biblemap/image/after_poi2.png?version=20171201" style="border:1px solid grey;  width:28px; height:28px; vertical-align:top;\">&nbsp;' + '</a>';
-    */
 
 
     strPoiTitle += strSearchWord;
@@ -38,11 +28,10 @@ poiContentsToTab = function( infoText ){
 
     // infoTab.innerHTML += infoText;
     infoTab.innerHTML = strConvText;
+}
 
-};
 
-
-makeLinkedName = function( poiID, placeName, youtube, infoText ){
+function makeLinkedLabel( poiID, placeName, youtube, infoText ){
 
     var strRet = "";
 
@@ -67,7 +56,21 @@ makeLinkedName = function( poiID, placeName, youtube, infoText ){
     }
 
     return strRet;
-};
+}
+
+
+function showPoiTooltip( poiObj, labelText, youtube, infoText ){
+
+    if ( focusPoiObj != null) {
+        if (poiObj.id == focusPoiObj.id) {
+            poiTooltip.create(poiObj.biblePlace, labelText, [poiObj.x, poiObj.y], true);
+        }
+        else
+            poiTooltip.create( poiObj.biblePlace, labelText, [poiObj.x, poiObj.y], false);
+    }
+    else
+        poiTooltip.create( poiObj.biblePlace, labelText, [poiObj.x, poiObj.y], false);
+}
 
 
 function mobileRequestPoiContentAndShow( paramPoiObj, callback ) {
@@ -78,6 +81,8 @@ function mobileRequestPoiContentAndShow( paramPoiObj, callback ) {
     var infoText = "";
     var titleText = "";
     var labelText = "";
+
+    var callbackFunc = callback;
 
     showDownloading();
 
@@ -103,11 +108,18 @@ function mobileRequestPoiContentAndShow( paramPoiObj, callback ) {
                 titleText = recvPoiInfo.title;
         }
 
-        showPoiTooltip( selectedPoiObj.id );
-        // poiContentsToTab();
+        if( selectedPoiObj.title !== undefined &&  selectedPoiObj.title !== "" ){
+            labelText = selectedPoiObj.biblePlace + ": " + selectedPoiObj.title;
+            labelText = makeLinkedLabel(selectedPoiObj.id, labelText, youtube, infoText);
+        }
+        else {
+            labelText = makeLinkedLabel(selectedPoiObj.id, selectedPoiObj.biblePlace, youtube, infoText);
+        }
 
-        if( callback )
-            callback();
+        showPoiTooltip( selectedPoiObj, labelText, youtube, infoText );
+
+        if( callbackFunc )
+            callbackFunc( selectedPoiObj.id );
 
     }, function () {    // POI의 상세정보가 없을 경우
 
@@ -116,50 +128,28 @@ function mobileRequestPoiContentAndShow( paramPoiObj, callback ) {
       //  poiTooltip.create( poiObj.biblePlace, linkedPlaceName, [poiObj.x, poiObj.y]);
         youtube = "";
         infoText = "";
+        titleText = "";
 
-        showPoiTooltip( selectedPoiObj.id );
+        labelText = makeLinkedLabel(selectedPoiObj.id, selectedPoiObj.biblePlace, youtube, infoText);
 
-        if( callback )
-            callback();
+        showPoiTooltip( selectedPoiObj, labelText, youtube, infoText );
 
-        // labelText = makeLinkedName( focusPoiObj.id, focusPoiObj.biblePlace, null, null );
-        // poiTooltip.create( focusPoiObj.biblePlace, labelText, [focusPoiObj.x, focusPoiObj.y]);
+        if( callbackFunc )
+            callbackFunc(  );
+
     });
 
-    showPoiTooltip = function( poiID ){
 
-        var poiObj = layerManager.getPoiObjById( poiID );
-
-        if( titleText !== ""){
-            // labelText = makeLinkedName( selectedPoiObj.id, titleText, youtube, infoText );
-            labelText = makeLinkedName(selectedPoiObj.id, selectedPoiObj.biblePlace, youtube, infoText);
-        }
-        else {
-            labelText = makeLinkedName(selectedPoiObj.id, selectedPoiObj.biblePlace, youtube, infoText);
-        }
-
-
-        if ( focusPoiObj != null) {
-            if (poiObj.id == focusPoiObj.id) {
-                poiTooltip.create(selectedPoiObj.biblePlace, labelText, [selectedPoiObj.x, selectedPoiObj.y], true);
-            }
-            else
-                poiTooltip.create( selectedPoiObj.biblePlace, labelText, [selectedPoiObj.x, selectedPoiObj.y], false);
-        }
-        else
-            poiTooltip.create( selectedPoiObj.biblePlace, labelText, [selectedPoiObj.x, selectedPoiObj.y], false);
-    };
-
-    showPoiInfoInTab = function( poiID ) {      // tabMenu 에서 정보 보여주기
+    showPoiInfoInTab = function ( poiID ) {      // tabMenu 에서 정보 보여주기
 
         var poiObj = layerManager.getPoiObjById( poiID );
         bibleMapManager.createPoiIcon( poiObj );        // focus POI Icon 만들기
 
-        setFocusPoiObj( poiObj );
+        setGlobalFocusPoiObj( poiObj );
+
+        writePoiContentsToTab( infoText );
 
         footerMenu.middle();
-
-        poiContentsToTab( infoText );
 
         tabMenu.selectTab('tab3Menu');
         $("#tab3").scrollTop(0);
@@ -167,15 +157,21 @@ function mobileRequestPoiContentAndShow( paramPoiObj, callback ) {
         poiTooltip.create( poiObj.biblePlace, labelText, [poiObj.x, poiObj.y], true);
         moveCenterFocusedPOI( poiObj );
     };
+
 }
 
 
-function setFocusPoiObj( poiObj ){
+
+
+
+
+
+function setGlobalFocusPoiObj( poiObj ){
     focusPoiObj = poiObj;
 }
 
 
-showPoiYoutubeInTooltip = function( poiID, youtubeLink ) {
+function showPoiYoutubeInTooltip( poiID, youtubeLink ) {
 
     var poiObj = layerManager.getPoiObjById( poiID );
 

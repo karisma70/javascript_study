@@ -19,13 +19,11 @@ function tabDecreaseBibleChapterAndSearch(){
     searchBibleChapterNum -= 1;
     var objChapter =  adjustBibleBookChapter( searchBibleBookNum, searchBibleChapterNum );
 
-    if( parseInt( dvBibleTitle.value ) == searchBibleBookNum){
-        if( Math.abs( parseInt( dvBibleChapter.value ) - objChapter.chapterNum ) < 3 ) {
-            dvBibleChapter.value = objChapter.bookNum.toString();
-            dvBibleChapter.value = objChapter.chapterNum.toString();
+    if( parseInt( dvBibleTitle.value ) == searchBibleBookNum &&  parseInt( dvBibleChapter.value) ==  searchBibleChapterNum+1 ){
+        dvBibleTitle.value = objChapter.bookNum.toString();
+        dvBibleChapter.value = objChapter.chapterNum.toString();
 
-            saveSearchWordsToStorage();
-        }
+        saveSearchWordsToStorage();
     }
 
     searchBibleBookNum = objChapter.bookNum;
@@ -60,13 +58,11 @@ function tabIncreaseBibleChapterAndSearch() {
     searchBibleChapterNum += 1;
     var objChapter =  adjustBibleBookChapter( searchBibleBookNum, searchBibleChapterNum );
 
-    if( parseInt( dvBibleTitle.value ) == searchBibleBookNum){
-        if( Math.abs( parseInt( dvBibleChapter.value ) - objChapter.chapterNum ) < 3 ) {
-            dvBibleChapter.value = objChapter.bookNum.toString();
+    if( parseInt( dvBibleTitle.value ) == searchBibleBookNum &&  parseInt( dvBibleChapter.value) ==  searchBibleChapterNum-1 ){
+            dvBibleTitle.value = objChapter.bookNum.toString();
             dvBibleChapter.value = objChapter.chapterNum.toString();
 
             saveSearchWordsToStorage();
-        }
     }
 
     searchBibleBookNum = objChapter.bookNum;

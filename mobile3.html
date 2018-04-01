@@ -73,18 +73,23 @@
     <script type="text/javascript" src="biblemap/src/m_poiTooltip.js"></script>
 
     <style stype="text/css">
+        /*
         ::-webkit-scrollbar {
             width: 8px;
         }
+        */
 
         /* Track */
+        /*
         ::-webkit-scrollbar-track {
             -webkit-box-shadow: inset 0 0 6px rgba(240,240,240,0.3);
             -webkit-border-radius: 10px;
             border-radius: 10px;
         }
+        */
 
         /* Handle */
+        /*
         ::-webkit-scrollbar-thumb {
             -webkit-border-radius: 10px;
             border-radius: 10px;
@@ -94,6 +99,7 @@
         ::-webkit-scrollbar-thumb:window-inactive {
             background: rgba(240,240,240,0.8);
         }
+        */
 
 
         div > span {
@@ -243,7 +249,7 @@
 
     <!-- <div id="dummy" style="position:absolute; left:50px; top:0px; height:20px; background-color: white;">테스트</div>  -->
 
-    <input id="compassBtn" type="image" src="biblemap/image/compass3.png?version=20170930"  style="position: absolute; border:0; width: 55px; height: 55px;"  onclick="setRotateNorth()">
+    <input id="compassBtn" type="image" src="biblemap/image/compass3.png?version=20171002"  style="position: absolute; border:0; width: 40px; height: 40px;"  onclick="setRotateNorth()">
 
     <!-- <input id="zoomInBtn2D" type="image" src="biblemap/image/m_zoom_in.png?version=20171204"  style="border:1px solid #A0A0A0; position: absolute; width:35px; height: 35px; border:none;"  -->
     <input id="zoomInBtn2D" type="image" src="biblemap/image/plus_btn2.png?version=20171204"  style="position: absolute; width:35px; height: 35px; border:1px solid rgb(170, 170, 170);"
@@ -251,7 +257,7 @@
     <!-- <input id="zoomOutBtn2D" type="image" src="biblemap/image/m_zoom_out.png?version=20171204" style="border:1px solid grey;  position: absolute; width:35px; height: 35px; border:none;"-->
     <input id="zoomOutBtn2D" type="image" src="biblemap/image/minus_btn2.png?version=20171204" style="position: absolute; width:35px; height: 35px; border:1px solid rgb(170, 170, 170);"
            onclick="map2DZoomOut()">
-    <input id="homeBtn" type="image" src="biblemap/image/home.png?version=20170930"
+    <input id="homeBtn" type="image" src="biblemap/image/home.png?version=20171001"
            style="position: absolute; width:35px; height: 35px; border:none;" onclick="gotoHome()">
 </div>
 
@@ -1120,6 +1126,18 @@
     });
 
 
+    function showGlobalFocusPoiInfoInTab( poiID ) {
+        if (focusPoiObj !== null && focusPoiObj.id == poiID ) {
+            footerMenu.middle();
+
+            moveCenterFocusedPOI( focusPoiObj );
+
+            tabMenu.selectTab('tab3Menu');
+            $("#tab3").scrollTop(0);
+        }
+    }
+
+
     bibleMapManager.selectFeatureEvent( function(e) {
 
         var selLen = e.selected.length;
@@ -1141,19 +1159,10 @@
         var posName = feature.get("label");     //  OpenLayersControl.js 내에  createTextStyleOfFeature 함수에서  text: feature.get('label') 으로 설정되어 있음
         var poiID = feature.get("id");     //  OpenLayersControl.js 내에  createTextStyleOfFeature 함수에서  text: feature.get('label') 으로 설정되어 있음
 
-        showPoiInfoInTab = function( ) {
-            if (focusPoiObj !== null && focusPoiObj.id == poiID ) {
-                footerMenu.middle();
+        var poiObj = layerManager.getPoiObjById( poiID );
+        mobileRequestPoiContentAndShow( poiObj , showGlobalFocusPoiInfoInTab );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
 
-                moveCenterFocusedPOI( focusPoiObj );
-
-                // poiContentsToTab(infoText);
-                tabMenu.selectTab('tab3Menu');
-                $("#tab3").scrollTop(0);
-            }
-        };
-
-        // var zoom3D = map3D.view.getZoom();
+        /*
 
         if (posName == null) {      // polygon 레이어를 클릭했을 경우
             posName = feature.get("name");      // History admin polygon에는 name과 name2 필드가 존재함
@@ -1185,6 +1194,7 @@
                 mobileRequestPoiContentAndShow( poiObj , showPoiInfoInTab );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
             }
         }
+        */
 
     });
 

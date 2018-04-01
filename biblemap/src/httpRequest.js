@@ -66,7 +66,7 @@ var httpRequest = (function(){
 
         if( typeof( xmlhttp.abort ) != "undefined"){
             xmlhttp.abort = function(){
-                ConsoleLog( "abort!!!");
+                abort( "abort!!!");
             }
         }
 
@@ -78,7 +78,7 @@ var httpRequest = (function(){
 
         if( typeof( xmlhttp.timeout ) != "undefined"){
             xmlhttp.error = function(){
-                ConsoleLog( "timeout !!!");
+                abort( "timeout !!!");
             }
         }
 
@@ -135,13 +135,20 @@ function requestPoiInfo( poiObj, recvFunc,  noRecvFunc){
     var jsonStr = JSON.stringify( searchParam );
 
     httpRequest("POST", jsonStr, function( http ) {
+
+        if( http.responseText == "")
+            alert( "recv : " + http.responseText );
+
         var resObj = JSON.parse( http.responseText );
 
         if( resObj.result != "undefined" && resObj.result == "fail" ){
             ConsoleLog("requestPoiInfo() Fail!!!   param: " + jsonStr );
+            // alert( "데이터 수신이 실패하였습니다 네트웍 상태를 점검해 주세요!" );
+
             if( noRecvFunc ){
                 noRecvFunc( resObj );
             }
+
             return;
         }
 
