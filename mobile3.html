@@ -272,10 +272,10 @@
     <div id ="tab_contain" class="tab_container" >
         <!-- <div id = "tab1Title" class="divContent" style="padding-left: 40px;  font-size: 1.5em; top:-6px; overflow-x:hidden; border-bottom: 1px solid rgb(240, 240, 240);" >  -->
         <div id = "tab1Title" class="divContent" style="padding-left: 20px; font-weight: bold; font-size: 1.25em; top:-6px; height: 33px; overflow-x:hidden; color: rgb( 90, 90, 90 );" >
-            <span id ="tabBibleBook" style="position: absolute; left: 5px; top: 0px; width:120px; font-size:1.2em; text-align:right;" ></span>
-            <input id="tabDecBible" type="image" src="biblemap/image/left_arrow.png?version=20170907" style="position: absolute; left: 130px; width:22px; height:26px; vertical-align:middle; " onclick="tabDecreaseBibleChapterAndSearch()">
-            <span id ="tabBibleChapter" style="position: absolute; left: 150px; width:70px; top: 0px; font-size:1.2em; text-align:center;">장</span>
-            <input id="tabIncBible" type="image" src="biblemap/image/right_arrow.png?version=20170907" style="position: absolute; left: 215px; top: 0px; width:22px; height:26px; vertical-align:middle;" onclick="tabIncreaseBibleChapterAndSearch()">
+            <span id ="tabBibleBook" style="position: absolute; left: 15px; top: 0px; width:125px; font-size:1.2em; text-align:right;" ></span>
+            <input id="tabDecBible" type="image" src="biblemap/image/left_arrow.png?version=20170907" style="position: absolute; left: 140px; width:22px; height:26px; vertical-align:middle; " onclick="tabDecreaseBibleChapterAndSearch()">
+            <span id ="tabBibleChapter" style="position: absolute; left: 155px; width:70px; top: 0px; font-size:1.2em; text-align:center;">장</span>
+            <input id="tabIncBible" type="image" src="biblemap/image/right_arrow.png?version=20170907" style="position: absolute; left: 220px; top: 0px; width:22px; height:26px; vertical-align:middle;" onclick="tabIncreaseBibleChapterAndSearch()">
         </div>
 
         <!-- <div id = "tab3Title" class="divContent" style="padding-left: 10px;  font-size: 1.5em; top:-6px; height: 35px; overflow-x:hidden; border-bottom:4px solid rgb(230, 230, 230);" > </div>  -->
@@ -302,12 +302,6 @@
     <input id ="footDownArrow" type="image" src="biblemap/image/down_arrow.png?version=20170918" style="position: absolute; left: 280px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerDown()">
 
     <!-- .tab_container -->
-</div>
-
-<div id="bubblePopup" class="ol-popup" style="font-size:1.1em;">
-    <a href="#" id="popup-closer" class="ol-popup-closer" ></a>
-    <div style="height: 8px"></div>
-    <div id="popup-content" class="ol-popup-content" style="text-align:center; font-size: 1.2em;"></div>
 </div>
 
 
@@ -340,6 +334,39 @@
 <script>
 
     setDebug( true );
+/*
+    Date.prototype.getCurMonth = function(){
+      return (this.getMonth() +1 );
+    };
+    */
+
+    var curDate = new Date();
+
+    var dayObj = getCurrentDayFromStorage();
+    if( dayObj == null ){
+        saveCurrentDayToStorage( curDate );
+        window.location.reload( true );
+    }else{
+
+        if( dayObj.year != curDate.getFullYear() || dayObj.mon != curDate.getCurMonth() || dayObj.day != curDate.getCurDay() || dayObj.hour != curDate.getHours() || dayObj.min != curDate.getMinutes() ){
+            saveCurrentDayToStorage( curDate );
+            // alert( "refresh!!!");
+            window.location.reload( true );
+        }
+    }
+
+    var currentDate = new Date();
+    ConsoleLog( "Year: " + currentDate.getFullYear() + ", Mon: " + currentDate.getCurMonth() + ", Day: " + currentDate.getCurDay() + ", Hour : " + currentDate.getHours() + ", Min : " + currentDate.getMinutes() );
+
+    // var zIndex = $( '#map' ).css( "z-index");
+
+    $( '#map' ).css( "z-index", 1 );
+    $("#sideMenu").css( "z-index", 20);
+
+    $("#compassBtn").hide();
+    $("#zoomInBtn2D").hide();
+    $("#zoomOutBtn2D").hide();
+    $("#homeBtn").hide();
 
     <!-- $( '#dummy' ).css( "z-index", 100 );   -->
 
@@ -446,7 +473,6 @@
 
 
 
-    $( '#bubblePopup' ).css( "z-index", 10 );
     $( '#zoomInBtn2D' ).css( "z-index", 100 );
     $( '#zoomOutBtn2D' ).css( "z-index", 100 );
     $( '#homeBtn' ).css( "z-index", 100 );
@@ -455,7 +481,9 @@
 
     $("#searchedPoiList").hide();
 
-    var focusPoiObj = null;
+    // var focusPoiObj = null;
+    window.focusPoiObj = null;
+    window.selectedPoiObj = null;
 
     var footerMenu = createFooterMenu();
 
@@ -492,10 +520,6 @@
 
     var downloadGeomTimer = null;
     var IsDownload = false;
-
-    var dvPopupContainer = document.getElementById('bubblePopup');
-    dvPopupContainer.setAttribute("id", "popupContainer" );
-    $( '#popupContainer' ).css( "z-index", 2000 );
 
 
     var dvPopupContent = document.getElementById('popup-content');
@@ -565,6 +589,11 @@
             dvBibleTitle.appendChild( chapter );
         }
 
+        $("#compassBtn").show();
+        $("#zoomInBtn2D").show();
+        $("#zoomOutBtn2D").show();
+        $("#homeBtn").show();
+
         getSearchWordsFromStorage();
 
     } );
@@ -611,40 +640,8 @@
     }
 
 
-    function createOverlay( divID ){    // container
-        var overlay = new ol.Overlay( ({
-            element: divID,
-            autoPan: true,
-            autoPanAnimation: {
-                duration: 250
-            }
-        }));
-        return overlay;
-    }
-
-    var overlay = createOverlay( dvPopupContainer );
-
-    var popup2D = {
-        name : "2D",
-        overlay : overlay,
-        content : dvPopupContent,
-        closer : dvPopupCloser
-    };
-
-    popup2D.closer.onclick = function() {
-        popup2D.overlay.setPosition(undefined);
-        popup2D.closer.blur();
-        popup2D.content.innerHTML = "";
-
-        /*
-        if( footerMenu.getMode() == "middle" )
-            footerMenu.bottom();
-            */
-
-        return false;
-    };
-
-    var bibleMapManager = createMapManager( popup2D.overlay, 'map' );
+    // var bibleMapManager = createMapManager( popup2D.overlay, 'map' );
+    var bibleMapManager = createMapManager( null, 'map' );
     var layerManager = bibleMapManager.getLayerManager();
     var bibleMap = bibleMapManager.getMap();
 
@@ -727,6 +724,7 @@
             $(this).addClass("active").css("color", "#000000");
             $(".tab_content").hide();
 
+            /*
             if( selMenuString == "성경본문"){
                 $("#tab1Title").show();
             }else{
@@ -734,21 +732,24 @@
             }
             if( selMenuString == "지명정보"){
                 $("#tab3Title").show();
-                /*
-                var infoTab3 = document.getElementById( 'tab3' );
-                if( infoTab3.innerHTML.length > 10 )
-                    $("#tab3Title").show();
-                else{
-                    alert("검색결과가 없습니다 지도상의 지명을 클릭하고 아이콘 \'i\'를 클릭해 주세요");
-                }*/
             }else{
                 $("#tab3Title").hide();
             }
+            */
 
             var activeTab = $(this).attr("rel");
             ConsoleLog( "tab Click !!! rel Active : " + activeTab );
-            // $("#" + activeTab).fadeIn();
+
             $("#" + activeTab).show();
+
+            $("#tab1Title").hide();
+            $("#tab3Title").hide();
+
+            if(activeTab == "tab1" ){
+                $("#tab1Title").show();
+            }else if( activeTab == "tab3"){
+                $("#tab3Title").show();
+            }
         });
 
         TabMenuControl = function() {
@@ -775,12 +776,11 @@
 
         if( window.matchMedia("(orientation: portrait)").matches){
             // alert("가로");
-            console.log("세로");
+
             // middleFooter();
             footerMenu.showControl();
         }else if( window.matchMedia("(orientation: landscape)").matches){
             // alert("세로");
-            console.log("가로");
             setTimeout( function(){ window.scrollTo(0, 1); }, 100 );
             // middleFooter();
             footerMenu.showControl();
@@ -1039,20 +1039,33 @@
         var poiZoomIn = poiObj.zoomIn;
 
         if( IsIntersectExtent( mapBaseExtent, poiObj.x, poiObj.y ) == true) {    // 기본 지도 영역 이내에 있으면
-            if( poiZoomIn < 6){
+            if (poiZoomIn < 6) {
                 poiZoomIn = 7.8;
-            }else{
+            } else {
                 poiZoomIn -= 1;
             }
 
             // if( curZoom < poiZoomIn ){
-            var tolerance = Math.abs( curZoom - poiZoomIn );
-            if( tolerance > 2){
-                poiZoomIn = ( curZoom + poiZoomIn ) / 2.0;
-            }else{
+            if (IsIntersectExtent(mapExtent, poiObj.x, poiObj.y) == true) {
                 poiZoomIn = curZoom;
+            } else {
+                var tolerance = Math.abs(curZoom - poiZoomIn);
+                if (tolerance > 2) {
+                    poiZoomIn = ( curZoom + poiZoomIn ) / 2.0;
+                } else {
+                    poiZoomIn = curZoom;
+                }
             }
-            moveTo(view, [poiObj.x, poiObj.y], poiZoomIn );
+            if( tolerance > 2 ){
+                flyTo(view, [poiObj.x, poiObj.y], poiZoomIn, function (complete) {
+                    if (complete == true) {
+                    }
+                });
+            }
+            else
+            {
+                moveTo(view, [poiObj.x, poiObj.y], poiZoomIn);
+            }
         }else{
             if( poiZoomIn < 6 )
                 poiZoomIn = 6.5;
@@ -1127,10 +1140,10 @@
 
 
     function showGlobalFocusPoiInfoInTab( poiID ) {
-        if (focusPoiObj !== null && focusPoiObj.id == poiID ) {
+        if (window.focusPoiObj !== null && window.focusPoiObj.id == poiID ) {
             footerMenu.middle();
 
-            moveCenterFocusedPOI( focusPoiObj );
+            moveCenterFocusedPOI( window.focusPoiObj );
 
             tabMenu.selectTab('tab3Menu');
             $("#tab3").scrollTop(0);

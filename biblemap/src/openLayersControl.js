@@ -543,7 +543,8 @@ LayerManager.prototype.getPoiObjectArray = function(){
  LayerManager.prototype.getPoiObjById = function( id ){
      if( id < 0 || id > this.layerContainer.poiDicObjects.length ) {
          ConsoleLog( "cannot find getPoiObjById(" + id + ")  ===>  length : " + this.layerContainer.poiDicObjects.length );
-         return;
+         alert( "cannot find getPoiObjById(" + id + ")  ===>  poiDicObjects.length : " + this.layerContainer.poiDicObjects.length );
+         return null;
      }
 
      return this.layerContainer.poiDicObjects[id];
@@ -924,24 +925,36 @@ function createLayer( source  ) {
 
          var collControls = new ol.Collection();
 
+         /*
          this.map = new ol.Map({
              overlays: [overlay],
              target: targetMap,      // taret: 'map'
 
-        /*
-             controls: ol.control.defaults({
-                 attribution: false,
-                 attributionOptions: ({    // @type {olx.control.AttributionOptions}
-                     collapsible: false
-                 })
-             }).extend([ this.scaleLineControl ]),
-             */
-
              controls: collControls.extend([ this.scaleLineControl ]),
-
              // controls : [ ],
              view: this.view
          });
+         */
+
+         if( overlay !== undefined && overlay != null ){
+             this.map = new ol.Map({
+                 overlays: [overlay],
+                 target: targetMap,      // taret: 'map'
+
+                 controls: collControls.extend([ this.scaleLineControl ]),
+                 // controls : [ ],
+                 view: this.view
+             });
+         }else{
+             this.map = new ol.Map({
+                 target: targetMap,      // taret: 'map'
+                 controls: collControls.extend([ this.scaleLineControl ]),
+                 // controls : [ ],
+                 view: this.view
+             });
+         }
+
+
 
          this.mapExtent = this.map.getView().calculateExtent( this.map.getSize());
          this.mapExtent[0]= this.mapExtent[0] - 190000;

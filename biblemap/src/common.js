@@ -2,6 +2,16 @@
  * Created by Administrator on 2017-07-07.
  */
 
+Date.prototype.getCurMonth = function(){
+    return (this.getMonth() +1 );
+};
+
+
+Date.prototype.getCurDay = function(){
+    return (this.getDay() +1 );
+};
+
+
 function removeSpaceInWord( strText){
     strText = strText.replace(/^\s*|\s*$/g, '');
     return strText;
@@ -285,6 +295,42 @@ function saveSearchWordsToStorage( ){
 
     storage.setItem('bibleMap', strObj);
 }
+
+function saveCurrentDayToStorage( curDate ){
+    if( checkLocalStorageEnabled() == false ) {
+        return;
+    }
+
+    ConsoleLog( "Year: " + curDate.getFullYear() + ", Mon: " + curDate.getCurMonth() + ", Day: " + curDate.getCurDay() + ", Hour : " + curDate.getHours() + ", Min : " + curDate.getMinutes() );
+
+    var Obj = {
+        'year': curDate.getFullYear(),
+        'mon': curDate.getCurMonth(),
+        'day': curDate.getCurDay(),
+        'hour' :  curDate.getHours(),
+        'min' : curDate.getMinutes()
+     };
+
+    var strObj = JSON.stringify(Obj);
+    // alert("JSON : " + strObj );
+    var storage = window.localStorage;
+
+    storage.setItem('bibleMap-day', strObj);
+}
+
+function getCurrentDayFromStorage(){
+    var strObj = localStorage.getItem( 'bibleMap-day');
+    if( strObj === undefined || strObj == null ){
+        return null;
+    }
+
+    var Obj = JSON.parse( strObj );
+    if( Obj == null )
+        return null;
+
+    return Obj;
+}
+
 
 function getSearchWordsFromStorage(){
     var strObj = localStorage.getItem( 'bibleMap');

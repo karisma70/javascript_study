@@ -17,35 +17,35 @@ var createFooterMenu = (function() {
          alert( "OuterWidth : " + window.outerWidth ) ;
          */
 
-         var footer = document.getElementById('footer');
-         var mapView = document.getElementById('map');
+         this.footer = document.getElementById('footer');
+         this.mapView = document.getElementById('map');
 
-         var logo = document.getElementById('bibleMapLogo');
+         this.logo = document.getElementById('bibleMapLogo');
 
-         var tabMenuBar = document.getElementById("tabsMenu");
-         var tab_contain = document.getElementById("tab_contain");
+         this.tabMenuBar = document.getElementById("tabsMenu");
+         this.tab_contain = document.getElementById("tab_contain");
 
-         var tab1 = document.getElementById("tab1");
-         var tab2 = document.getElementById("tab2");
-         var tab3 = document.getElementById("tab3");
+         this.tab1 = document.getElementById("tab1");
+         this.tab2 = document.getElementById("tab2");
+         this.tab3 = document.getElementById("tab3");
 
-         var upArrow = document.getElementById("footUpArrow");
-         var downArrow = document.getElementById("footDownArrow");
+         this.upArrow = document.getElementById("footUpArrow");
+         this.downArrow = document.getElementById("footDownArrow");
 
-         var missionWideIntro = document.getElementById("missionWideIntro");
+         this.missionWideIntro = document.getElementById("missionWideIntro");
 
-         var compassBtn = document.getElementById("compassBtn");
-         var zoomInBtn = document.getElementById("zoomInBtn2D");
-         var zoomOutBtn = document.getElementById("zoomOutBtn2D");
-         var homeBtn = document.getElementById("homeBtn");
+         this.compassBtn = document.getElementById("compassBtn");
+         this.zoomInBtn = document.getElementById("zoomInBtn2D");
+         this.zoomOutBtn = document.getElementById("zoomOutBtn2D");
+         this.homeBtn = document.getElementById("homeBtn");
 
 
-         compassBtn.style.top = 5 + 'px';
-         compassBtn.style.left = (window.innerWidth - 43 ) + 'px';
+         this.compassBtn.style.top = 5 + 'px';
+         this.compassBtn.style.left = (window.innerWidth - 43 ) + 'px';
 
-         zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
-         zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
-         homeBtn.style.left = (window.innerWidth - 40 ) + 'px';
+         this.zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
+         this.zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
+         this.homeBtn.style.left = (window.innerWidth - 40 ) + 'px';
 
          function setZOrder2DViewBtn( val ) {
              $('#compassBtn').css("z-index", val);
@@ -54,35 +54,35 @@ var createFooterMenu = (function() {
              $('#homeBtn').css("z-index", val);
          }
 
-         function setLogoPosition(){
-             logo.style.left =  (window.innerWidth - 43) + 'px';
-             logo.style.right = 0 + 'px';
-         }
+         this.setLogoPosition = function(){
+             this.logo.style.left =  (window.innerWidth - 43) + 'px';
+             this.logo.style.right = 0 + 'px';
+         };
 
-         function setTabPosition(){
-             tabMenuBar.style.top = 5 + 'px';
-             tabMenuBar.style.left = 0 + 'px';
+         this.setTabPosition = function(){
+             this.tabMenuBar.style.top = 5 + 'px';
+             this.tabMenuBar.style.left = 0 + 'px';
 
-             tab_contain.style.top = 38 + 'px';
-             tab_contain.style.left = 0 + 'px';
-             tab_contain.style.right = 0 + 'px';
-             tab_contain.style.bottom = 5 + 'px';
+             this.tab_contain.style.top = 38 + 'px';
+             this.tab_contain.style.left = 0 + 'px';
+             this.tab_contain.style.right = 0 + 'px';
+             this.tab_contain.style.bottom = 5 + 'px';
 
-             tab1.style.top = 30 + 'px';
-             tab1.style.left = 0 + 'px';
-             tab1.style.right = 0 + 'px';
-             tab1.style.bottom = 5 + 'px';
+             this.tab1.style.top = 30 + 'px';
+             this.tab1.style.left = 0 + 'px';
+             this.tab1.style.right = 0 + 'px';
+             this.tab1.style.bottom = 5 + 'px';
 
-             tab2.style.top = 0 + 'px';
-             tab2.style.left = 0 + 'px';
-             tab2.style.right = 0 + 'px';
-             tab2.style.bottom = 5 + 'px';
+             this.tab2.style.top = 0 + 'px';
+             this.tab2.style.left = 0 + 'px';
+             this.tab2.style.right = 0 + 'px';
+             this.tab2.style.bottom = 5 + 'px';
 
-             tab3.style.top = 30 + 'px';
-             tab3.style.left = 0 + 'px';
-             tab3.style.right = 0 + 'px';
-             tab3.style.bottom = 0 + 'px';
-         }
+             this.tab3.style.top = 30 + 'px';
+             this.tab3.style.left = 0 + 'px';
+             this.tab3.style.right = 0 + 'px';
+             this.tab3.style.bottom = 0 + 'px';
+         };
 
          this.mode = "hide";    // "hide", "bottom", "middle", "top";
 
@@ -95,7 +95,7 @@ var createFooterMenu = (function() {
          };
 
          this.showControl = function(){
-             setLogoPosition();
+             this.setLogoPosition();
 
              switch( this.mode ){
                  case "hide": this.hide();
@@ -111,94 +111,180 @@ var createFooterMenu = (function() {
              }
          };
 
+         topModeShowContol = function(){
+
+             $("#footer").css( "z-index", 10 );
+             $("#tab_contain").css( "z-index", 9 );
+
+             $("#footer").show();
+
+             $("#tabsMenu").show();
+             $("#tab_contain").show();
+             $("#footUpArrow").hide();
+             $("#footDownArrow").show();
+             $("#missionWideIntro").hide();
+
+         };
+
+         middleModeShowControl = function(){
+
+             $("#footer").css( "z-index", 10 );
+             $("#tab_contain").css( "z-index", 9 );
+
+
+             $("#footer").show();
+             $("#footUpArrow").show();
+             $("#footDownArrow").show();
+
+             $("#tabsMenu").show();
+             $("#tab_contain").show();
+
+             $("#missionWideIntro").hide();
+         };
+
+         bottomModeShowControl = function(){
+
+             // $("#footer").css( "z-index", -10 );
+
+             $("#footer").show();
+
+             $("#tab_contain").css( "z-index", -10 );
+
+             $("#tabsMenu").hide();
+             $("#tab_contain").hide();
+             $("#footDownArrow").hide();
+
+
+             $("#footUpArrow").show();
+             $("#missionWideIntro").show();
+         };
+
+
+
+         footerShowControl = function( type ){
+            switch( type ){
+                case "top" :
+                    topModeShowContol();
+                    break;
+                case "middle" :
+                    middleModeShowControl();
+                    break;
+                case "bottom" :
+                    bottomModeShowControl();
+                    break;
+                case "hide" :
+                    $("#footer").hide();
+                    break;
+
+            }
+         };
+
+
+
+         showTabMenu = function() {
+             $("#tabsMenu").css( "z-index", 10 );
+             //$("#tabsMenu").show();
+
+             $("#tab_contain").css( "z-index", 10 );
+             //$("#tab_contain").show();
+         };
+
+         hideTabMenu = function() {
+             $("#tabsMenu").css( "z-index", -20 );
+             //$("#tabsMenu").hide();
+
+             $("#tab_contain").css( "z-index", -20 );
+             //$("#tab_contain").hide();
+
+             $("#tab1").css( "z-index", -20 );
+             $("#tab2").css( "z-index", -20 );
+             $("#tab3").css( "z-index", -20 );
+
+         };
+
+         hideFooterMenu = function(){
+             //$("#footer").hide();
+             $("#footer").css( "z-index", -10 );
+         };
+
+         showFooterMenu = function(){
+             //$("#footer").show();
+             $("#footer").css( "z-index", 10 );
+         };
+
+
 
          this.top = function(){
 
              this.mode = "top";
              var mapHeight = window.innerHeight * 0.50;
 
-             mapView.style.left = 0 + 'px';
-             mapView.style.right = 0 + 'px';
-             mapView.style.top = 41 + 'px';
-             mapView.style.bottom = ( window.innerHeight - mapHeight + 1 ) + 'px';
+             this.mapView.style.left = 0 + 'px';
+             this.mapView.style.right = 0 + 'px';
+             this.mapView.style.top = 41 + 'px';
+             this.mapView.style.bottom = ( window.innerHeight - mapHeight + 1 ) + 'px';
 
-             compassBtn.style.top = 5 + 'px';
-             compassBtn.style.left = (window.innerWidth - 43 ) + 'px';
+             this.compassBtn.style.top = 5 + 'px';
+             this.compassBtn.style.left = (window.innerWidth - 43 ) + 'px';
 
-             footer.style.top = 81 + 'px';
-             footer.style.left = 0 + 'px';
-             footer.style.right = 0 + 'px';
-             footer.style.bottom = 0 + 'px';
+             this.footer.style.top = 81 + 'px';
+             this.footer.style.left = 0 + 'px';
+             this.footer.style.right = 0 + 'px';
+             this.footer.style.bottom = 0 + 'px';
 
-             setTabPosition();
+             this.downArrow.style.top = 4 + 'px';
+             this.downArrow.style.left = window.innerWidth - 40 + 'px';
+             this.downArrow.style.right = 0 + 'px';
+             this.downArrow.style.bottom = 0 + 'px';
 
+
+             this.setTabPosition();
              bibleMap.updateSize();
-
-             $("#tabsMenu").show();
-             $("#tab_contain").show();
-
-             $("#footer").show();
-
-             $("#footUpArrow").hide();
-             $("#footDownArrow").show();
-             $("#missionWideIntro").hide();
-
-             downArrow.style.top = 4 + 'px';
-             downArrow.style.left = window.innerWidth - 40 + 'px';
-             downArrow.style.right = 0 + 'px';
-             downArrow.style.bottom = 0 + 'px';
-
+             footerShowControl( "top");
              setZOrder2DViewBtn( 2010 );
          };
 
          this.bottom = function(){
 
-
              this.mode = "bottom";
 
-             mapView.style.left = 0 + 'px';
-             mapView.style.right = 0 + 'px';
-             mapView.style.top = 41 + 'px';
-             mapView.style.bottom = 40 + 'px';
+             footerShowControl( "bottom");
 
-             compassBtn.style.top = 5 + 'px';
-             compassBtn.style.left = (window.innerWidth - 43 ) + 'px';
+             this.mapView.style.left = 0 + 'px';
+             this.mapView.style.right = 0 + 'px';
+             this.mapView.style.top = 41 + 'px';
+             this.mapView.style.bottom = 40 + 'px';
 
-             homeBtn.style.top = ( window.innerHeight - 220 ) + 'px';
-             zoomInBtn.style.top = ( window.innerHeight - 172 ) + 'px';
-             zoomOutBtn.style.top = (window.innerHeight - 140 ) + 'px';
+             this.compassBtn.style.top = 5 + 'px';
+             this.compassBtn.style.left = (window.innerWidth - 43 ) + 'px';
 
-             zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
-             zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
-             homeBtn.style.left = (window.innerWidth - 40 ) + 'px';
+             this.homeBtn.style.top = ( window.innerHeight - 220 ) + 'px';
+             this.zoomInBtn.style.top = ( window.innerHeight - 172 ) + 'px';
+             this.zoomOutBtn.style.top = (window.innerHeight - 140 ) + 'px';
+
+             this.zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
+             this.zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
+             this.homeBtn.style.left = (window.innerWidth - 40 ) + 'px';
 
 
-             footer.style.top = (window.innerHeight - 41) + 'px';
+             this.footer.style.top = (window.innerHeight - 41) + 'px';
              /* footer.style.top = ( document.body.scrollHeight - 40) + 'px';  */
-             footer.style.left = 0 + 'px';
-             footer.style.right = 0 + 'px';
-             footer.style.bottom = 0 + 'px';
+             this.footer.style.left = 0 + 'px';
+             this.footer.style.right = 0 + 'px';
+             this.footer.style.bottom = 0 + 'px';
 
-             setTabPosition();
+             this.setTabPosition();
 
+             this.upArrow.style.top = 3 + 'px';
+             this.upArrow.style.left = window.innerWidth - 40 + 'px';
+             this.upArrow.style.right = 0 + 'px';
+             this.upArrow.style.bottom = 0 + 'px';
 
-             $("#tabsMenu").hide();
-             $("#tab_contain").hide();
-             $("#footer").show();
-             $("#footUpArrow").show();
-             $("#footDownArrow").hide();
-             $("#missionWideIntro").show();
-
-             upArrow.style.top = 3 + 'px';
-             upArrow.style.left = window.innerWidth - 40 + 'px';
-             upArrow.style.right = 0 + 'px';
-             upArrow.style.bottom = 0 + 'px';
-
-             missionWideIntro.style.top = 0 + 'px';
-             missionWideIntro.style.left = 0 + 'px';
-             // missionWideIntro.style.right = window.innerWidth - 80 + 'px';
-             missionWideIntro.style.right = 80 + 'px';
-             upArrow.style.bottom = 2 + 'px';
+             this.missionWideIntro.style.top = 0 + 'px';
+             this.missionWideIntro.style.left = 0 + 'px';
+             // this.missionWideIntro.style.right = window.innerWidth - 80 + 'px';
+             this.missionWideIntro.style.right = 80 + 'px';
+             this.upArrow.style.bottom = 2 + 'px';
 
              bibleMap.updateSize();
 
@@ -210,51 +296,44 @@ var createFooterMenu = (function() {
             this.mode = "middle";
             var mapHeight = window.innerHeight * 0.50;
 
-            mapView.style.left = 0 + 'px';
-            mapView.style.right = 0 + 'px';
-            mapView.style.top = 41 + 'px';
-            mapView.style.bottom = ( window.innerHeight - mapHeight - 1 ) + 'px';
+            this.mapView.style.left = 0 + 'px';
+            this.mapView.style.right = 0 + 'px';
+            this.mapView.style.top = 41 + 'px';
+            this.mapView.style.bottom = ( window.innerHeight - mapHeight - 1 ) + 'px';
 
-            compassBtn.style.top = 5 + 'px';
-            compassBtn.style.left = (window.innerWidth - 43 ) + 'px';
+            this.compassBtn.style.top = 5 + 'px';
+            this.compassBtn.style.left = (window.innerWidth - 43 ) + 'px';
 
-            homeBtn.style.top = ( window.innerHeight - mapHeight - 180 ) + 'px';
-            zoomInBtn.style.top = ( window.innerHeight - mapHeight - 133 ) + 'px';
-            zoomOutBtn.style.top = (window.innerHeight - mapHeight - 100 ) + 'px';
+            this.homeBtn.style.top = ( window.innerHeight - mapHeight - 180 ) + 'px';
+            this.zoomInBtn.style.top = ( window.innerHeight - mapHeight - 133 ) + 'px';
+            this.zoomOutBtn.style.top = (window.innerHeight - mapHeight - 100 ) + 'px';
 
-            zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
-            zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
-            homeBtn.style.left = (window.innerWidth - 40 ) + 'px';
+            this.zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
+            this.zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
+            this.homeBtn.style.left = (window.innerWidth - 40 ) + 'px';
 
-            footer.style.top = mapHeight + 'px';
-            footer.style.left = 0 + 'px';
-            footer.style.right = 0 + 'px';
-            footer.style.bottom = 0 + 'px';
+            this.footer.style.top = (mapHeight ) + 'px';
+            this.footer.style.left = 0 + 'px';
+            this.footer.style.right = 0 + 'px';
+            this.footer.style.bottom = 0 + 'px';
 
-            setTabPosition();
+            this.setTabPosition();
 
-            $("#footUpArrow").show();
-            $("#footDownArrow").show();
+            this.upArrow.style.top = 0 + 'px';
+            this.upArrow.style.left = window.innerWidth - 66 + 'px';
+            this.upArrow.style.right = 0 + 'px';
+            this.upArrow.style.bottom = 0 + 'px';
 
-            upArrow.style.top = 0 + 'px';
-            upArrow.style.left = window.innerWidth - 66 + 'px';
-            upArrow.style.right = 0 + 'px';
-            upArrow.style.bottom = 0 + 'px';
+            this.downArrow.style.top = 0 + 'px';
+            this.downArrow.style.left = window.innerWidth - 32 + 'px';
+            this.downArrow.style.right = 0 + 'px';
+            this.downArrow.style.bottom = 0 + 'px';
 
-            downArrow.style.top = 0 + 'px';
-            downArrow.style.left = window.innerWidth - 32 + 'px';
-            downArrow.style.right = 0 + 'px';
-            downArrow.style.bottom = 0 + 'px';
-
-            bibleMap.updateSize();
-
-            $("#tabsMenu").show();
-            $("#tab_contain").show();
-            $("#missionWideIntro").hide();
-
-            $("#footer").show();
+            footerShowControl( "middle");
 
             setZOrder2DViewBtn( 2010 );
+
+            bibleMap.updateSize();
         };
 
         this.hide = function(){
@@ -262,32 +341,28 @@ var createFooterMenu = (function() {
             this.mode = "hide";
             var mapHeight = window.innerHeight * 0.50;
 
-            mapView.style.left = 0 + 'px';
-            mapView.style.right = 0 + 'px';
-            mapView.style.top = 41 + 'px';
-            mapView.style.bottom = 0 + 'px';
+            this.mapView.style.left = 0 + 'px';
+            this.mapView.style.right = 0 + 'px';
+            this.mapView.style.top = 41 + 'px';
+            this.mapView.style.bottom = 0 + 'px';
 
-            compassBtn.style.top = 5 + 'px';
-            compassBtn.style.left = (window.innerWidth - 43 ) + 'px';
+            this.compassBtn.style.top = 5 + 'px';
+            this.compassBtn.style.left = (window.innerWidth - 43 ) + 'px';
 
-            homeBtn.style.top = ( window.innerHeight - 180 ) + 'px';
-            zoomInBtn.style.top = (window.innerHeight - 133 ) + 'px';
-            zoomOutBtn.style.top = (window.innerHeight - 100 ) + 'px';
+            this.homeBtn.style.top = ( window.innerHeight - 180 ) + 'px';
+            this.zoomInBtn.style.top = (window.innerHeight - 133 ) + 'px';
+            this.zoomOutBtn.style.top = (window.innerHeight - 100 ) + 'px';
 
-            zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
-            zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
-            homeBtn.style.left = (window.innerWidth - 40 ) + 'px';
+            this.zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
+            this.zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
+            this.homeBtn.style.left = (window.innerWidth - 40 ) + 'px';
 
+            footerShowControl( "hide");
 
-            $("#footer").hide();
-
-            $("#footUpArrow").show();
-            $("#footDownArrow").hide();
-
-            upArrow.style.top = 0 + 'px';
-            upArrow.style.left = window.innerWidth - 60 + 'px';
-            upArrow.style.right = 0 + 'px';
-            upArrow.style.bottom = 0 + 'px';
+            this.upArrow.style.top = 0 + 'px';
+            this.upArrow.style.left = window.innerWidth - 60 + 'px';
+            this.upArrow.style.right = 0 + 'px';
+            this.upArrow.style.bottom = 0 + 'px';
 
             bibleMap.updateSize();
 
