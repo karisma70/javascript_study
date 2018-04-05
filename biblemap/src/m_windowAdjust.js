@@ -2,9 +2,49 @@
  * Created by Administrator on 2018-03-16.
  */
 
+var DoubleTap = (function(){        // prevent for double tap
+    var lastTap = 0;
+    var timeout;
+
+    this.preventEvent = function(evt){
+        var currentTime = new Date().getTime();
+        var tapLength = currentTime - lastTap;
+
+        evt.preventDefault();
+        clearTimeout(timeout);
+        ConsoleLog("preventEventDefault()");
+
+        if(tapLength < 1000 && tapLength > 0){
+            evt.preventDefault();
+            lapTap = 0;
+        }else{
+            timeout = setTimeout(function(){
+                clearTimeout(timeout);
+            }, 1000);
+        }
+        lastTap = currentTime;
+    };
+
+    this.prevent= function() {
+        $('#incChapter').on('touched click', this.preventEvent);
+        $('#decChapter').on('touched click', this.preventEvent);
+        $('#sideMenu').on('touched click', this.preventEvent);
+
+        $('#tabDecBible').on('touched click', this.preventEvent);
+        $('#tabIncBible').on('touched click', this.preventEvent);
+
+        $('#infoPopup').on('touched click', this.preventEvent);
+        // $('#biblePlaceDiv').on('touched click', preventEvent );
+    };
+
+    return function(){
+        return this;
+    };
+
+}());
+
+
 var createFooterMenu = (function() {
-
-
 
      function CreateFooter(){
 
@@ -47,12 +87,14 @@ var createFooterMenu = (function() {
          this.zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
          this.homeBtn.style.left = (window.innerWidth - 40 ) + 'px';
 
-         function setZOrder2DViewBtn( val ) {
+         function setZOrderMapViewBtn( val ) {
              $('#compassBtn').css("z-index", val);
              $('#zoomInBtn2D').css("z-index", val);
              $('#zoomOutBtn2D').css("z-index", val);
              $('#homeBtn').css("z-index", val);
          }
+
+         setZOrderMapViewBtn(2010);
 
          this.setLogoPosition = function(){
              this.logo.style.left =  (window.innerWidth - 43) + 'px';
@@ -114,9 +156,9 @@ var createFooterMenu = (function() {
          topModeShowContol = function(){
 
              $("#footer").css( "z-index", 10 );
-             $("#tab_contain").css( "z-index", 9 );
+             // $("#tab_contain").css( "z-index", 9 );
 
-             $("#footer").show();
+             // $("#footer").show();
 
              $("#tabsMenu").show();
              $("#tab_contain").show();
@@ -128,7 +170,7 @@ var createFooterMenu = (function() {
 
          middleModeShowControl = function(){
 
-             $("#footer").css( "z-index", 10 );
+             // $("#footer").css( "z-index", 10 );
              $("#tab_contain").css( "z-index", 9 );
 
 
@@ -146,8 +188,6 @@ var createFooterMenu = (function() {
 
              // $("#footer").css( "z-index", -10 );
 
-             $("#footer").show();
-
              $("#tab_contain").css( "z-index", -10 );
 
              $("#tabsMenu").hide();
@@ -157,6 +197,10 @@ var createFooterMenu = (function() {
 
              $("#footUpArrow").show();
              $("#missionWideIntro").show();
+         };
+
+         hideModeShowControl = function() {
+             // $("#footer").css( "z-index", -10 );
          };
 
 
@@ -173,7 +217,7 @@ var createFooterMenu = (function() {
                     bottomModeShowControl();
                     break;
                 case "hide" :
-                    $("#footer").hide();
+                    hideModeShowControl();
                     break;
 
             }
@@ -212,11 +256,40 @@ var createFooterMenu = (function() {
              $("#footer").css( "z-index", 10 );
          };
 
+         this.setFooterTopPos = function( height ){
+
+             //this.footer.style.top = (mapHeight ) + 'px';
+             this.footer.style.top = height + 'px';
+             this.footer.style.left = 0 + 'px';
+             this.footer.style.right = 0 + 'px';
+             this.footer.style.bottom = 0 + 'px';
+         };
+
+         this.setMiddleFooterExtent = function() {
+             var mapHeight = window.innerHeight * 0.50;
+
+             this.footer.style.top = (mapHeight ) + 'px';
+             this.footer.style.left = 0 + 'px';
+             this.footer.style.right = 0 + 'px';
+             this.footer.style.bottom = 0 + 'px';
+         };
+
+         this.setTopFooterExtent = function(){
+             this.footer.style.top = 81 + 'px';
+             this.footer.style.left = 0 + 'px';
+             this.footer.style.right = 0 + 'px';
+             this.footer.style.bottom = 0 + 'px';
+         };
 
 
          this.top = function(){
 
              this.mode = "top";
+             footerShowControl( "top");
+
+             // this.setTopFooterExtent();
+             this.setFooterTopPos(  81 );
+
              var mapHeight = window.innerHeight * 0.50;
 
              this.mapView.style.left = 0 + 'px';
@@ -227,10 +300,6 @@ var createFooterMenu = (function() {
              this.compassBtn.style.top = 5 + 'px';
              this.compassBtn.style.left = (window.innerWidth - 43 ) + 'px';
 
-             this.footer.style.top = 81 + 'px';
-             this.footer.style.left = 0 + 'px';
-             this.footer.style.right = 0 + 'px';
-             this.footer.style.bottom = 0 + 'px';
 
              this.downArrow.style.top = 4 + 'px';
              this.downArrow.style.left = window.innerWidth - 40 + 'px';
@@ -240,15 +309,15 @@ var createFooterMenu = (function() {
 
              this.setTabPosition();
              bibleMap.updateSize();
-             footerShowControl( "top");
-             setZOrder2DViewBtn( 2010 );
          };
 
          this.bottom = function(){
 
              this.mode = "bottom";
-
              footerShowControl( "bottom");
+
+             // this.setMiddleFooterExtent();
+             this.setFooterTopPos( window.innerHeight - 41 );
 
              this.mapView.style.left = 0 + 'px';
              this.mapView.style.right = 0 + 'px';
@@ -266,13 +335,6 @@ var createFooterMenu = (function() {
              this.zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
              this.homeBtn.style.left = (window.innerWidth - 40 ) + 'px';
 
-
-             this.footer.style.top = (window.innerHeight - 41) + 'px';
-             /* footer.style.top = ( document.body.scrollHeight - 40) + 'px';  */
-             this.footer.style.left = 0 + 'px';
-             this.footer.style.right = 0 + 'px';
-             this.footer.style.bottom = 0 + 'px';
-
              this.setTabPosition();
 
              this.upArrow.style.top = 3 + 'px';
@@ -287,14 +349,16 @@ var createFooterMenu = (function() {
              this.upArrow.style.bottom = 2 + 'px';
 
              bibleMap.updateSize();
-
-             setZOrder2DViewBtn( 2010 );
          };
 
         this.middle = function(){
 
             this.mode = "middle";
+            footerShowControl( "middle");
+
+            // this.setMiddleFooterExtent();
             var mapHeight = window.innerHeight * 0.50;
+            this.setFooterTopPos(  mapHeight );
 
             this.mapView.style.left = 0 + 'px';
             this.mapView.style.right = 0 + 'px';
@@ -312,11 +376,6 @@ var createFooterMenu = (function() {
             this.zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
             this.homeBtn.style.left = (window.innerWidth - 40 ) + 'px';
 
-            this.footer.style.top = (mapHeight ) + 'px';
-            this.footer.style.left = 0 + 'px';
-            this.footer.style.right = 0 + 'px';
-            this.footer.style.bottom = 0 + 'px';
-
             this.setTabPosition();
 
             this.upArrow.style.top = 0 + 'px';
@@ -329,17 +388,15 @@ var createFooterMenu = (function() {
             this.downArrow.style.right = 0 + 'px';
             this.downArrow.style.bottom = 0 + 'px';
 
-            footerShowControl( "middle");
-
-            setZOrder2DViewBtn( 2010 );
-
             bibleMap.updateSize();
         };
 
         this.hide = function(){
 
             this.mode = "hide";
-            var mapHeight = window.innerHeight * 0.50;
+            footerShowControl( "hide");
+
+            // this.setMiddleFooterExtent();
 
             this.mapView.style.left = 0 + 'px';
             this.mapView.style.right = 0 + 'px';
@@ -357,17 +414,12 @@ var createFooterMenu = (function() {
             this.zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
             this.homeBtn.style.left = (window.innerWidth - 40 ) + 'px';
 
-            footerShowControl( "hide");
-
             this.upArrow.style.top = 0 + 'px';
             this.upArrow.style.left = window.innerWidth - 60 + 'px';
             this.upArrow.style.right = 0 + 'px';
             this.upArrow.style.bottom = 0 + 'px';
 
             bibleMap.updateSize();
-
-            setZOrder2DViewBtn( 2010 );
-
         };
 
         return this;
@@ -550,22 +602,10 @@ function showDownloading(){
 }
 
 
-/*
-function showDownloading(){
-    $("#downloadingDiv").show();
-
-    $("#downloadingDiv").fakeLoader({
-        timeToHide:1200, // 로딩중에 걸리는 시간, 1000은 1초
-        bgColor:"#f8f8f8", // 배경색
-        spinner:"spinner2" // 로딩중으로 원하는 로딩이미지타입
-    });
-}
-*/
 
 function hideDownloading(){
-    $("#downloadingDiv").hide();
+  $("#downloadingDiv").hide();
 }
-
 
 
 function disableDIV( elemID ){   // "divID"
@@ -603,7 +643,103 @@ function preventZoomInDIV( strDiv ){
             e.preventDefault();
         }
     }, false);
-
-
 }
 
+
+function examineNumber(){
+    ConsoleLog( "input Number : " + dvBibleChapter.value );
+    alert( dvBibleChapter.value  );
+    if(isNaN( dvBibleChapter.value ) == true) {
+        alert("숫자를 입력해 주세요");
+    }
+}
+
+function clearSearchBibleWord(){
+    dvBibleWord.value = "";
+    $("#bibleWord").focus();
+    //alert( "clar!!");
+}
+
+function clearSearchPlaceWord(){
+    $("#searchedPoiList").hide();
+    dvBiblePlace.value ="";
+    $("#biblePlace").focus();
+}
+
+
+function windowReloadByCurDate() {
+
+    var curDate = new Date();
+
+    var dayObj = getCurrentDayFromStorage();
+    if (dayObj == null) {
+        saveCurrentDayToStorage(curDate);
+        window.location.reload(true);
+    } else {
+
+        if (dayObj.year != curDate.getFullYear() || dayObj.mon != curDate.getCurMonth() || dayObj.day != curDate.getCurDay() || dayObj.hour != curDate.getHours() || dayObj.min != curDate.getMinutes()) {
+            saveCurrentDayToStorage(curDate);
+            // alert( "refresh!!!");
+            window.location.reload(true);
+        }
+    }
+}
+
+
+function createTabMenu(){
+
+    //document.body.requestFullscreen();
+
+    $(".tab_content").hide();
+    $(".tab_content:first").show();
+
+    var selMenuString = "";
+
+    $("ul.tabs li").click(function () {
+        selMenuString = $(this).text();
+        ConsoleLog( "tab Click !!! select : " + selMenuString );
+        $("ul.tabs li").removeClass("active").css("color", "#FFFFFF");
+        /* $("ul.tabs li").removeClass("active").css("color", "#646464");  */
+        $(this).addClass("active").css("color", "#000000");
+
+        var activeTab = $(this).attr("rel");
+        ConsoleLog( "tab Click !!! rel Active : " + activeTab );
+        if( activeTab === undefined || activeTab == null ){
+            alert( "lost activeTab!!!");
+            if( $(this) == undefined || $(this) == null )
+                alert( "$(this) is not valid!!! ");
+            return;
+        }
+
+        $(".tab_content").hide();
+
+        $("#tab1Title").hide();
+        $("#tab3Title").hide();
+
+        if(activeTab == "tab1" ){
+            $("#tab1Title").show();
+        }else if( activeTab == "tab3"){
+            $("#tab3Title").show();
+        }
+
+        $("#" + activeTab).show();
+        // $("#" + activeTab).scrollTop(0);
+
+    });
+
+    TabMenuControl = function() {
+        this.selectTab = function (menuID) {
+            // var el = document.getElementById('tab1Menu');
+            var el = document.getElementById(menuID);
+            eventFire(el, 'click');
+        };
+
+        this.getSelectedTabString = function () {
+            return selMenuString;
+        };
+
+        return this;
+    };
+
+    return new TabMenuControl;
+}

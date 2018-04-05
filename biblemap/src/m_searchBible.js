@@ -422,3 +422,51 @@ function requestBibleWithShortChapter( shortTitle, chapterNum, paragraph ){
     } );
 
 }
+
+
+
+function mobileSearchBiblePlace() {
+    if (dvBiblePlace.value == "") {
+        return;
+    }
+
+    dvBiblePlace.value = removeSpaceInWord(dvBiblePlace.value);
+
+    saveSearchWordsToStorage();
+
+    var dvSearchedPoiList = document.getElementById("searchedPoiList");
+    dvSearchedPoiList.innerHTML = "";
+
+    var strHrefText = "";
+
+    var poiArray = layerManager.getPoiObjArrayFromDictionary( dvBiblePlace.value );
+
+    if( poiArray.length > 1 ) {
+        $("#searchedPoiList").show();
+
+        dvSearchedPoiList.innerHTML = "<ol>";
+
+        for (var idx in poiArray) {
+            ConsoleLog(  "id : " +  poiArray[idx].id + ", Find POI : " + poiArray[idx].biblePlace + ", title : " + poiArray[idx].title);
+            /*
+
+             var tempString = '<a href=' + '"javascript:hideMenuAndMoveToPoiID( ' + poiArray[idx].id + ')\" style=\"text-decoration:none; color:rgb(0,0,0);\" >';
+             tempString += poiArray[idx].title;
+             tempString += '</a>';
+             if( idx < poiArray.length )
+             tempString += '<br>';
+             */
+
+            var tempString = '<li id=\"' + poiArray[idx].id + '\">' +  poiArray[idx].title + '</li>';
+
+            strHrefText += tempString;
+        }
+        dvSearchedPoiList.innerHTML += strHrefText;
+        dvSearchedPoiList.innerHTML += "</ol>";
+    }else{
+        $("#searchedPoiList").hide();
+        poiObj = poiArray[0];
+        hideMenuAndMoveToPoiID( poiObj.id );
+    }
+
+}

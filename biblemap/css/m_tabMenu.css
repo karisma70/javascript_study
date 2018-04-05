@@ -8,8 +8,8 @@ ul.tabs {
     float: left;
     list-style: none;
     height: 27px;
-    border-bottom: 1px solid  rgb(124, 151, 205);
-    /* border-left: 1px solid #CAC9C9;  */
+    /* border-bottom: 1px solid  rgb(124, 151, 205); */
+    border-bottom: 1px solid rgb( 59, 88, 154  );
     width: 100%;
     font-family: 'Nanum Gothic';
     /* font-size:13px;  */
@@ -26,19 +26,25 @@ ul.tabs li {
     height: 27px;
     line-height: 27px;
 
-    /*
-    border-top: 1px solid rgb(124, 151, 205);
-    border-left: 1px solid rgb(124, 151, 205);
-    border-right: 1px solid rgb(124, 151, 205);
-    border-bottom: 2px solid rgb(124, 151, 205);
-    */
 
+    border-top: 1px solid rgb( 32, 67, 109);
+    border-left: 1px solid rgb( 32, 67, 109);
+    border-right: 1px solid rgb( 32, 67, 109);
+    border-bottom: 1px solid rgb( 32, 67, 109);
+
+
+    /*
     border-top: 1px solid rgb( 59, 89, 153);
     border-left: 1px solid rgb( 59, 89, 153);
     border-right: 1px solid rgb( 59, 89, 153);
     border-bottom: 2px solid rgb( 59, 89, 153);
+    */
 
-    background: rgb( 59, 89, 153);
+    /* background: rgb( 59, 89, 153);  */
+
+    background: rgb( 59, 88, 154 );
+
+
     overflow: hidden;
     position: relative;
     font-family: 'Nanum Gothic';
@@ -46,12 +52,21 @@ ul.tabs li {
 }
 
 ul.tabs li:hover {
-    background: rgb( 101, 126, 194 );
+
+    background: rgb( 49, 150, 255 );
+
+    border-top: 1px solid rgb(  32, 67, 109 );
+    border-left: 1px solid rgb(  32, 67, 109 );
+    border-right: 1px solid rgb(  32, 67, 109 );
+    border-bottom: 2px solid rgb(  32, 67, 109 );
+
+    /* background: rgb( 101, 126, 194 );
 
     border-top: 1px solid rgb( 101, 126, 194 );
     border-left: 1px solid rgb( 101, 126, 194 );
     border-right: 1px solid rgb( 101, 126, 194 );
     border-bottom: 2px solid rgb( 101, 126, 194 );
+    */
 }
 
 ul.tabs li.active {

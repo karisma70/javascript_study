@@ -10,7 +10,7 @@ function writePoiContentsToTab( poiObj, infoText ){
 
         $('#tab3Title').empty();
 
-        var strPoiTitle = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + "\'" + poiObj.id + "\'" + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: rgb( 90, 90, 90)\" >'
+        var strPoiTitle = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + "\'" + poiObj.id + "\'" + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: rgb( 180, 4, 174 )\" >'
             + '<img src ="biblemap/image/poi_location.png?version=20170908" style=\"height:26px; vertical-align:top;\">&nbsp;&nbsp;' +
             poiObj.biblePlace + '  ' + '</a>';
 
@@ -245,7 +245,7 @@ function moveCenterFocusedPOI( focusedPoiObj ){
     var zoom = bibleMapManager.getView().getZoom();
     // _moveToPos( bibleMapManager.getView(), [focusedPoiObj.x, focusedPoiObj.y], zoom, 200);
     if( zoom < (focusedPoiObj.zoomIn - 1.0) )
-        _moveToPos( bibleMapManager.getView(), [focusedPoiObj.x, focusedPoiObj.y], (focusedPoiObj.zoomIn - 1.0), 200);
+        _moveToPos( bibleMapManager.getView(), [focusedPoiObj.x, focusedPoiObj.y], (focusedPoiObj.zoomIn - 1.0), 500);
     else
-        _moveToPos( bibleMapManager.getView(), [focusedPoiObj.x, focusedPoiObj.y], zoom, 200);
+        _moveToPos( bibleMapManager.getView(), [focusedPoiObj.x, focusedPoiObj.y], zoom, 500);
 }

@@ -37,7 +37,8 @@ function mapTooltip( paramMap, cssClassName ) {
         tooltipElement.setAttribute("id", poiName );
         var strID = "#"+ poiName ;
 
-        $(strID).css( "z-index", zOrder.toString() );
+        //$(strID).css( "z-index", zOrder.toString() );
+        $(strID).css( "z-index", 12 );
 
         tooltip.setPosition(coord);
        //  tooltip.setOffset([0, -7]);

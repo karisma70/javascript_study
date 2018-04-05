@@ -16,7 +16,7 @@ html, body {
 h1{
     /* background: rgb( 59, 89, 153 );   */
     /* background: rgb( 77, 162, 253 );  */
-    height: 50px;
+    height: 40px;
     width: 100%;
     vertical-align:middle; /*middle centred*/
 }
