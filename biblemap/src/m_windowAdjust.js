@@ -743,3 +743,58 @@ function createTabMenu(){
 
     return new TabMenuControl;
 }
+
+
+
+function openMenu(){
+    $("#sideMenu").addClass("open");
+    document.getElementById("sideMenu").focus();
+}
+
+$(".close").click(function() {
+    $("#sideMenu").removeClass("open");
+    document.getElementById("map").focus();
+});
+
+function gotoSearchWord() {
+    $("#sideMenu").addClass("open");
+    $("#bibleWord").focus();
+}
+
+function IsExistWord( array, word ) {
+    for (var id in array ) {
+        var curObj = array[id];
+        if( curObj.value == word) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+// 지명 검색창에 지명 입력시 자동으로 후보단어 표시하기
+function initTextAutoComplete(){
+
+    var currencies = [];
+    var poiDic = layerManager.getPoiDictionaryObj();
+
+    for( prop in poiDic ){
+        if( poiDic.hasOwnProperty(prop) && typeof poiDic[prop] === "object" ){
+            if( IsExistWord( currencies,  prop ) == false) {
+                currencies.push({value: prop});
+            }
+        }
+    }
+
+    $('#biblePlace').autocomplete({
+        lookup: currencies,
+        onSelect: function (suggestion) {
+            // var thehtml = '<strong>Currency Name:</strong> ' + suggestion.value + ' <br> <strong>Symbol:</strong> ' + suggestion.data;
+            // $('#outputcontent').html(thehtml);
+
+            var dvBiblePlace = document.getElementById("biblePlace");
+            dvBiblePlace.value = suggestion.value;
+            mobileSearchBiblePlace();
+        }
+    });
+}
