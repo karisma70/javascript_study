@@ -485,6 +485,9 @@
      return this.historyPoi.nextPoi();
  };
 
+ LayerManager.prototype.historyCurrentPoi = function() {
+     return this.historyPoi.getCurrentPoi();
+ };
 
 LayerManager.prototype.getPoiObjectArray = function(){
     return this.layerContainer.poiDicObjects;
@@ -686,8 +689,8 @@ function flyTo( view, location, zoomIn, done) {
     duration = dist / 1000;
     if( duration < 1200 )
         duration = 1200;
-    if( duration > 2000 )
-        duration = 2000;
+    if( duration > 1500 )
+        duration = 1500;
 
     var adjustZoom = dist / 400000;
     adjustZoom = Math.ceil( adjustZoom );

@@ -105,8 +105,13 @@ HistoryClickedPoi = function(){
         if( this.cursor < 0 )
             this.cursor = 0;
 
+        var retObj = this.poiQue[ this.cursor ];
+
         ConsoleLog( "prev!! Cursor : " + this.cursor + ", poiName: " +  this.poiQue[ this.cursor ].biblePlace );
-        return this.poiQue[ this.cursor ];
+        // this.poiQue.pop();
+
+        this.wholePrint();
+        return retObj;
     };
 
     this.nextPoi = function(){
@@ -122,9 +127,10 @@ HistoryClickedPoi = function(){
     };
 
     this.wholePrint = function(){
+
         for( var idx in this.poiQue ){
             var tempObj = this.poiQue[idx];
-            ConsoleLog( "id : " + tempObj.id + ", " + "poiName: " + tempObj.biblePlace );
+            ConsoleLog( "idx: " + idx + ", id : " + tempObj.id + ", " + "poiName: " + tempObj.biblePlace );
         }
 
     };

@@ -612,9 +612,24 @@ function Create3DPopupOverlay( overlayCloser, closerEventFunc ) {
 
         return false;
     };
-
-
-
 }
 
 
+function gotoSearchWord() {
+    $("#sideMenu").addClass("open");
+    $("#bibleWord").focus();
+}
+
+
+function clearSearchBibleWord(){
+    dvBibleWord.value = "";
+    $("#bibleWord").focus();
+    //alert( "clar!!");
+}
+
+function clearSearchPlaceWord(){
+    // $("#searchedPoiList").hide();
+    $('#searchedPoiList').empty();
+    dvBiblePlace.value ="";
+    $("#biblePlace").focus();
+}

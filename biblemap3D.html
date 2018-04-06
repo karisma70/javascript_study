@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <title>Bible Map</title>
 
     <link rel="shortcut icon" href="http://www.biblemap.or.kr/favicon.ico" type="image/x-icon"/>
@@ -268,7 +269,7 @@
             white-space: nowrap;
         }
         .tooltip-static {
-            background-color: #ffcc33;
+            /* background-color: #ffcc33;  */
             /* background-color: #FBFE38;  */
             color: black;
             border: 1px solid white;
@@ -302,18 +303,21 @@
         <div class="dummy2" style = "height: 8px;"></div>
         <div class="dummy2" style = "height:178px;">
             <div id ="bibleSearch" style="font-size:12px; height: 50px">
-                <select id ="bibleTitle"  class="customSelect" name="bibleTitle" style="margin-left: 46px; width: 120px; height:21px; " ></select>
+                <select id ="bibleTitle"  class="customSelect" name="bibleTitle" style="margin-left: 46px; width: 145px; height:21px; " ></select>
                 <div style="height: 4px"></div>
                 <input type="image" src="biblemap/image/left_arrow.png?version=20170905" style="position: absolute;  margin-left: 46px; width:18px; height:20px; vertical-align:middle" onclick="decreaseBibleChapter()">
                 <input type="number" class="chapterNum" id ="bibleChapter" style="padding-left: 3px; margin-left: 66px; top: 50px;  width: 3em; height: 20px; font-size:12px;" value="1"> <span style="margin-left: 0px; font-size:12px;">장</span>
                 <input type="image" src="biblemap/image/right_arrow.png?version=20170905" style="position: absolute;  margin-left: 2px;width:18px; height:20px; vertical-align:middle" onclick="increaseBibleChapter()">
-                <input type="button" class="button" value="검색" style="position: absolute;  margin-left: 22px;" onclick="searchBibleChapter()">
+
+                <input type="button" class="button" value="검색" style="position: absolute;  left: 138px; margin-left: 22px;" onclick="searchBibleChapter()">
             </div>
 
-            <div name="searchWord" style="height:20px;">
+            <div name="searchWord" style="height:20px; width: 198px;">
                 <!-- <img src="image/word_search2.png" style="width:20px; height:22px; vertical-align:middle" ><input type="text" id ="bibleWord" size="12" style="font-size:12px;" value="바울"><input type="button" value="검색" style="font-size:12px;" onclick="searchBibleWord()"> -->
-                <span style="margin-left: 18px; font-size:12px;">단어</span><input type="text" id ="bibleWord" size="12" style="padding-left: 5px; margin-left: 3px; width:90px; height:21px; font-size:12px;"  value="바울" onkeypress="if(event.keyCode==13) searchBibleWord();">
-                <input type="button" class="button" value="검색" style="position: absolute; margin-left: 2px;" onclick="searchBibleWord()">
+                <span style="margin-left: 18px; font-size:12px;">단어</span>
+                <input type="text" id ="bibleWord" size="12" style="position: absolute; padding-left: 5px; margin-left: 3px; left: 42px; width:112px; height:21px; font-size:12px;"  value="바울" onkeypress="if(event.keyCode==13) searchBibleWord();">
+                <input type="image" src="biblemap/image/m_text_clear.png?version=20170916" style="position: absolute; top: 92px;  left: 136px;  width:19px; height:18px; vertical-align:bottom; border:none; "  onclick="clearSearchBibleWord()">
+                <input type="button" class="button" value="검색" style="position: absolute; margin-left: 2px; left: 157px;" onclick="searchBibleWord()">
             </div>
 
             <div style="height: 14px; background: url(biblemap/image/horizon-line_2.png);"></div>
@@ -322,10 +326,11 @@
                 <span style="margin-left: 18px;  font-size:12px;">지명</span>
                 <input type="text" name="currency" class="biginput" id="biblePlace" size="16"
                        style="padding-left: 3px; margin-left: 0px; height:21px; font-size:12px; font:'Nanum Gothic'; " value="갈릴리 호수" onkeypress="if(event.keyCode==13) searchBiblePlace();">
+                <input type="image" src="biblemap/image/m_text_clear.png?version=20170916" style="position: absolute; top: 2px;  left: 136px;  width:19px; height:18px; vertical-align:bottom; border:none; "  onclick="clearSearchPlaceWord()">
                 <input type="button" class="button" value="검색" style="position: absolute; vertical-align:center; margin-left: 2px;" onclick="searchBiblePlace()">
                 <div style="height: 4px"></div>
                 <!-- <div id ="searchedPoiList" rows= "5" style="border:1px solid grey; margin-left:10px; height: 60px; width: 163px; font-size:13px ; clear: both;"></div>  -->
-                <select id ="searchedPoiList" name="searchedPoiList" size='3' style="overflow:hidden; padding-left: 3px; margin-left:41px; width: 143px; height:52px; border: 1px solid #D9D9D9; " ></select>
+                <select id ="searchedPoiList" name="searchedPoiList" size='3' style="position: absolute; overflow:hidden; padding-left: 3px; margin-left:41px; left: 3px; width: 144px; height:52px; border: 1px solid #D9D9D9; " ></select>
             </div>
 
         </div>
@@ -386,8 +391,6 @@
                     <br>
                 </div>
             </div>
-
-
 
 
         </div>  <!--  <div id="css3-animated-autoclose" data-collapse>  -->
@@ -540,6 +543,7 @@
         </div>
         <div id="tab2" class="tab_content">
             검색결과가&nbsp;없습니다 <br> 성경의&nbsp;단어&nbsp;검색&nbsp;버튼을&nbsp;클릭해&nbsp;주세요
+            <a href ="javascript:gotoSearchWord()" style="text-decoration:none; font-weight: bold; fong-size: 1.5em; color:rgb(0, 91, 227); text-align : left;">→ 바로가기 클릭!!</a><br>
         </div>
         <div id="tab3" class="tab_content" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
             검색결과가&nbsp;없습니다 <br> 지도상의&nbsp;지명을&nbsp;클릭하고&nbsp;아이콘&nbsp;'i'를&nbsp;클릭해&nbsp;주세요
@@ -1314,10 +1318,8 @@
         map3D.addPathLayer( pathArrowLayer );
 
         function newRouteMoveProcess(){
-            routeMove = new RouteMoveProcess(bibleMap, trajectory, layerManager.getPoiObjectArray(), pathTooltip, function( popupPoiArray ){
-                // ConsoleLog( popupPoiArray );
+            routeMove = new RouteMoveProcess(bibleMap, trajectory, layerManager.getPoiObjectArray(), function( popupPoiArray ){
                 fillPathPoiList( popupPoiArray );
-
                 map3D.createLandMarkOfPath( popupPoiArray );
             });
 
@@ -1328,10 +1330,7 @@
             var view = bibleMap.getView();
             view.fit(extent, bibleMap.getSize());
 
-            pathTooltip.allRemove();
-
             routeMove.play();
-
             oldMovePath = movePath;
         }
 
@@ -1362,8 +1361,6 @@
         if( routeMove ){
             routeMove.stop();
         }
-
-        pathTooltip.allRemove();
 
         map3D.removePathLayer( );
 

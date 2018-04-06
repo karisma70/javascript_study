@@ -439,7 +439,7 @@ function Tooltip( paramMap, cssClassName ) {
 
     var zOrder = 0;
 
-    this.create = function( poiName, linkedText, coord){
+    this.create = function( poiID, linkedText, coord, backColor ){
 
         tooltipElement = document.createElement('div');
 
@@ -456,10 +456,11 @@ function Tooltip( paramMap, cssClassName ) {
         tooltipElement.innerHTML = linkedText;
 
 
-        tooltipElement.setAttribute("id", poiName );
-        var strID = "#"+ poiName ;
+        tooltipElement.setAttribute("id", poiID );
+        var strID = "#"+ poiID ;
 
         $(strID).css( "z-index", zOrder.toString() );
+        $(strID).css( "background-color",  backColor );
 
         tooltip.setPosition(coord);
         tooltip.setOffset([0, -7]);

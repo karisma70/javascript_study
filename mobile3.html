@@ -42,13 +42,14 @@
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/m_bubblePopup.css?version=20171210">
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/m_popup.css?version=20170910">
 
-    <script type="text/javascript" src="biblemap/src/m_include.js"></script>
-
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
     <script type="text/javascript" src="biblemap/src/common.js?version=20170830"></script>
 
+    <!--
     <script type="text/javascript" src="biblemap/js/matchMedia.js-master/matchMedia.js"></script>
     <script type="text/javascript" src="biblemap/js/matchMedia.js-master/matchMedia.addListener.js"></script>
+    -->
+
     <script type="text/javascript" src="biblemap/openLayers_v4.4.2/ol.js"></script>
     <script type="text/javascript" src="biblemap/src/jQueryRotate.js"></script>
 
@@ -90,7 +91,7 @@
         }
 
         .customSelect{
-            background: url('biblemap/image/down_arrow.png') no-repeat 100% 50%; /* 네이티브 화살표를 커스텀 화살표로 대체 */
+            background: url('biblemap/image/m_down_arrow.png') no-repeat 100% 50%; /* 네이티브 화살표를 커스텀 화살표로 대체 */
             background-color: rgb(255,255, 255);
 
             border-radius: 0px; /* iOS 둥근모서리 제거 */
@@ -204,13 +205,7 @@
         <input type="image" src="biblemap/image/m_text_clear.png?version=20170916" style="position: absolute; left: 164px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="clearSearchPlaceWord()">
         <input type="image" src="biblemap/image/poi_location.png?version=20170908" style="position: absolute; left: 193px;  top: 0px; width:30px; height:30px; vertical-align:middle; border:none; "  onclick="mobileSearchBiblePlace()">
         <div style="height: 4px"></div>
-        <!--
-        <select id ="searchedPoiList" class="customSelect" name="searchedPoiList" style="position: absolute; overflow:hidden; left: 0px; top:40px; width: 160px; height:30px; border: 1px solid #D9D9D9; " ></select>
-        <input type="image" src="biblemap/image/m_search_btn2.png?version=20170905" style="position: absolute; left: 170px; top:40px; width:30px; height:30px; vertical-align:middle; "  onclick="searchPoiList()">
-        -->
         <div id ="searchedPoiList" rows= "5" style="border:1px solid rgb(217, 217, 217); overflow:scroll; position: absolute; left:5px; top: 40px; height: 75px; width: 202px; padding-left: 5px; font-size:1.5em ;text-align : left; ">
-          <!--  <a href ="javascript:clearSearchPlaceWord()" style="text-decoration:none; color:rgb(0,0,0); text-align : left;">베다니1</a><br>
-            <a href ="javascript:clearSearchPlaceWord()" style="text-decoration:none; color:rgb(0,0,0); text-align : left;">베다니2</a><br> -->
         </div>
     </div>
 
@@ -220,13 +215,13 @@
 
     <!-- <div id="dummy" style="position:absolute; left:50px; top:0px; height:20px; background-color: white;">테스트</div>  -->
 
-    <input id="compassBtn" type="image" src="biblemap/image/compass3.png?version=20171005"  style="position: absolute; border:0; width: 40px; height: 40px;"  onclick="setRotateNorth()">
+    <input id="compassBtn" type="image" src="biblemap/image/compass3.png?version=20171006"  style="position: absolute; border:0; width: 40px; height: 40px;"  onclick="setRotateNorth()">
 
     <!-- <input id="zoomInBtn2D" type="image" src="biblemap/image/m_zoom_in.png?version=20171204"  style="border:1px solid #A0A0A0; position: absolute; width:35px; height: 35px; border:none;"  -->
-    <input id="zoomInBtn2D" type="image" src="biblemap/image/plus_btn2.png?version=20171204"  style="position: absolute; width:35px; height: 35px; border:1px solid rgb(170, 170, 170);"
+    <input id="zoomInBtn2D" type="image" src="biblemap/image/plus_btn2.png?version=20171204"  style="position: absolute; width:35px; height: 35px; border: none;"
            onclick="map2DZoomIn()">
     <!-- <input id="zoomOutBtn2D" type="image" src="biblemap/image/m_zoom_out.png?version=20171204" style="border:1px solid grey;  position: absolute; width:35px; height: 35px; border:none;"-->
-    <input id="zoomOutBtn2D" type="image" src="biblemap/image/minus_btn2.png?version=20171204" style="position: absolute; width:35px; height: 35px; border:1px solid rgb(170, 170, 170);"
+    <input id="zoomOutBtn2D" type="image" src="biblemap/image/minus_btn2.png?version=20171204" style="position: absolute; width:35px; height: 35px; border:none; "
            onclick="map2DZoomOut()">
     <input id="homeBtn" type="image" src="biblemap/image/home2.png?version=20171004"
             style="position: absolute; width:35px; height: 35px; border:none;" onclick="gotoHome()">
@@ -247,6 +242,12 @@
             <input id="tabDecBible" type="image" src="biblemap/image/left_arrow.png?version=20170907" style="position: absolute; left: 140px; width:22px; height:26px; vertical-align:middle; " onclick="tabDecreaseBibleChapterAndSearch()">
             <span id ="tabBibleChapter" style="position: absolute; left: 155px; width:70px; top: 0px; font-size:1.2em; text-align:center;">장</span>
             <input id="tabIncBible" type="image" src="biblemap/image/right_arrow.png?version=20170907" style="position: absolute; left: 220px; top: 0px; width:22px; height:26px; vertical-align:middle;" onclick="tabIncreaseBibleChapterAndSearch()">
+
+            <!--
+            <input type="image" src ="biblemap/image/undo.png?version=20170910" style="position: absolute; left: 260px; top: -2px; width: 28px; height:24px; vertical-align:top; border: none;" onclick="beforePoi( )" >
+            <input type="image"  src ="biblemap/image/redo.png?version=20170910" style="position: absolute; left: 295px; top: -2px; width: 28px; height:24px; vertical-align:top; border: none;" onclick="afterPoi( )">
+            -->
+
         </div>
 
         <!-- <div id = "tab3Title" class="divContent" style="padding-left: 10px;  font-size: 1.5em; top:-6px; height: 35px; overflow-x:hidden; border-bottom:4px solid rgb(230, 230, 230);" > </div>  -->
@@ -269,8 +270,8 @@
         <input id ="missionWideLogo" type="image" src="biblemap/image/mission_wide_logo.png?version=20170905" style="position: absolute; left: 15px;  top: 3px; width:160px; height:30px; vertical-align:middle; border:none;"  onclick="showIntroMissionWide()" >
     </div>
 
-    <input id ="footUpArrow" type="image" src="biblemap/image/up_arrow.png?version=20170918" style="position: absolute; left: 250px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerUp()">
-    <input id ="footDownArrow" type="image" src="biblemap/image/down_arrow.png?version=20170918" style="position: absolute; left: 280px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerDown()">
+    <input id ="footUpArrow" type="image" src="biblemap/image/m_up_arrow.png?version=20170918" style="position: absolute; left: 250px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerUp()">
+    <input id ="footDownArrow" type="image" src="biblemap/image/m_down_arrow.png?version=20170918" style="position: absolute; left: 280px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerDown()">
 </div>
 
 
@@ -313,10 +314,8 @@
     $("#sideMenu").css( "z-index", 20);
     $("#footer").css( "z-index", 10 );
 
-    $("#compassBtn").hide();
-    $("#zoomInBtn2D").hide();
-    $("#zoomOutBtn2D").hide();
-    $("#homeBtn").hide();
+    imageBtnShowControl( false );
+
 
     <!-- $( '#dummy' ).css( "z-index", 100 );   -->
 
@@ -333,6 +332,7 @@
 
     var doubleTap = DoubleTap();
     doubleTap.prevent();
+
 
     (function(){        // prevent for double tap
         var lastTap = 0;
@@ -377,6 +377,8 @@
     window.selectedPoiObj = null;
 
     var footerMenu = createFooterMenu();
+
+    footerMenu.hide();
 
     function footerDown(){
         var mode = footerMenu.getMode();
@@ -449,11 +451,6 @@
             dvBibleTitle.appendChild( chapter );
         }
 
-        $("#compassBtn").show();
-        $("#zoomInBtn2D").show();
-        $("#zoomOutBtn2D").show();
-        $("#homeBtn").show();
-
         getSearchWordsFromStorage();
 
     } );
@@ -522,6 +519,14 @@
 
     });
 
+
+    $(".close").click(function() {
+        $("#sideMenu").removeClass("open");
+        document.getElementById("map").focus();
+    });
+
+
+
     ///////////////////////////////////////////////////
 
 
@@ -537,6 +542,7 @@
                 layerManager.sortPoiWords();
                  menuSearchBibleChapter( );
                 initTextAutoComplete();
+                imageBtnShowControl( true  );
                 // hideDownloading();
                 setTimeout( hideDownloading, 1000);
             } );
@@ -585,6 +591,7 @@
 
     window.onresize = function(){
         // middleFooter();
+        // alert("onresize");
         footerMenu.showControl();
     };
 
@@ -774,9 +781,13 @@
 
     bibleMapManager.selectFeatureEvent( function(e) {
 
+        //setRoateNorthByVal( 1 );
+
         var selLen = e.selected.length;
-        if (selLen < 1)
+        if (selLen < 1) {
+            setRoateNorthByVal( 0 );
             return;
+        }
 
         beforeChapterSearchParam = { type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
             option: { "title": "",
@@ -794,7 +805,14 @@
         var poiID = feature.get("id");     //  OpenLayersControl.js 내에  createTextStyleOfFeature 함수에서  text: feature.get('label') 으로 설정되어 있음
 
         var poiObj = layerManager.getPoiObjById( poiID );
-        mobileRequestPoiContentAndShow( poiObj , showGlobalFocusPoiInfoInTab );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+        mobileRequestPoiContentAndShow( poiObj , function(){
+            // setRoateNorthByVal( 0 );
+            // var mode = footerMenu.getMode();
+            // mobileSearchBibleWord();
+            // footerMenu.setMode( mode );
+            showGlobalFocusPoiInfoInTab();
+
+        } );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
 
     });
 
@@ -822,21 +840,40 @@
 
     };
 
+    function setRoateNorthByVal( val){
+        bibleMapManager.getView().animate({
+            rotation: val,
+            duration : 0
+        });
+    };
+
 
     // layerManager.historyInsertPoi( poiObj );
 
 
     function beforePoi(){
         var poiObj = layerManager.historyPrevPoi();
-        if( poiObj != null )
-            moveToPlaceByPoiObj( poiObj );
+        if( poiObj != null ) {
+            if( window.focusPoiObj != poiObj ) {
+                mobileRequestPoiContentAndShow(poiObj, function () {
+                    showPoiInfoInTabByID(poiObj.id);
+                   // layerManager.historyInsertPoi( poiObj );
+                });
+            }
+        }
     }
 
 
     function afterPoi(){
         var poiObj = layerManager.historyNextPoi();
-        if( poiObj != null )
-            moveToPlaceByPoiObj( poiObj );
+        if( poiObj != null ) {
+            if( window.focusPoiObj != poiObj ) {
+                mobileRequestPoiContentAndShow(poiObj, function () {
+                    showPoiInfoInTabByID(poiObj.id);
+                   // layerManager.historyInsertPoi( poiObj );
+                });
+            }
+        }
     }
 
 

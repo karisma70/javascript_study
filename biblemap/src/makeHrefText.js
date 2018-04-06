@@ -31,9 +31,6 @@ function makeHrefWordInText( LayerManager, strWord, bibleTitle, bibleText, color
     strWord = "모압";
     */
 
-    if( strWord == '단'){
-        ConsoleLog("Debuging Here!!!");
-    }
 
     /*
     if( strWord == '가이사랴'){

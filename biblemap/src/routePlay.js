@@ -108,13 +108,16 @@ function CreatePathArrowLayer( trajectoryArray, isArrow ) {
 
 // var tolerancePoiPos = 2000;
 
-function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, paramTooltip, CallBackForInitPathComplete ){
+// function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, paramTooltip, CallBackForInitPathComplete ){
+function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, CallBackForInitPathComplete ){
 
     var moveLineStyle = new ol.style.Style({
         stroke: new ol.style.Stroke({
             color: '#EAE911',
             width: 3   })
     });
+
+    var tooltip = new Tooltip( paramMap, 'tooltip tooltip-static' );
 
     // var tolerancePoiPos = 700;
     var tolerancePoiPos = 2000;
@@ -133,7 +136,8 @@ function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, paramToolti
     var oldFrameState = 0;
     var pathPause = false;
     var bIsFirstLoop = true;
-    var tooltip = paramTooltip;
+    // var tooltip = paramTooltip;
+
     var beforeDetectPoi = null;
     var movingSpeed = 0.0;
 
@@ -243,7 +247,7 @@ function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, paramToolti
 
                     // tooltip.create( firstPoi.biblePlace, [firstPoi.x, firstPoi.y]);
                     var linkedPlaceName = makeLinkedName( firstPoi.id, firstPoi.biblePlace );
-                    tooltip.create( firstPoi.biblePlace, linkedPlaceName, [firstPoi.x, firstPoi.y]);
+                    tooltip.create( firstPoi.id, linkedPlaceName, [firstPoi.x, firstPoi.y], "#ffcc33" );
 
                     ConsoleLog( "first toolTip Create : " + firstPoi.biblePlace );
                     beforeDetectPoi = firstPoi;
@@ -269,7 +273,7 @@ function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, paramToolti
                         var linkedPlaceName = makeLinkedName( detectPoi.id, detectPoi.biblePlace );
 
                         // tooltip.create(detectPoi.biblePlace, [detectPoi.x, detectPoi.y]);
-                        tooltip.create( detectPoi.biblePlace, linkedPlaceName, [detectPoi.x, detectPoi.y]);
+                        tooltip.create( detectPoi.biblePlace, linkedPlaceName, [detectPoi.x, detectPoi.y], "#ffcc33");
 
                         ConsoleLog( "toolTip Create : " + detectPoi.biblePlace );
                         beforeDetectPoi = detectPoi;
@@ -444,7 +448,7 @@ function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, paramToolti
 
     this.stop = function(){
 
-        // tooltip.allRemove();
+        tooltip.allRemove();
 
         if( pathVector){
             var features = pathVector.getFeatures();

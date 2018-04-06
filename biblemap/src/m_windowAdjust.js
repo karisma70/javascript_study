@@ -34,7 +34,9 @@ var DoubleTap = (function(){        // prevent for double tap
         $('#tabIncBible').on('touched click', this.preventEvent);
 
         $('#infoPopup').on('touched click', this.preventEvent);
-        // $('#biblePlaceDiv').on('touched click', preventEvent );
+
+        $('#tab1Title').on('touched click', this.preventEvent);
+
     };
 
     return function(){
@@ -56,6 +58,8 @@ var createFooterMenu = (function() {
          alert( "innerWidth : " + window.innerWidth ) ;
          alert( "OuterWidth : " + window.outerWidth ) ;
          */
+
+         this.mapviewRatio = 0.50;
 
          this.footer = document.getElementById('footer');
          this.mapView = document.getElementById('map');
@@ -127,6 +131,7 @@ var createFooterMenu = (function() {
          };
 
          this.mode = "hide";    // "hide", "bottom", "middle", "top";
+         //this.mode = "bottom";    // "hide", "bottom", "middle", "top";
 
          this.setMode = function( paramMode ){
             this.mode = paramMode;
@@ -155,6 +160,7 @@ var createFooterMenu = (function() {
 
          topModeShowContol = function(){
 
+             $("#footer").show();
              $("#footer").css( "z-index", 10 );
              // $("#tab_contain").css( "z-index", 9 );
 
@@ -170,7 +176,7 @@ var createFooterMenu = (function() {
 
          middleModeShowControl = function(){
 
-             // $("#footer").css( "z-index", 10 );
+             $("#footer").show();
              $("#tab_contain").css( "z-index", 9 );
 
 
@@ -186,7 +192,7 @@ var createFooterMenu = (function() {
 
          bottomModeShowControl = function(){
 
-             // $("#footer").css( "z-index", -10 );
+             $("#footer").show();
 
              $("#tab_contain").css( "z-index", -10 );
 
@@ -201,6 +207,7 @@ var createFooterMenu = (function() {
 
          hideModeShowControl = function() {
              // $("#footer").css( "z-index", -10 );
+             $("#footer").hide();
          };
 
 
@@ -266,7 +273,7 @@ var createFooterMenu = (function() {
          };
 
          this.setMiddleFooterExtent = function() {
-             var mapHeight = window.innerHeight * 0.50;
+             var mapHeight = window.innerHeight * this.mapviewRatio;
 
              this.footer.style.top = (mapHeight ) + 'px';
              this.footer.style.left = 0 + 'px';
@@ -290,7 +297,7 @@ var createFooterMenu = (function() {
              // this.setTopFooterExtent();
              this.setFooterTopPos(  81 );
 
-             var mapHeight = window.innerHeight * 0.50;
+             var mapHeight = window.innerHeight * this.mapviewRatio;
 
              this.mapView.style.left = 0 + 'px';
              this.mapView.style.right = 0 + 'px';
@@ -357,7 +364,7 @@ var createFooterMenu = (function() {
             footerShowControl( "middle");
 
             // this.setMiddleFooterExtent();
-            var mapHeight = window.innerHeight * 0.50;
+            var mapHeight = window.innerHeight * this.mapviewRatio;
             this.setFooterTopPos(  mapHeight );
 
             this.mapView.style.left = 0 + 'px';
@@ -368,9 +375,10 @@ var createFooterMenu = (function() {
             this.compassBtn.style.top = 5 + 'px';
             this.compassBtn.style.left = (window.innerWidth - 43 ) + 'px';
 
-            this.homeBtn.style.top = ( window.innerHeight - mapHeight - 180 ) + 'px';
-            this.zoomInBtn.style.top = ( window.innerHeight - mapHeight - 133 ) + 'px';
-            this.zoomOutBtn.style.top = (window.innerHeight - mapHeight - 100 ) + 'px';
+            //this.homeBtn.style.top = ( (window.innerHeight - mapHeight) - 180 ) + 'px';
+            this.homeBtn.style.top = ( mapHeight - 180  ) + 'px';
+            this.zoomInBtn.style.top = ( mapHeight - 133 ) + 'px';
+            this.zoomOutBtn.style.top = ( mapHeight - 100 ) + 'px';
 
             this.zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
             this.zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
@@ -396,6 +404,8 @@ var createFooterMenu = (function() {
             this.mode = "hide";
             footerShowControl( "hide");
 
+            this.setFooterTopPos( window.innerHeight );
+
             // this.setMiddleFooterExtent();
 
             this.mapView.style.left = 0 + 'px';
@@ -419,7 +429,10 @@ var createFooterMenu = (function() {
             this.upArrow.style.right = 0 + 'px';
             this.upArrow.style.bottom = 0 + 'px';
 
-            bibleMap.updateSize();
+            this.setTabPosition();
+
+            if( bibleMap !== undefined )
+                bibleMap.updateSize();
         };
 
         return this;
@@ -697,13 +710,13 @@ function createTabMenu(){
 
     $("ul.tabs li").click(function () {
         selMenuString = $(this).text();
-        ConsoleLog( "tab Click !!! select : " + selMenuString );
+
         $("ul.tabs li").removeClass("active").css("color", "#FFFFFF");
         /* $("ul.tabs li").removeClass("active").css("color", "#646464");  */
         $(this).addClass("active").css("color", "#000000");
 
         var activeTab = $(this).attr("rel");
-        ConsoleLog( "tab Click !!! rel Active : " + activeTab );
+
         if( activeTab === undefined || activeTab == null ){
             alert( "lost activeTab!!!");
             if( $(this) == undefined || $(this) == null )
@@ -751,10 +764,6 @@ function openMenu(){
     document.getElementById("sideMenu").focus();
 }
 
-$(".close").click(function() {
-    $("#sideMenu").removeClass("open");
-    document.getElementById("map").focus();
-});
 
 function gotoSearchWord() {
     $("#sideMenu").addClass("open");
@@ -797,4 +806,19 @@ function initTextAutoComplete(){
             mobileSearchBiblePlace();
         }
     });
+}
+
+
+function imageBtnShowControl( isShow){
+    if( isShow == true ) {
+        $("#compassBtn").show();
+        $("#zoomInBtn2D").show();
+        $("#zoomOutBtn2D").show();
+        $("#homeBtn").show();
+    }else{
+        $("#compassBtn").hide();
+        $("#zoomInBtn2D").hide();
+        $("#zoomOutBtn2D").hide();
+        $("#homeBtn").hide();
+    }
 }

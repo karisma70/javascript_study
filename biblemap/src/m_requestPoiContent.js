@@ -10,15 +10,21 @@ function writePoiContentsToTab( poiObj, infoText ){
 
         $('#tab3Title').empty();
 
-        var strPoiTitle = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + "\'" + poiObj.id + "\'" + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: rgb( 180, 4, 174 )\" >'
+        var strPoiTitle = '<a href=' + '\"javascript:moveToPlaceByPoiID( ' + "\'" + poiObj.id + "\'" + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: rgb( 180, 4, 174 )\" >'
             + '<img src ="biblemap/image/poi_location.png?version=20170908" style=\"height:26px; vertical-align:top;\">&nbsp;&nbsp;' +
             poiObj.biblePlace + '  ' + '</a>';
 
-        var strSearchWord = '<a href=' + '"javascript:bibleSearchByWord( ' + "\'" + poiObj.biblePlace + "\'" + ')\">';
-        strSearchWord += '&nbsp;&nbsp;&nbsp;<img src ="biblemap/image/m_search_btn2.png" style=\"position: absolute; top: -2px; height:28px; vertical-align:top;\">&nbsp;' + '</a>';
-
+        var strSearchWord = '<a href=' + '\"javascript:bibleSearchByWord( ' + "\'" + poiObj.biblePlace + "\'" + ')\">';
+        strSearchWord += '&nbsp;&nbsp;&nbsp;<img src =\"biblemap/image/m_search_btn2.png\" style=\"position: absolute; top: -2px; height:28px; vertical-align:top;\">&nbsp;' + '</a>';
 
         strPoiTitle += strSearchWord;
+
+        strSearchWord = '<a href=' + '\"javascript:beforePoi( )\"><img src =\"biblemap/image/undo.png?version=20170914\" style=\"position: absolute; left: 180px; top: -2px; width: 28px; height:24px; vertical-align:top;\"></a>';
+        // strSearchWord += '<img src =\"biblemap/image/vertical_line.png\" style=\"position: absolute; left: 190px; top: -2px; left: 218px;  width: 8px; height:24px; vertical-align:top;\">';
+        strSearchWord += '<a href=' + '\"javascript:afterPoi( )\"><img src =\"biblemap/image/redo.png?version=20170914\" style=\"position: absolute; left: 220px; top: -2px; width:28px; height:24px; vertical-align:top;\"></a>';
+
+        strPoiTitle += strSearchWord;
+
 
         $("#tab3Title").append(strPoiTitle);
 
@@ -68,13 +74,13 @@ function showPoiTooltip( poiObj, labelText, youtube, infoText ){
 
     if ( window.focusPoiObj !== undefined && window.focusPoiObj != null) {
         if (poiObj.id == window.focusPoiObj.id) {
-            poiTooltip.create(poiObj.biblePlace, labelText, [poiObj.x, poiObj.y], true);        // 아이콘위에 툴팁을 표시하도록 함
+            poiTooltip.create( poiObj.id, labelText, [poiObj.x, poiObj.y], true);        // 아이콘위에 툴팁을 표시하도록 함
         }
         else
-            poiTooltip.create( poiObj.biblePlace, labelText, [poiObj.x, poiObj.y], false);
+            poiTooltip.create( poiObj.id, labelText, [poiObj.x, poiObj.y], false);
     }
     else
-        poiTooltip.create( poiObj.biblePlace, labelText, [poiObj.x, poiObj.y], false);
+        poiTooltip.create( poiObj.id, labelText, [poiObj.x, poiObj.y], false);
 }
 
 
@@ -149,7 +155,7 @@ function mobileRequestPoiContentAndShow( paramPoiObj, callback ) {
             return;
         }
 
-      //  poiTooltip.create( poiObj.biblePlace, linkedPlaceName, [poiObj.x, poiObj.y]);
+      //  poiTooltip.create( poiObj.id, linkedPlaceName, [poiObj.x, poiObj.y]);
         youtube = "";
         youtubelink ="";
         infoText = "";
@@ -186,6 +192,18 @@ function mobileRequestPoiContentAndShow( paramPoiObj, callback ) {
             return;
         }
 
+/*
+        var tempPoi = layerManager.historyCurrentPoi();
+        if( tempPoi !== undefined ) {
+            if (tempPoi.id != poiObj.id)
+                layerManager.historyInsertPoi(poiObj);
+        }else{
+            layerManager.historyInsertPoi(poiObj);
+        }
+        */
+
+        layerManager.historyInsertPoi(poiObj);
+
         bibleMapManager.createPoiIcon( poiObj );        // focus POI Icon 만들기
 
         setGlobalFocusPoiObj( poiObj );
@@ -197,16 +215,36 @@ function mobileRequestPoiContentAndShow( paramPoiObj, callback ) {
         tabMenu.selectTab('tab3Menu');
         $("#tab3").scrollTop(0);
 
-        poiTooltip.create( poiObj.biblePlace, labelText, [poiObj.x, poiObj.y], true);
+        poiTooltip.create( poiObj.id, labelText, [poiObj.x, poiObj.y], true);
         moveCenterFocusedPOI( poiObj );
     };
 
+    showPoiInfoInTabByID = function ( poiID ) {      // tabMenu 에서 정보 보여주기
+
+        if( poiID == null ){
+            alert("poiID == null error!!  at showPoiInfoTab ");
+            return;
+        }
+
+        var poiObj = layerManager.getPoiObjById( poiID );
+
+        if( poiObj == null ){
+            alert("poiID == null error!!  at showPoiInfoTab ");
+            return;
+        }
+
+        bibleMapManager.createPoiIcon( poiObj );        // focus POI Icon 만들기
+
+        setGlobalFocusPoiObj( poiObj );
+
+        writePoiContentsToTab( poiObj, infoText );
+
+        poiTooltip.create( poiObj.id, labelText, [poiObj.x, poiObj.y], true);
+
+        moveToPlaceByPoiObj( poiObj );
+    };
+
 }
-
-
-
-
-
 
 
 function setGlobalFocusPoiObj( poiObj ){
@@ -235,9 +273,9 @@ function showPoiYoutubeInTooltip( poiID, youtubeSrc, youtubeLink ) {
     labelText += "<iframe width=\"275\" height=\"180\" src=\"" + youtubeSrc + "\" frameborder = \"0\" allowfullscreen></iframe>";
 
     if( window.focusPoiObj !== null && poiObj.id == window.focusPoiObj.id )
-        poiTooltip.create( poiObj.biblePlace, labelText, [poiObj.x, poiObj.y], true);
+        poiTooltip.create( poiObj.id,  labelText, [poiObj.x, poiObj.y], true);
     else
-        poiTooltip.create( poiObj.biblePlace, labelText, [poiObj.x, poiObj.y], false);
+        poiTooltip.create( poiObj.id,  labelText, [poiObj.x, poiObj.y], false);
 };
 
 

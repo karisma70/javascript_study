@@ -11,7 +11,7 @@ function mapTooltip( paramMap, cssClassName ) {
 
     var zOrder = 0;
 
-    this.create = function( poiName, linkedText, coord, isFocus){
+    this.create = function( poiID, linkedText, coord, isFocus){
 
         var posY = -11;
         if( isFocus == true)
@@ -33,15 +33,14 @@ function mapTooltip( paramMap, cssClassName ) {
 
         tooltipElement.innerHTML = linkedText;
 
-
-        tooltipElement.setAttribute("id", poiName );
-        var strID = "#"+ poiName ;
+        tooltipElement.setAttribute("id", poiID );
+        var strID = "#"+ poiID ;
 
         //$(strID).css( "z-index", zOrder.toString() );
         $(strID).css( "z-index", 12 );
+        $(strID).css( "style", "background-color: gray;" );
 
         tooltip.setPosition(coord);
-       //  tooltip.setOffset([0, -7]);
         tooltip.setOffset([0, posY ]);
 
         this.tooltipArray.push( tooltip);
