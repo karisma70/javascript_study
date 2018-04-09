@@ -86,108 +86,76 @@
 
  var bibleMapPointLayers = [
 
-     /*
-         { url: 'history/History_12Sect_poi',  order: 20, style: {
-             visibleRange : { max : 9.5, min : 7.5 },
-             // textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px Nanum Gothic', color: '#E7E5E5', outlineColor : '#5F0291', outlineWidth : 3  }}
-             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 13px Nanum Gothic', color: "#E7E5E5", outlineColor : "#5F0291", outlineWidth : 3  } }  //3e636a
-         },
-
-         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-         { url: 'level_12_poi',  order: 19, style: {
-             visibleRange : { max : 25 , min : 13 },
-             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px Nanum Gothic', color: "white", outlineColor : "black", outlineWidth : 2  }}
-         },
-
-
-         { url: 'level_11_poi',  order: 21, style: {
-             visibleRange : { max : 25 , min : 11 },
-             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px Nanum Gothic', color: "white", outlineColor : "black", outlineWidth : 2  }}
-         },
-
-
-         { url: 'level_10_poi',  order: 22, style: {
-             visibleRange : { max : 25 , min : 10 },
-             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px Nanum Gothic', color: "white", outlineColor : "#313132", outlineWidth : 3  } }
-         },
-
-
-         { url : 'level_9_poi',  order: 23, style: {
-             visibleRange : { max : 25 , min : 9 },
-             // textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px Nanum Gothic', color: "white", outlineColor : "#9b490d", outlineWidth : 2  } }   // 191970
-             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px Nanum Gothic', color: "white", outlineColor : "#191970", outlineWidth : 3  } }   // 191970
-         },
-
-         { url : 'level_7_poi',  order: 24, style: {
-             visibleRange : { max : 25 , min : 7 },
-             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px Nanum Gothic', color: "white", outlineColor : "#3737FF", outlineWidth : 3  } }  //3e636a
-         },
-
-         { url: 'level_6_poi',  order: 25, style: {
-             visibleRange : { max : 25 , min : 6 },
-             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 13px Nanum Gothic', color: '#E7E5E5', outlineColor : '#033078', outlineWidth : 3  }}
-         },
-
-         {
-             url: 'level_4_poi',  order: 26, style: {
-             visibleRange : { max : 25 , min : 4 },
-            // textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px Nanum Gothic', color: '#E7E5E5', outlineColor : '#105602', outlineWidth : 4  }}
-             textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 13px Nanum Gothic', color: "#E7E5E5", outlineColor : "#105602", outlineWidth : 3  } }  //3e636a
-         }  */
-
 
      { url: 'level_12_poi',  order: 19, style: {
          visibleRange : { max : 25 , min : 13.5 },
-         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "black", outlineWidth : 2  }}
+         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "black", outlineWidth : 2  },
+         font3D : 'normal 15px Nanum Gothic'
+         }
      },
 
      { url: 'level_11_poi',  order: 20, style: {
          visibleRange : { max : 25 , min : 10.7 },
-         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "black", outlineWidth : 2  }}
+         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "black", outlineWidth : 2  },
+         font3D : 'normal 15px Nanum Gothic'
+     }
      },
 
 
      { url: 'level_10_poi',  order: 21, style: {
          visibleRange : { max : 25 , min : 10 },
-         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "#313132", outlineWidth : 3  } }
+         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "#313132", outlineWidth : 3  },
+         font3D : 'normal 15px Nanum Gothic'
+     }
      },
 
 
      { url : 'level_9_poi',  order: 22, style: {
          visibleRange : { max : 25 , min : 9.5 },
          // textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px Nanum Gothic', color: "white", outlineColor : "#9b490d", outlineWidth : 2  } }   // 191970
-         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "#191970", outlineWidth : 3  } }   // 191970
+         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "#191970", outlineWidth : 3  },
+         font3D : 'normal 15px Nanum Gothic'
+     }   // 191970
      },
 
 
      { url : 'level_8_poi',  order: 23, style: {
          visibleRange : { max : 25 , min : 8.7 },
-         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : '#033078', outlineWidth : 3  } }  //3e636a
+         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : '#033078', outlineWidth : 3  },
+         font3D : 'normal 15px Nanum Gothic'
+     }  //3e636a
      },
 
      { url: 'history/History_12Sect_poi',  order: 24, style: {
          visibleRange : { max : 11.5, min : 8 },
          // textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px Nanum Gothic', color: '#E7E5E5', outlineColor : '#5F0291', outlineWidth : 3  }}
-         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 15px Nanum Gothic', color: "#E7E5E5", outlineColor : "#5F0291", outlineWidth : 3  } }  //3e636a
+         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 15px Nanum Gothic', color: "#FFFFFF", outlineColor : "#5B2B29", outlineWidth : 3  },
+         font3D : 'normal 16px Nanum Gothic'
+     }
      },
 
 
      { url : 'level_7_poi',  order: 25, style: {
          visibleRange : { max : 25 , min : 7 },
-         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : '#033078', outlineWidth : 3  } }  //3e636a
+         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : '#033078', outlineWidth : 3  },
+         font3D : 'normal 15px Nanum Gothic'
+     }
      },
 
 
      { url: 'level_6_poi',  order: 26, style: {
          visibleRange : { max : 25 , min : 6 },
-         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 16px Nanum Gothic', color: '#E7E5E5', outlineColor : '#052FFF', outlineWidth : 3  }}
+         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 16px Nanum Gothic', color: '#E7E5E5', outlineColor : '#052FFF', outlineWidth : 3  },
+         font3D : 'normal 17px Nanum Gothic'
+     }
      },
 
      {
          url: 'level_4_poi',  order: 27, style: {
          visibleRange : { max : 20 , min : 4 },
-         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 17px Nanum Gothic', color: "#E7E5E5", outlineColor : "#105602", outlineWidth : 3  } }  //3e636a
+         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 17px Nanum Gothic', color: "#E7E5E5", outlineColor : "#105602", outlineWidth : 3  },
+         font3D : 'normal 18px Nanum Gothic'
+     }
      }
 
      ];
@@ -273,31 +241,7 @@
  };
 
 
- /*
- const textStyle = [new ol.style.Style({
-     text: new ol.style.Text({
-         text: 'Only text',
-         textAlign: 'center',
-         textBaseline: 'middle',
-         stroke: new ol.style.Stroke({
-             color: 'red',
-             width: 3
-         }),
-         fill: new ol.style.Fill({
-             color: 'rgba(0, 0, 155, 0.3)'
-         })
-     })
- }), new ol.style.Style({
-     geometry: new ol.geom.Circle([1000000, 3000000, 10000], 2e6),
-     stroke: new ol.style.Stroke({
-         color: 'blue',
-         width: 2
-     }),
-     fill: new ol.style.Fill({
-         color: 'rgba(0, 0, 255, 0.2)'
-     })
- })];
-*/
+
 
  var createTextStyleOfFeature = function( feature, resolution ){
 
@@ -335,7 +279,7 @@
          text: new ol.style.Text({
              text : feature.get('label'),
            //  font: featureStyle.textStroke.font,
-             font : 'normal 13px Nanum Gothic',
+             font : 'normal 15px Nanum Gothic',
              textAlign: 'bottom',
              textBaseline: 'middle',
              stroke: new ol.style.Stroke({
@@ -1937,3 +1881,40 @@ function createLayer( source  ) {
      }
 
  }());
+
+
+
+function Create3DPOIFeature( prop, posX, posY ){
+
+     var textFeature = new ol.Feature({
+         geometry: new ol.geom.Point([ posX, posY ])
+     });
+
+
+    var textStyle = new ol.style.Style({
+        text: new ol.style.Text({
+            // font : 'normal 15px Nanum Gothic',
+            font : prop.style.font3D,
+            //text: labelText,
+            text: prop.label,
+            fill : new ol.style.Fill( {
+                //color: '#FFFFFF'
+                color: prop.style.textStroke.color
+            }),
+            textAlign: 'center',
+            textBaseline: 'middle',
+            stroke: new ol.style.Stroke({
+                // color: '#105602',
+                color: prop.style.textStroke.outlineColor,
+              //  width: 3
+                width : prop.style.textStroke.outlineWidth
+            })
+        })
+    });
+
+     textFeature.setStyle( textStyle );
+
+     return textFeature;
+ }
+
+ // textStroke : { prop: 'label', align: 'center', baseline: 'middle' , font : 'normal 14px Nanum Gothic', color: '#F1EEEE', outlineColor : '#6d6954', outlineWidth : 3  }}

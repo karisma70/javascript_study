@@ -12,7 +12,7 @@ ul.tabs {
     /* border-left: 1px solid #CAC9C9;  */
     width: 100%;
     font-family: 'Nanum Gothic';
-    font-size:13px;
+    font-size:15px;
 }
 ul.tabs li {
     border-top-left-radius: 4px;
@@ -61,7 +61,7 @@ ul.tabs li.active {
 
     overflow-y:scroll;
     line-height: 1.7em;
-    font-size:14px ;
+    font-size:15px ;
     clear: both;
     font-family: 'Nanum Gothic';
 }

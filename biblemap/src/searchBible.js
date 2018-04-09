@@ -62,7 +62,7 @@ function decreaseBibleChapter(){
     var chapter = parseInt( dvBibleChapter.value);
     chapter -= 1;
     dvBibleChapter.value = String( chapter );
-    // searchBibleChapter();
+    searchBibleChapter();
 }
 
 
@@ -70,7 +70,7 @@ function increaseBibleChapter(){
     var chapter = parseInt( dvBibleChapter.value);
     chapter += 1;
     dvBibleChapter.value = String( chapter );
-    // searchBibleChapter();
+    searchBibleChapter();
 }
 
 function makeSearchChapterParam(){

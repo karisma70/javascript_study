@@ -82,6 +82,8 @@ function createFeatureFromWkt( wkt, attrs, bTransform, format, label ) {
     return feature;
 }
 
+
+
 function create3DFeatureFrom2DFeauture( feature2D ){
 
     // feature2D.getGeometry().set('altitudeMode', 'clampToGround');
@@ -89,18 +91,27 @@ function create3DFeatureFrom2DFeauture( feature2D ){
     var geom = feature2D.getGeometry();
     var coord = geom.getCoordinates();
 
+    var prop2D = feature2D.getProperties();
+
+    /*
     var feature3D = new ol.Feature( {
         geometry: new ol.geom.Point( [ coord[0], coord[1] ] )
     });
 
-  //  feature3D.setProperties( feature2D.getProperties() );
-
-    var geom3D = feature3D.getGeometry();
-    var coord3D = geom3D.getCoordinates();
-
     feature3D.setProperties( feature2D.getProperties() );
 
-    coord3D = geom3D.getCoordinates();
+
+    var geom3D = feature3D.getGeometry();
+    feature3D.setProperties( feature2D.getProperties() );
+
+    // textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "black", outlineWidth : 2  }
+    var prop = feature3D.getProperties();
+    prop.style.textStroke.font = "normal 20px Nanum Ghotic";
+
+    var coord3D = geom3D.getCoordinates();
+    */
+
+    var feature3D = Create3DPOIFeature( prop2D, coord[0], coord[1] );
 
     return feature3D;
 }
