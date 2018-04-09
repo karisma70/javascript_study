@@ -117,7 +117,8 @@ function RouteMoveProcess( paramMap, paramTrajectory, paramPoiArray, CallBackFor
             width: 3   })
     });
 
-    var tooltip = new Tooltip( paramMap, 'tooltip tooltip-static' );
+    // var tooltip = new Tooltip( "2D", paramMap, 'pathTooltip pathTooltip-static', 1 );
+    var tooltip = new Tooltip(  "2D", paramMap, 'pathTooltip pathTooltip-static' );
 
     // var tolerancePoiPos = 700;
     var tolerancePoiPos = 2000;

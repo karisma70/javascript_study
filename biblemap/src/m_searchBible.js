@@ -432,7 +432,9 @@ function mobileSearchBiblePlace() {
 
     dvBiblePlace.value = removeSpaceInWord(dvBiblePlace.value);
 
+
     saveSearchWordsToStorage();
+
 
     var dvSearchedPoiList = document.getElementById("searchedPoiList");
     dvSearchedPoiList.innerHTML = "";

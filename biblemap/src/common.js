@@ -282,6 +282,118 @@ function checkLocalStorageEnabled() {
 }
 
 
+function saveFocusPoiToStorage( ){
+
+    if( window.focusPoiObj == null ) {
+        return;
+    }
+
+    var Obj = {
+        'focusPoiPlace': window.focusPoiObj.biblePlace,
+        'focusPoiTitle': window.focusPoiObj.title
+    };
+
+    var strObj = JSON.stringify(Obj);
+    var storage = window.localStorage;
+
+    storage.setItem('bibleMap-poi', strObj);
+}
+
+function getFocusPoiFromStorage(){
+    var strObj = localStorage.getItem('bibleMap-poi');
+    if (strObj == null) {
+        return null;
+    }
+
+    var Obj = JSON.parse( strObj );
+    if( Obj == null ) {
+        return null;
+    }
+
+    var strPoiPlace = "";
+    if( Obj.hasOwnProperty('focusPoiPlace')){
+        if( typeof( Obj['focusPoiPlace'] ) == "string")
+            strPoiPlace = Obj['focusPoiPlace'];
+    }
+
+    var strPoiTitle = "";
+    if( Obj.hasOwnProperty( 'focusPoiTitle')){
+        if( typeof( Obj['focusPoiTitle'] ) == "string")
+            strPoiTitle = Obj['focusPoiTitle'];
+    }
+
+    if( strPoiPlace != "" ){
+        var strPoi = {
+            'place': strPoiPlace,
+            'title': strPoiTitle
+        };
+        return strPoi;
+    }
+    else {
+        return null;
+    }
+}
+
+
+
+function saveLocationToStorage( zoom, posX, posY ){
+    //alert( "saveLocation !!! ");
+
+    window.zoom = zoom;
+    window.posX = posX;
+    window.posY = posY;
+
+    var Obj = {
+        'zoom' : window.zoom,
+        'posX'  : window.posX,
+        'posY'  : window.posY
+    };
+
+    var strObj = JSON.stringify(Obj);
+    var storage = window.localStorage;
+
+    storage.setItem('bibleMap-location', strObj);
+}
+
+
+function getLocationFromStorage() {
+    var strObj = localStorage.getItem('bibleMap-location');
+    if (strObj == null) {
+        window.zoom = 0;
+        window.posX = 0;
+        window.posY = 0;
+        return;
+    }
+
+
+    var Obj = JSON.parse( strObj );
+    if( Obj == null ) {
+        window.zoom = 0;
+        window.posX = 0;
+        window.posY = 0;
+        return;
+    }
+
+    if( Obj.hasOwnProperty('zoom' )){
+        if( typeof( Obj['zoom'] ) == "number") {
+            window.zoom = Obj['zoom'];
+        }
+    }
+
+    if( Obj.hasOwnProperty('posX' )){
+        if( typeof( Obj['posX'] ) == "number") {
+            window.posX = Obj['posX'];
+        }
+    }
+
+    if( Obj.hasOwnProperty('posY' )){
+        if( typeof( Obj['posY'] ) == "number") {
+            window.posY = Obj['posY'];
+        }
+    }
+}
+
+
 function saveSearchWordsToStorage( ){
 
     if( checkLocalStorageEnabled() == false ) {
@@ -296,11 +408,10 @@ function saveSearchWordsToStorage( ){
     };
 
     var strObj = JSON.stringify(Obj);
-    // alert("JSON : " + strObj );
     var storage = window.localStorage;
-
     storage.setItem('bibleMap', strObj);
 }
+
 
 function saveCurrentDayToStorage( curDate ){
     if( checkLocalStorageEnabled() == false ) {
@@ -387,6 +498,7 @@ function getSearchWordsFromStorage(){
         strText = "예루살렘";
     }
     $("#biblePlace").val( strText );
+
 }
 
 function getWhatBrowser(){

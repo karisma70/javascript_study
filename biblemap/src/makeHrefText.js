@@ -48,18 +48,6 @@ function makeHrefWordInText( LayerManager, strWord, bibleTitle, bibleText, color
         return bibleText;
     }
 
-    /*
-    if( strPos > 0){
-        if (bibleText.substring(strPos - 1, strPos) != ">"){
-            return bibleText;
-        }
-
-        if( bibleText.substring(strPos - 1, strPos) != " " ) {
-            if( bibleText.substring(strPos-1, strPos) != "'" ||  )
-                return bibleText;
-    }*/
-
-
     if (strPos > 0 && bibleText.substring(strPos - 1, strPos) != " " ) {
         if( bibleText.substring(strPos-1, strPos) !== ">" ) {
             if( bibleText.substring(strPos-1, strPos) !== "\'") {

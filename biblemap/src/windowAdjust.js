@@ -433,6 +433,7 @@ var adjustScrDiv = (function(){
         setCompassBtnPos( compassBasX, compassBasY );
 
 
+
         if ( view2D3D == "chkView2D") {
             $( '#map' ).css( "z-index", 2000 );
 
@@ -632,4 +633,26 @@ function clearSearchPlaceWord(){
     $('#searchedPoiList').empty();
     dvBiblePlace.value ="";
     $("#biblePlace").focus();
+}
+
+
+function showDownloading(){
+
+    $( '#downloadingDiv' ).css( "z-index", 6100 );
+
+    var downloading = document.getElementById("downloadingDiv");
+
+    downloading.style.left = ((window.innerWidth * 0.5 ) - 80) + 'px';
+    downloading.style.right = ((window.innerWidth * 0.5 ) - 80) + 'px';
+    downloading.style.top = ((window.innerHeight * 0.5 ) - 80) + 'px';
+    downloading.style.top = ((window.innerHeight * 0.5 ) - 80) + 'px';
+}
+
+function hideDownloading(){
+
+    setCursorByID('map','default');
+    setCursorByID('map3D','default');
+
+    $("#downloadingDiv").hide();
+
 }

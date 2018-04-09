@@ -1,0 +1,74 @@
+.poiTooltip {
+    position: relative;
+    background: rgba(0, 0, 0, 0.5);
+    /* border-radius: 4px;  */
+    border-radius: 7px;
+    color: black;
+    /*
+    padding: 4px 8px;
+    */
+
+    padding: 6px 10px;
+
+    /* opacity: 0.7;  */
+    white-space: nowrap;
+}
+
+.poiTooltip-static {
+    /* background-color: #ffcc33;  */
+    background-color: #FFFFFF;
+    border: 1px solid black;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
+
+    font-size: 14px;
+}
+.poiTooltip-static:before {
+    /* border-top: 6px solid rgba(0, 0, 0, 0.5);  */
+    border-top: 10px solid rgba(0, 0, 0, 0.5);
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    /* bottom: -6px;  */
+    margin-left: -6px;
+    left: 50%;
+}
+.poiTooltip-static:before {
+    /* border-top-color: #ffcc33;  */
+    border-top-color: #FFFFFF;
+}
+
+/* --------------- below is route tool tip ------------------------------------------------ */
+
+.pathTooltip {
+    position: relative;
+    /* background: rgba(0, 0, 0, 0.5);  */
+    background:#FFA07A;
+    border-radius: 4px;
+    color: white;
+    padding: 4px 8px;
+    /* opacity: 0.7;  */
+    white-space: nowrap;
+}
+.pathTooltip-static {
+    /* background-color: #ffcc33;  */
+    /* background-color: #FBFE38;  */
+    background-color: #FFD700;
+    color: black;
+    border: 1px solid yellow;
+}
+.pathTooltip-static:before {
+    border-top: 6px solid rgba(0, 0, 0, 0.5);
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    margin-left: -7px;
+    left: 50%;
+}
+.pathTooltip-static:before {
+    border-top-color: #ffcc33;
+    /* border-top-color: #FBFE38; */
+}

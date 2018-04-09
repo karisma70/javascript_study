@@ -2,6 +2,14 @@
  * Created by Administrator on 2017-12-23.
  */
 
+function searchBibleWord_( word ){
+
+    dvBibleWord.value = word;
+
+    searchBibleWord();
+}
+
+
 function searchBibleWord(){
     if( dvBibleWord.value == "" ){
         return;
@@ -54,7 +62,7 @@ function decreaseBibleChapter(){
     var chapter = parseInt( dvBibleChapter.value);
     chapter -= 1;
     dvBibleChapter.value = String( chapter );
-    searchBibleChapter();
+    // searchBibleChapter();
 }
 
 
@@ -62,7 +70,7 @@ function increaseBibleChapter(){
     var chapter = parseInt( dvBibleChapter.value);
     chapter += 1;
     dvBibleChapter.value = String( chapter );
-    searchBibleChapter();
+    // searchBibleChapter();
 }
 
 function makeSearchChapterParam(){
@@ -215,7 +223,7 @@ function reqeustAndShowContents( tabID, searchParam , paragraph, completeCallbac
                     }
                     strChapterLinkWithBibleContent = "<td width = \"150\" " + reverseColor + " >&nbsp;&nbsp;" + resObj.title + " " + resObj.chapter + ":" + resObj.paragraph + "</td>" + "<td" + " " + reverseColor + ">" + strConvText + "</td>";
                 }else if( tabID == '#tab2' ) {
-                    strChapterLinkWithBibleContent = "<td width = \"150\"  >&nbsp;&nbsp;" + '<a href= "javascript:requestBibleWithChapter( \'' + resObj.title + '\',' + resObj.chapter + ',' + resObj.paragraph + ' )\" style=\"text-decoration:none; font-weight:bold; color:#464646;\">'
+                    strChapterLinkWithBibleContent = "<td width = \"150\"  >&nbsp;&nbsp;" + '<a href= "javascript:requestBibleWithChapter( \'' + resObj.title + '\',' + resObj.chapter + ',' + resObj.paragraph + ' )\" style=\"text-decoration:none; font-weight:bold; color:#0D63DB;\">'
                         + resObj.title + " " + resObj.chapter + ":" + resObj.paragraph + "</a>" + "</td>"
                         + "<td>" + strConvText + "</td>";
                 }

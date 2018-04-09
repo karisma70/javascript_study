@@ -43,7 +43,7 @@
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/m_popup.css?version=20170910">
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
-    <script type="text/javascript" src="biblemap/src/common.js?version=20170830"></script>
+    <script type="text/javascript" src="biblemap/src/common.js?version=20171004"></script>
 
     <!--
     <script type="text/javascript" src="biblemap/js/matchMedia.js-master/matchMedia.js"></script>
@@ -53,7 +53,7 @@
     <script type="text/javascript" src="biblemap/openLayers_v4.4.2/ol.js"></script>
     <script type="text/javascript" src="biblemap/src/jQueryRotate.js"></script>
 
-    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20180201"></script>
+    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20180202"></script>
     <script type="text/javascript" src="biblemap/src/m_downloadLayers.js?version=20180201"></script>
 
     <script type="text/javascript" src="biblemap/src/arc.js?version=20170813"></script>
@@ -66,7 +66,7 @@
     <!-- <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20180121"></script>  -->
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170829"></script>
     <script type="text/javascript" src="biblemap/src/makeHrefText.js?version=20170829"></script>
-    <script type="text/javascript" src="biblemap/src/m_requestPoiContent.js?version=20170829"></script>
+    <script type="text/javascript" src="biblemap/src/m_requestPoiContent.js?version=20170902"></script>
 
     <script type="text/javascript" src="biblemap/src/m_searchBible.js?version=20170901"></script>
     <script type="text/javascript" src="biblemap/js/jquery.autocomplete.min.js"></script>
@@ -171,9 +171,10 @@
         <select id ="bibleTitle"  class="customSelect" name="bibleTitle" style="position: absolute; left: 40px; top:5px; width: 180px; height:32px; font-size:1.5em;" ></select>
         <input id ="decChapter" type="image" src="biblemap/image/left_arrow.png?version=20170906" style="position: absolute; left: 40px; top:40px; width:30px; height:30px; vertical-align:middle; " onclick="menuDecreaseBibleChapter()">
         <!-- <input id ="bibleChapter" type="number" class="chapterNum"  style="position: absolute; padding-left: 5px; left: 76px; top: 40px;  width: 40px; height: 30px; font-size:1.5em;" value="1" onchange="examineNumber()">  -->
-        <input id ="bibleChapter" type="tel" class="chapterNum"  style="position: absolute; padding-left: 5px; left: 76px; top: 40px;  width: 40px; height: 30px; font-size:1.5em;" value="1" >
+        <input id ="bibleChapter" type="tel" class="chapterNum"  style="position: absolute; padding-left: 5px; left: 76px; top: 40px;  width: 40px; height: 30px; font-size:1.5em; " value="1" >
         <span style="position: absolute; left: 120px; top: 44px; font-size:1.5em;">장</span>
-        <input id ="incChapter" type="image" src="biblemap/image/right_arrow.png?version=20170906" style="position: absolute;  left: 145px;  top:40px; width:30px; height:30px; vertical-align:middle;" onclick="menuIncreaseBibleChapter()">
+        <input id ="incChapter" type="image" src="biblemap/image/right_arrow.png?version=20170906" style="position: absolute;  left: 145px;  top:40px; width:30px; height:30px; vertical-align:middle; " onclick="menuIncreaseBibleChapter()">
+
         <input type="image" src="biblemap/image/m_search_btn2.png?version=20170905" style="position: absolute; left: 190px;  top:40px; width:30px; height:30px; vertical-align:middle; border:none;"
                 onclick="menuSearchBibleChapter( footerMenuMiddle )">
     </div>
@@ -253,21 +254,21 @@
         <!-- <div id = "tab3Title" class="divContent" style="padding-left: 10px;  font-size: 1.5em; top:-6px; height: 35px; overflow-x:hidden; border-bottom:4px solid rgb(230, 230, 230);" > </div>  -->
         <div id = "tab3Title" class="divContent" style="padding-left: 10px;  font-size: 1.5em; top:-6px; height: 35px; overflow-x:hidden; color: rgb( 90, 90, 90 ); " > </div>
 
-        <div id="tab1" class="tab_content" style="padding-left: 5px; border-top: 1px solid rgb(225, 225, 225); -webkit-overflow-scrolling:touch;">
+        <div id="tab1" class="tab_content" style="padding-left: 5px; border-top: 1px solid rgb(225, 225, 225); -webkit-overflow-scrolling:touch; font-size:1.5em">
         </div>
-        <div id="tab2" class="tab_content" style="padding-left: 5px; -webkit-overflow-scrolling:touch;" >
+        <div id="tab2" class="tab_content" style="padding-left: 5px; -webkit-overflow-scrolling:touch; font-size:1.5em" >
             성경&nbsp;단어&nbsp;검색&nbsp;버튼을&nbsp;클릭해&nbsp;주세요 <br>
             <a href ="javascript:gotoSearchWord()" style="text-decoration:none; font-weight: bold; fong-size: 1.5em; color:rgb(0, 91, 227); text-align : left;">→ 바로가기 클릭!!</a><br>
         </div>
         <!-- <div id="tab3" class="tab_content" style="left: -5px; padding-left: 5px; padding-right:5px;  background-color:rgb(245, 245, 245); border-top:1px solid rgb(225, 225, 225); -webkit-overflow-scrolling:touch; "  >  -->
-        <div id="tab3" class="tab_content" style="left: -5px; padding-left: 5px; padding-right:5px;  border-top:1px solid rgb(215, 215, 215); -webkit-overflow-scrolling:touch; "  >
+        <div id="tab3" class="tab_content" style="left: -5px; padding-left: 5px; padding-right:5px;  border-top:1px solid rgb(215, 215, 215); -webkit-overflow-scrolling:touch; font-size:1.5em"  >
             지명 정보의 검색결과가&nbsp; 없습니다 <br> 지도상의&nbsp;지명을&nbsp;클릭하고&nbsp;아이콘'i'를&nbsp;클릭해&nbsp;주세요&nbsp;
         </div>
     </div>
 
 
     <div id = "missionWideIntro" style="height:40px;" >
-        <input id ="missionWideLogo" type="image" src="biblemap/image/mission_wide_logo.png?version=20170905" style="position: absolute; left: 15px;  top: 3px; width:160px; height:30px; vertical-align:middle; border:none;"  onclick="showIntroMissionWide()" >
+        <input id ="missionWideLogo" type="image" src="biblemap/image/mission_wide_logo.png?version=20170905" style="position: absolute; left: 8px;  top: 3px; width:160px; height:30px; vertical-align:middle; border:none;"  onclick="showIntroMissionWide()" >
     </div>
 
     <input id ="footUpArrow" type="image" src="biblemap/image/m_up_arrow.png?version=20170918" style="position: absolute; left: 250px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerUp()">
@@ -304,9 +305,7 @@
 
     setDebug( true );
 
-    windowReloadByCurDate();
-
-    // var zIndex = $( '#map' ).css( "z-index");
+    var isReload = windowReloadByCurDate();
 
     $("#downloadingDiv").css( "z-index", 30);
 
@@ -346,7 +345,6 @@
             clearTimeout(timeout);
 
             if(tapLength < 1000 && tapLength > 0){
-                alert("!!!!");
                 evt.preventDefault();
                 lapTap = 0;
             }else{
@@ -372,9 +370,11 @@
 
     $("#searchedPoiList").hide();
 
-    // var focusPoiObj = null;
     window.focusPoiObj = null;
     window.selectedPoiObj = null;
+    window.zoom = 0;
+    window.posX = 0;
+    window.posY = 0;
 
     var footerMenu = createFooterMenu();
 
@@ -388,7 +388,6 @@
         else if( mode == "middle"){
             footerMenu.bottom();
         }else if( mode == "bottom" ){
-            alert("!!!");
         }
     }
 
@@ -400,7 +399,6 @@
         else if( mode == "middle"){
             footerMenu.top();
         }else if( mode == "top" ){
-            alert("!!!");
         }
     }
 
@@ -438,22 +436,27 @@
 
     var bibleChapterList = new BibleChapterList();
 
-    bibleChapterList.setCallback( function(){
+    if( isReload == false ) {
+        bibleChapterList.setCallback(function () {
 
-        showDownloading();
-        downloadGeometries();
+            showDownloading();
+            downloadGeometries();
 
-        for( var order = 1; order <= bibleChapterList.getCount(); order ++  ) {
-            var chapter = document.createElement("option");
-            var obj =  bibleChapterList.getChapterByNumber( order );
-            chapter.text = obj.title;
-            chapter.value = obj.bookNumber;
-            dvBibleTitle.appendChild( chapter );
-        }
+            for (var order = 1; order <= bibleChapterList.getCount(); order++) {
+                var chapter = document.createElement("option");
+                var obj = bibleChapterList.getChapterByNumber(order);
+                chapter.text = obj.title;
+                chapter.value = obj.bookNumber;
+                dvBibleTitle.appendChild(chapter);
+            }
 
-        getSearchWordsFromStorage();
+            getSearchWordsFromStorage();
 
-    } );
+            getLocationFromStorage();
+            if( window.posX > 0 && window.posY > 0)
+                moveTo( bibleMap.getView(), [window.posX, window.posY], window.zoom );
+        });
+    }
 
     dvBibleTitle.addEventListener("change", function(e){
         dvBibleChapter.value = "1";
@@ -499,14 +502,23 @@
 
     bibleMapManager.mapEventPostcompose( function(evt){
 
+        if( isReload == true )
+            return;
+
         if( IsDownload == false ) {
             bibleChapterList.requestBibleChapter();
             ConsoleLog("Postcompse !!!!  requestBibleChapter !!! ");
             IsDownload = true;
         }
 
+        var centerPos = bibleMap.getView().getCenter();
 
-        var curZoom = bibleMap.getView().getZoom();
+        /*
+        window.zoom = bibleMap.getView().getZoom();
+        window.posX = centerPos[0];
+        window.posY = centerPos[1];
+        */
+
 
         // dummy.innerHTML = "zoom : " + curZoom;
 
@@ -533,19 +545,39 @@
 
     var downloadGeometries = function(){
 
-        layerManager.layerContainer.totalCount = mobileBibleMapPointLayers.length;
+        if( isReload == false) {
 
-        for( var idx in mobileBibleMapPointLayers ){
-            var layer = mobileBibleMapPointLayers[idx];
+            layerManager.layerContainer.totalCount = mobileBibleMapPointLayers.length;
 
-            new GMDFileDownload( bibleMap, null, layer.url, layer.order, layer.style, layerManager, function( ){
-                layerManager.sortPoiWords();
-                 menuSearchBibleChapter( );
-                initTextAutoComplete();
-                imageBtnShowControl( true  );
-                // hideDownloading();
-                setTimeout( hideDownloading, 1000);
-            } );
+            for (var idx in mobileBibleMapPointLayers) {
+                var layer = mobileBibleMapPointLayers[idx];
+
+                new GMDFileDownload(bibleMap, null, layer.url, layer.order, layer.style, layerManager, function () {
+                    layerManager.sortPoiWords();
+                    initTextAutoComplete();
+                    imageBtnShowControl(true);
+
+                    menuSearchBibleChapter( function(){
+
+                        var strPoi = getFocusPoiFromStorage();
+                        if( strPoi != null ){
+                            window.focusPoiObj = layerManager.getPoiObjByPlaceAndTitle( strPoi.place, strPoi.title );
+                            layerManager.historyInsertPoi( window.focusPoiObj );
+                            bibleMapManager.createPoiIcon( window.focusPoiObj );        // focus POI Icon 만들기
+
+                            mobileRequestPoiContentAndShow( window.focusPoiObj , function( infoText ){
+                                closeTooltip();
+                                writePoiContentsToTab( window.focusPoiObj, infoText );
+                                footerMenu.bottom();
+                            } );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+
+
+                        }
+                    } );
+
+                    setTimeout(hideDownloading, 1000);
+                });
+            }
         }
 
     };
@@ -635,7 +667,6 @@
 
 
 
-
     function moveToPlaceByPoiObj( poiObj ){
         if( poiObj == null )
             return;
@@ -676,6 +707,8 @@
         var poiZoomIn = poiObj.zoomIn -1;
         if( poiZoomIn > 11 )
             poiZoomIn += 1;
+
+        saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );
 
         if( isFar ){
             flyTo(view, [poiObj.x, poiObj.y], poiZoomIn, function (complete) {
@@ -723,7 +756,7 @@
                 }
             }
             if( tolerance > 2 ){
-                flyTo(view, [poiObj.x, poiObj.y], poiZoomIn, function (complete) {
+               flyTo(view, [poiObj.x, poiObj.y], poiZoomIn, function (complete) {
                     if (complete == true) {
                     }
                 });
@@ -732,6 +765,9 @@
             {
                 moveTo(view, [poiObj.x, poiObj.y], poiZoomIn);
             }
+
+            saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );
+
         }else{
             if( poiZoomIn < 6 )
                 poiZoomIn = 6.5;
@@ -739,27 +775,34 @@
                 poiZoomIn -= 1;
 
             if( isFar == true ) {
-                flyTo(view, [poiObj.x, poiObj.y], poiZoomIn, function (complete) {
+                   saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );
+                   flyTo(view, [poiObj.x, poiObj.y], poiZoomIn, function (complete) {
                     if (complete == true) {
                     }
                 });
             }else{
                 if(IsIntersectExtent( mapExtent, poiObj.x, poiObj.y ) == true) {    // 현재 지도 영역 이내에 있으면
+                    saveLocationToStorage( curZoom, poiObj.x, poiObj.y );
                     moveTo(view, [poiObj.x, poiObj.y], curZoom );
                 }
                 else {
+                    saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );
                     moveTo(view, [poiObj.x, poiObj.y], poiZoomIn);
                 }
             }
         }
+
     };
 
     bibleMapManager.clickEvent( function(evt){
         var clickedPos = evt.coordinate;
         // $("#mousePosition").html( "Pos X: " + clickedPos[0] + ", Y:" + clickedPos[1] ); // + zoom;
 
+        saveLocationToStorage( bibleMap.getView().getZoom(), clickedPos[0], clickedPos[1] );
+
         closeTooltip();
-        ConsoleLog( "Map2D Click!!!! ");
+
+        ConsoleLog("clickEvent!!!");
 
     });
 
@@ -805,13 +848,11 @@
         var poiID = feature.get("id");     //  OpenLayersControl.js 내에  createTextStyleOfFeature 함수에서  text: feature.get('label') 으로 설정되어 있음
 
         var poiObj = layerManager.getPoiObjById( poiID );
-        mobileRequestPoiContentAndShow( poiObj , function(){
-            // setRoateNorthByVal( 0 );
-            // var mode = footerMenu.getMode();
-            // mobileSearchBibleWord();
-            // footerMenu.setMode( mode );
-            showGlobalFocusPoiInfoInTab();
-
+        mobileRequestPoiContentAndShow( poiObj , function( infoText ){
+            if( poiID == window.focusPoiObj.id ){
+                writePoiContentsToTab( poiObj, infoText );
+            }
+            showGlobalFocusPoiInfoInTab( poiObj.id );
         } );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
 
     });
@@ -819,10 +860,15 @@
 
     function map2DZoomIn(){
         bibleMapManager.zoomIn();
+
+        var center = bibleMap.getView().getCenter();
+        saveLocationToStorage( bibleMap.getView().getZoom()+1, center[0], center[1] );
     }
 
     function map2DZoomOut(){
         bibleMapManager.zoomOut();
+        var center = bibleMap.getView().getCenter();
+        saveLocationToStorage( bibleMap.getView().getZoom()-1, center[0], center[1] );
     }
 
     function gotoHome(){
@@ -857,7 +903,7 @@
             if( window.focusPoiObj != poiObj ) {
                 mobileRequestPoiContentAndShow(poiObj, function () {
                     showPoiInfoInTabByID(poiObj.id);
-                   // layerManager.historyInsertPoi( poiObj );
+                    $("#tab3").scrollTop(0);
                 });
             }
         }
@@ -870,7 +916,7 @@
             if( window.focusPoiObj != poiObj ) {
                 mobileRequestPoiContentAndShow(poiObj, function () {
                     showPoiInfoInTabByID(poiObj.id);
-                   // layerManager.historyInsertPoi( poiObj );
+                    $("#tab3").scrollTop(0);
                 });
             }
         }

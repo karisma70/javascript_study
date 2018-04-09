@@ -2,11 +2,11 @@
  * Created by Administrator on 2017-06-06.
  */
 
-
+//  max : zoomIn       min : zoomOut
  var bibleMapPolygonLayers = [
      { url : '110m-admin-0-countries', order: 1, style: {
          historyShow : 'false',
-         visibleRange : { max : 16, min : 1 },
+         visibleRange : { max : 9, min : 1 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
          lineStroke : {  color: [174, 122, 40], width : 1, opacity: 0.01  },
          //textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 12px arial', color: '#2581D8', outlineColor : '#CECBCB', outlineWidth : 3  }}
@@ -596,7 +596,33 @@ LayerManager.prototype.getPoiObjectArray = function(){
      return this.layerContainer.poiDictionary[poiWord].poiArray;
  };
 
+
+ LayerManager.prototype.getPoiObjByPlaceAndTitle = function( place, title ){
+
+     if( this.layerContainer.poiDictionary.hasOwnProperty( place ) == false) {
+         return null;
+     }
+
+     var poiArray = this.layerContainer.poiDictionary[ place ].poiArray;
+
+     if( poiArray.length > 1 ) {
+         for (var pIdx in poiArray) {
+             var poiObj = poiArray[pIdx];
+             if( poiObj.title == title ){
+                return poiObj;
+             }
+         }
+        return null;
+     }else{
+         return poiArray[0];
+     }
+
+ };
+
  LayerManager.prototype.findPoiObjByBibleTitleAndWord = function( bibleTitle, poiWord ){
+     if( poiWord == "벧스안"){
+         ConsoleLog("Debug Here!!!");
+     }
 
      if( this.layerContainer.poiDictionary.hasOwnProperty( poiWord ) == false) {
          return null;
@@ -781,6 +807,7 @@ function moveTo( view, location, zoomIn, done ) {
 }
 
  function _moveTo( view, location, zoomIn, duration, done ) {
+
      // if( zoomIn < 10 )
      //  zoomIn = 10;
 
@@ -853,8 +880,8 @@ function isExistStringPropInObj( obj, prop ) {
 
  function gotoHome_( view2D, view3D ){
 
-     moveTo( view2D, [3844176, 3806822 ], 7 );
-     moveTo( view3D, [3844176, 3806822 ], 9 );
+     moveTo( view2D, [3937988, 3763366 ], 7 );
+     moveTo( view3D, [3937988, 3763366 ], 9 );
  }
 
 
@@ -917,6 +944,8 @@ function createLayer( source  ) {
      var tempLineInteract = null;
      var bingMapSource = null;
      var bingMapDrawInter = null;
+
+     var scrollDelta = 0.5;
 
      function MapManager(overlay, targetMap, view) {
          this.scaleLineControl = new ol.control.ScaleLine();
@@ -1052,6 +1081,60 @@ function createLayer( source  ) {
                  callBack(evt);
              });
          };
+
+         /*
+         this.map.getInteractions().forEach(function(interaction) {
+             if (interaction instanceof ol.interaction.MouseWheelZoom) {
+                 interaction.setActive(false);
+             }
+         }, this);
+         */
+
+         this.mouseWheel = function( callback ){
+             this.map.on('mousewheel', function(e){
+                 e.browserEvent.preventDefault();
+                 var now = new Date();
+                 if(lastScrollZoom === null || now > lastScrollZoom ) {
+                     var zoom_in = e.browserEvent.deltaY < 0;
+                     _panAndZoom(e.map, zoom_in, e.coordinate);
+                     lastScrollZoom = now.setMilliseconds(now.getMilliseconds() + scrollDelta)
+                 }
+             });
+         };
+
+         /*
+         this.map.on('mousewheel', function(e){
+             e.browserEvent.preventDefault();
+             var now = new Date();
+             if(lastScrollZoom === null || now > lastScrollZoom ) {
+                 var zoom_in = e.browserEvent.deltaY < 0;
+                 _panAndZoom(e.map, zoom_in, e.coordinate);
+                 lastScrollZoom = now.setMilliseconds(now.getMilliseconds() + scrollDelta)
+             }
+         });
+         */
+
+         _panAndZoom = function(map, zoom_in, coordinates){
+             var view = map.getView();
+             var currentResolution = view.getResolution();
+             var delta = zoom_in ? 1 : -1;
+             var pan = ol.animation.pan({
+                 duration: 500,
+                 source: view.getCenter(),
+                 easing: ol.easing.easeOut
+             });
+             var zoom = ol.animation.zoom({
+                 resolution: currentResolution,
+                 duration: 500,
+                 easing: ol.easing.easeOut
+             });
+             map.beforeRender(pan,zoom);
+             var newResolution = view.constrainResolution(currentResolution, delta);
+             view.setResolution(newResolution);
+             view.setCenter(coordinates);
+         };
+
+
 
          this.mapEventPostcompose = function( callback ){
              this.map.on('postcompose', function(evt){
@@ -1281,7 +1364,7 @@ function createLayer( source  ) {
      var minDist = 9999999;
      var retObj = null;
 
-     var tolerancePoiPos = 8000;
+     var tolerancePoiPos = 3500;
 
      for (var idx in poiArray ) {
 
@@ -1818,7 +1901,7 @@ function createLayer( source  ) {
                      if (typeof visibleRange !== "undefined") {
 
                          if( typeof( zoom ) != 'undefined'){
-                             if (visibleRange.min <= zoom && zoom <= visibleRange.max) {
+                             if (visibleRange.min <= (zoom-0.7)  && (zoom -0.7 ) <= visibleRange.max) {
                                  var historyMap = layer.get('historyShow');
                                  if (historyMap) {
                                      if (historyMap == 'true')

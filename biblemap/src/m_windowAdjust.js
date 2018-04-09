@@ -688,13 +688,17 @@ function windowReloadByCurDate() {
     if (dayObj == null) {
         saveCurrentDayToStorage(curDate);
         window.location.reload(true);
+        return true;
     } else {
 
         if (dayObj.year != curDate.getFullYear() || dayObj.mon != curDate.getCurMonth() || dayObj.day != curDate.getCurDay() || dayObj.hour != curDate.getHours() || dayObj.min != curDate.getMinutes()) {
             saveCurrentDayToStorage(curDate);
             // alert( "refresh!!!");
             window.location.reload(true);
+            return true;
         }
+        else
+            return false;
     }
 }
 
