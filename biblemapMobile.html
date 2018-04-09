@@ -1,0 +1,929 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0 minimum-scale=1.0 initial-scale=1.0 user-scalable=no" charset="UTF-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <!--
+    <meta name="HandheldFriendly" content="true">
+    html {
+    -webkit-text-size-adjust: none
+    } -->
+    <title>Bible Map</title>
+    <!-- <link rel="apple-touch-icon" sizes="146x146" href="biblemap/image/biblemap_logo_114x114.png?version=20180214" />  -->
+
+    <script>
+        var userAgent = navigator.userAgent.toLowerCase();
+        if(userAgent.match('iphone')) {
+            document.write('<link rel=\"apple-touch-icon\" sizes=\"146x146\" href=\"biblemap/image/biblemap_logo_114x114.png?version=20180214\" />');
+        } else if(userAgent.match('ipad')) { // sizes="72*72"
+            document.write('<link href=\"biblemap/image/biblemap_logo_124x117.png\" rel=\"apple-touch-icon\" >');
+        } else if(userAgent.match('ipod')) {
+            document.write('<link href=\"biblemap/image/biblemap_logo_124x117.png\" rel=\"apple-touch-icon\">');
+        } else if(userAgent.match('android')) {
+            document.write('<link href=\"biblemap/image/biblemap_logo_124x117.png\" rel=\"shortcut icon\">');
+        } else {
+            document.write('<link href=\"biblemap/image/biblemap_logo_124x117.png\" rel=\"shortcut icon\">');
+        }
+    </script>
+
+    <link rel="stylesheet" href="https://openlayers.org/en/v4.4.2/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="biblemap/css/m_main.css" type="text/css">
+    <link rel="stylesheet" href="biblemap/css/m_sidebar.css?version=20170916" type="text/css">
+    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/bubblePopup.css?version=20171210">        <!-- 지도상의 버블 팝업 -->
+    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/m_autocomplete_style.css?version=20170911">
+    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/m_tooltip.css?version=20170911">
+
+    <!-- <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/autocomplete_style.css?version=20170911">  -->
+    <!-- <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/popup.css?version=20170910">  -->
+    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/m_tabMenu.css?version=20170916">
+    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/m_bubblePopup.css?version=20171210">
+    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/m_popup.css?version=20170910">
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+    <script type="text/javascript" src="biblemap/src/common.js?version=20171004"></script>
+
+    <!--
+    <script type="text/javascript" src="biblemap/js/matchMedia.js-master/matchMedia.js"></script>
+    <script type="text/javascript" src="biblemap/js/matchMedia.js-master/matchMedia.addListener.js"></script>
+    -->
+
+    <script type="text/javascript" src="biblemap/openLayers_v4.4.2/ol.js"></script>
+    <script type="text/javascript" src="biblemap/src/jQueryRotate.js"></script>
+
+    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20180202"></script>
+    <script type="text/javascript" src="biblemap/src/m_downloadLayers.js?version=20180201"></script>
+
+    <script type="text/javascript" src="biblemap/src/arc.js?version=20170813"></script>
+    <script type="text/javascript" src="biblemap/src/common.js?version=20170830"></script>
+    <script type="text/javascript" src="biblemap/lib/binaryajax.js?version=20170813"></script>
+    <script type="text/javascript" src="biblemap/src/binarywrapper.js?version=20170813"></script>
+    <script type="text/javascript" src="biblemap/src/GMDFileReader.js?version=20170901"></script>
+    <script type="text/javascript" src="biblemap/src/propertyDB.js?version=20170813"></script>
+    <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170905"></script>
+    <!-- <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20180121"></script>  -->
+    <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170829"></script>
+    <script type="text/javascript" src="biblemap/src/makeHrefText.js?version=20170829"></script>
+    <script type="text/javascript" src="biblemap/src/m_requestPoiContent.js?version=20170902"></script>
+
+    <script type="text/javascript" src="biblemap/src/m_searchBible.js?version=20170901"></script>
+    <script type="text/javascript" src="biblemap/js/jquery.autocomplete.min.js"></script>
+    <script type="text/javascript" src="biblemap/src/m_windowAdjust.js"></script>
+    <script type="text/javascript" src="biblemap/src/m_poiTooltip.js"></script>
+
+    <style stype="text/css">
+        div > span {
+            font-family: 'Nanum Gothic';
+        }
+
+        div > select {
+
+            font-family: 'Nanum Gothic';
+            /* font-size: 12px;  */
+            font-size:1.3em ;
+            padding-left: 5px;
+            height:20px;
+
+            background-color: rgb(255,255, 255);
+            border: 1px solid rgb(217, 217, 217);
+        }
+
+        .customSelect{
+            background: url('biblemap/image/m_down_arrow.png') no-repeat 100% 50%; /* 네이티브 화살표를 커스텀 화살표로 대체 */
+            background-color: rgb(255,255, 255);
+
+            border-radius: 0px; /* iOS 둥근모서리 제거 */
+            -webkit-appearance: none; /* 네이티브 외형 감추기 */
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        /* 화살표 없애기 for IE10, 11*/
+        div > select::-ms-expand {
+            display: none;
+        }
+
+        div > input {
+            font-family: 'Nanum Gothic';
+            /* font-size: 12px;  */
+
+            font-size:1.3em ;
+
+            -moz-user-select : text;
+            -webkit-user-select : text;
+            -ms-user-select : text;
+            user-select : text;
+            border: 1px solid rgb(217, 217, 217);
+        }
+
+        .inputClass {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            font-size: 5px;
+        }
+
+        .customInput {
+            font-family: 'Nanum Gothic';
+            font-size: 12px;
+
+            -moz-user-select : text;
+            -webkit-user-select : text;
+            -ms-user-select : text;
+            user-select : text;
+            border: 1px solid rgb(217, 217, 217);
+        }
+
+        .divContent{
+            line-height: 1.7em;
+            font-size:1.3em ;
+            clear: both;
+            /* text-align:center;  */
+            font-family: 'Nanum Gothic';
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div class="wrapperDiv">
+    <div id="titlebar" style="position:absolute; left:0px; top:0px; height:40px;  background-color:rgb( 32, 67, 109  );">
+        <!-- <div id="titlebar" style="position:absolute; left:0px; top:0px; height:40px;  background-color:rgb( 77, 162, 253 );">  -->
+        <h1 align="center" style="position:absolute; top: 5px; color:white; background: rgb( 32, 67, 109 ); " >성경지도</h1>
+        <!-- <input type="image" src="biblemap/image/biblemap_logo.png" style="position:absolute; left:0px; top:0px; width:45px; height:45px; vertical-align:middle; border:0;" onclick="openMenu()">  -->
+        <input type="image" src="biblemap/image/m_menu_open.png" style="position:absolute; left:5px; top:5px; width:35px; height:30px; vertical-align:middle; border:0;" onclick="openMenu()">
+        <input id ="bibleMapLogo" type="image" src="biblemap/image/biblemap_logo.png" style="position:absolute; top:0px; width:41opx; height:41px; vertical-align:middle; border:0;" onclick="showIntroBibleMap()">
+    </div>
+</div>
+
+<!-- <div id="sideMenu"  oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >  -->
+<div id="sideMenu"  >
+    <div id="logo" style="height:40px; background-color:rgb( 59, 89, 153 );" >
+        <h1 align="center" style="position:absolute; height:35px; top: 5px; color:white; " >검색메뉴</h1>
+    </div>
+    <div class="close" >
+    </div>
+
+    <div id ="bibleSearch" style="position:absolute; left: 10px; top:50px; height: 100px; ">
+        <select id ="bibleTitle"  class="customSelect" name="bibleTitle" style="position: absolute; left: 40px; top:5px; width: 180px; height:32px; font-size:1.5em;" ></select>
+        <input id ="decChapter" type="image" src="biblemap/image/left_arrow.png?version=20170906" style="position: absolute; left: 40px; top:40px; width:30px; height:30px; vertical-align:middle; " onclick="menuDecreaseBibleChapter()">
+        <!-- <input id ="bibleChapter" type="number" class="chapterNum"  style="position: absolute; padding-left: 5px; left: 76px; top: 40px;  width: 40px; height: 30px; font-size:1.5em;" value="1" onchange="examineNumber()">  -->
+        <input id ="bibleChapter" type="tel" class="chapterNum"  style="position: absolute; padding-left: 5px; left: 76px; top: 40px;  width: 40px; height: 30px; font-size:1.5em; " value="1" >
+        <span style="position: absolute; left: 120px; top: 44px; font-size:1.5em;">장</span>
+        <input id ="incChapter" type="image" src="biblemap/image/right_arrow.png?version=20170906" style="position: absolute;  left: 145px;  top:40px; width:30px; height:30px; vertical-align:middle; " onclick="menuIncreaseBibleChapter()">
+
+        <input type="image" src="biblemap/image/m_search_btn2.png?version=20170905" style="position: absolute; left: 190px;  top:40px; width:30px; height:30px; vertical-align:middle; border:none;"
+               onclick="menuSearchBibleChapter( footerMenuMiddle )">
+    </div>
+
+    <!-- <div name="searchWord" style="position:absolute; left: 10px; top:130px; width: 230px; height: 50px; ">  -->
+    <div id="dvSearchWord" style="position:absolute; left: 10px; top:130px; width: 230px; height: 50px; ">
+        <!-- <img src="image/word_search2.png" style="width:20px; height:22px; vertical-align:middle" ><input type="text" id ="bibleWord" size="12" style="font-size:12px;" value="바울"><input type="button" value="검색" style="font-size:12px;" onclick="searchBibleWord()"> -->
+        <span style="position: absolute; left: 0px; top: 4px; width: 40px; font-size:1.3em;">단어</span>
+
+        <!-- <form action="#" method="post" autocomplete="on" onSubmit="mobileSearchBibleWord()" >  -->
+        <!-- <form method="post" autocomplete="on" onSubmit="mobileSearchBibleWord()" >
+            <input id ="bibleWord" type="search"  class="customInput" maxlength="9" style="position: absolute; padding-left: 5px; padding-right:50px; left: 40px; width:180px; height:30px; font-size:1.3em; vertical-align:middle;"  value="바울"  />
+         </form>  -->
+        <input id ="bibleWord" type="text"  class="customInput" maxlength="9" style="position: absolute; padding-left: 5px; padding-right:25px; left: 40px; width:150px; height:30px; font-size:1.5em; vertical-align:middle;"  value="바울"  />
+
+        <input type="image" src="biblemap/image/m_text_clear.png?version=20170916" style="position: absolute; left: 164px;  top:3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="clearSearchBibleWord()">
+        <input type="image" src="biblemap/image/m_search_btn2.png?version=20170905" style="position: absolute; left: 192px;  top:0px; width:30px; height:30px; vertical-align:middle; border:none;"  onclick="mobileSearchBibleWord()">
+    </div>
+
+    <div style="position:absolute; top: 165px; width: 249px; height: 14px; background: url(biblemap/image/horizon-line_2.png);"></div>
+
+    <div id="biblePlaceDiv" class="content" style ="position: absolute; left: 10px; width:230px; top: 190px; height: 200px; ">
+        <span style="position: absolute; top: 4px; left: 3px;  font-size:1.5em;">지명</span>
+        <!-- <input id="biblePlace" type="text" name="currency" class="biginput"  size="16" maxlength="9"  -->
+
+        <input id="biblePlace" type="text" name="currency" class="biginput"  size="16" maxlength="9"
+               style="position: absolute; padding-left: 5px; left: 40px; width: 150px; height:30px; font-size:1.5em; font:'Nanum Gothic'; " value="갈릴리 호수" />
+
+        <input type="image" src="biblemap/image/m_text_clear.png?version=20170916" style="position: absolute; left: 164px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="clearSearchPlaceWord()">
+        <input type="image" src="biblemap/image/poi_location.png?version=20170908" style="position: absolute; left: 193px;  top: 0px; width:30px; height:30px; vertical-align:middle; border:none; "  onclick="mobileSearchBiblePlace()">
+        <div style="height: 4px"></div>
+        <div id ="searchedPoiList" rows= "5" style="border:1px solid rgb(217, 217, 217); overflow:scroll; position: absolute; left:5px; top: 40px; height: 75px; width: 202px; padding-left: 5px; font-size:1.5em ;text-align : left; ">
+        </div>
+    </div>
+
+</div>
+
+<div id="map" class="mapview" style="position:absolute; top:41px;" >
+
+    <!-- <div id="dummy" style="position:absolute; left:50px; top:0px; height:20px; background-color: white;">테스트</div>  -->
+
+    <input id="compassBtn" type="image" src="biblemap/image/compass3.png?version=20171006"  style="position: absolute; border:0; width: 40px; height: 40px;"  onclick="setRotateNorth()">
+
+    <!-- <input id="zoomInBtn2D" type="image" src="biblemap/image/m_zoom_in.png?version=20171204"  style="border:1px solid #A0A0A0; position: absolute; width:35px; height: 35px; border:none;"  -->
+    <input id="zoomInBtn2D" type="image" src="biblemap/image/plus_btn2.png?version=20171204"  style="position: absolute; width:35px; height: 35px; border: none;"
+           onclick="map2DZoomIn()">
+    <!-- <input id="zoomOutBtn2D" type="image" src="biblemap/image/m_zoom_out.png?version=20171204" style="border:1px solid grey;  position: absolute; width:35px; height: 35px; border:none;"-->
+    <input id="zoomOutBtn2D" type="image" src="biblemap/image/minus_btn2.png?version=20171204" style="position: absolute; width:35px; height: 35px; border:none; "
+           onclick="map2DZoomOut()">
+    <input id="homeBtn" type="image" src="biblemap/image/home2.png?version=20171004"
+           style="position: absolute; width:35px; height: 35px; border:none;" onclick="gotoHome()">
+</div>
+
+<div id="footer"  style="border-top: 1px solid rgb(220, 220, 220);" >
+    <!-- <div id ="tabTitle"  style ="height: 40px;">  -->
+    <ul id="tabsMenu" class="tabs" style="position: absolute;" >
+        <li id="tab1Menu" class="active" rel="tab1">성경본문</span></li>
+        <li id="tab2Menu" rel="tab2"><span style="font-color:white; ">단어검색</span></li>
+        <li id="tab3Menu" rel="tab3">지명정보</li>
+    </ul>
+    <!-- </div>  -->
+    <div id ="tab_contain" class="tab_container" >
+        <!-- <div id = "tab1Title" class="divContent" style="padding-left: 40px;  font-size: 1.5em; top:-6px; overflow-x:hidden; border-bottom: 1px solid rgb(240, 240, 240);" >  -->
+        <div id = "tab1Title" class="divContent" style="padding-left: 20px; font-weight: bold; font-size: 1.25em; top:-6px; height: 33px; overflow-x:hidden; color: rgb( 90, 90, 90 );" >
+            <span id ="tabBibleBook" style="position: absolute; left: 15px; top: 0px; width:125px; font-size:1.2em; text-align:right;" ></span>
+            <input id="tabDecBible" type="image" src="biblemap/image/left_arrow.png?version=20170907" style="position: absolute; left: 140px; width:22px; height:26px; vertical-align:middle; " onclick="tabDecreaseBibleChapterAndSearch()">
+            <span id ="tabBibleChapter" style="position: absolute; left: 155px; width:70px; top: 0px; font-size:1.2em; text-align:center;">장</span>
+            <input id="tabIncBible" type="image" src="biblemap/image/right_arrow.png?version=20170907" style="position: absolute; left: 220px; top: 0px; width:22px; height:26px; vertical-align:middle;" onclick="tabIncreaseBibleChapterAndSearch()">
+
+            <!--
+            <input type="image" src ="biblemap/image/undo.png?version=20170910" style="position: absolute; left: 260px; top: -2px; width: 28px; height:24px; vertical-align:top; border: none;" onclick="beforePoi( )" >
+            <input type="image"  src ="biblemap/image/redo.png?version=20170910" style="position: absolute; left: 295px; top: -2px; width: 28px; height:24px; vertical-align:top; border: none;" onclick="afterPoi( )">
+            -->
+
+        </div>
+
+        <!-- <div id = "tab3Title" class="divContent" style="padding-left: 10px;  font-size: 1.5em; top:-6px; height: 35px; overflow-x:hidden; border-bottom:4px solid rgb(230, 230, 230);" > </div>  -->
+        <div id = "tab3Title" class="divContent" style="padding-left: 10px;  font-size: 1.5em; top:-6px; height: 35px; overflow-x:hidden; color: rgb( 90, 90, 90 ); " > </div>
+
+        <div id="tab1" class="tab_content" style="padding-left: 5px; border-top: 1px solid rgb(225, 225, 225); -webkit-overflow-scrolling:touch; font-size:1.5em">
+        </div>
+        <div id="tab2" class="tab_content" style="padding-left: 5px; -webkit-overflow-scrolling:touch; font-size:1.5em" >
+            성경&nbsp;단어&nbsp;검색&nbsp;버튼을&nbsp;클릭해&nbsp;주세요 <br>
+            <a href ="javascript:gotoSearchWord()" style="text-decoration:none; font-weight: bold; fong-size: 1.5em; color:rgb(0, 91, 227); text-align : left;">→ 바로가기 클릭!!</a><br>
+        </div>
+        <!-- <div id="tab3" class="tab_content" style="left: -5px; padding-left: 5px; padding-right:5px;  background-color:rgb(245, 245, 245); border-top:1px solid rgb(225, 225, 225); -webkit-overflow-scrolling:touch; "  >  -->
+        <div id="tab3" class="tab_content" style="left: -5px; padding-left: 5px; padding-right:5px;  border-top:1px solid rgb(215, 215, 215); -webkit-overflow-scrolling:touch; font-size:1.5em"  >
+            지명 정보의 검색결과가&nbsp; 없습니다 <br> 지도상의&nbsp;지명을&nbsp;클릭하고&nbsp;아이콘'i'를&nbsp;클릭해&nbsp;주세요&nbsp;
+        </div>
+    </div>
+
+
+    <div id = "missionWideIntro" style="height:40px;" >
+        <input id ="missionWideLogo" type="image" src="biblemap/image/mission_wide_logo.png?version=20170905" style="position: absolute; left: 8px;  top: 3px; width:160px; height:30px; vertical-align:middle; border:none;"  onclick="showIntroMissionWide()" >
+    </div>
+
+    <input id ="footUpArrow" type="image" src="biblemap/image/m_up_arrow.png?version=20170918" style="position: absolute; left: 250px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerUp()">
+    <input id ="footDownArrow" type="image" src="biblemap/image/m_down_arrow.png?version=20170918" style="position: absolute; left: 280px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerDown()">
+</div>
+
+
+<div id="infoPopup" class="pop-layer" style = "width : 90%; height: 90%;" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
+    <div class="pop-container" >
+        <div>
+            <span id ="noticeTitle" style="font-size:1.5em; ">
+           </span>
+
+        </div>
+
+        <div id ="contentDiv" style = "position: absolute; overflow-y:scroll; line-height:24px; border-left: 1px solid #DDD;  border-right: 1px solid #DDD; border-bottom: 1px solid #DDD;">
+            <!-- <div id ="contentDiv" style = "overflow-y:scroll; line-height:24px; ">  -->
+            <span id ="noticeContent" style="font-size:1.4em; text-align:center; ">
+           </span>
+        </div>
+        <div id ="noticeClose" class="btn-r" style = "position: absolute;" >
+            <a href="#" class="btn-layerClose">닫기</a>
+        </div>
+    </div>
+</div>
+
+
+<div id="downloadingDiv" style ="position:absolute; ">
+    <img src ="biblemap/image/downloading.gif?version=20170905">
+</div>
+
+
+<script>
+
+    setDebug( false );
+
+    var isReload = windowReloadByCurDate();
+
+    $("#downloadingDiv").css( "z-index", 30);
+
+    $( '#map' ).css( "z-index", 1 );
+    $("#sideMenu").css( "z-index", 20);
+    $("#footer").css( "z-index", 10 );
+
+    imageBtnShowControl( false );
+
+
+    <!-- $( '#dummy' ).css( "z-index", 100 );   -->
+
+    var searchBibleBookNum = 0;
+    var searchBibleChapterNum = 0;
+
+    preventZoomInDIV( 'sideMenu' );
+    preventZoomInDIV( 'titlebar' );
+    preventZoomInDIV( 'footer' );
+    preventZoomInDIV('tab1Title');
+    preventZoomInDIV('infoPopup');
+    preventZoomInDIV('biblePlaceDiv');
+
+
+    var doubleTap = DoubleTap();
+    doubleTap.prevent();
+
+
+    (function(){        // prevent for double tap
+        var lastTap = 0;
+        var timeout;
+
+        function preventEvent(evt){
+            var currentTime = new Date().getTime();
+            var tapLength = currentTime - lastTap;
+
+            evt.preventDefault();
+            clearTimeout(timeout);
+
+            if(tapLength < 1000 && tapLength > 0){
+                evt.preventDefault();
+                lapTap = 0;
+            }else{
+                var targetElement = evt.target || evt.srcElement;
+                hideMenuAndMoveToPoiID( targetElement.id  );
+                timeout = setTimeout(function(){
+                    clearTimeout(timeout);
+                }, 1000);
+            }
+            lastTap = currentTime;
+        }
+
+        $('#searchedPoiList').on('touched click', preventEvent );
+    }());
+
+
+
+    $( '#zoomInBtn2D' ).css( "z-index", 100 );
+    $( '#zoomOutBtn2D' ).css( "z-index", 100 );
+    $( '#homeBtn' ).css( "z-index", 100 );
+
+    checkLocalStorageEnabled();
+
+    $("#searchedPoiList").hide();
+
+    window.focusPoiObj = null;
+    window.selectedPoiObj = null;
+    window.zoom = 0;
+    window.posX = 0;
+    window.posY = 0;
+
+    var footerMenu = createFooterMenu();
+
+    footerMenu.hide();
+
+    function footerDown(){
+        var mode = footerMenu.getMode();
+        if( mode == "top"){
+            footerMenu.middle();
+        }
+        else if( mode == "middle"){
+            footerMenu.bottom();
+        }else if( mode == "bottom" ){
+        }
+    }
+
+    function footerUp(){
+        var mode = footerMenu.getMode();
+        if( mode == "bottom"){
+            footerMenu.middle();
+        }
+        else if( mode == "middle"){
+            footerMenu.top();
+        }else if( mode == "top" ){
+        }
+    }
+
+    var IsDownload = false;
+
+
+    var dvPopupContent = document.getElementById('popup-content');
+    var dvPopupCloser = document.getElementById('popup-closer');
+
+    var dvBibleTitle = document.getElementById('bibleTitle');
+    var dvBibleChapter = document.getElementById('bibleChapter');
+
+    var beforeChapterSearchParam = { type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
+        option: { "title": "",
+            "chapter" : ""
+        }
+    };
+
+    var dvBibleWord = document.getElementById("bibleWord");
+    var dvBiblePlace = document.getElementById("biblePlace");
+
+    dvBibleChapter.addEventListener('change', function(){
+        if(isNaN( dvBibleChapter.value ) == true) {
+            alert( "숫자를 입력해 주세요");
+        }
+        else{
+            var inputChapterNum = parseInt( dvBibleChapter.value);
+            var chapter = bibleChapterList.getChapterByNumber( parseInt( dvBibleTitle.value) );
+            if( chapter.lastNum < inputChapterNum ){
+                dvBibleChapter.value = chapter.lastNum.toString();
+            }
+        }
+
+    });
+
+    var bibleChapterList = new BibleChapterList();
+
+    if( isReload == false ) {
+        bibleChapterList.setCallback(function () {
+
+            showDownloading();
+            downloadGeometries();
+
+            for (var order = 1; order <= bibleChapterList.getCount(); order++) {
+                var chapter = document.createElement("option");
+                var obj = bibleChapterList.getChapterByNumber(order);
+                chapter.text = obj.title;
+                chapter.value = obj.bookNumber;
+                dvBibleTitle.appendChild(chapter);
+            }
+
+            getSearchWordsFromStorage();
+
+            getLocationFromStorage();
+            if( window.posX > 0 && window.posY > 0)
+                moveTo( bibleMap.getView(), [window.posX, window.posY], window.zoom );
+        });
+    }
+
+    dvBibleTitle.addEventListener("change", function(e){
+        dvBibleChapter.value = "1";
+        // mobileSearchBibleChapter();
+    });
+
+    $('#bibleWord').click( clickedBibleWordInput );
+    function clickedBibleWordInput(){
+        // alert("Clicked!!");
+    }
+
+
+    $('.chapterNum').bind('keyup mouseup', function(){
+    } );
+
+    var beforeChapterSearchParam = { type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
+        option: { "title": "",
+            "chapter" : ""
+        }
+    };
+
+
+    var tabMenu = createTabMenu();
+    var bibleMapManager = createMapManager( null, 'map' );
+    var layerManager = bibleMapManager.getLayerManager();
+    var bibleMap = bibleMapManager.getMap();
+
+    var poiTooltip = new mapTooltip( bibleMap, 'tooltip tooltip-static' );
+
+    bibleMapManager.mapEventPrecompose( function(evt){
+
+        var radian = bibleMapManager.getView().getRotation();
+        var mapAngle = radian * (180/ Math.PI);
+        if( mapAngle < 0 ){
+            mapAngle = 360 + mapAngle;
+        }
+
+        mapAngle = Math.floor( mapAngle );
+        var nAngle = parseInt( mapAngle );
+        $("#compassBtn").rotate( nAngle);
+    });
+
+
+    bibleMapManager.mapEventPostcompose( function(evt){
+
+        if( isReload == true )
+            return;
+
+        if( IsDownload == false ) {
+            bibleChapterList.requestBibleChapter();
+            ConsoleLog("Postcompse !!!!  requestBibleChapter !!! ");
+            IsDownload = true;
+        }
+
+        var centerPos = bibleMap.getView().getCenter();
+
+        /*
+         window.zoom = bibleMap.getView().getZoom();
+         window.posX = centerPos[0];
+         window.posY = centerPos[1];
+         */
+
+
+        // dummy.innerHTML = "zoom : " + curZoom;
+
+        /*
+         dummy.innerHTML += '<br>';
+         var view2D = bibleMap.getView();
+         var center2D = view2D.getCenter();
+         dummy.innerHTML += "X: " + center2D[0] + "," + "Y:" + center2D[1];
+         */
+
+    });
+
+
+    $(".close").click(function() {
+        $("#sideMenu").removeClass("open");
+        document.getElementById("map").focus();
+    });
+
+
+
+    ///////////////////////////////////////////////////
+
+
+
+    var downloadGeometries = function(){
+
+        if( isReload == false) {
+
+            layerManager.layerContainer.totalCount = mobileBibleMapPointLayers.length;
+
+            for (var idx in mobileBibleMapPointLayers) {
+                var layer = mobileBibleMapPointLayers[idx];
+
+                new GMDFileDownload(bibleMap, null, layer.url, layer.order, layer.style, layerManager, function () {
+                    layerManager.sortPoiWords();
+                    initTextAutoComplete();
+                    imageBtnShowControl(true);
+
+                    menuSearchBibleChapter( function(){
+
+                        var strPoi = getFocusPoiFromStorage();
+                        if( strPoi != null ){
+                            window.focusPoiObj = layerManager.getPoiObjByPlaceAndTitle( strPoi.place, strPoi.title );
+                            layerManager.historyInsertPoi( window.focusPoiObj );
+                            bibleMapManager.createPoiIcon( window.focusPoiObj );        // focus POI Icon 만들기
+
+                            mobileRequestPoiContentAndShow( window.focusPoiObj , function( infoText ){
+                                closeTooltip();
+                                writePoiContentsToTab( window.focusPoiObj, infoText );
+                                footerMenu.bottom();
+                            } );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+
+
+                        }
+                    } );
+
+                    setTimeout(hideDownloading, 1000);
+                });
+            }
+        }
+
+    };
+
+
+    window.onload = function(){
+
+        footerMenu.showControl();
+        tabMenu.selectTab( 'tab1Menu');
+
+        ConsoleLog("window.onload!!!");
+    };
+
+
+    $(window).on("orientationchange", function(event) {
+
+        if( window.matchMedia("(orientation: portrait)").matches){
+            footerMenu.showControl();
+        }else if( window.matchMedia("(orientation: landscape)").matches){
+            setTimeout( function(){ window.scrollTo(0, 1); }, 100 );
+            footerMenu.showControl();
+        }
+
+    });
+
+    $(document).ready(function(){
+        // middleFooter();
+        // footerMenu.showControl();
+        // tabMenu.selectTab( 'tab1Menu');
+
+        ConsoleLog("document.ready!!!");
+    });
+
+    /*
+     $(document).load( function(){
+     footerMenu.showControl();
+     tabMenu.selectTab( 'tab1Menu');
+
+     ConsoleLog("document.load!!!");
+     });
+     */
+
+
+    window.onresize = function(){
+        // middleFooter();
+        // alert("onresize");
+        footerMenu.showControl();
+    };
+
+
+
+    function hideMenuAndMoveToPoiID( poiID ){
+        $("#sideMenu").removeClass("open");
+        if( footerMenu.getMode() == "top" || footerMenu.getMode() == "middle")
+            footerMenu.bottom();
+
+        // moveToPlaceByPoiID( poiID );
+        deepMoveToPlaceByPoiID( poiID );
+    }
+
+
+
+    function moveToPlaceByPoiID( poiID ){
+        if( poiID == null )
+            return;
+
+        if( footerMenu.getMode() == "top" )
+            footerMenu.middle();
+
+        var poiObj = layerManager.getPoiObjById( poiID );
+
+        moveToPlaceByPoiObj( poiObj );
+    }
+
+
+    function deepMoveToPlaceByPoiID( poiID ){
+        if( poiID == null )
+            return;
+
+        if( footerMenu.getMode() == "top" )
+            footerMenu.middle();
+
+        var poiObj = layerManager.getPoiObjById( poiID );
+
+        deepMoveToPlaceByPoiObj( poiObj );
+    }
+
+
+
+    function moveToPlaceByPoiObj( poiObj ){
+        if( poiObj == null )
+            return;
+
+
+        // requestPoiContentAndShow( poiObj, popup2D, popup3D );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+        mobileRequestPoiContentAndShow( poiObj );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+
+        var curZoom2D = bibleMap.getView().getZoom();
+
+        var view2D = bibleMap.getView();
+        var center2D = view2D.getCenter();
+        var curExtent2D = view2D.calculateExtent(bibleMap.getSize());
+
+        var extentLength2D = getDistance( curExtent2D[0], curExtent2D[1], curExtent2D[2], curExtent2D[3]);
+        var moveDistance2D = getDistance( center2D[0], center2D[1], poiObj.x, poiObj.y );
+        ///////////////////////////////////////////////////////////
+
+        moveMap( moveDistance2D, extentLength2D, view2D, curZoom2D, poiObj );
+    }
+
+    function deepMoveToPlaceByPoiObj( poiObj ){
+
+        mobileRequestPoiContentAndShow( poiObj );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+
+        var view = bibleMap.getView();
+
+        var mapExtent = bibleMap.getView().calculateExtent(bibleMap.getSize());
+        var mapExtentDistance = getDistance( mapExtent[0],mapExtent[1], mapExtent[2], mapExtent[3] );
+        var mapCenter =  bibleMap.getView().getCenter();
+        var poiDistance = getDistance( mapCenter[0], mapCenter[1], poiObj.x, poiObj.y );
+
+        var isFar = false;
+        if( mapExtentDistance < poiDistance ) {
+            isFar = true;
+        }
+
+        var poiZoomIn = poiObj.zoomIn -1;
+        if( poiZoomIn > 11 )
+            poiZoomIn += 1;
+
+        saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );
+
+        if( isFar ){
+            flyTo(view, [poiObj.x, poiObj.y], poiZoomIn, function (complete) {
+                if (complete == true) {
+                }
+            });
+        }
+        else {
+            moveTo(view, [poiObj.x, poiObj.y], poiZoomIn);
+        }
+    }
+
+
+    moveMap = function( moveDistance, extentLength, view, curZoom, poiObj ) {
+
+        var mapBaseExtent = bibleMapManager.getMapBaseExtent();
+
+        var mapExtent = bibleMap.getView().calculateExtent(bibleMap.getSize());
+        var curZoom = bibleMap.getView().getZoom();
+        var mapExtentDistance = getDistance( mapExtent[0],mapExtent[1], mapExtent[2], mapExtent[3] );
+        var mapCenter =  bibleMap.getView().getCenter();
+        var poiDistance = getDistance( mapCenter[0], mapCenter[1], poiObj.x, poiObj.y );
+        var isFar = false;
+        if( mapExtentDistance < poiDistance )
+            isFar = true;
+
+        var poiZoomIn = poiObj.zoomIn;
+
+        if( IsIntersectExtent( mapBaseExtent, poiObj.x, poiObj.y ) == true) {    // 기본 지도 영역 이내에 있으면
+            if (poiZoomIn < 6) {
+                poiZoomIn = 7.8;
+            } else {
+                poiZoomIn -= 1;
+            }
+
+            // if( curZoom < poiZoomIn ){
+            if (IsIntersectExtent(mapExtent, poiObj.x, poiObj.y) == true) {
+                poiZoomIn = curZoom;
+            } else {
+                var tolerance = Math.abs(curZoom - poiZoomIn);
+                if (tolerance > 2) {
+                    poiZoomIn = ( curZoom + poiZoomIn ) / 2.0;
+                } else {
+                    poiZoomIn = curZoom;
+                }
+            }
+            if( tolerance > 2 ){
+                flyTo(view, [poiObj.x, poiObj.y], poiZoomIn, function (complete) {
+                    if (complete == true) {
+                    }
+                });
+            }
+            else
+            {
+                moveTo(view, [poiObj.x, poiObj.y], poiZoomIn);
+            }
+
+            saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );
+
+        }else{
+            if( poiZoomIn < 6 )
+                poiZoomIn = 6.5;
+            else
+                poiZoomIn -= 1;
+
+            if( isFar == true ) {
+                saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );
+                flyTo(view, [poiObj.x, poiObj.y], poiZoomIn, function (complete) {
+                    if (complete == true) {
+                    }
+                });
+            }else{
+                if(IsIntersectExtent( mapExtent, poiObj.x, poiObj.y ) == true) {    // 현재 지도 영역 이내에 있으면
+                    saveLocationToStorage( curZoom, poiObj.x, poiObj.y );
+                    moveTo(view, [poiObj.x, poiObj.y], curZoom );
+                }
+                else {
+                    saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );
+                    moveTo(view, [poiObj.x, poiObj.y], poiZoomIn);
+                }
+            }
+        }
+
+    };
+
+    bibleMapManager.clickEvent( function(evt){
+        var clickedPos = evt.coordinate;
+        // $("#mousePosition").html( "Pos X: " + clickedPos[0] + ", Y:" + clickedPos[1] ); // + zoom;
+
+        saveLocationToStorage( bibleMap.getView().getZoom(), clickedPos[0], clickedPos[1] );
+
+        closeTooltip();
+
+        ConsoleLog("clickEvent!!!");
+
+    });
+
+    bibleMapManager.singleClickEvent( function(evt){
+    });
+
+
+    function showGlobalFocusPoiInfoInTab( poiID ) {
+        if (window.focusPoiObj !== null && window.focusPoiObj.id == poiID ) {
+            footerMenu.middle();
+
+            moveCenterFocusedPOI( window.focusPoiObj );
+
+            tabMenu.selectTab('tab3Menu');
+            $("#tab3").scrollTop(0);
+        }
+    }
+
+
+    bibleMapManager.selectFeatureEvent( function(e) {
+
+        //setRoateNorthByVal( 1 );
+
+        var selLen = e.selected.length;
+        if (selLen < 1) {
+            setRoateNorthByVal( 0 );
+            return;
+        }
+
+        beforeChapterSearchParam = { type: "Args",     // book, chapter, paragraph 등으로 구성된 검색
+            option: { "title": "",
+                "chapter" : ""
+            }
+        };
+
+        var feature = e.selected[0];    // 첫번째 걸린 것만 가져오기로 하자
+        var layer = feature.getLayer(bibleMap);
+        var id = layer.get("id");
+
+        var pos = null;
+
+        var posName = feature.get("label");     //  OpenLayersControl.js 내에  createTextStyleOfFeature 함수에서  text: feature.get('label') 으로 설정되어 있음
+        var poiID = feature.get("id");     //  OpenLayersControl.js 내에  createTextStyleOfFeature 함수에서  text: feature.get('label') 으로 설정되어 있음
+
+        var poiObj = layerManager.getPoiObjById( poiID );
+        mobileRequestPoiContentAndShow( poiObj , function( infoText ){
+            if( poiID == window.focusPoiObj.id ){
+                writePoiContentsToTab( poiObj, infoText );
+            }
+            showGlobalFocusPoiInfoInTab( poiObj.id );
+        } );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+
+    });
+
+
+    function map2DZoomIn(){
+        bibleMapManager.zoomIn();
+
+        var center = bibleMap.getView().getCenter();
+        saveLocationToStorage( bibleMap.getView().getZoom()+1, center[0], center[1] );
+    }
+
+    function map2DZoomOut(){
+        bibleMapManager.zoomOut();
+        var center = bibleMap.getView().getCenter();
+        saveLocationToStorage( bibleMap.getView().getZoom()-1, center[0], center[1] );
+    }
+
+    function gotoHome(){
+        //moveTo( bibleMapManager.getView(), [3844176, 3806822 ], 7 );
+        moveTo( bibleMapManager.getView(), [3937988, 3763366 ], 7.4  );
+        setRotateNorth();
+    }
+
+    var setRotateNorth = function() {
+
+        bibleMapManager.getView().animate({
+            rotation: 0,
+            duration : 500
+        });
+
+    };
+
+    function setRoateNorthByVal( val){
+        bibleMapManager.getView().animate({
+            rotation: val,
+            duration : 0
+        });
+    };
+
+
+    // layerManager.historyInsertPoi( poiObj );
+
+
+    function beforePoi(){
+        var poiObj = layerManager.historyPrevPoi();
+        if( poiObj != null ) {
+            if( window.focusPoiObj != poiObj ) {
+                mobileRequestPoiContentAndShow(poiObj, function () {
+                    showPoiInfoInTabByID(poiObj.id);
+                    $("#tab3").scrollTop(0);
+                });
+            }
+        }
+    }
+
+
+    function afterPoi(){
+        var poiObj = layerManager.historyNextPoi();
+        if( poiObj != null ) {
+            if( window.focusPoiObj != poiObj ) {
+                mobileRequestPoiContentAndShow(poiObj, function () {
+                    showPoiInfoInTabByID(poiObj.id);
+                    $("#tab3").scrollTop(0);
+                });
+            }
+        }
+    }
+
+
+
+</script>
+</body>
+</html>
