@@ -300,6 +300,7 @@ function saveFocusPoiToStorage( ){
 }
 
 function getFocusPoiFromStorage(){
+    // var strObj = localStorage.getItem('bibleMap-poi');
     var strObj = localStorage.getItem('bibleMap-poi');
     if (strObj == null) {
         return null;
@@ -563,3 +564,24 @@ function IsIntersectExtent( extent, mapX, mapY ){
     return false;
 }
 
+function windowReloadByCurDate() {
+
+    var curDate = new Date();
+
+    var dayObj = getCurrentDayFromStorage();
+    if (dayObj == null) {
+        saveCurrentDayToStorage(curDate);
+        window.location.reload(true);
+        return true;
+    } else {
+
+        if (dayObj.year != curDate.getFullYear() || dayObj.mon != curDate.getCurMonth() || dayObj.day != curDate.getCurDay() || dayObj.hour != curDate.getHours() || dayObj.min != curDate.getMinutes()) {
+            saveCurrentDayToStorage(curDate);
+            // alert( "refresh!!!");
+            window.location.reload(true);
+            return true;
+        }
+        else
+            return false;
+    }
+}

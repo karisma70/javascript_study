@@ -20,7 +20,7 @@
     border: 1px solid black;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
 
-    font-size: 14px;
+    /* font-size: 14px;  */
 }
 .poiTooltip-static:before {
     /* border-top: 6px solid rgba(0, 0, 0, 0.5);  */

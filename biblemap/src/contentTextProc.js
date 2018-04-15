@@ -1,5 +1,4 @@
 /**
-/**
  * Created by Administrator on 2017-06-13.
  */
 
@@ -196,47 +195,45 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
 
     var lineImage = '<div style=\"height: 5px; background: url(biblemap/image/horizon-line_2.png);\"></div>';
 
-    requestPoiInfo( poiObj, function ( recvPoiObj) {
-        if ( recvPoiObj.hasOwnProperty("youtube")) {
-            youtube = recvPoiObj["youtube"];
+    requestPoiInfo( poiObj, function ( recvInfo) {
+        if ( recvInfo.hasOwnProperty("youtube")) {
+            youtube = recvInfo["youtube"];
         }
 
-        if ( recvPoiObj.hasOwnProperty("text")) {
-            infoText = recvPoiObj["text"];
+        if ( recvInfo.hasOwnProperty("text")) {
+            infoText = recvInfo["text"];
         }
 
-        if( tooltip2D ) {
-            showBaseInfoPoi(tooltip2D, "contentFrame2D");
+        if( window.focusPoiObj !== null && window.focusPoiObj.id == localPoiObj.id ) {
+             poiContentsToTab_( window.focusPoiObj );
         }
 
-        if( tooltip3D ) {
-            showBaseInfoPoi(tooltip3D, "contentFrame3D");
+        if( window.focusPoiObj != null ){
+            if( window.focusPoiObj.id != localPoiObj.id ) {
+                createPoiTooltip(tooltip2D, "contentFrame2D", false);
+            }
         }
+        else
+            createPoiTooltip(tooltip2D, "contentFrame2D", false);
+
+        if( window.focusPoiObj != null ){
+            if( window.focusPoiObj.id != localPoiObj.id ) {
+                createPoiTooltip(tooltip3D, "contentFrame3D", false);
+            }
+        }
+        else
+            createPoiTooltip(tooltip3D, "contentFrame3D", false);
+
 
         // poiContentsToTab();
 
     }, function () {
 
-        /*
-         if( popup3D ) {
-         popup3D.content.innerHTML = poiText + " ";
-         showTitlePoi(popup3D, poiObj.title, "contentFrame3D");
-         popup3D.overlay.setGroundPosition([poiObj.x, poiObj.y]);
-         }
-
-         if( popup2D ) {
-         popup2D.content.innerHTML = poiText + " ";
-         showTitlePoi(popup2D, poiObj.title, "contentFrame2D");
-         popup2D.overlay.setPosition([poiObj.x, poiObj.y]);
-         }
-         */
-
-
         if( tooltip2D ) {
-            poiTooltip2D.removeAndCreate( localPoiObj.id, localPoiObj.biblePlace, [localPoiObj.x, localPoiObj.y], "white" );
+            poiTooltip2D.removeAndCreate( localPoiObj.id, localPoiObj.biblePlace, [localPoiObj.x, localPoiObj.y], false );
         }
         if( tooltip3D ) {
-            poiTooltip3D.removeAndCreate( localPoiObj.id, localPoiObj.biblePlace, [localPoiObj.x, localPoiObj.y], "white" );
+            poiTooltip3D.removeAndCreate( localPoiObj.id, localPoiObj.biblePlace, [localPoiObj.x, localPoiObj.y], false );
             // poiTooltip3D.setGroundPosition( [localPoiObj.x, localPoiObj.y] );
             poiTooltip3D.setGroundPosition(  );
         }
@@ -254,7 +251,7 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
     };
 
 
-    showBaseInfoPoi = function( popup, frameName ){
+    createPoiTooltip = function( popup, frameName, isFocus ){
 
         var labelText = "";
 
@@ -272,10 +269,9 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
         }
 
         if( frameName == "contentFrame2D" )
-            poiTooltip2D.removeAndCreate( localPoiObj.id, labelText, [localPoiObj.x, localPoiObj.y], "white" );
+            poiTooltip2D.removeAndCreate( localPoiObj.id, labelText, [localPoiObj.x, localPoiObj.y], isFocus );
         else {
-            poiTooltip3D.removeAndCreate(localPoiObj.id, labelText, [localPoiObj.x, localPoiObj.y], "white");
-            // poiTooltip3D.setGroundPosition( [localPoiObj.x, localPoiObj.y] );
+            poiTooltip3D.removeAndCreate(localPoiObj.id, labelText, [localPoiObj.x, localPoiObj.y], isFocus );
             poiTooltip3D.setGroundPosition( );
         }
     };
@@ -292,35 +288,17 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
         closePopup2D();
         closePopup3D();
 
-        showBaseInfoPoi( popup2D, "contentFrame2D" );
-        showBaseInfoPoi(popup3D, "contentFrame3D");
+        createPoiTooltip( popup2D, "contentFrame2D", false );
+        createPoiTooltip(popup3D, "contentFrame3D", false );
 
     };
 
     showYoutubePoi2D = function() {
-        // var scriptRef = "<a href =\"javascript:showBaseInfoPoi()\"' >";
-        var scriptRef = "<a href =\"javascript:showBaseInfoPoi2D3D()\"' >";
-        var foldIcon = "<img src=\"biblemap/image/fold-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">";
-        // popup.innerHTML = poiText + " " + scriptRef + foldIcon + "</a>";
-
-        //popup2D.content.innerHTML = poiText + " " + scriptRef + foldIcon + "</a>";
         popup2D.content.innerHTML = localPoiObj.biblePlace;
-
-
-        /*
-         if( infoText!= "" ){
-         // popup.innerHTML += textRef + textIcon + "</a>";
-         popup2D.content.innerHTML += textRef + textIcon + "</a>";
-
-         }
-         */
-        // popup.innerHTML += lineImage;
         popup2D.content.innerHTML += lineImage;
 
         if( localPoiObj.title != ""){
-            // popup.innerHTML += "<br>" + poiObj.title + "<br>";
             popup2D.content.innerHTML += "<br>" + localPoiObj.title + "<br>";
-
         }
 
         popup2D.content.innerHTML += "<iframe width=\"320\" height=\"240\" src=\"" + youtube + "\" frameborder = \"0\" allowfullscreen></iframe>";
@@ -351,33 +329,64 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
     };
 
 
-    poiContentsToTab = function(){
+    poiContentsToTab = function() {
+        layerManager.historyInsertPoi( localPoiObj );
+        setGlobalFocusPoiObj( localPoiObj );
+        poiContentsToTab_( localPoiObj );
+
+        /*
+        createPoiTooltip( popup2D, "contentFrame2D", true );
+        createPoiTooltip(popup3D, "contentFrame3D", true );
+
+        bibleMapManager.createPoiIcon( localPoiObj );        // focus POI Icon 만들기
+        */
+
+    };
+
+    poiContentsToTab_ = function( poiObj ){
 
         var infoTab = document.getElementById( 'tab3' );
-        // infoTab.innerHTML = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + focusPoiObj.id + ')\" style=\"text-decoration:none; font-weight:bold;' + "font-size:\'20px;\'" + 'color: #9C1AC8 \" >' + "[ " + poiText + " ]  " +  '</a>';
-        // infoTab.innerHTML = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + focusPoiObj.id + ')\" style=\"text-decoration:none; font-weight:bold;' + "font-size:\'30px\';" + 'color: #000000 \" >' + "[ " + poiText + " ]  " +  '</a>';
-        // infoTab.innerHTML = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + localPoiObj.id + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: #2682E8 \" >' + '#'+ poiText + '  ' + '</a>';
+        // infoTab.innerHTML = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + poiObj.id + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: #2682E8 \" >' + '#'+ poiText + '  ' + '</a>';
 
-        var poiTitle = '<a href=' + '\"javascript:moveToPlaceByPoiID( ' + "\'" + localPoiObj.id + "\'" + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: rgb( 180, 4, 174 )\" >'
-            + '<img src ="biblemap/image/poi_location.png?version=20170908" style=\"height:26px; vertical-align:top;\">&nbsp;&nbsp;' +
-            localPoiObj.biblePlace + '</a>';
+        var poiTitle = '<a href=' + '\"javascript:moveToPlaceByPoiID( ' + "\'" + poiObj.id + "\'" + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: rgb( 180, 4, 174 )\" >'
+            + '<img src ="biblemap/image/poi_location.png?version=20170908" style=\"height:22px; vertical-align:top;\">&nbsp;&nbsp;' +
+            poiObj.biblePlace + '</a>';
 
-        var strSearchWord = '<a href=' + '\"javascript:searchBibleWord_( ' + "\'" + localPoiObj.biblePlace + "\'" + ')\">';
-        strSearchWord += '&nbsp;&nbsp;&nbsp;<img src =\"biblemap/image/m_search_btn2.png\" style=\"top: -2px; height:28px; vertical-align:top;\">' + '</a>';
+        var strSearchWord = '<a href=' + '\"javascript:searchBibleWord_( ' + "\'" + poiObj.biblePlace + "\'" + ')\">';
+        strSearchWord += '&nbsp;&nbsp;&nbsp;<img src =\"biblemap/image/m_search_btn2.png\" style=\"top: -2px; height:24px; vertical-align:top;\">' + '</a>';
 
-        infoTab.innerHTML = poiTitle + strSearchWord + '<br>' ;
+        strSearchWord += '<a href=' + '\"javascript:beforePoi( )\"><img src =\"biblemap/image/undo.png?version=20170914\" style=\"position: absolute; left: 215px; top: -2px; width: 24px; height:20px; vertical-align:top;\"></a>';
+        strSearchWord += '<a href=' + '\"javascript:afterPoi( )\"><img src =\"biblemap/image/redo.png?version=20170914\" style=\"position: absolute; left: 255px; top: -2px; width:24px; height:20px; vertical-align:top;\"></a>';
+
+        // infoTab.innerHTML = poiTitle + strSearchWord + '<br>' ;
+
+        $('#tab3Title').empty();
+        $("#tab3Title").append( poiTitle + strSearchWord );
+
+        infoTab.innerHTML = "";
 
         var infoObj = { // title : poiText,
             content : infoText
         };
 
-        var strConvText = makeStrongInText( layerManager, localPoiObj.biblePlace, infoObj );
+        var strConvText = makeStrongInText( layerManager, poiObj.biblePlace, infoObj );
 
         // infoTab.innerHTML += infoText;
         infoTab.innerHTML += strConvText;
+
+
+        createPoiTooltip( popup2D, "contentFrame2D", true );
+        createPoiTooltip(popup3D, "contentFrame3D", true );
+
+        bibleMapManager.createPoiIcon( poiObj );        // focus POI Icon 만들기
+
+
+        moveCenterFocusedPOI( poiObj );
+
     };
 
     showTextPoi = function() {      // tabMenu 에서 정보 보여주기
+        ConsoleLog( "showTextPoi!!! ");
 
         poiContentsToTab();
 
@@ -484,15 +493,20 @@ function Tooltip( mapType, paramMap, cssClassName ) {
     this.tooltipArray = [];
 
     // var zOrder = 0;
+    var orgOffsetY = -10;
     var offsetY = -10;
     var idx = 0;
 
     if( mapType == "3D")
-        offsetY = -16;
+        orgOffsetY = -16;
 
     this.coord = null;
 
-    this.create = function (poiID, linkedText, coord, backColor) {
+    this.create = function (poiID, linkedText, coord, isFocus) {
+        offsetY = orgOffsetY;
+
+        if( isFocus == true)
+            offsetY = orgOffsetY - 30;
 
         this.coord = coord;
 
@@ -518,7 +532,7 @@ function Tooltip( mapType, paramMap, cssClassName ) {
 
         // $(strID).css("z-index", zOrder.toString());
         $(strID).css("z-index", window.tooltipID.toString());
-        $(strID).css("background-color", backColor);
+        // $(strID).css("background-color", backColor);
 
         tooltip.setPosition(coord);
         // tooltip.setOffset([0, -7]);
@@ -545,9 +559,9 @@ function Tooltip( mapType, paramMap, cssClassName ) {
     };
 
 
-    this.removeAndCreate = function (poiID, linkedText, coord, backColor) {
+    this.removeAndCreate = function (poiID, linkedText, coord, isFocus ) {
         this.allRemove();
-        this.create(poiID, linkedText, coord, backColor);
+        this.create(poiID, linkedText, coord, isFocus );
     };
 
     this.setGroundPosition_ = function (coord) {
@@ -700,4 +714,59 @@ function changeHistoryAdmin( newValue ){
     }
 
     showHistoryLayer( historyArray[newValue]);
+}
+
+
+
+function moveCenterFocusedPOI( focusedPoiObj ){
+    /*
+    var zoom = bibleMapManager.getView().getZoom();
+    // _moveToPos( bibleMapManager.getView(), [focusedPoiObj.x, focusedPoiObj.y], zoom, 200);
+    if( zoom < (focusedPoiObj.zoomIn - 1.0) )
+        _moveToPos( bibleMapManager.getView(), [focusedPoiObj.x, focusedPoiObj.y], (focusedPoiObj.zoomIn - 1.0), 500);
+    else
+        _moveToPos( bibleMapManager.getView(), [focusedPoiObj.x, focusedPoiObj.y], zoom, 500);
+ */
+
+    var zoom = bibleMapManager.getView().getZoom();
+    var view;
+
+    if( curMapViewMode == 'chkView2D' ){
+        // zoom = bibleMapManager.getView().getZoom();
+        view = bibleMapManager.getView();
+    }else{
+        view = map3D.view;
+        // zoom = map3D.view.getZoom();
+    }
+
+    var tolerance = 1.0;
+
+    if( curMapViewMode == 'chkView3D' )
+        tolerance = 0;
+
+    if( zoom < (focusedPoiObj.zoomIn - tolerance) )
+        zoom = focusedPoiObj.zoomIn - tolerance;
+
+    if( zoom < 7 )
+        zoom = 7;
+
+    _moveToPos( view, [focusedPoiObj.x, focusedPoiObj.y], zoom, 500);
+
+    saveLocationToStorage( zoom,  focusedPoiObj.x, focusedPoiObj.y );
+}
+
+
+function setGlobalFocusPoiObj( poiObj ){
+    if( poiObj == null )
+        return;
+
+    window.focusPoiObj = poiObj;
+
+    ConsoleLog("focus PoiObj place : " + window.focusPoiObj.biblePlace );
+    if( window.focusPoiObj.title !== undefined ){
+        ConsoleLog("focus PoiObj title : " + window.focusPoiObj.title );
+    }
+
+    saveFocusPoiToStorage();
+    saveLocationToStorage( window.focusPoiObj.zoomIn,  window.focusPoiObj.x, window.focusPoiObj.y );
 }

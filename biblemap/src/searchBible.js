@@ -51,10 +51,7 @@ function searchBibleWord(){
             // moveToPlaceByWord( param.option.content.$regex );
         }
     } );
-
 }
-
-
 
 
 

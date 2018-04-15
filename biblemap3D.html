@@ -460,7 +460,7 @@
            style="position: absolute; width:17px; height:36px; border:0;" >
 
     <input id="homeBtn" type="image" src="biblemap/image/home.png?version=20170930"
-           onmouseover="this.src='biblemap/image/home_.png?version=20170930';"
+           onmouseover="this.src='biblemap/image/home2.png?version=20170930';"
            onmouseout="this.src='biblemap/image/home.png?version=20170930';"
            style="position: absolute; border:0; width:30px; height: 30px;" onclick="gotoHome()">
 
@@ -505,6 +505,9 @@
         <li id="tab4Menu" rel="tab4">기타정보</li>
     </ul>
     <div id ="tab_contain" class="tab_container"  >
+
+        <div id = "tab3Title" class="divContent" style="padding-left: 10px;  font-size: 16px; top:-6px; height: 35px; overflow-x:hidden; color: rgb( 90, 90, 90 ); " ></div>
+
         <div id="tab1" class="tab_content">
             Waiting....
         </div>
@@ -512,7 +515,7 @@
             검색결과가&nbsp;없습니다 <br> 성경의&nbsp;단어&nbsp;검색&nbsp;버튼을&nbsp;클릭해&nbsp;주세요
             <a href ="javascript:gotoSearchWord()" style="text-decoration:none; font-weight: bold; fong-size: 1.5em; color:rgb(0, 91, 227); text-align : left;">→ 바로가기 클릭!!</a><br>
         </div>
-        <div id="tab3" class="tab_content" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
+        <div id="tab3" class="tab_content"  style="padding-left: 5px; border-top:1px solid rgb(215, 215, 215);" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
             검색결과가&nbsp;없습니다 <br> 지도상의&nbsp;지명을&nbsp;클릭하고&nbsp;아이콘&nbsp;'i'를&nbsp;클릭해&nbsp;주세요
         </div>
         <div id="tab4" class="tab_content" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
@@ -570,6 +573,8 @@
 <script>
     setDebug( true );
 
+    var isReload = windowReloadByCurDate();
+
     showDownloading();
 
     var isIE = true;
@@ -587,16 +592,11 @@
 
     var map3DAddLayerTimer;
     var setGroundLayerTimer;
-    var startSearchBibleTimer;
     var tabMenu = createTabMenu();
     var curMapViewMode = 'chkView2D';   // "chkView2D" |  "chkView3D"  | "chkViewAll"
 
 
-    function startSearchBibleWithTimer(){
-        startSearchBibleTimer = setInterval( startSearchBible, 100);
-    }
-
-    function startSearchBible(){
+    function startSearchBible( callback ){
 
         searchBibleChapter( function(){
 
@@ -609,17 +609,13 @@
                 // ConsoleLog( "layer.url ==> " + layer.url );
                 new GMDFileDownload( bibleMap, null, layer.url, layer.order, layer.style, layerManager, function( ){
                     changeHistoryAdmin( historyAdmin.value );
+                    writeInfoTabHistoryAdmin();
                     downloadTrajectoryData();
-
-                    // startMap3DAddLayerWithTimer();
-                    // startMap3DAddLayer();
 
                     map3D.memWholeLayerAddToMap();
 
-                    // setCursorByID('map','default');
-                    // setCursorByID('map3D','default');
-                    // hideDownloading();
-                    // setTimeout(hideDownloading, 1000);
+                    if( callback )
+                        callback();
 
                     var delayTime = 1000;
                     if( isIE == true ){
@@ -632,7 +628,7 @@
                         clearTimeout(timeout);
                     }, delayTime );
 
-                     // clearInterval( startSearchBibleTimer );
+
                 });
             }
 
@@ -973,8 +969,8 @@
     }
 
     function showTooltip( poiID, label, position ){
-        poiTooltip2D.removeAndCreate( poiID, label, position, "white" );
-        poiTooltip3D.removeAndCreate( poiID, label, position, "white" );
+        poiTooltip2D.removeAndCreate( poiID, label, position, false );
+        poiTooltip3D.removeAndCreate( poiID, label, position, false );
         poiTooltip3D.setGroundPosition( position );
     }
 
@@ -1000,6 +996,11 @@
             }
 
             getSearchWordsFromStorage();
+
+            getLocationFromStorage();
+            if( window.posX > 0 && window.posY > 0)
+                moveTo( bibleMap.getView(), [window.posX, window.posY], window.zoom );
+
     });
 
     // bibleChapterList.requestBibleChapter( );
@@ -1047,17 +1048,52 @@
     }
 
     function beforePoi(){
+        var isUpdate = false;
         var poiObj = layerManager.historyPrevPoi();
-        if( poiObj != null )
-            moveToPlaceByPoiObj( poiObj );
-        ConsoleLog( "Prev Poi Button!!! ");
+        if( poiObj != null ) {
+            if( window.focusPoiObj == null )
+                isUpdate = true;
+            else{
+                if( window.focusPoiObj.id != poiObj.id ){
+                 isUpdate = true;
+                }
+            }
+
+            if( isUpdate == true ) {
+                window.focusPoiObj = poiObj;
+                moveToPlaceByPoiObj(poiObj);
+                if (window.focusPoiObj != poiObj) {
+                    // requestPoiContentAndShow( poiObj, poiTooltip2D, poiTooltip3D );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+                }
+                poiContentsToTab_(poiObj);
+                $("#tab3").scrollTop(0);
+            }
+        }
     }
 
     function afterPoi(){
+        var isUpdate = false;
         var poiObj = layerManager.historyNextPoi();
-        if( poiObj != null )
-            moveToPlaceByPoiObj( poiObj );
-        ConsoleLog( "Next Poi Button!!! ");
+        if( poiObj != null ) {
+            if( window.focusPoiObj == null )
+                isUpdate = true;
+            else{
+                if( window.focusPoiObj.id != poiObj.id ){
+                    isUpdate = true;
+                }
+            }
+
+            if( isUpdate == true ) {
+                window.focusPoiObj = poiObj;
+                moveToPlaceByPoiObj(poiObj);
+                if (window.focusPoiObj != poiObj) {
+                    // requestPoiContentAndShow( poiObj, poiTooltip2D, poiTooltip3D );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+                }
+                poiContentsToTab_(poiObj);
+                $("#tab3").scrollTop(0);
+            }
+        }
+
     }
 
 
@@ -1181,8 +1217,16 @@
                 sync2DMapTo3DMap();
                 initTextAutoComplete();
 
-                startSearchBible();
-                // startSearchBibleWithTimer();
+                startSearchBible( function(){
+                    var strPoi = getFocusPoiFromStorage();
+                    if( strPoi != null ){
+                        window.focusPoiObj = layerManager.getPoiObjByPlaceAndTitle( strPoi.place, strPoi.title );
+                        bibleMapManager.createPoiIcon( window.focusPoiObj );        // focus POI Icon 만들기
+                        layerManager.historyInsertPoi( window.focusPoiObj );
+                        requestPoiContentAndShow( window.focusPoiObj, poiTooltip2D, poiTooltip3D );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+                    }
+                });
+
 
                 /*
                  searchBibleChapter( function(){
@@ -1465,9 +1509,16 @@
         var poiObj = findPoiByCoord ( mapX, mapY, layerManager.getPoiObjectArray() );
         if( poiObj ){
             var poiObj = layerManager.getPoiObjById( poiObj.id );
-            layerManager.historyInsertPoi( poiObj );
             // requestPoiContentAndShow( poiObj, popup2D, popup3D );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
             requestPoiContentAndShow( poiObj, poiTooltip2D, poiTooltip3D );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+
+            var view2D3D = adjustScrDiv.getCurrent2D3DString();
+            if( view2D3D == 'chkViewAll' || view2D3D == 'chkView2D') {
+                var curZoom = bibleMap.getView().getZoom();
+                var view = bibleMap.getView();
+                moveTo( view, [ poiObj.x, poiObj.y ], curZoom );
+            }
+
         }else{
             closeTooltip();
         }
@@ -1501,6 +1552,9 @@
         var poiID = feature.get("id");     //  OpenLayersControl.js 내에  createTextStyleOfFeature 함수에서  text: feature.get('label') 으로 설정되어 있음
 
         var zoom3D = map3D.view.getZoom();
+        if( window.focusPoiObj !== null && window.focusPoiObj.id == poiID ){
+            tabMenu.selectTab('tab3Menu');
+        }
 
         if (posName == null) {      // polygon 레이어를 클릭했을 경우
             posName = feature.get("name");      // History admin polygon에는 name과 name2 필드가 존재함
@@ -1517,7 +1571,6 @@
                 var poiArray = layerManager.getPoiObjArrayFromDictionary( posName );
                 if( poiArray.length < 2){
                     var poiObj = poiArray[ 0];
-                    layerManager.historyInsertPoi( poiObj );
                     if( curMapViewMode == 'chkView2D' ){
                         setMap3DPosByPos( [poiObj.x, poiObj.y] );
                     }
@@ -1538,7 +1591,6 @@
             } else {    // 나머지 폴리곤에 정의된 "name" 필드로 검색하도록 한다
 
                 var poiObj = layerManager.getPoiObjById( poiID );
-                layerManager.historyInsertPoi( poiObj );
                 if( curMapViewMode == 'chkView2D' ){
                     setMap3DPosByPos( [poiObj.x, poiObj.y] );
                 }
@@ -1619,7 +1671,8 @@
 
         if( poiArray.length == 1 ){
             poiObj = poiArray[0];
-            moveToPlaceByPoiID( poiObj.id );
+            // moveToPlaceByPoiID( poiObj.id );
+            deepMoveToPlaceByPoiObj( poiObj );
         }
     }
 
@@ -1669,9 +1722,6 @@
             return;
 
         var poiObj = layerManager.getPoiObjById( poiID );
-
-        layerManager.historyInsertPoi( poiObj );
-
         moveToPlaceByPoiObj( poiObj );
     }
 
@@ -1692,43 +1742,260 @@
     }
 
 
+
+    /*
     move2DMapOr3DMap = function( moveDistance, extentLength, view, curZoom, poiObj, mode ) {
-        if (moveDistance < extentLength) {
-            ConsoleLog("moveTo..... 1");
-            if (curZoom > poiObj.zoomIn) {
-                moveTo(view, [poiObj.x, poiObj.y], curZoom);
-            }
-            else {
-                moveTo(view, [poiObj.x, poiObj.y], poiObj.zoomIn);
-            }
-        }
-        else {
-            ConsoleLog("flyTo.....1 ");
-            var zoomIn = poiObj.zoomIn;
-            //    var zoomIn = curZoom;
-            if (zoomIn > 12)
-                zoomIn = 12;
 
-            if( mode == "2D") {
-                flyTo(view, [poiObj.x, poiObj.y], zoomIn, function (complete) {
-                    if (complete == true) {
-                    }
-                });
+        var mapBaseExtent = bibleMapManager.getMapBaseExtent();
+
+        var mapExtent = view.calculateExtent(bibleMap.getSize());
+        var curZoom = view.getZoom();
+        var mapExtentDistance = getDistance( mapExtent[0],mapExtent[1], mapExtent[2], mapExtent[3] );
+        var mapCenter =  view.getCenter();
+        var poiDistance = getDistance( mapCenter[0], mapCenter[1], poiObj.x, poiObj.y );
+        var isFar = false;
+        if( mapExtentDistance < poiDistance )
+            isFar = true;
+
+        var poiZoomIn = poiObj.zoomIn;
+
+        if( IsIntersectExtent( mapBaseExtent, poiObj.x, poiObj.y ) == true) {    // 기본 지도 영역 이내에 있으면
+            if (poiZoomIn < 6) {
+                poiZoomIn = 7.8;
             } else {
+                poiZoomIn -= 1;
+            }
 
-                if( zoomIn <= 5 )
-                    zoomIn = 8;
-
-                zoomIn += 2;
-                // moveTo(view, [poiObj.x, poiObj.y], zoomIn );
-                flyTo(view, [poiObj.x, poiObj.y], zoomIn, function (complete) {
+            // if( curZoom < poiZoomIn ){
+            if (IsIntersectExtent(mapExtent, poiObj.x, poiObj.y) == true) {
+                poiZoomIn = curZoom;
+            } else {
+                var tolerance = Math.abs(curZoom - poiZoomIn);
+                if (tolerance > 2) {
+                    poiZoomIn = ( curZoom + poiZoomIn ) / 2.0;
+                } else {
+                    poiZoomIn = curZoom;
+                }
+            }
+            if( tolerance > 2 ){
+                flyTo(view, [poiObj.x, poiObj.y], poiZoomIn, function (complete) {
                     if (complete == true) {
                     }
                 });
             }
+            else
+            {
+                moveTo(view, [poiObj.x, poiObj.y], poiZoomIn);
+            }
 
+            saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );
+
+        }else{
+            if( poiZoomIn < 6 )
+                poiZoomIn = 6.5;
+            else
+                poiZoomIn -= 1;
+
+            if( isFar == true ) {
+                saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );
+                flyTo(view, [poiObj.x, poiObj.y], poiZoomIn, function (complete) {
+                    if (complete == true) {
+                    }
+                });
+            }else{
+                if(IsIntersectExtent( mapExtent, poiObj.x, poiObj.y ) == true) {    // 현재 지도 영역 이내에 있으면
+                    saveLocationToStorage( curZoom, poiObj.x, poiObj.y );
+                    moveTo(view, [poiObj.x, poiObj.y], curZoom );
+                }
+                else {
+                    saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );
+                    moveTo(view, [poiObj.x, poiObj.y], poiZoomIn);
+                }
+            }
         }
     };
+    */
+
+    function move2DMap( moveDistance, extentLength, view, curZoom, poiObj ){
+
+        var mapBaseExtent = bibleMapManager.getMapBaseExtent();
+
+        var mapExtent = view.calculateExtent(bibleMap.getSize());
+        var curZoom = view.getZoom();
+        var mapExtentDistance = getDistance( mapExtent[0],mapExtent[1], mapExtent[2], mapExtent[3] );
+        var mapCenter =  view.getCenter();
+        var poiDistance = getDistance( mapCenter[0], mapCenter[1], poiObj.x, poiObj.y );
+        var isFar = false;
+        if( mapExtentDistance < poiDistance )
+            isFar = true;
+
+        var poiZoomIn = poiObj.zoomIn;
+
+        if( IsIntersectExtent( mapBaseExtent, poiObj.x, poiObj.y ) == true) {    // 기본 지도 영역 이내에 있으면
+            if (poiZoomIn < 6) {
+                poiZoomIn = 7.8;
+            } else {
+                poiZoomIn -= 1;
+            }
+
+            // if( curZoom < poiZoomIn ){
+            if (IsIntersectExtent(mapExtent, poiObj.x, poiObj.y) == true) {
+                poiZoomIn = curZoom;
+            } else {
+                var tolerance = Math.abs(curZoom - poiZoomIn);
+                if (tolerance > 2) {
+                    poiZoomIn = ( curZoom + poiZoomIn ) / 2.0;
+                } else {
+                    poiZoomIn = curZoom;
+                }
+            }
+            if( tolerance > 2 ){
+                flyTo(view, [poiObj.x, poiObj.y], poiZoomIn, function (complete) {
+                    if (complete == true) {
+                    }
+                });
+            }
+            else
+            {
+                moveTo(view, [poiObj.x, poiObj.y], poiZoomIn);
+            }
+
+            saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );
+
+        }else{
+            if( poiZoomIn < 6 )
+                poiZoomIn = 6.5;
+            else
+                poiZoomIn -= 1;
+
+            if( isFar == true ) {
+                saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );
+                flyTo(view, [poiObj.x, poiObj.y], poiZoomIn, function (complete) {
+                    if (complete == true) {
+                    }
+                });
+            }else{
+                if(IsIntersectExtent( mapExtent, poiObj.x, poiObj.y ) == true) {    // 현재 지도 영역 이내에 있으면
+                    saveLocationToStorage( curZoom, poiObj.x, poiObj.y );
+                    moveTo(view, [poiObj.x, poiObj.y], curZoom );
+                }
+                else {
+                    saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );
+                    moveTo(view, [poiObj.x, poiObj.y], poiZoomIn);
+                }
+            }
+        }
+    };
+
+
+    function move3DMap( moveDistance, extentLength, view, curZoom, poiObj ){
+
+        var mapBaseExtent = bibleMapManager.getMapBaseExtent();
+
+        var mapExtent = view.calculateExtent(bibleMap.getSize());
+        var curZoom = view.getZoom();
+        var mapExtentDistance = getDistance( mapExtent[0],mapExtent[1], mapExtent[2], mapExtent[3] );
+        var mapCenter =  view.getCenter();
+        var poiDistance = getDistance( mapCenter[0], mapCenter[1], poiObj.x, poiObj.y );
+        var isFar = false;
+        if( mapExtentDistance < poiDistance )
+            isFar = true;
+
+        var poiZoomIn = poiObj.zoomIn;
+
+        if (poiZoomIn < 6) {
+            poiZoomIn = 7.8;
+        } else {
+            poiZoomIn -= 1;
+        }
+
+        // if( curZoom < poiZoomIn ){
+        if (IsIntersectExtent(mapExtent, poiObj.x, poiObj.y) == true) {
+            poiZoomIn = curZoom;
+        } else {
+            var tolerance = Math.abs(curZoom - poiZoomIn);
+            if (tolerance > 2) {
+                poiZoomIn = ( curZoom + poiZoomIn ) / 2.0;
+            } else {
+                poiZoomIn = curZoom;
+            }
+        }
+        if( tolerance > 2 ){
+            flyTo(view, [poiObj.x, poiObj.y], poiZoomIn, function (complete) {
+                if (complete == true) {
+                }
+            });
+        }
+        else
+        {
+            moveTo(view, [poiObj.x, poiObj.y], poiZoomIn);
+        }
+
+        saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );
+
+    };
+
+
+
+/*
+    function moveToPlaceByPoiObj( poiObj ){
+        if( poiObj == null )
+            return;
+
+
+        // requestPoiContentAndShow( poiObj, popup2D, popup3D );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+        mobileRequestPoiContentAndShow( poiObj );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+
+        var curZoom2D = bibleMap.getView().getZoom();
+
+        var view2D = bibleMap.getView();
+        var center2D = view2D.getCenter();
+        var curExtent2D = view2D.calculateExtent(bibleMap.getSize());
+
+        var extentLength2D = getDistance( curExtent2D[0], curExtent2D[1], curExtent2D[2], curExtent2D[3]);
+        var moveDistance2D = getDistance( center2D[0], center2D[1], poiObj.x, poiObj.y );
+        ///////////////////////////////////////////////////////////
+
+        moveMap( moveDistance2D, extentLength2D, view2D, curZoom2D, poiObj );
+    }
+    */
+
+
+
+    function deepMoveToPlaceByPoiObj( poiObj ){
+
+        // mobileRequestPoiContentAndShow( poiObj );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+        requestPoiContentAndShow( poiObj, poiTooltip2D, poiTooltip3D );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
+
+        var view = bibleMap.getView();
+
+        var mapExtent = bibleMap.getView().calculateExtent(bibleMap.getSize());
+        var mapExtentDistance = getDistance( mapExtent[0],mapExtent[1], mapExtent[2], mapExtent[3] );
+        var mapCenter =  bibleMap.getView().getCenter();
+        var poiDistance = getDistance( mapCenter[0], mapCenter[1], poiObj.x, poiObj.y );
+
+        var isFar = false;
+        if( mapExtentDistance < poiDistance ) {
+            isFar = true;
+        }
+
+        var poiZoomIn = poiObj.zoomIn -1;
+        if( poiZoomIn > 11 )
+            poiZoomIn += 1;
+
+        saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );
+
+        if( isFar ){
+            flyTo(view, [poiObj.x, poiObj.y], poiZoomIn, function (complete) {
+                if (complete == true) {
+                }
+            });
+        }
+        else {
+            moveTo(view, [poiObj.x, poiObj.y], poiZoomIn);
+        }
+    }
+
 
     function moveToPlaceByPoiObj( poiObj ){
         if( poiObj == null )
@@ -1758,16 +2025,23 @@
 
         // "chkView2D" |  "chkView3D"  | "chkViewAll"
         if( curMapViewMode == 'chkView2D' ){
-            move2DMapOr3DMap( moveDistance2D, extentLength2D, view2D, curZoom2D, poiObj, "2D");
+            /// move2DMapOr3DMap( moveDistance2D, extentLength2D, view2D, curZoom2D, poiObj, "2D");
+            move2DMap( moveDistance2D, extentLength2D, view2D, curZoom2D, poiObj );
         }
 
         if( curMapViewMode == 'chkView3D' ){
-            move2DMapOr3DMap( moveDistance3D, extentLength3D, view3D, curZoom3D, poiObj, "3D");
+            // move2DMapOr3DMap( moveDistance3D, extentLength3D, view3D, curZoom3D, poiObj, "3D");
+            // move2DMapOr3DMap( moveDistance3D, extentLength3D, view3D, curZoom2D, poiObj, "3D");
+            move3DMap( moveDistance3D, extentLength3D, view3D, curZoom2D, poiObj );
         }
 
         if( curMapViewMode == 'chkViewAll' ){
-            move2DMapOr3DMap( moveDistance2D, extentLength2D, view2D, curZoom2D, poiObj, "2D");
-            move2DMapOr3DMap( moveDistance3D, extentLength3D, view3D, curZoom3D, poiObj, "3D");
+            // move2DMapOr3DMap( moveDistance2D, extentLength2D, view2D, curZoom2D, poiObj, "2D");
+            move2DMap( moveDistance2D, extentLength2D, view2D, curZoom2D, poiObj );
+
+            // move2DMapOr3DMap( moveDistance3D, extentLength3D, view3D, curZoom3D, poiObj, "3D");
+            // move2DMapOr3DMap( moveDistance3D, extentLength3D, view3D, curZoom2D, poiObj, "3D");
+            move3DMap( moveDistance3D, extentLength3D, view3D, curZoom2D, poiObj );
         }
 
 

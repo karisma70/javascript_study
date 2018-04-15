@@ -578,17 +578,19 @@ function showIntroMissionWide(  ) {
     popupContent.innerHTML += '\'미션와이드\'의 목적은 성경 관련 여러 정보를 공유할 수 있는 미디어 매체 기반의 플랫폼을 제공함으로써, 하나님의 말씀에 대한 확신과 강건한 믿음을 갖도록 다리 역할을 하는 것입니다. ';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '본 바이블 맵 서비스는 여러분들의 소중한 기부와 후원을 통하여 운영되고 있습니다.';
+    // popupContent.innerHTML += '본 바이블 맵 서비스는 여러분들의 소중한 기부와 후원을 통하여 운영되고 있습니다.';
+    popupContent.innerHTML += '본 바이블 맵 웹서비스는 여러분들의 많은 관심과 기대를 필요로 하고 있습니다.';
+    popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '여러분들의 많은 성원 부탁드립니다.';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '< 기부/후원 계좌 안내 >';
-    popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '신한은행 : 100-032-560142';
-    popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '예금주 : 미션와이드';
-    popupContent.innerHTML += '<br>';
+//    popupContent.innerHTML += '< 기부/후원 계좌 안내 >';
+//    popupContent.innerHTML += '<br>';
+//    popupContent.innerHTML += '신한은행 : 100-032-560142';
+//    popupContent.innerHTML += '<br>';
+//    popupContent.innerHTML += '예금주 : 미션와이드';
+//    popupContent.innerHTML += '<br>';
 
     showNoticePopup( '#infoPopup' );
 }
@@ -677,29 +679,6 @@ function clearSearchPlaceWord(){
     $("#searchedPoiList").hide();
     dvBiblePlace.value ="";
     $("#biblePlace").focus();
-}
-
-
-function windowReloadByCurDate() {
-
-    var curDate = new Date();
-
-    var dayObj = getCurrentDayFromStorage();
-    if (dayObj == null) {
-        saveCurrentDayToStorage(curDate);
-        window.location.reload(true);
-        return true;
-    } else {
-
-        if (dayObj.year != curDate.getFullYear() || dayObj.mon != curDate.getCurMonth() || dayObj.day != curDate.getCurDay() || dayObj.hour != curDate.getHours() || dayObj.min != curDate.getMinutes()) {
-            saveCurrentDayToStorage(curDate);
-            // alert( "refresh!!!");
-            window.location.reload(true);
-            return true;
-        }
-        else
-            return false;
-    }
 }
 
 

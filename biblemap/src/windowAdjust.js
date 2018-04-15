@@ -47,14 +47,50 @@ function createTabMenu(){
     var selMenuString = "";
 
     $("ul.tabs li").click(function () {
+
+        selMenuString = $(this).text();
+
+        $("ul.tabs li").removeClass("active").css("color", "#FFFFFF");
+        /* $("ul.tabs li").removeClass("active").css("color", "#646464");  */
+        $(this).addClass("active").css("color", "#000000");
+
+        var activeTab = $(this).attr("rel");
+
+        if( activeTab === undefined || activeTab == null ){
+            alert( "lost activeTab!!!");
+            if( $(this) == undefined || $(this) == null )
+                alert( "$(this) is not valid!!! ");
+            return;
+        }
+
+        $(".tab_content").hide();
+
+        $("#tab1Title").hide();
+        $("#tab3Title").hide();
+
+        if(activeTab == "tab1" ){
+            $("#tab1Title").show();
+        }else if( activeTab == "tab3"){
+            $("#tab3Title").show();
+        }
+
+        $("#" + activeTab).show();
+        // $("#" + activeTab).scrollTop(0);
+
+
+        /*
         selMenuString = $(this).text();
         ConsoleLog( selMenuString );
         $("ul.tabs li").removeClass("active").css("color", "#FFFFFF");
         $(this).addClass("active").css("color", "#000000");
         $(".tab_content").hide();
+
+
+
         var activeTab = $(this).attr("rel");
         // $("#" + activeTab).fadeIn();
         $("#" + activeTab).show();
+        */
     });
 
     TabMenuControl = function() {
@@ -408,8 +444,9 @@ var adjustScrDiv = (function(){
         tab2.style.right = 0 + 'px';
         tab2.style.bottom = 5 + 'px';
 
-        tab3.style.top = 0 +'px';
-        tab3.style.left = 15+'px';
+        // tab3.style.top = 0 +'px';
+        tab3.style.top = 30 +'px';
+        tab3.style.left = 0 +'px';
         tab3.style.right = 5 + 'px';
         tab3.style.bottom = 5 + 'px';
 

@@ -248,6 +248,9 @@ function mobileRequestPoiContentAndShow( paramPoiObj, callback ) {
 
 
 function setGlobalFocusPoiObj( poiObj ){
+    if( poiObj == null )
+        return;
+
     window.focusPoiObj = poiObj;
 
     ConsoleLog("focus PoiObj place : " + window.focusPoiObj.biblePlace );
