@@ -117,7 +117,7 @@ function create3DFeatureFrom2DFeauture( feature2D ){
 }
 
 
-function createPoiObj( attrs, shapeRecord, minVisibleLevel ){
+function createPoiObj( attrs, shapeRecord, minVisibleLevel, minVisibleLevel3D ){
     var biblePlace = "";
     if( attrs.values["bible"] ) {
         biblePlace = attrs.values["bible"].toString();
@@ -148,6 +148,7 @@ function createPoiObj( attrs, shapeRecord, minVisibleLevel ){
         x: shapeRecord.shape.x,
         y: shapeRecord.shape.y,
         zoomIn: minVisibleLevel,
+        zoomIn3D: minVisibleLevel3D,
         title : poiTitle,
         rangeStr : rangeStr,
         rangeArray : rangeArray
@@ -199,6 +200,11 @@ function GMDFileDownload( map, map3D, shpUrl, layerId, style, paramLayerManager,
 
         shapeLayer.set('id', layerId, false);
         shapeLayer.set('visibleRange', style.visibleRange);
+
+        if( style.visibleRange3D !== undefined ){
+            shapeLayer.set('visibleRange3D', style.visibleRange3D );
+        }
+
         if (style.historyShow)
             shapeLayer.set('historyShow', style.historyShow);
 
@@ -256,9 +262,15 @@ function GMDFileDownload( map, map3D, shpUrl, layerId, style, paramLayerManager,
                 // moveLevel = Math.floor(moveLevel) -2;
                 var moveLevel = paramStyle.visibleRange.min + 1;
                 if( moveLevel > 13 )
-                    moveLevel = paramStyle.visibleRange.min;
+                    //moveLevel = paramStyle.visibleRange.min;
+                    moveLevel = 13;
 
-                var poiobj = createPoiObj( attrs, record, moveLevel );    //  bible, title, range 에 해당하는 필드로 poi 오브젝트를 생성한다
+                var moveLevel3D = moveLevel;
+                if( paramStyle.visibleRange3D !== undefined ){
+                    moveLevel3D = paramStyle.visibleRange3D.min;
+                }
+
+                var poiobj = createPoiObj( attrs, record, moveLevel, moveLevel3D );    //  bible, title, range 에 해당하는 필드로 poi 오브젝트를 생성한다
                 poiobj = layerManager.insertPoiObj( poiobj );
                 var confirmPoi = layerManager.getPoiObjById( poiobj.id );
 
@@ -268,6 +280,7 @@ function GMDFileDownload( map, map3D, shpUrl, layerId, style, paramLayerManager,
                 features.push(feature);
 
                 // var cloneFeature = cloneObject( feature );
+
                 var cloneFeature = create3DFeatureFrom2DFeauture( feature );
                 cloneFeature.getGeometry().set('altitudeMode', 'clampToGround');
                 cloneFeatures.push( cloneFeature );
@@ -417,13 +430,15 @@ function GMDFileDownload( map, map3D, shpUrl, layerId, style, paramLayerManager,
         map.addLayer(  shapeLayer );
 
         ///////////////////////  3D Map
-        // var cloneShapeLayer = createShapeLayer( cloneFeatures, layerId, style, createTextStyleOfFeature );
-        var cloneShapeLayer = createShapeLayer( cloneFeatures, layerId, style, create3DPointStyleOfFeature );
-        cloneShapeLayer.setVisible( false );
 
         if( map3D ) {
+            // var cloneShapeLayer = createShapeLayer( cloneFeatures, layerId, style, createTextStyleOfFeature );
+            var cloneShapeLayer = createShapeLayer( cloneFeatures, layerId, style, create3DPointStyleOfFeature );
+            cloneShapeLayer.setVisible( false );
+
             cloneShapeLayer.set('altitudeMode', 'clampToGround' );
             map3D.layers.push( cloneShapeLayer );
+            // map3D.map.addLayer( cloneShapeLayer );
         }
         ////////////////////////
 

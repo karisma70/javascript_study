@@ -89,14 +89,16 @@
 
      { url: 'level_12_poi',  order: 19, style: {
          visibleRange : { max : 25 , min : 13.5 },
-         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "black", outlineWidth : 2  },
+         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "black", outlineWidth : 3  },
+         visibleRange3D : { max : 25 , min : 14 },
          font3D : 'normal 15px Nanum Gothic'
          }
      },
 
      { url: 'level_11_poi',  order: 20, style: {
          visibleRange : { max : 25 , min : 10.7 },
-         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "black", outlineWidth : 2  },
+         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "black", outlineWidth : 3  },
+         visibleRange3D : { max : 25 , min : 12 },
          font3D : 'normal 15px Nanum Gothic'
      }
      },
@@ -105,6 +107,7 @@
      { url: 'level_10_poi',  order: 21, style: {
          visibleRange : { max : 25 , min : 10 },
          textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "#313132", outlineWidth : 3  },
+         visibleRange3D : { max : 25 , min : 11 },
          font3D : 'normal 15px Nanum Gothic'
      }
      },
@@ -114,6 +117,7 @@
          visibleRange : { max : 25 , min : 9.5 },
          // textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px Nanum Gothic', color: "white", outlineColor : "#9b490d", outlineWidth : 2  } }   // 191970
          textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "#191970", outlineWidth : 3  },
+         visibleRange3D : { max : 25 , min : 10 },
          font3D : 'normal 15px Nanum Gothic'
      }   // 191970
      },
@@ -122,6 +126,7 @@
      { url : 'level_8_poi',  order: 23, style: {
          visibleRange : { max : 25 , min : 8.7 },
          textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : '#033078', outlineWidth : 3  },
+         visibleRange3D : { max : 25 , min :  9 },
          font3D : 'normal 15px Nanum Gothic'
      }  //3e636a
      },
@@ -130,6 +135,7 @@
          visibleRange : { max : 11.5, min : 8 },
          // textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px Nanum Gothic', color: '#E7E5E5', outlineColor : '#5F0291', outlineWidth : 3  }}
          textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 15px Nanum Gothic', color: "#FFFFFF", outlineColor : "#5B2B29", outlineWidth : 3  },
+         visibleRange3D : { max : 20 , min :  8 },
          font3D : 'normal 16px Nanum Gothic'
      }
      },
@@ -138,6 +144,7 @@
      { url : 'level_7_poi',  order: 25, style: {
          visibleRange : { max : 25 , min : 7 },
          textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : '#033078', outlineWidth : 3  },
+         visibleRange3D : { max : 25 , min :  7 },
          font3D : 'normal 15px Nanum Gothic'
      }
      },
@@ -146,6 +153,7 @@
      { url: 'level_6_poi',  order: 26, style: {
          visibleRange : { max : 25 , min : 6 },
          textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 16px Nanum Gothic', color: '#E7E5E5', outlineColor : '#052FFF', outlineWidth : 3  },
+         visibleRange3D : { max : 25 , min :  6 },
          font3D : 'normal 17px Nanum Gothic'
      }
      },
@@ -154,6 +162,7 @@
          url: 'level_4_poi',  order: 27, style: {
          visibleRange : { max : 20 , min : 4 },
          textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 17px Nanum Gothic', color: "#E7E5E5", outlineColor : "#105602", outlineWidth : 3  },
+         visibleRange3D : { max : 25 , min :  4 },
          font3D : 'normal 18px Nanum Gothic'
      }
      }
@@ -854,6 +863,8 @@ function createLayer( source  ) {
          this.view = view;
          this.mapExtent = null;
 
+         this.iconFeature = null;
+
          var collControls = new ol.Collection();
 
          /*
@@ -974,6 +985,7 @@ function createLayer( source  ) {
                          else {
                              layer.setVisible(false);
                          }
+
                      }
                  });
 
@@ -1159,12 +1171,21 @@ function createLayer( source  ) {
              }
          };
 
+         this.setIconPosByPoi = function( poiObj ){
+             if( iconLayer == null ){
+                 this.createPoiIcon( poiObj );
+             }else{
+                 this.iconFeature.getGeometry().setCoordinates( [poiObj.x, poiObj.y]);
+                 this.iconFeature.setProperties({  'id' : poiObj.id,
+                     'label' : poiObj.biblePlace });
+
+                 this.map.render();
+             }
+         };
+
 
          this.createPoiIcon = function( poiObj ){
-
-             this.destroyPoiIcon();
-
-             var iconFeature = new ol.Feature({
+             this.iconFeature = new ol.Feature({
                  geometry: new ol.geom.Point([poiObj.x, poiObj.y]),
                  // name: poiObj.biblePlace,
                  population: 4000,
@@ -1186,13 +1207,13 @@ function createLayer( source  ) {
              });
 
 
-             iconFeature.setProperties({  'id' : poiObj.id,
+             this.iconFeature.setProperties({  'id' : poiObj.id,
                                         'label' : poiObj.biblePlace });
 
-             iconFeature.setStyle(iconStyle);
+             this.iconFeature.setStyle(iconStyle);
 
              var iconVectorSource = new ol.source.Vector({
-                 features: [iconFeature]
+                 features: [ this.iconFeature ]
              });
 
              iconLayer = new ol.layer.Vector({
@@ -1203,14 +1224,6 @@ function createLayer( source  ) {
 
              this.map.addLayer( iconLayer );
              this.map.render();
-           //  this.map.updateSize();
-         };
-
-         this.destroyPoiIcon = function(){
-             if( iconLayer ){
-                 this.map.removeLayer( iconLayer );
-                 iconLayer = null;
-             }
          };
 
          return this;
@@ -1258,7 +1271,7 @@ function createLayer( source  ) {
 
 
 
- findPoiByCoord = function( coordX, coordY, poiArray ) {
+ findPoiByCoord = function( curZoom, coordX, coordY, poiArray ) {
 
      var minDist = 9999999;
      var retObj = null;
@@ -1269,15 +1282,26 @@ function createLayer( source  ) {
 
          var obj = poiArray[idx];
 
-         if (IsWithinTolerance( coordX, coordY, obj.x, obj.y, tolerancePoiPos ) == true) {
-             var dist = getDistance( coordX, coordY, obj.x, obj.y );
-             if( dist < minDist ){
-                 minDist = dist;
-                 retObj = obj;
+         if( window.focusPoiObj.id == obj.id ){
+             if (IsWithinTolerance(coordX, coordY, obj.x, obj.y, tolerancePoiPos + 100) == true) {
+                 var dist = getDistance(coordX, coordY, obj.x, obj.y);
+                 if (dist < minDist) {
+                     minDist = dist;
+                     retObj = obj;
+                 }
+             }
+         }else{
+             if (obj.zoomIn3D-1 < curZoom) {
+                 if (IsWithinTolerance(coordX, coordY, obj.x, obj.y, tolerancePoiPos) == true) {
+                     var dist = getDistance(coordX, coordY, obj.x, obj.y);
+                     if (dist < minDist) {
+                         minDist = dist;
+                         retObj = obj;
+                     }
+                 }
              }
          }
-
-     }
+     }  // end of for
 
      if( retObj ){
          ConsoleLog( "Find POI : " + retObj.biblePlace );
@@ -1354,6 +1378,8 @@ function createLayer( source  ) {
      var scene3D = null;
      var staticOverlay = null;
 
+     var iconLayer = null;
+
      var createLabelLayer = function( name, posX, posY ){
 
          var iconStyle = new ol.style.Style({
@@ -1417,6 +1443,8 @@ function createLayer( source  ) {
          staticOverlay = overlay;
          this.overlay = overlay;
 
+         this.iconFeature = null;
+
          this.memWholeLayerAddToMap = function(){
              for( var idx = 0 ; idx < this.layers.length; idx ++  ) {
                  var layer = this.layers[ idx ];
@@ -1459,6 +1487,10 @@ function createLayer( source  ) {
              for( var idx = 0; idx < this.layers.length; idx ++  ) {
                  var layer = this.layers[idx];
                  set3DGroundLayer( layer );
+             }
+
+             if( iconLayer != null ){
+                 set3DGroundLayer( iconLayer );
              }
 
          };
@@ -1569,6 +1601,68 @@ function createLayer( source  ) {
          ConsoleLog( "depthTest : " + depthTest);
 
          ///////////////////////////////////////////////////////////
+
+         this.setIconPosByPoi = function( poiObj ){
+             if( iconLayer == null ){
+                 this.createPoiIcon( poiObj );
+                 set3DGroundLayer( iconLayer );
+             }else{
+                 this.iconFeature.getGeometry().setCoordinates( [poiObj.x, poiObj.y]);
+                 this.iconFeature.setProperties({  'id' : poiObj.id,
+                     'label' : poiObj.biblePlace });
+
+                 set3DGroundLayer( iconLayer );
+                 this.map.render();
+             }
+         };
+
+
+         this.createPoiIcon = function( poiObj ){
+             this.iconFeature = new ol.Feature({
+                 geometry: new ol.geom.Point([poiObj.x, poiObj.y]),
+                 // name: poiObj.biblePlace,
+                 population: 4000,
+                 rainfall: 500
+             });
+
+             var iconStyle = new ol.style.Style({
+                 image: new ol.style.Icon( ({
+                     // anchor: [0.5, 46],
+                     // anchor: [0.55, 34],
+                     anchor: [0.50, 0],
+                     anchorXUnits: 'fraction',
+                     anchorYUnits: 'pixels',
+                     // src: 'https://openlayers.org/en/v4.6.5/examples/data/icon.png'
+                     // size : [ 50, 50 ],
+                     scale: 0.14,
+                     src: 'biblemap/image/poi_location.png'
+                 }))
+             });
+
+
+             this.iconFeature.setProperties({  'id' : poiObj.id,
+                 'label' : poiObj.biblePlace });
+
+             this.iconFeature.setStyle(iconStyle);
+
+             var iconVectorSource = new ol.source.Vector({
+                 features: [ this.iconFeature ]
+             });
+
+             iconLayer = new ol.layer.Vector({
+                 source: iconVectorSource
+             });
+             iconLayer.setVisible( true );
+             iconLayer.setZIndex( 1000 );
+
+             set3DGroundLayer( iconLayer );
+
+             this.map.addLayer( iconLayer );
+             this.map.render();
+         };
+
+         ///////////////////////////////////////////////////////////
+
          const iconFeature = new ol.Feature({
              geometry: new ol.geom.Point([700000, 200000, 100000])
          });
@@ -1797,9 +1891,9 @@ function createLayer( source  ) {
                  var layers = map2DMap.getLayers();
 
                  layers.forEach(function (layer) {
-                     var visibleRange = layer.get('visibleRange');
-                     if (typeof visibleRange !== "undefined") {
 
+                     var visibleRange = layer.get('visibleRange3D');
+                     if (typeof visibleRange !== "undefined") {
                          if( typeof( zoom ) != 'undefined'){
                              if (visibleRange.min <= (zoom-0.7)  && (zoom -0.7 ) <= visibleRange.max) {
                                  var historyMap = layer.get('historyShow');

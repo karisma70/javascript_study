@@ -205,7 +205,8 @@ function mobileRequestPoiContentAndShow( paramPoiObj, callback ) {
 
         layerManager.historyInsertPoi(poiObj);
 
-        bibleMapManager.createPoiIcon( poiObj );        // focus POI Icon 만들기
+        // bibleMapManager.createPoiIcon( poiObj );        // focus POI Icon 만들기
+        bibleMapManager.setIconPosByPoi( poiObj );        // focus POI Icon 만들기
 
         setGlobalFocusPoiObj( poiObj );
 
@@ -234,7 +235,9 @@ function mobileRequestPoiContentAndShow( paramPoiObj, callback ) {
             return;
         }
 
-        bibleMapManager.createPoiIcon( poiObj );        // focus POI Icon 만들기
+        // bibleMapManager.createPoiIcon( poiObj );        // focus POI Icon 만들기
+        bibleMapManager.setIconPosByPoi( poiObj );        // focus POI Icon 만들기
+
         setGlobalFocusPoiObj( poiObj );
 
         writePoiContentsToTab( poiObj, infoText );
@@ -295,9 +298,9 @@ function moveCenterFocusedPOI( focusedPoiObj ){
     var zoom = bibleMapManager.getView().getZoom();
     // _moveToPos( bibleMapManager.getView(), [focusedPoiObj.x, focusedPoiObj.y], zoom, 200);
     if( zoom < (focusedPoiObj.zoomIn - 1.0) )
-        _moveToPos( bibleMapManager.getView(), [focusedPoiObj.x, focusedPoiObj.y], (focusedPoiObj.zoomIn - 1.0), 500);
+        _moveToPos( bibleMapManager.getView(), [focusedPoiObj.x, focusedPoiObj.y], (focusedPoiObj.zoomIn - 1.0), 300);
     else
-        _moveToPos( bibleMapManager.getView(), [focusedPoiObj.x, focusedPoiObj.y], zoom, 500);
+        _moveToPos( bibleMapManager.getView(), [focusedPoiObj.x, focusedPoiObj.y], zoom, 300);
 
     saveLocationToStorage( zoom,  focusedPoiObj.x, focusedPoiObj.y );
 }

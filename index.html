@@ -2,14 +2,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Bible map</title>
+  <script type="text/javascript" src="biblemap/src/common.js?version=20170930"></script>
 </head>
 <body>
 <script type="text/javascript">
-
-  var isReload = windowReloadByCurDate();
-
-   // location.replace( 'redirect.html' );
-
 
   var IEVersionCheck = function() {
 
@@ -37,37 +33,35 @@
     return version;
   };
 
+
+  var isReload = windowReloadByCurDate();
+
   var userAgent = navigator.userAgent.toLowerCase();
   if(userAgent.match('iphone')) {
     alert("iphone!!!");
-    location.replace( 'mobile3.html' );
+    location.replace( 'biblemapMobile.html' );
   } else if(userAgent.match('ipad')) { // sizes="72*72"
-    document.write('<link href=\"biblemap/image/biblemap_logo_124x117.png\" rel=\"apple-touch-icon\" >');
+    location.replace( 'biblemapMobile.html' );
   } else if(userAgent.match('ipod')) {
-    document.write('<link href=\"biblemap/image/biblemap_logo_124x117.png\" rel=\"apple-touch-icon\">');
+    location.replace( 'biblemapMobile.html' );
   } else if(userAgent.match('android')) {
-    document.write('<link href=\"biblemap/image/biblemap_logo_124x117.png\" rel=\"shortcut icon\">');
+    location.replace( 'biblemapMobile.html' );
   } else {
-    location.replace( 'notice.html' );
+    var iEVersion = IEVersionCheck();
+
+    if( iEVersion == 'N/A') {
+      location.replace( 'biblemap3D.html' );
+    }
+    else{
+      var numVersion = parseFloat( iEVersion  );
+      if( numVersion >= 11) {
+        location.replace( 'biblemap3D.html' );
+      }else{
+        location.replace('download_guide.html');
+      }
+    }
   }
 
-
-
-  /*
-   var iEVersion = IEVersionCheck();
-
-   if( iEVersion == 'N/A') {
-   location.replace( 'biblemap3D.html' );
-   }
-   else{
-   var numVersion = parseFloat( iEVersion  );
-   if( numVersion >= 11) {
-   location.replace('biblemap3D.html');
-   }else{
-   location.replace('download_guide.html');
-   }
-   }
-   */
 
 </script>
 

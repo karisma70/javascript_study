@@ -224,6 +224,7 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
         else
             createPoiTooltip(tooltip3D, "contentFrame3D", false);
 
+        poiTooltip3D.setGroundPosition( );
 
         // poiContentsToTab();
 
@@ -378,8 +379,9 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
         createPoiTooltip( popup2D, "contentFrame2D", true );
         createPoiTooltip(popup3D, "contentFrame3D", true );
 
-        bibleMapManager.createPoiIcon( poiObj );        // focus POI Icon 만들기
-
+        // bibleMapManager.createPoiIcon( poiObj );        // focus POI Icon 만들기
+        bibleMapManager.setIconPosByPoi(  poiObj );        // focus POI Icon 만들기
+        map3D.setIconPosByPoi( poiObj );        // focus POI Icon 만들기
 
         moveCenterFocusedPOI( poiObj );
 
@@ -569,8 +571,6 @@ function Tooltip( mapType, paramMap, cssClassName ) {
         if ( tooltip == null)
             return;
 
-        ConsoleLog("setGroundPosition_  : " + tooltip);
-
         var feature = new ol.Feature({
             geometry: new ol.geom.Point([coord[0], coord[1]])
         });
@@ -609,9 +609,9 @@ function eventHistoryAdmin( newVal ){
     closePopup3D();
     /*
      adjustScrDiv.setIsFullScr("false");
-
-     writeInfoTabHistoryAdmin();
      */
+
+    writeInfoTabHistoryAdmin();
 
     changeHistoryAdmin( newVal );
     // showHistoryAdmin();
@@ -728,15 +728,15 @@ function moveCenterFocusedPOI( focusedPoiObj ){
         _moveToPos( bibleMapManager.getView(), [focusedPoiObj.x, focusedPoiObj.y], zoom, 500);
  */
 
-    var zoom = bibleMapManager.getView().getZoom();
+    var zoom;
     var view;
 
     if( curMapViewMode == 'chkView2D' ){
-        // zoom = bibleMapManager.getView().getZoom();
+        zoom = bibleMapManager.getView().getZoom();
         view = bibleMapManager.getView();
     }else{
         view = map3D.view;
-        // zoom = map3D.view.getZoom();
+        zoom = map3D.view.getZoom();
     }
 
     var tolerance = 1.0;
@@ -747,9 +747,16 @@ function moveCenterFocusedPOI( focusedPoiObj ){
     if( zoom < (focusedPoiObj.zoomIn - tolerance) )
         zoom = focusedPoiObj.zoomIn - tolerance;
 
+    if( curMapViewMode == 'chkView3D' ) {
+        zoom = focusedPoiObj.zoomIn3D + 1;
+        if( map3D.view.getZoom() > zoom )
+            zoom = map3D.view.getZoom();
+    }
+
     if( zoom < 7 )
         zoom = 7;
 
+    //_moveToPos( view, [focusedPoiObj.x, focusedPoiObj.y], zoom, 500);
     _moveToPos( view, [focusedPoiObj.x, focusedPoiObj.y], zoom, 500);
 
     saveLocationToStorage( zoom,  focusedPoiObj.x, focusedPoiObj.y );
