@@ -296,6 +296,8 @@ function searchBibleChapter( callback ){
         return;
     }
 
+    adjustScrDiv.setIsFullScr("false");
+
     tabMenu.selectTab('tab1Menu');
 
     var objChapter =  adjustBibleBookChapter( parseInt( dvBibleTitle.value), parseInt( dvBibleChapter.value) );

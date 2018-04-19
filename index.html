@@ -2,66 +2,13 @@
 <head>
   <meta charset="UTF-8">
   <title>Bible map</title>
-  <script type="text/javascript" src="biblemap/src/common.js?version=20170930"></script>
 </head>
 <body>
 <script type="text/javascript">
 
-  var IEVersionCheck = function() {
+  console.log( "index.html");
 
-    var word;
-    var version = "N/A";
-
-    var agent = navigator.userAgent.toLowerCase();
-    var name = navigator.appName;
-
-    // IE old version ( IE 10 or Lower )
-    if ( name == "Microsoft Internet Explorer" ) word = "msie ";
-
-    else {
-      // IE 11
-      if ( agent.search("trident") > -1 ) word = "trident/.*rv:";
-
-      // IE 12  ( Microsoft Edge )
-      else if ( agent.search("edge/") > -1 ) word = "edge/";
-    }
-
-    var reg = new RegExp( word + "([0-9]{1,})(\\.{0,}[0-9]{0,1})" );
-    if (  reg.exec( agent ) != null  )
-      version = RegExp.$1 + RegExp.$2;
-
-    return version;
-  };
-
-
-  var isReload = windowReloadByCurDate();
-
-  var userAgent = navigator.userAgent.toLowerCase();
-  if(userAgent.match('iphone')) {
-    alert("iphone!!!");
-    location.replace( 'biblemapMobile.html' );
-  } else if(userAgent.match('ipad')) { // sizes="72*72"
-    location.replace( 'biblemapMobile.html' );
-  } else if(userAgent.match('ipod')) {
-    location.replace( 'biblemapMobile.html' );
-  } else if(userAgent.match('android')) {
-    location.replace( 'biblemapMobile.html' );
-  } else {
-    var iEVersion = IEVersionCheck();
-
-    if( iEVersion == 'N/A') {
-      location.replace( 'biblemap3D.html' );
-    }
-    else{
-      var numVersion = parseFloat( iEVersion  );
-      if( numVersion >= 11) {
-        location.replace( 'biblemap3D.html' );
-      }else{
-        location.replace('download_guide.html');
-      }
-    }
-  }
-
+  location.replace( 'redirect.html' );
 
 </script>
 
