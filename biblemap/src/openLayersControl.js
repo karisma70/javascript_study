@@ -90,7 +90,7 @@
      { url: 'level_12_poi',  order: 19, style: {
          visibleRange : { max : 25 , min : 13.5 },
          textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "black", outlineWidth : 3  },
-         visibleRange3D : { max : 25 , min : 14 },
+         visibleRange3D : { max : 25 , min : 13.5 },
          font3D : 'normal 15px Nanum Gothic'
          }
      },
@@ -98,7 +98,7 @@
      { url: 'level_11_poi',  order: 20, style: {
          visibleRange : { max : 25 , min : 10.7 },
          textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "black", outlineWidth : 3  },
-         visibleRange3D : { max : 25 , min : 12 },
+         visibleRange3D : { max : 25 , min : 11 },
          font3D : 'normal 15px Nanum Gothic'
      }
      },
@@ -106,8 +106,8 @@
 
      { url: 'level_10_poi',  order: 21, style: {
          visibleRange : { max : 25 , min : 10 },
-         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "#313132", outlineWidth : 3  },
-         visibleRange3D : { max : 25 , min : 11 },
+         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "black", outlineWidth : 3  },
+         visibleRange3D : { max : 25 , min : 10.5 },
          font3D : 'normal 15px Nanum Gothic'
      }
      },
@@ -116,7 +116,7 @@
      { url : 'level_9_poi',  order: 22, style: {
          visibleRange : { max : 25 , min : 9.5 },
          // textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px Nanum Gothic', color: "white", outlineColor : "#9b490d", outlineWidth : 2  } }   // 191970
-         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "#191970", outlineWidth : 3  },
+         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "black", outlineWidth : 3  },
          visibleRange3D : { max : 25 , min : 10 },
          font3D : 'normal 15px Nanum Gothic'
      }   // 191970
@@ -300,31 +300,6 @@
          })
      });
 
-     /*
-     return [new ol.style.Style({
-         text: new ol.style.Text({
-             text : feature.get('label'),
-             // font: featureStyle.textStroke.font,
-             font : 'normal 15px Nanum Gothic',
-             textAlign: 'center',
-             textBaseline: 'middle',
-             stroke: new ol.style.Stroke({
-                 color: featureStyle.textStroke.outlineColor,
-                 width: featureStyle.textStroke.outlineWidth
-             }),
-             fill: new ol.style.Fill({color: featureStyle.textStroke.color})
-         })
-     }), new ol.style.Style({
-         geometry: new ol.geom.Circle([ coord[0], coord[1], 0], 100 ),
-         stroke: new ol.style.Stroke({
-             color: 'blue',
-             width: 2
-         }),
-         fill: new ol.style.Fill({
-             color: 'rgba(0, 0, 255, 0.2)'
-         })
-     })];
-     */
  }
 
 
@@ -867,24 +842,19 @@ function createLayer( source  ) {
 
          var collControls = new ol.Collection();
 
-         /*
-         this.map = new ol.Map({
-             overlays: [overlay],
-             target: targetMap,      // taret: 'map'
-
-             controls: collControls.extend([ this.scaleLineControl ]),
-             // controls : [ ],
-             view: this.view
-         });
-         */
-
          if( overlay !== undefined && overlay != null ){
              this.map = new ol.Map({
                  overlays: [overlay],
                  target: targetMap,      // taret: 'map'
 
                  controls: collControls.extend([ this.scaleLineControl ]),
-                 // controls : [ ],
+           //      interactions: ol.interaction.defaults( {mouseWheelZoom: false }),
+                 // interactions: [ interactions ],
+                 interactions: [ new ol.interaction.MouseWheelZoom({
+                     duration: 500,
+                 }), new ol.interaction.DragPan({
+                     kinetic: new ol.Kinetic(-0.01, 0.1, 200)
+                 }) ],
                  view: this.view
              });
          }else{
@@ -897,6 +867,13 @@ function createLayer( source  ) {
          }
 
 
+         /*
+         this.map.getInteractions().forEach(function(interaction) {
+             if (interaction instanceof ol.interaction.MouseWheelZoom) {
+                 interaction.setActive(false);
+             }
+         }, this);
+         */
 
          this.mapExtent = this.map.getView().calculateExtent( this.map.getSize());
          this.mapExtent[0]= this.mapExtent[0] - 190000;
@@ -958,6 +935,7 @@ function createLayer( source  ) {
              _moveTo( this.view, center, zoom-1, 200 );
          };
 
+
          this.mapEventPrecompose = function (callBack) {
              this.map.on('precompose', function (evt) {
                  if( bibleMap == null )
@@ -992,59 +970,6 @@ function createLayer( source  ) {
                  callBack(evt);
              });
          };
-
-         /*
-         this.map.getInteractions().forEach(function(interaction) {
-             if (interaction instanceof ol.interaction.MouseWheelZoom) {
-                 interaction.setActive(false);
-             }
-         }, this);
-         */
-
-         this.mouseWheel = function( callback ){
-             this.map.on('mousewheel', function(e){
-                 e.browserEvent.preventDefault();
-                 var now = new Date();
-                 if(lastScrollZoom === null || now > lastScrollZoom ) {
-                     var zoom_in = e.browserEvent.deltaY < 0;
-                     _panAndZoom(e.map, zoom_in, e.coordinate);
-                     lastScrollZoom = now.setMilliseconds(now.getMilliseconds() + scrollDelta)
-                 }
-             });
-         };
-
-         /*
-         this.map.on('mousewheel', function(e){
-             e.browserEvent.preventDefault();
-             var now = new Date();
-             if(lastScrollZoom === null || now > lastScrollZoom ) {
-                 var zoom_in = e.browserEvent.deltaY < 0;
-                 _panAndZoom(e.map, zoom_in, e.coordinate);
-                 lastScrollZoom = now.setMilliseconds(now.getMilliseconds() + scrollDelta)
-             }
-         });
-         */
-
-         _panAndZoom = function(map, zoom_in, coordinates){
-             var view = map.getView();
-             var currentResolution = view.getResolution();
-             var delta = zoom_in ? 1 : -1;
-             var pan = ol.animation.pan({
-                 duration: 500,
-                 source: view.getCenter(),
-                 easing: ol.easing.easeOut
-             });
-             var zoom = ol.animation.zoom({
-                 resolution: currentResolution,
-                 duration: 500,
-                 easing: ol.easing.easeOut
-             });
-             map.beforeRender(pan,zoom);
-             var newResolution = view.constrainResolution(currentResolution, delta);
-             view.setResolution(newResolution);
-             view.setCenter(coordinates);
-         };
-
 
 
          this.mapEventPostcompose = function( callback ){
@@ -1291,7 +1216,7 @@ function createLayer( source  ) {
                  }
              }
          }else{
-             if (obj.zoomIn3D-1 < curZoom) {
+             if (obj.zoomIn3D - 0.5 < curZoom) {
                  if (IsWithinTolerance(coordX, coordY, obj.x, obj.y, tolerancePoiPos) == true) {
                      var dist = getDistance(coordX, coordY, obj.x, obj.y);
                      if (dist < minDist) {
@@ -1471,8 +1396,10 @@ function createLayer( source  ) {
                  this.map.addLayer(layer);
 
                  if( this.addLayerCursor == this.layers.length-1 ) {
-                     map3D.view3DTilt(1.1);
+                     // map3D.view3DTilt(1.1);
                  }
+
+                 map3D.view3DTilt( 0.13);
 
                  this.addLayerCursor--;
                  return false;
@@ -1492,42 +1419,6 @@ function createLayer( source  ) {
              if( iconLayer != null ){
                  set3DGroundLayer( iconLayer );
              }
-
-         };
-
-
-         this.setGroundLayerOneByOne = function(){
-
-             ConsoleLog( "setGroundLayerOneByOne( " + this.setGroundLayerCursor + " ).........");
-
-             set3DGroundLayer( this.pathLayer );
-
-             var layer = this.layers[ this.setGroundLayerCursor];
-
-             set3DGroundLayer( layer );
-             /*
-              var source = layer.getSource();
-              var features = source.getFeatures();
-              for( let idx = 0; idx < features.length ; idx ++ ){
-              var feature = features[ idx ];
-              feature.getGeometry().set('altitudeMode', 'clampToGround');
-              }
-              */
-
-             this.setGroundLayerCursor ++;
-             if( this.setGroundLayerCursor > this.layers.length -1 ) {
-                 this.setGroundLayerCursor = 0;
-                 return true;
-             }
-
-             return false;
-
-             /*
-             if( this.pathLayer ){
-                 set3DGroundLayer( this.pathLayer );
-             }
-             */
-
          };
 
 
@@ -1558,10 +1449,24 @@ function createLayer( source  ) {
                  attributionOptions: ({    // @type {olx.control.AttributionOptions}
                      collapsible: false
                  }) }),
+             interactions: ol.interaction.defaults( {mouseWheelZoom: false }),
+             /*
+             interactions: [ new ol.interaction.MouseWheelZoom({
+                 duration: 600,
+             }), new ol.interaction.DragPan({
+                 kinetic: new ol.Kinetic(-0.01, 0.1, 200)
+             }) ],
+             */
              view: this.view
          });
 
          map2DMap = this.map;
+
+         this.map.getInteractions().forEach(function(interaction) {
+             if (interaction instanceof ol.interaction.MouseWheelZoom) {
+                 interaction.setActive(false);
+             }
+         }, this);
 
          // this.map.addOverlay( staticOverlay );
 
@@ -1581,12 +1486,18 @@ function createLayer( source  ) {
              });
          };
 
-
          this.ol3d = new olcs.OLCesium({map: this.map, target: 'map3D'});
          // this.ol3d = new olcs.OLCesium({map: this.map});
          this.ol3dScene = this.ol3d.getCesiumScene();
+         // this.ol3dScene.screenSpaceCameraController.minimumZoomDistance = 0.01;
+         // this.ol3dScene.screenSpaceCameraController.maximumZoomDistance = 1.0;
+         // this.ol3dScene.screenSpaceCameraController.inertiaZoom = 10.0;
+
+         this.ol3dScene.screenSpaceCameraController.enableZoom = false;         // Wheel ZoomIn / ZoomOut 막기
+
          // this.ol3dScene.skyBox.show = false;   // 동작하지 않음
          // this.ol3dScene.scene.fxaa = false;         // 동작하지 않음
+
          this.ol3dScene.globe.enableLighting = false;
          this.ol3dScene.skyAtmosphere.show = true;
          this.ol3dScene.fog.enabled = false;
@@ -1736,12 +1647,53 @@ function createLayer( source  ) {
                      if( callback )
                          callback( mapCoords[0], mapCoords[1] );
                  },
-                 // this.map3DClick,
                  Cesium.ScreenSpaceEventType['LEFT_CLICK'] );
 
          };
 
-         this.getMapCoordFromFeature = function( feature ){
+
+         var dvMap3D = document.getElementById('map3D');
+         dvMap3D.addEventListener("wheel", function(evt){
+             ConsoleLog( evt.deltaY );
+
+             var zoom = mapView.getZoom();
+             var center = mapView.getCenter();
+
+             if( evt.deltaY == 0)
+                 return;
+
+             if( evt.deltaY > 0 )
+                _moveTo( mapView, center, zoom-0.25, 1);
+             else
+                 _moveTo( mapView, center, zoom+0.25, 1);
+
+         });
+
+
+         this.mapWheel = function( callback ){
+             eventHandler.setInputAction(
+                 function( event ) {
+                     /*
+                     ConsoleLog( "wheel !!!  value : " + event);
+
+                     var zoom = mapView.getZoom();
+                     var center = mapView.getCenter();
+
+                     if( event < 0 )
+                         _moveTo( mapView, center, zoom-0.25, 1);
+                     else
+                         _moveTo( mapView, center, zoom+0.25, 1);
+                         */
+
+                     if( callback )
+                         callback();
+
+                 },
+                 Cesium.ScreenSpaceEventType['WHEEL'] );
+         };
+
+
+          this.getMapCoordFromFeature = function( feature ){
 
              var coord = feature.getGeometry().getCoordinates();
 

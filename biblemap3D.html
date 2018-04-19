@@ -20,7 +20,7 @@
     <!-- <script src="https://api.mapbox.com/mapbox.js/plugins/arc.js/v0.1.0/arc.js"></script> -->
 
     <script type="text/javascript" src="biblemap/src/arc.js?version=20170813"></script>
-    <script type="text/javascript" src="biblemap/src/common.js?version=20170830"></script>
+    <script type="text/javascript" src="biblemap/src/common.js?version=20170903"></script>
     <script type="text/javascript" src="biblemap/lib/binaryajax.js?version=20170813"></script>
     <script type="text/javascript" src="biblemap/src/binarywrapper.js?version=20170813"></script>
     <script type="text/javascript" src="biblemap/src/GMDFileReader.js?version=20170901"></script>
@@ -28,7 +28,7 @@
 
     <script type="text/javascript" src="biblemap/src/makeHrefText.js?version=20180121"></script>
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20180121"></script>
-    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20180121"></script>
+    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20180210"></script>
     <script type="text/javascript" src="biblemap/src/routePlay.js?version=20171205"></script>
     <script type="text/javascript" src="biblemap/src/trajectoryData.js?version=20170901"></script>
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170829"></script>
@@ -54,11 +54,11 @@
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/popup.css?version=20170910">
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/tabMenu.css?version=20170916">
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/bubblePopup.css?version=20171210">
-    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/poiTooltip.css?version=20171212">
+    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/poiTooltip.css?version=20171213">
     <!-- <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/biblemap.css?version=version=20170916"> -->
     <!-- <script type="text/javascript" src="biblemap/js/jquery-1.9.1.min.js"></script> -->
     <script type="text/javascript" src="biblemap/js/jquery.autocomplete.min.js"></script>
-    <script type="text/javascript" src="biblemap/src/searchBible.js?version=20170829"></script>
+    <script type="text/javascript" src="biblemap/src/searchBible.js?version=20170901"></script>
 
 
     <style type ="text/css">
@@ -397,42 +397,27 @@
 </div>
 
 <div id="map" class="mapview" style="position:absolute;">
-    <input id="view3DBtn" type="image" src="biblemap/image/view_3D.png?version=20171205"
-           onmouseover="this.src='biblemap/image/view_3D_.png?version=20171203';"
-           onmouseout="this.src='biblemap/image/view_3D.png?version=20171205';"
-           style="border:1px solid #A0A0A0; position: absolute; width:35px; height:35px;" onclick="setViewMode3D()">
+    <input id="view3DBtn" type="image" src="biblemap/image/view_3D_2.png?version=20171218"
+           onmouseover="this.src='biblemap/image/view_3D_2_.png?version=20171218';"
+           onmouseout="this.src='biblemap/image/view_3D_2.png?version=20171218';"
+           style="position: absolute; border: none; width:35px; height:35px;" onclick="setViewMode3D()">
+           <!-- style="border:1px solid #A0A0A0; position: absolute; width:35px; height:35px;" onclick="setViewMode3D()">  -->
+
 
     <!--
-    <input id="zoomInBtn2D" type="image" src="biblemap/image/Zoom-In-icon.png?version=20171202" style="position: absolute; width:28px; height: 28px;"
-           onmouseover="this.src='biblemap/image/Zoom-In-icon_.png?version=20171203';"
-           onmouseout="this.src='biblemap/image/Zoom-In-icon.png?version=20171202';"
-           onclick="map2DZoomIn()">
-    <input id="zoomOutBtn2D" type="image" src="biblemap/image/Zoom-Out-icon.png?version=20171201" style="position: absolute; width:28px; height: 28px;"
-           onmouseover="this.src='biblemap/image/Zoom-Out-icon_.png?version=20171203';"
-           onmouseout="this.src='biblemap/image/Zoom-Out-icon.png?version=20171202';"
-           onclick="map2DZoomOut()">
-           -->
+    <input id="zoomInBtn2D" type="image" src="biblemap/image/Zoom-In-icon.png?version=20171211"  style="border:none; position: absolute; width:28px; height: 28px;"
+           onmouseover="this.src='biblemap/image/Zoom-In-icon_.png?version=20171208';"
+           onmouseout="this.src='biblemap/image/Zoom-In-icon.png?version=20171211';"
+           onclick="map2DZoomIn()">  -->
 
-    <input id="zoomInBtn2D" type="image" src="biblemap/image/Zoom-In-icon.png?version=20171202"  style="border:1px solid #A0A0A0; position: absolute; width:23px; height: 23px;"
-           onmouseover="this.src='biblemap/image/Zoom-In-icon_.png?version=20171203';"
-           onmouseout="this.src='biblemap/image/Zoom-In-icon.png?version=20171202';"
+    <input id="zoomInBtn2D" type="image" src="biblemap/image/Zoom-In-icon.png?version=20171211"  style="border:none; position: absolute; width:29px; height: 29px;"
            onclick="map2DZoomIn()">
-    <input id="zoomOutBtn2D" type="image" src="biblemap/image/Zoom-Out-icon.png?version=20171201" style="border:1px solid grey;  position: absolute; width:23px; height: 23px;"
-           onmouseover="this.src='biblemap/image/Zoom-Out-icon_.png?version=20171203';"
-           onmouseout="this.src='biblemap/image/Zoom-Out-icon.png?version=20171202';"
+
+    <input id="zoomOutBtn2D" type="image" src="biblemap/image/Zoom-Out-icon.png?version=20171211" style="border:none;  position: absolute; width:29px; height: 29px;"
            onclick="map2DZoomOut()">
 
-    <input id="measureBtn2D" type="image" src="biblemap/image/measure_btn.png?version=20171201" style="border:1px solid grey; width:23px; height: 23px; position: absolute;" onclick="mesaureToggleBtn()">
-    <!-- onmouseover="this.src='biblemap/image/measure_btn_.png';"  onmouseout="this.src='biblemap/image/measure_btn.png';"
-    onclick="mesaureToggleBtn()">  -->
-    <input id="beforePoiBtn2D" type="image" src="biblemap/image/before_poi2.png?version=20171201" style="border:1px solid grey; position: absolute; width:23px; height:23px; "
-           onmouseover="this.src='biblemap/image/before_poi2_.png?version=20171203';"
-           onmouseout="this.src='biblemap/image/before_poi2.png?version=20171202';"
-           onclick="beforePoi()">
-    <input id="afterPoiBtn2D" type="image" src="biblemap/image/after_poi2.png?version=20171201" style="border:1px solid grey; position: absolute;width:23px; height:23px;"
-           onmouseover="this.src='biblemap/image/after_poi2_.png?version=20171203';"
-           onmouseout="this.src='biblemap/image/after_poi2.png?version=20171202';"
-           onclick="afterPoi()">
+    <input id="measureBtn2D" type="image" src="biblemap/image/measure_btn.png?version=20171207" style="border: none; width:28px; height: 28px; position: absolute;" onclick="mesaureToggleBtn()">
+
 </div>
 
 <div id="map3D" class="mapview" style="position:absolute;">
@@ -463,28 +448,15 @@
            onmouseout="this.src='biblemap/image/home.png?version=20170930';"
            style="position: absolute; border:0; width:30px; height: 30px;" onclick="gotoHome()">
 
-    <input id="view2DBtn" type="image" src="biblemap/image/view_2D.png?version=20171203" style="position: absolute; width: 35px; height:35px;"
-           onmouseover="this.src='biblemap/image/view_2D_.png?version=20171204';"
-           onmouseout="this.src='biblemap/image/view_2D.png?version=20171203';"
+    <input id="view2DBtn" type="image" src="biblemap/image/view_2D_2.png?version=20171207" style="position: absolute; border: none; width: 35px; height:35px;"
+           onmouseover="this.src='biblemap/image/view_2D_2_.png?version=20171207';"
+           onmouseout="this.src='biblemap/image/view_2D_2.png?version=20171207';"
            onclick="setViewMode2DWithSync()">
 
-    <input id="zoomInBtn3D" type="image" src="biblemap/image/Zoom-In-icon.png?version=20171202"  style="border:1px solid #A0A0A0; position: absolute; width:23px; height: 23px;"
-           onmouseover="this.src='biblemap/image/Zoom-In-icon_.png?version=20171203';"
-           onmouseout="this.src='biblemap/image/Zoom-In-icon.png?version=20171202';"
+    <input id="zoomInBtn3D" type="image" src="biblemap/image/Zoom-In-icon.png?version=20171209"  style="border: none; position: absolute; width:29px; height: 29px;"
            onclick="map3DZoomIn()">
-    <input id="zoomOutBtn3D" type="image" src="biblemap/image/Zoom-Out-icon.png?version=20171201" style="border:1px solid grey;  position: absolute; width:23px; height: 23px;"
-           onmouseover="this.src='biblemap/image/Zoom-Out-icon_.png?version=20171203';"
-           onmouseout="this.src='biblemap/image/Zoom-Out-icon.png?version=20171202';"
+    <input id="zoomOutBtn3D" type="image" src="biblemap/image/Zoom-Out-icon.png?version=20171209" style="border: none; position: absolute; width:29px; height: 29px;"
            onclick="map3DZoomOut()">
-
-    <input id="beforePoiBtn3D" type="image" src="biblemap/image/before_poi2.png?version=20171201" style="border:1px solid grey; position: absolute; width:23px; height:23px; "
-           onmouseover="this.src='biblemap/image/before_poi2_.png?version=20171203';"
-           onmouseout="this.src='biblemap/image/before_poi2.png?version=20171202';"
-           onclick="beforePoi()">
-    <input id="afterPoiBtn3D" type="image" src="biblemap/image/after_poi2.png?version=20171201" style="border:1px solid grey; position: absolute;width:23px; height:23px;"
-           onmouseover="this.src='biblemap/image/after_poi2_.png?version=20171203';"
-           onmouseout="this.src='biblemap/image/after_poi2.png?version=20171202';"
-           onclick="afterPoi()">
 
 </div>
 
@@ -505,9 +477,16 @@
     </ul>
     <div id ="tab_contain" class="tab_container"  >
 
+        <div id = "tab1Title" class="divContent" style="padding-left: 20px; font-weight: bold; font-size:15px; top:-6px; height: 33px; overflow-x:hidden; color: rgb( 90, 90, 90 );" >
+            <span id ="tabBibleBook" style="position: absolute; left: 15px; top: 0px; width:125px; font-size:15px; text-align:right;" ></span>
+            <input id="tabDecBible" type="image" src="biblemap/image/left_arrow.png?version=20170907" style="position: absolute; left: 140px; width:22px; height:22px; vertical-align:middle; " onclick="tabDecreaseBibleChapterAndSearch()">
+            <span id ="tabBibleChapter" style="position: absolute; left: 155px; width:70px; top: 0px; font-size:15px; text-align:center;">장</span>
+            <input id="tabIncBible" type="image" src="biblemap/image/right_arrow.png?version=20170907" style="position: absolute; left: 220px; top: 0px; width:22px; height:22px; vertical-align:middle;" onclick="tabIncreaseBibleChapterAndSearch()">
+        </div>
+
         <div id = "tab3Title" class="divContent" style="padding-left: 10px;  font-size: 16px; top:-6px; height: 35px; overflow-x:hidden; color: rgb( 90, 90, 90 ); " ></div>
 
-        <div id="tab1" class="tab_content">
+        <div id="tab1" class="tab_content" style="padding-left: 10px; border-top:1px solid rgb(215, 215, 215);" >
             Waiting....
         </div>
         <div id="tab2" class="tab_content">
@@ -528,7 +507,7 @@
 
 
 <div>
-    <img src="biblemap/image/hideBible.png?version=2017905" id="footerToggle" name="img" style="position:absolute; width:50px; height:12px;" onclick="toggleScrMap()">
+    <img id="footerToggle" src="biblemap/image/hideBible.png?version=2017905" name="img" style="position:absolute; width:50px; height:12px;" onclick="toggleScrMap()">
 </div>
 
 <div id="bubblePopup" class="ol-popup" style="font-size:1.1em;">
@@ -570,9 +549,9 @@
 </div>
 
 <script>
-    setDebug( true );
+    setDebug( false );
 
-    var isReload = windowReloadByCurDate();
+    var isReload = windowReloadByCurDate( 'biblemap3D-day');
 
     showDownloading();
 
@@ -589,10 +568,12 @@
     window.posX = 0;
     window.posY = 0;
 
-    var map3DAddLayerTimer;
+    var map3DAddLayerTimer = -1;
     var setGroundLayerTimer;
     var tabMenu = createTabMenu();
     var curMapViewMode = 'chkView2D';   // "chkView2D" |  "chkView3D"  | "chkViewAll"
+
+    $("#footerToggle").css( "z-index", "5000" );
 
     (function() {
 
@@ -691,7 +672,6 @@
     }());
 
 
-
     function startMap3DAddLayerWithTimer() {
         map3DAddLayerTimer = setInterval(addLayerTo3DMapOneByOne, 500);
     }
@@ -706,10 +686,11 @@
 
         var ret = map3D.memLayerAddToMapOneByOne();
         if( ret == true ){
-            clearInterval( map3DAddLayerTimer );
             sync2DMapTo3DMap();
             map3D.setGroundWholeLayer();
             waitOver();
+            clearInterval( map3DAddLayerTimer );
+            map3DAddLayerTimer = null;
         }
         else{
             ConsoleLog("addMap3DAddLayerWithTimer ..........");
@@ -748,6 +729,7 @@
 
         scaleBtnFunc2D = createScaleBtns( "map", 4, 15 );
         scaleBtnFunc3D = createScaleBtns( "map3D", 4, 18 );
+        //scaleBtnFunc3D = createScaleBtns( "map3D", 4, 16 );
 
         tabMenu.selectTab( 'tab1Menu');
         var oldValue = 'chkView2D';
@@ -1126,7 +1108,7 @@
 
     function mesaureToggleBtn() {
 
-        var img1 = "biblemap/image/measure_btn.png";
+        var img1 = "biblemap/image/measure_btn.png?version=20171207";
         var img2 = "biblemap/image/measure_btn_toggle.png";
 
         var measureBtn = document.getElementById("measureBtn2D");
@@ -1217,6 +1199,7 @@
             var layer = bibleMapPolygonLayers[ pid ];
             new GMDFileDownload( bibleMap, null, layer.url, layer.order, layer.style, layerManager, function(){
                 completeDownloadPolygons();
+                // map3D.view3DTilt(1.1);
             } );
         }
     }
@@ -1236,11 +1219,12 @@
 
     function downloadGeometries(){
 
+        sync2DMapTo3DMap();
+
         layerManager.layerContainer.totalCount = bibleMapPointLayers.length;
 
         for( var idx in bibleMapPointLayers ){
             var layer = bibleMapPointLayers[idx];
-
             new GMDFileDownload( bibleMap, map3D, layer.url, layer.order, layer.style, layerManager, completePoiDownload );
         }
     };
@@ -1341,6 +1325,9 @@
 
 
     function setViewMode3D(){
+        if( map3DAddLayerTimer == -1 )
+            return;
+
         closePopup2D();
 
         setViewMode( 'chkView3D' );
@@ -1469,6 +1456,7 @@
 
 
 
+
     bibleMapManager.clickEvent( function(evt){
         var clickedPos = evt.coordinate;
         // $("#mousePosition").html( "Pos X: " + clickedPos[0] + ", Y:" + clickedPos[1] ); // + zoom;
@@ -1501,19 +1489,11 @@
 
         ConsoleLog( "Map3D Click!!!!  mapX : " + mapX + ", mapY : " + mapY );
 
-        var poiObj = findPoiByCoord ( map3D.view.getZoom() - 1, mapX, mapY, layerManager.getPoiObjectArray() );
+        var poiObj = findPoiByCoord ( map3D.view.getZoom(), mapX, mapY, layerManager.getPoiObjectArray() );
         if( poiObj ){
             var poiObj = layerManager.getPoiObjById( poiObj.id );
 
-            /*
-            if( window.focusPoiObj.id != poiObj.id ) {
-                if (poiObj.zoomIn3D > map3D.view.getZoom() - 1) {
-                    var strText = poiObj.biblePlace + "=> poiZoom3D : " + poiObj.zoomIn3D + ", map3D.view.getZoom() - 1 : " + ( map3D.view.getZoom() - 1 );
-                    alert( strText );
-                    return;
-                }
-            }
-            */
+            poiObj.feature.getGeometry().set('altitudeMode', 'clampToGround');
 
             // requestPoiContentAndShow( poiObj, popup2D, popup3D );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
             requestPoiContentAndShow( poiObj, poiTooltip2D, poiTooltip3D );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
@@ -1531,6 +1511,10 @@
         }
 
     });
+
+    map3D.mapWheel( function(){
+
+    } );
 
 
     bibleMapManager.singleClickEvent( function(evt){
@@ -1551,6 +1535,7 @@
         ConsoleLog( "Zoom : "+ window.zoom + ", posX : " + window.posX + ", posY : " + window.posY );
 
         var feature = e.selected[0];    // 첫번째 걸린 것만 가져오기로 하자
+
         var layer = feature.getLayer(bibleMap);
         var id = layer.get("id");
         var pos = null;
@@ -1755,80 +1740,6 @@
     }
 
 
-
-    /*
-    move2DMapOr3DMap = function( moveDistance, extentLength, view, curZoom, poiObj, mode ) {
-
-        var mapBaseExtent = bibleMapManager.getMapBaseExtent();
-
-        var mapExtent = view.calculateExtent(bibleMap.getSize());
-        var curZoom = view.getZoom();
-        var mapExtentDistance = getDistance( mapExtent[0],mapExtent[1], mapExtent[2], mapExtent[3] );
-        var mapCenter =  view.getCenter();
-        var poiDistance = getDistance( mapCenter[0], mapCenter[1], poiObj.x, poiObj.y );
-        var isFar = false;
-        if( mapExtentDistance < poiDistance )
-            isFar = true;
-
-        var poiZoomIn = poiObj.zoomIn;
-
-        if( IsIntersectExtent( mapBaseExtent, poiObj.x, poiObj.y ) == true) {    // 기본 지도 영역 이내에 있으면
-            if (poiZoomIn < 6) {
-                poiZoomIn = 7.8;
-            } else {
-                poiZoomIn -= 1;
-            }
-
-            // if( curZoom < poiZoomIn ){
-            if (IsIntersectExtent(mapExtent, poiObj.x, poiObj.y) == true) {
-                poiZoomIn = curZoom;
-            } else {
-                var tolerance = Math.abs(curZoom - poiZoomIn);
-                if (tolerance > 2) {
-                    poiZoomIn = ( curZoom + poiZoomIn ) / 2.0;
-                } else {
-                    poiZoomIn = curZoom;
-                }
-            }
-            if( tolerance > 2 ){
-                flyTo(view, [poiObj.x, poiObj.y], poiZoomIn, function (complete) {
-                    if (complete == true) {
-                    }
-                });
-            }
-            else
-            {
-                moveTo(view, [poiObj.x, poiObj.y], poiZoomIn);
-            }
-
-            saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );
-
-        }else{
-            if( poiZoomIn < 6 )
-                poiZoomIn = 6.5;
-            else
-                poiZoomIn -= 1;
-
-            if( isFar == true ) {
-                saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );
-                flyTo(view, [poiObj.x, poiObj.y], poiZoomIn, function (complete) {
-                    if (complete == true) {
-                    }
-                });
-            }else{
-                if(IsIntersectExtent( mapExtent, poiObj.x, poiObj.y ) == true) {    // 현재 지도 영역 이내에 있으면
-                    saveLocationToStorage( curZoom, poiObj.x, poiObj.y );
-                    moveTo(view, [poiObj.x, poiObj.y], curZoom );
-                }
-                else {
-                    saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );
-                    moveTo(view, [poiObj.x, poiObj.y], poiZoomIn);
-                }
-            }
-        }
-    };
-    */
-
     function move2DMap( moveDistance, extentLength, view, curZoom, poiObj ){
 
         var mapBaseExtent = bibleMapManager.getMapBaseExtent();
@@ -1906,8 +1817,20 @@
 
         var mapBaseExtent = bibleMapManager.getMapBaseExtent();
 
-        // var mapExtent = view.calculateExtent(map3D.map.getSize());
-        var mapExtent = bibleMap.getView().calculateExtent(bibleMap.getSize());
+        var mapExtent = view.calculateExtent(map3D.map.getSize());
+        // var mapExtent = bibleMap.getView().calculateExtent(bibleMap.getSize());
+
+        var mapDistance = getDistance( mapExtent[0], mapExtent[1], mapExtent[2], mapExtent[3] );
+
+        // mapDistance = mapDistance / 2;
+
+        mapDistance  = mapDistance + (mapDistance * 0.8);
+
+        mapExtent[0] -= mapDistance;
+        mapExtent[1] -= mapDistance;
+
+        mapExtent[2] += mapDistance;
+        mapExtent[3] += mapDistance;
 
         var curZoom = view.getZoom();
         var mapExtentDistance = getDistance( mapExtent[0],mapExtent[1], mapExtent[2], mapExtent[3] );
@@ -2067,8 +1990,6 @@
             move3DMap( view3D, poiObj );
         }
 
-
-
     }
 
 
@@ -2084,12 +2005,24 @@
 
     function createScaleBtns( divID, min, max  ) {
 
-        var baseY = 230;
+        var zoomInBtn2D = document.getElementById('zoomInBtn2D');
+        var zoomOutBtn2D = document.getElementById('zoomOutBtn2D');
 
+        var zoomInBtn3D = document.getElementById('zoomInBtn3D');
+        var zoomOutBtn3D = document.getElementById('zoomOutBtn3D');
+
+        var measureBtn2D = document.getElementById('measureBtn2D');
+
+        var baseY = 150;
+
+        /*
         if( divID == 'map')
             baseY = 230;
         else
-            baseY = 210;
+            baseY = 100;
+            */
+
+        var intervalY = 10;
 
         var minLevel = min;
         var maxLevel = max;
@@ -2097,7 +2030,29 @@
 
         var levelLen = maxLevel - minLevel +1;
 
-        var imgSrc1 = "biblemap/image/scale_btn.png";       // normal
+        if( divID == 'map') {
+            zoomOutBtn2D.style.top = (baseY - 29) + 'px';
+            zoomOutBtn2D.style.left = 5 + 'px';
+
+            //zoomInBtn2D.style.top = ( (baseY - 30) + ( intervalY * levelLen ) ) + 'px';
+            zoomInBtn2D.style.top = ( (baseY - 0) + ( intervalY * levelLen ) ) + 'px';
+            // zoomInBtn2D.style.top = 260 + 'px';
+            zoomInBtn2D.style.left = 5 + 'px';
+
+            measureBtn2D.style.top = baseY - 70 +'px';
+            measureBtn2D.style.left = 5 + 'px';
+        }else {
+
+            zoomOutBtn3D.style.top = (baseY - 29) + 'px';
+            zoomOutBtn3D.style.left = 5 + 'px';
+
+            // zoomInBtn3D.style.top = ( (baseY - 30) + ( intervalY * levelLen ) ) + 'px';
+            zoomInBtn3D.style.top = ( (baseY - 0) + ( intervalY * levelLen ) ) + 'px';
+            zoomInBtn3D.style.left = 5 + 'px';
+        }
+
+
+        var imgSrc1 = "biblemap/image/scale_btn.png?version=20170922";       // normal
         var imgSrc2 = "biblemap/image/scale_btn_.png";      // over
         var imgSrc3 = "biblemap/image/scale_btn__.png";     // click
 
@@ -2111,17 +2066,27 @@
             btn.src = imgSrc1;
             btn.type = "image";
             var strIdx = idx + "";
+            // strIdx +=  mapViewId;
+            // var strIdx = idx + "-" + mapViewId;
+            btn.id = strIdx;
+            // btn.setAttribute("id", strIdx );
             btn.setAttribute('clicked', "false" );
-            btn.setAttribute('id', strIdx );
+            // btn.setAttribute("border", "1px solid #1A75FF");
+            // btn.setAttribute('style', "position: absolute; border: 1px solid #1A75FF; width: 20px; height: 10px; ");
+            btn.setAttribute('style', "position: absolute; border: none; width: 20px; height: 10px; ");
+
             var strID = "#" + strIdx;
             $(strID).css("z-index", "2100");
-            //border:1px solid #A0A0A0;
-            btn.setAttribute('border', '1px solid #A0A0A0');
-            btn.setAttribute('width', '23px');
-            btn.setAttribute('height', '8px');
-            btn.style.position = "absolute";
-            btn.style.top = baseY + (idx * 8 ) + "px";
-            btn.style.left = "5px";
+            //$(strID).css("border", "1px solid #1A75FF");
+            //$(strID).css("border", "none");
+
+            var name_by_id = document.getElementById( strIdx);
+
+            // btn.setAttribute('width', '23px');
+            // btn.setAttribute('height', '8px');
+            // btn.style.position = "absolute";
+            btn.style.top = baseY + (idx * intervalY ) + "px";
+            btn.style.left = "9px";
 
             btn.addEventListener('mouseover', mouseOverFunc, false );
             btn.addEventListener('mouseout', mouseOutFunc, false );

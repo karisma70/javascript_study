@@ -54,7 +54,6 @@ function menuIncreaseBibleChapter(){
 
 function tabIncreaseBibleChapterAndSearch() {
 
-
     searchBibleChapterNum += 1;
     var objChapter =  adjustBibleBookChapter( searchBibleBookNum, searchBibleChapterNum );
 
@@ -242,10 +241,11 @@ function tabSearchBibleChapter(){
     $("#sideMenu").removeClass("open");
 
     reqeustAndShowContents('#tab1', searchParam, -1, function(){
+        /*
         if( callback ){
             callback();
         }
-
+        */
     } );
 
 }

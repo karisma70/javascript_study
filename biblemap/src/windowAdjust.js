@@ -172,8 +172,6 @@ var adjustScrDiv = (function(){
     var compassBtn;
     var zoomInBtn2D;
     var zoomOutBtn2D;
-    var beforePoiBtn2D;
-    var afterPoiBtn2D;
 
     var compassBasX = window.innerWidth - ( 200 + 85 );
     var compassBasY = 5;
@@ -183,14 +181,11 @@ var adjustScrDiv = (function(){
     var zoomInBtn3D;
     var zoomOutBtn3D;
     var measureBtn2D;
-    var beforePoiBtn3D;
-    var afterPoiBtn3D;
 
     var view2DBtn;
     var view3DBtn;
 
     var footer;
-    // var footerDummy = document.getElementById('footerDummy');
     var tab_contain;
 
     var container;
@@ -241,18 +236,6 @@ var adjustScrDiv = (function(){
         turnRightBtn = document.getElementById('turnRightBtn');
         turnDownBtn = document.getElementById('turnDownBtn');
 
-        zoomInBtn3D = document.getElementById('zoomInBtn3D');
-        zoomOutBtn3D = document.getElementById('zoomOutBtn3D');
-        beforePoiBtn3D = document.getElementById('beforePoiBtn3D');
-        afterPoiBtn3D = document.getElementById('afterPoiBtn3D');
-
-
-        zoomInBtn2D = document.getElementById('zoomInBtn2D');
-        zoomOutBtn2D = document.getElementById('zoomOutBtn2D');
-        measureBtn2D = document.getElementById('measureBtn2D');
-        beforePoiBtn2D = document.getElementById('beforePoiBtn2D');
-        afterPoiBtn2D = document.getElementById('afterPoiBtn2D');
-
         view2DBtn  = document.getElementById('view2DBtn');
         view3DBtn  = document.getElementById('view3DBtn');
 
@@ -267,34 +250,7 @@ var adjustScrDiv = (function(){
         tab3 = document.getElementById("tab3");
         tab4 = document.getElementById("tab4");
 
-        // compassBtn.style.top = 5 +'px';
-        // compassBtn.style.left = (window.innerWidth - ( 200 + 110 )) + 'px';
-
         setCompassBtnPos( compassBasX, compassBasY );
-
-        zoomInBtn3D.style.top = baseY +'px';
-        zoomInBtn3D.style.left = 5 + 'px';
-        zoomOutBtn3D.style.top = baseY + 23 +'px';
-        zoomOutBtn3D.style.left = 5 + 'px';
-
-        beforePoiBtn3D.style.top = baseY + 70 +'px';
-        beforePoiBtn3D.style.left = 5 + 'px';
-        afterPoiBtn3D.style.top = baseY + 93 +'px';
-        afterPoiBtn3D.style.left = 5 + 'px';
-
-        zoomInBtn2D.style.top = baseY +'px';
-        zoomInBtn2D.style.left = 5 + 'px';
-        zoomOutBtn2D.style.top = baseY + 23 +'px';
-        zoomOutBtn2D.style.left = 5 + 'px';
-
-        measureBtn2D.style.top = baseY + 56 +'px';
-        measureBtn2D.style.left = 5 + 'px';
-
-        beforePoiBtn2D.style.top = baseY + 90 +'px';
-        beforePoiBtn2D.style.left = 5 + 'px';
-        afterPoiBtn2D.style.top = baseY + 113 +'px';
-        afterPoiBtn2D.style.left = 5 + 'px';
-
 
         view2DBtn.style.top = 5 +'px';
         view2DBtn.style.left = 5 + 'px';
@@ -315,11 +271,13 @@ var adjustScrDiv = (function(){
         $( '#turnRightBtn' ).css( "z-index", val );
         $( '#turnDownBtn' ).css( "z-index", val );
 
+
         $( '#zoomInBtn3D' ).css( "z-index",  val);
         $( '#zoomOutBtn3D' ).css( "z-index",  val);
-        $( '#beforePoiBtn3D' ).css( "z-index", val );
-        $( '#afterPoiBtn3D' ).css( "z-index", val );
+        // $( '#beforePoiBtn3D' ).css( "z-index", val );
+        // $( '#afterPoiBtn3D' ).css( "z-index", val );
         $( '#view2DBtn' ).css( "z-index", val );
+
 
     }
 
@@ -327,8 +285,8 @@ var adjustScrDiv = (function(){
         $('#zoomInBtn2D').css("z-index", val);
         $('#zoomOutBtn2D').css("z-index", val);
         $('#measureBtn2D').css("z-index", val);
-        $('#beforePoiBtn2D').css("z-index", val);
-        $('#afterPoiBtn2D').css("z-index", val);
+        // $('#beforePoiBtn2D').css("z-index", val);
+        // $('#afterPoiBtn2D').css("z-index", val);
         $('#view3DBtn').css("z-index", val);
     }
 
@@ -434,7 +392,7 @@ var adjustScrDiv = (function(){
         tab_contain.style.bottom = 5 + 'px';
 
 
-        tab1.style.top = 0 +'px';
+        tab1.style.top = 30 +'px';
         tab1.style.left = 0+'px';
         tab1.style.right = 0 + 'px';
         tab1.style.bottom = 5 + 'px';

@@ -43,7 +43,7 @@
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/m_popup.css?version=20170910">
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
-    <script type="text/javascript" src="biblemap/src/common.js?version=20171004"></script>
+    <script type="text/javascript" src="biblemap/src/common.js?version=20171005"></script>
 
     <!--
     <script type="text/javascript" src="biblemap/js/matchMedia.js-master/matchMedia.js"></script>
@@ -305,7 +305,24 @@
 
     setDebug( false );
 
-    var isReload = windowReloadByCurDate();
+    var isReload = windowReloadByCurDate( 'biblemapMobile-day' );
+
+    if( isMobile() == false ){
+        var iEVersion = IEVersionCheck();
+
+        if( iEVersion == 'N/A') {
+            location.replace( 'biblemap3D.html' );
+        }
+        else{
+            var numVersion = parseFloat( iEVersion  );
+            if( numVersion >= 11) {
+                location.replace( 'biblemap3D.html' );
+            }else{
+                location.replace('download_guide.html');
+            }
+        }
+    }
+
 
     $("#downloadingDiv").css( "z-index", 30);
 
@@ -563,7 +580,8 @@
                         if( strPoi != null ){
                             window.focusPoiObj = layerManager.getPoiObjByPlaceAndTitle( strPoi.place, strPoi.title );
                             layerManager.historyInsertPoi( window.focusPoiObj );
-                            bibleMapManager.createPoiIcon( window.focusPoiObj );        // focus POI Icon 만들기
+                            // bibleMapManager.createPoiIcon( window.focusPoiObj );        // focus POI Icon 만들기
+                            bibleMapManager.setIconPosByPoi( window.focusPoiObj );        // focus POI Icon 만들기
 
                             mobileRequestPoiContentAndShow( window.focusPoiObj , function( infoText ){
                                 closeTooltip();
@@ -735,6 +753,7 @@
         if( mapExtentDistance < poiDistance )
             isFar = true;
 
+        var tolerance = 0.0;
         var poiZoomIn = poiObj.zoomIn;
 
         if( IsIntersectExtent( mapBaseExtent, poiObj.x, poiObj.y ) == true) {    // 기본 지도 영역 이내에 있으면
@@ -748,7 +767,7 @@
             if (IsIntersectExtent(mapExtent, poiObj.x, poiObj.y) == true) {
                 poiZoomIn = curZoom;
             } else {
-                var tolerance = Math.abs(curZoom - poiZoomIn);
+                tolerance = Math.abs(curZoom - poiZoomIn);
                 if (tolerance > 2) {
                     poiZoomIn = ( curZoom + poiZoomIn ) / 2.0;
                 } else {

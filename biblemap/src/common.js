@@ -414,7 +414,7 @@ function saveSearchWordsToStorage( ){
 }
 
 
-function saveCurrentDayToStorage( curDate ){
+function saveCurrentDayToStorage( curDate, storageName ){
     if( checkLocalStorageEnabled() == false ) {
         return;
     }
@@ -433,11 +433,14 @@ function saveCurrentDayToStorage( curDate ){
     // alert("JSON : " + strObj );
     var storage = window.localStorage;
 
-    storage.setItem('bibleMap-day', strObj);
+    // storage.setItem('bibleMap-day', strObj);
+    storage.setItem( storageName, strObj);
+
 }
 
-function getCurrentDayFromStorage(){
-    var strObj = localStorage.getItem( 'bibleMap-day');
+function getCurrentDayFromStorage( storageName ){
+    // var strObj = localStorage.getItem( 'bibleMap-day');
+    var strObj = localStorage.getItem( storageName );
     if( strObj === undefined || strObj == null ){
         return null;
     }
@@ -564,25 +567,102 @@ function IsIntersectExtent( extent, mapX, mapY ){
     return false;
 }
 
-function windowReloadByCurDate() {
+// 'bibleMap-day'
+function windowReloadByCurDate( storageName ) {
 
     var curDate = new Date();
 
-    var dayObj = getCurrentDayFromStorage();
+    var dayObj = getCurrentDayFromStorage( storageName );
     if (dayObj == null) {
-        saveCurrentDayToStorage(curDate);
-        alert( "refresh!!!");
+        saveCurrentDayToStorage(curDate, storageName );
+        // alert( "refresh!!!");
         window.location.reload(true);
         return true;
     } else {
 
+
         if (dayObj.year != curDate.getFullYear() || dayObj.mon != curDate.getCurMonth() || dayObj.day != curDate.getCurDay() || dayObj.hour != curDate.getHours() || dayObj.min != curDate.getMinutes()) {
-            saveCurrentDayToStorage(curDate);
-            alert( "refresh!!!");
+            saveCurrentDayToStorage(curDate, storageName );
+            // alert( "refresh!!!");
             window.location.reload(true);
             return true;
         }
         else
             return false;
+    }
+}
+
+
+var IEVersionCheck = function() {
+
+    var word;
+    var version = "N/A";
+
+    var agent = navigator.userAgent.toLowerCase();
+    var name = navigator.appName;
+
+    // IE old version ( IE 10 or Lower )
+    if ( name == "Microsoft Internet Explorer" ) word = "msie ";
+
+    else {
+        // IE 11
+        if ( agent.search("trident") > -1 ) word = "trident/.*rv:";
+
+        // IE 12  ( Microsoft Edge )
+        else if ( agent.search("edge/") > -1 ) word = "edge/";
+    }
+
+    var reg = new RegExp( word + "([0-9]{1,})(\\.{0,}[0-9]{0,1})" );
+    if (  reg.exec( agent ) != null  )
+        version = RegExp.$1 + RegExp.$2;
+
+    return version;
+};
+
+
+
+function isMobile(){
+    var userAgent = navigator.userAgent.toLowerCase();
+    if(userAgent.match('iphone')) {
+        return true;
+    } else if(userAgent.match('ipad')) { // sizes="72*72"
+        return true;
+    } else if(userAgent.match('ipod')) {
+        return true;
+    } else if(userAgent.match('android')) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+function redirectByBrowser() {
+
+    var isReload = windowReloadByCurDate('biblemapRedirect-day');
+    /*
+    if (isReload == true)
+        alert("updated ___ !!!");
+    else
+        alert("not updated ____!!");
+        */
+
+    if (isMobile() == true) {
+        location.replace('biblemapMobile.html');
+    }
+    else {
+        var iEVersion = IEVersionCheck();
+
+        if (iEVersion == 'N/A') {
+            location.replace('biblemap3D.html');
+        }
+        else {
+            var numVersion = parseFloat(iEVersion);
+            if (numVersion >= 11) {
+                location.replace('biblemap3D.html');
+            } else {
+                location.replace('download_guide.html');
+            }
+        }
     }
 }

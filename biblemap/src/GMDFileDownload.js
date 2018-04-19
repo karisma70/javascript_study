@@ -151,7 +151,8 @@ function createPoiObj( attrs, shapeRecord, minVisibleLevel, minVisibleLevel3D ){
         zoomIn3D: minVisibleLevel3D,
         title : poiTitle,
         rangeStr : rangeStr,
-        rangeArray : rangeArray
+        rangeArray : rangeArray,
+        feature : null
     };
 
     return poiObj;
@@ -191,12 +192,20 @@ function GMDFileDownload( map, map3D, shpUrl, layerId, style, paramLayerManager,
 
     var createShapeLayer = function( features, layerId, style, styleFunction ) {
 
-        var shapeLayer = new ol.layer.Vector({
-            source: new ol.source.Vector({
-                features: features
-            }),
-            style: styleFunction
-        });
+        if( styleFunction !== null  ) {
+            var shapeLayer = new ol.layer.Vector({
+                source: new ol.source.Vector({
+                    features: features
+                }),
+                style: styleFunction
+            });
+        }else{
+            var shapeLayer = new ol.layer.Vector({
+                source: new ol.source.Vector({
+                    features: features
+                })
+            });
+        }
 
         shapeLayer.set('id', layerId, false);
         shapeLayer.set('visibleRange', style.visibleRange);
@@ -277,14 +286,18 @@ function GMDFileDownload( map, map3D, shpUrl, layerId, style, paramLayerManager,
                 var feature = createFeatureFromWkt(wkt, attrs, bTransform, format, "label" );
                 feature.setProperties({  'id' : poiobj.id,
                                         'style': paramStyle });
+
+                poiobj.feature = feature;
+
                 features.push(feature);
 
-                // var cloneFeature = cloneObject( feature );
+                if( map3D ) {
+                    // var cloneFeature = cloneObject( feature );
+                    var cloneFeature = create3DFeatureFrom2DFeauture(feature);
 
-                var cloneFeature = create3DFeatureFrom2DFeauture( feature );
-                cloneFeature.getGeometry().set('altitudeMode', 'clampToGround');
-                cloneFeatures.push( cloneFeature );
-
+                    cloneFeature.getGeometry().set('altitudeMode', 'clampToGround');
+                    cloneFeatures.push(cloneFeature);
+                }
 
                 var searchWord = getStringFromAttrs( attrs, "bible");
                 layerManager.insertPoiObjToDictionary( poiobj, searchWord );
@@ -432,8 +445,8 @@ function GMDFileDownload( map, map3D, shpUrl, layerId, style, paramLayerManager,
         ///////////////////////  3D Map
 
         if( map3D ) {
-            // var cloneShapeLayer = createShapeLayer( cloneFeatures, layerId, style, createTextStyleOfFeature );
-            var cloneShapeLayer = createShapeLayer( cloneFeatures, layerId, style, create3DPointStyleOfFeature );
+            // var cloneShapeLayer = createShapeLayer( cloneFeatures, layerId, style, create3DPointStyleOfFeature );
+           var cloneShapeLayer = createShapeLayer( cloneFeatures, layerId, style, null );
             cloneShapeLayer.setVisible( false );
 
             cloneShapeLayer.set('altitudeMode', 'clampToGround' );

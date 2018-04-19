@@ -349,12 +349,12 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
         var infoTab = document.getElementById( 'tab3' );
         // infoTab.innerHTML = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + poiObj.id + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: #2682E8 \" >' + '#'+ poiText + '  ' + '</a>';
 
-        var poiTitle = '<a href=' + '\"javascript:moveToPlaceByPoiID( ' + "\'" + poiObj.id + "\'" + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: rgb( 180, 4, 174 )\" >'
-            + '<img src ="biblemap/image/poi_location.png?version=20170908" style=\"height:22px; vertical-align:top;\">&nbsp;&nbsp;' +
+        var poiTitle = '<a href=' + '\"javascript:moveToPlaceByPoiID( ' + "\'" + poiObj.id + "\'" + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: rgb( 180, 4, 174 ); vertical-align:top; \" >'
+            + '<img src ="biblemap/image/poi_location.png?version=20170908" style=\"height:20px; \">&nbsp;&nbsp;' +
             poiObj.biblePlace + '</a>';
 
         var strSearchWord = '<a href=' + '\"javascript:searchBibleWord_( ' + "\'" + poiObj.biblePlace + "\'" + ')\">';
-        strSearchWord += '&nbsp;&nbsp;&nbsp;<img src =\"biblemap/image/m_search_btn2.png\" style=\"top: -2px; height:24px; vertical-align:top;\">' + '</a>';
+        strSearchWord += '&nbsp;&nbsp;&nbsp;<img src =\"biblemap/image/m_search_btn2.png\" style=\"top: -2px; height:22px; vertical-align:top;\">' + '</a>';
 
         strSearchWord += '<a href=' + '\"javascript:beforePoi( )\"><img src =\"biblemap/image/undo.png?version=20170914\" style=\"position: absolute; left: 215px; top: -2px; width: 24px; height:20px; vertical-align:top;\"></a>';
         strSearchWord += '<a href=' + '\"javascript:afterPoi( )\"><img src =\"biblemap/image/redo.png?version=20170914\" style=\"position: absolute; left: 255px; top: -2px; width:24px; height:20px; vertical-align:top;\"></a>';
@@ -467,16 +467,37 @@ function showIntroBibleMap(  ){
     popupContent.innerHTML += '본 웹사이트에서 표현되는 디지털 맵 데이터의 일부는 OpenStreetMap을 사용하고 있으며, OpenStreetMap의 라이센스는 CC BY-SA 2.0을 따릅니다.</span>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '본 웹사이트에서 표현되는 디지털 맵 데이터의 일부는 \'마이크로소프트\'가 제공하는 \'Bing Maps\'를 사용하고 있으며, \'Bing Maps\'를 사용하여 본 웹서비스를 제공하는 \'Mission Wide\'는 \'Bing Maps\'에 관한 라이선스 조항을 준수합니다';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '본 웹서비스를 사용하는 사용자는 아래 사이트에서 제공하는 라이센스 규정을 준수해야 합니다.';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += 'https://www.microsoft.com/en-us/maps/product';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '본 웹사이트에 포함된 디지털맵 뷰어는 Cesium과 ol-cesium를 기반으로 제작되었으며, Cesium v1.32의 라이센스는 Apache License 2.0를 따릅니다.</span>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '본 웹사이트에서 표현되는 DEM 데이터는 STK World Terrain 이며, EU에서 자금을 조달 한 코페르니쿠스 © Analytical Graphics, Inc., © CGIAR-CSI 에서 제공하는 정보입니다.</span>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '본 웹사이트에서 제공하는 성경지명 정보 가운데 \'-비전성경사전-\' 출처로 표현되는 내용은 \'(사)두란노서원\'에서, \'-성경지명사전-\' 출처로 표현되는 내용은 \'(사)한국컴퓨터선교회\'에서 웹서비스를 통하여 제공하고 있는 내용임을 알려드립니다.</span>';
+    popupContent.innerHTML += '본 웹사이트에서 제공하는 \'개역한글판\' 성경의 저작권은 \'대한성서공회\'에 있습니다.</span>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '본 웹사이트에서 제공하는 성경지명 정보 가운데 \'-비전성경사전-\' 출처로 표현되는 내용의 저작권은 \'(사)두란노서원\'에 있습니다.</span>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '본 웹사이트에서 제공되는 위치정보는 일부 오류를 포함할 수 있음을 알려드리며, 공인된 정확한 정보가 수집되는 대로 수정할 것을 알려드립니다.</span>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '본 웹사이트는 \'Mission Wide\'가 개발 및 운영, 관리하고 있으며, \'Mission Wide\'는 성경지리를 웹 서비스로 제공하는 비영리 단체입니다.';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '\'Mission Wide\' 연락처';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '이메일: missionwide@naver.com';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<a href= \"javascript:gotoBibleMapBlog()\" style=\"text-decoration:none; font-weight:bold; color:#2E59BF;\">' + '블로그: blog.naver.com/bible-map</a>';
+    popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
 
     showNoticePopup( '#infoPopup' );
@@ -486,6 +507,9 @@ function showIntroBibleMap(  ){
 }
 
 
+function gotoBibleMapBlog(){
+    window.open("http://blog.naver.com/bible-map");
+}
 
 
 function Tooltip( mapType, paramMap, cssClassName ) {
@@ -530,6 +554,9 @@ function Tooltip( mapType, paramMap, cssClassName ) {
         // tooltipElement.setAttribute("id", poiID);
         // var strID = "#" + poiID;
         tooltipElement.setAttribute("id", window.tooltipID );
+        //  tooltipElement.setAttribute("style", "font-size: 13px;" );
+        tooltipElement.setAttribute("style", "font : normal 13px Nanum Gothic ");
+
         var strID = "#" + window.tooltipID;
 
         // $(strID).css("z-index", zOrder.toString());
