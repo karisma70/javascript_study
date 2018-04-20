@@ -26,6 +26,10 @@ function makeHrefWordInText( LayerManager, strWord, bibleTitle, bibleText, color
     var strongStart = "<strong><font color='" + color + "'>";
     var strongEnd = "</font></strong>";
 
+    if( bibleTitle === undefined && strWord == '대해' ){
+        return bibleText;
+    }
+
     /*
     bibleText = "Iye Abarim <br>요단 동쪽에 위치한 광야라는 뜻으로 성경에는 \'모압 앞 해돋는 편 광야\’로 묘사되어 있는데 이는 모압 동남편의 변방 불모지로서 대부분 암석이 많은 지역이었다";
     strWord = "모압";

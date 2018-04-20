@@ -68,9 +68,9 @@
     <script type="text/javascript" src="biblemap/src/makeHrefText.js?version=20170829"></script>
     <script type="text/javascript" src="biblemap/src/m_requestPoiContent.js?version=20170902"></script>
 
-    <script type="text/javascript" src="biblemap/src/m_searchBible.js?version=20170901"></script>
+    <script type="text/javascript" src="biblemap/src/m_searchBible.js?version=20170903"></script>
     <script type="text/javascript" src="biblemap/js/jquery.autocomplete.min.js"></script>
-    <script type="text/javascript" src="biblemap/src/m_windowAdjust.js"></script>
+    <script type="text/javascript" src="biblemap/src/m_windowAdjust.js?version=20170902"></script>
     <script type="text/javascript" src="biblemap/src/m_poiTooltip.js"></script>
 
     <style stype="text/css">
@@ -210,6 +210,11 @@
         </div>
     </div>
 
+    <div id="snsSideDiv" class="content" style ="position: absolute; left: 10px; width:230px; top: 250px; height: 200px; ">
+        <input type="image" src="biblemap/image/naver_blog.png?version=20170916" style="position: absolute; left: 40px;  top: 0px; width:40px; height:40px; vertical-align:middle; border:none;"  onclick="gotoSNS(1)">
+        <input type="image" src="biblemap/image/naver_cafe.png?version=20170908" style="position: absolute; left: 95px;  top: 0px; width:40px; height:40px; vertical-align:middle; border:none; "  onclick="gotoSNS(2)">
+        <input type="image" src="biblemap/image/face_book.png?version=20170908" style="position: absolute; left: 150px;  top: 0px; width:40px; height:40px; vertical-align:middle; border:none; "  onclick="gotoSNS(3)">
+    </div>
 </div>
 
 <div id="map" class="mapview" style="position:absolute; top:41px;" >
@@ -306,6 +311,7 @@
     setDebug( false );
 
     var isReload = windowReloadByCurDate( 'biblemapMobile-day' );
+
 
     if( isMobile() == false ){
         var iEVersion = IEVersionCheck();
@@ -586,7 +592,8 @@
                             mobileRequestPoiContentAndShow( window.focusPoiObj , function( infoText ){
                                 closeTooltip();
                                 writePoiContentsToTab( window.focusPoiObj, infoText );
-                                footerMenu.bottom();
+                                tabMenu.selectTab('tab3Menu');
+                                footerMenu.middle();
                             } );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
 
 
@@ -725,6 +732,10 @@
         var poiZoomIn = poiObj.zoomIn -1;
         if( poiZoomIn > 11 )
             poiZoomIn += 1;
+
+        if( poiZoomIn < 6 )
+            poiZoomIn = 6;
+
 
         saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );
 
@@ -941,6 +952,17 @@
         }
     }
 
+    function gotoSNS( kind ){
+        if( kind == 1 ){
+            window.open("https://blog.naver.com/bible-map");
+        }
+        if( kind == 2 ){
+            window.open("http://cafe.naver.com/missionwide");
+        }
+        if( kind == 3 ){
+            window.open("https://www.facebook.com/biblemap/");
+        }
+    }
 
 
 </script>

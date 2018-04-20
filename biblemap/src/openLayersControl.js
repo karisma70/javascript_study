@@ -866,15 +866,6 @@ function createLayer( source  ) {
              });
          }
 
-
-         /*
-         this.map.getInteractions().forEach(function(interaction) {
-             if (interaction instanceof ol.interaction.MouseWheelZoom) {
-                 interaction.setActive(false);
-             }
-         }, this);
-         */
-
          this.mapExtent = this.map.getView().calculateExtent( this.map.getSize());
          this.mapExtent[0]= this.mapExtent[0] - 190000;
          this.mapExtent[1]= this.mapExtent[1] - 190000;
