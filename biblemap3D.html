@@ -291,12 +291,12 @@
             <div class="content" style ="position: absolute; width:198px; top: 130px; height: 85px; background-color:#FFFFFF;">
                 <span style="margin-left: 18px;  font-size:12px;">지명</span>
                 <input type="text" name="currency" class="biginput" id="biblePlace" size="16"
-                       style="padding-left: 3px; margin-left: 0px; width:112px; height:21px; font-size:12px; font:'Nanum Gothic'; " value="갈릴리 호수" onkeypress="if(event.keyCode==13) searchBiblePlace();">
-                <input type="image" src="biblemap/image/m_text_clear.png?version=20170916" style="position: absolute; top: 2px;  left: 136px;  width:19px; height:18px; vertical-align:bottom; border:none; "  onclick="clearSearchPlaceWord()">
-                <input type="button" class="button" value="검색" style="position: absolute; left: 157px; vertical-align:center; margin-left: 2px;" onclick="searchBiblePlace()">
+                       style="position: absolute; left: 44px; top: -2px; padding-left: 3px; margin-left: 0px; width:112px; height:21px; font-size:12px; font:'Nanum Gothic'; " value="갈릴리 호수" onkeypress="if(event.keyCode==13) searchBiblePlace();">
+                <input type="image" src="biblemap/image/m_text_clear.png?version=20170916" style="position: absolute; top: 0px;  left: 136px;  width:19px; height:18px; vertical-align:bottom; border:none; "  onclick="clearSearchPlaceWord()">
+                <input type="button" class="button" value="검색" style="position: absolute; left: 157px; top:-2px; vertical-align:center; margin-left: 2px;" onclick="searchBiblePlace()">
                 <div style="height: 4px"></div>
                 <!-- <div id ="searchedPoiList" rows= "5" style="border:1px solid grey; margin-left:10px; height: 60px; width: 163px; font-size:13px ; clear: both;"></div>  -->
-                <select id ="searchedPoiList" name="searchedPoiList" size='3' style="position: absolute; overflow:hidden; padding-left: 3px; margin-left:41px; left: 3px; width: 144px; height:52px; border: 1px solid #D9D9D9; " ></select>
+                <select id ="searchedPoiList" name="searchedPoiList" size='3' style="position: absolute; overflow:hidden; padding-left: 3px; margin-left:41px; left: 3px; top: 23px; width: 144px; height:52px; border: 1px solid #D9D9D9;  font-size:12px; font:'Nanum Gothic';" ></select>
             </div>
 
         </div>
@@ -425,7 +425,7 @@
     <input id="compassBtn" type="image" src="biblemap/image/compass2.png?version=20170930"
            onmouseover="this.src='biblemap/image/compass2_.png?version=20170930';"
            onmouseout="this.src='biblemap/image/compass2.png?version=20170930';"
-           style="position: absolute; border:0; width: 60px; height: 60px; opacity:0.7;"  onclick="setRotateNorth()">
+           style="position: absolute; border:0; width: 60px; height: 60px;"  onclick="setRotateNorth()">
     <input id="turnLeftBtn" type="image" src="biblemap/image/turn_left_.png?version=20170905"
            onmouseover="this.src='biblemap/image/turn_left__.png?version=20170905';"
            onmouseout="this.src='biblemap/image/turn_left_.png?version=20170905';"
@@ -550,6 +550,10 @@
 
 <script>
     setDebug( false );
+
+    if( isMobile() == true ){
+        location.replace( 'biblemapMobile.html' );
+    }
 
     var isReload = windowReloadByCurDate( 'biblemap3D-day');
 
@@ -2052,9 +2056,9 @@
         }
 
 
-        var imgSrc1 = "biblemap/image/scale_btn.png?version=20170922";       // normal
-        var imgSrc2 = "biblemap/image/scale_btn_.png";      // over
-        var imgSrc3 = "biblemap/image/scale_btn__.png";     // click
+        var imgSrc1 = "biblemap/image/scale_btn.png?version=20170923";       // normal
+        var imgSrc2 = "biblemap/image/scale_btn_.png?version=20170925";      // over
+        var imgSrc3 = "biblemap/image/scale_btn__.png?version=20170925";     // click
 
         var clickedNumber = -1;
 

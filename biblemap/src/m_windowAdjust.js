@@ -677,6 +677,9 @@ function clearSearchBibleWord(){
 
 function clearSearchPlaceWord(){
     $("#searchedPoiList").hide();
+
+    normalSNSButtonPos();
+
     dvBiblePlace.value ="";
     $("#biblePlace").focus();
 }

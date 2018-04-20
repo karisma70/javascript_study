@@ -424,6 +424,19 @@ function requestBibleWithShortChapter( shortTitle, chapterNum, paragraph ){
 }
 
 
+function normalSNSButtonPos( ){
+
+    var snsSideDiv = document.getElementById("snsSideDiv");
+    snsSideDiv.style.top = 250 + 'px';
+}
+
+function downSNSButtonPos( ){
+    var snsSideDiv = document.getElementById("snsSideDiv");
+    snsSideDiv.style.top = 320 + 'px';
+}
+
+
+
 
 function mobileSearchBiblePlace() {
     if (dvBiblePlace.value == "") {
@@ -445,6 +458,7 @@ function mobileSearchBiblePlace() {
 
     if( poiArray.length > 1 ) {
         $("#searchedPoiList").show();
+        downSNSButtonPos( );
 
         dvSearchedPoiList.innerHTML = "<ol>";
 
@@ -467,6 +481,7 @@ function mobileSearchBiblePlace() {
         dvSearchedPoiList.innerHTML += "</ol>";
     }else{
         $("#searchedPoiList").hide();
+        normalSNSButtonPos( );
         poiObj = poiArray[0];
         hideMenuAndMoveToPoiID( poiObj.id );
     }
