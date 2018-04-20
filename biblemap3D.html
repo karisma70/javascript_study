@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -28,7 +29,7 @@
 
     <script type="text/javascript" src="biblemap/src/makeHrefText.js?version=20180121"></script>
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20180121"></script>
-    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20180210"></script>
+    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20180211"></script>
     <script type="text/javascript" src="biblemap/src/routePlay.js?version=20171205"></script>
     <script type="text/javascript" src="biblemap/src/trajectoryData.js?version=20170901"></script>
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170829"></script>
@@ -1321,7 +1322,9 @@
     }
 
     function setViewMode2D(){
-        closePopup3D();
+        // closePopup3D();
+  //      if( window.selectedPoiObj != null )
+            showBaseInfoPoi2D3D();
 
         setViewMode( 'chkView2D' );
         $('input:radio[name="radio2D3D"][value=chkView2D]').prop("checked", true);
@@ -1332,7 +1335,9 @@
         if( map3DAddLayerTimer == -1 )
             return;
 
-        closePopup2D();
+        // closePopup2D();
+   //     if( window.selectedPoiObj != null )
+            showBaseInfoPoi2D3D();
 
         setViewMode( 'chkView3D' );
         $('input:radio[name="radio2D3D"][value=chkView3D]').prop("checked", true);
@@ -1467,6 +1472,7 @@
 
         // poiTooltip2D.allRemove();
         closeTooltip();
+        window.selectedPoiObj = null;
 
         /*
         var tempTooltip1 = new Tooltip( "2D", bibleMap, 'poiTooltip poiTooltip-static', 1000 );
@@ -1487,6 +1493,7 @@
 
         // ConsoleLog( "Map3D Click!!!! ");
         closeTooltip();
+        window.selectedPoiObj = null;
     });
 
     map3D.map3DClick( function( mapX, mapY ){
@@ -1496,6 +1503,7 @@
         var poiObj = findPoiByCoord ( map3D.view.getZoom(), mapX, mapY, layerManager.getPoiObjectArray() );
         if( poiObj ){
             var poiObj = layerManager.getPoiObjById( poiObj.id );
+            window.selectedPoiObj = poiObj;
 
             poiObj.feature.getGeometry().set('altitudeMode', 'clampToGround');
 
@@ -1512,6 +1520,7 @@
 
         }else{
             closeTooltip();
+            window.selectedPoiObj = null;
         }
 
     });
@@ -1573,6 +1582,8 @@
                         setMap3DPosByPos( [poiObj.x, poiObj.y] );
                     }*/
 
+                    window.selectedPoiObj = poiObj;
+
                     requestPoiContentAndShow( poiObj, poiTooltip2D, poiTooltip3D );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
                     moveToMap3DWithCheck3DShow( poiObj.x, poiObj.y );
                 }
@@ -1595,6 +1606,8 @@
                     setMap3DPosByPos( [poiObj.x, poiObj.y] );
                 }
                 */
+
+                window.selectedPoiObj = poiObj;
 
                 requestPoiContentAndShow( poiObj, poiTooltip2D, poiTooltip3D );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
                 moveToMap3DWithCheck3DShow( poiObj.x, poiObj.y );
@@ -1724,6 +1737,7 @@
             return;
 
         var poiObj = layerManager.getPoiObjById( poiID );
+        window.selectedPoiObj = poiObj;
         moveToPlaceByPoiObj( poiObj );
     }
 
@@ -2077,10 +2091,10 @@
             btn.setAttribute('clicked', "false" );
             // btn.setAttribute("border", "1px solid #1A75FF");
             // btn.setAttribute('style', "position: absolute; border: 1px solid #1A75FF; width: 20px; height: 10px; ");
-            btn.setAttribute('style', "position: absolute; border: none; width: 20px; height: 10px; ");
+            btn.setAttribute('style', "position: absolute; border: none; width: 20px; height: 10px; z-index: 2200 ");
 
-            var strID = "#" + strIdx;
-            $(strID).css("z-index", "2100");
+            // var strID = "#" + strIdx;
+            //$(strID).css("z-index", "2100");
             //$(strID).css("border", "1px solid #1A75FF");
             //$(strID).css("border", "none");
 

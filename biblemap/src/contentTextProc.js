@@ -289,12 +289,23 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
         closePopup2D();
         closePopup3D();
 
-        createPoiTooltip( popup2D, "contentFrame2D", false );
-        createPoiTooltip(popup3D, "contentFrame3D", false );
+        closeTooltip();
+
+        if( window.focusPoiObj !== null && window.focusPoiObj.id == localPoiObj.id ) {
+            createPoiTooltip(popup2D, "contentFrame2D", true);
+            createPoiTooltip(popup3D, "contentFrame3D", true);
+        }else{
+            if( window.selectedPoiObj != null ) {
+                createPoiTooltip(popup2D, "contentFrame2D", false);
+                createPoiTooltip(popup3D, "contentFrame3D", false);
+            }
+        }
 
     };
 
     showYoutubePoi2D = function() {
+
+        /*
         popup2D.content.innerHTML = localPoiObj.biblePlace;
         popup2D.content.innerHTML += lineImage;
 
@@ -304,21 +315,31 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
 
         popup2D.content.innerHTML += "<iframe width=\"320\" height=\"240\" src=\"" + youtube + "\" frameborder = \"0\" allowfullscreen></iframe>";
         popup2D.overlay.setPosition( [poiObj.x, poiObj.y] );
+        */
+
+        var labelText = localPoiObj.biblePlace + "&nbsp";
+
+        var foldIcon = '<a href =\"javascript:showBaseInfoPoi2D3D()\" >' + '<img src=\"biblemap/image/fold-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">' + '</a>';
+        labelText += '&nbsp;&nbsp;' + foldIcon;
+        labelText += '<br>';
+        labelText += "<iframe width=\"320\" height=\"240\" src=\"" + youtube + "\" frameborder = \"0\" allowfullscreen></iframe>";
+
+        if( window.focusPoiObj !== null && window.focusPoiObj.id == localPoiObj.id )
+            poiTooltip2D.removeAndCreate( localPoiObj.id, labelText, [localPoiObj.x, localPoiObj.y], true );
+        else
+            poiTooltip2D.removeAndCreate( localPoiObj.id, labelText, [localPoiObj.x, localPoiObj.y], false );
+
     };
 
     showYoutubePoi3D = function() {
+
+        /*
         // var scriptRef = "<a href =\"javascript:showBaseInfoPoi()\"' >";
         var scriptRef = "<a href =\"javascript:showBaseInfoPoi2D3D()\"' >";
         var foldIcon = "<img src=\"biblemap/image/fold-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">";
         // popup.innerHTML = poiText + " " + scriptRef + foldIcon + "</a>";
         // popup3D.content.innerHTML = poiText + " " + scriptRef + foldIcon + "</a>";
         popup3D.content.innerHTML = localPoiObj.biblePlace;
-
-        /*
-         if( infoText!= "" ){
-         popup3D.content.innerHTML += textRef + textIcon + "</a>";
-         }
-         */
 
         popup3D.content.innerHTML += lineImage;
         if( localPoiObj.title != ""){
@@ -327,6 +348,24 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
 
         popup3D.content.innerHTML += "<iframe width=\"320\" height=\"240\" src=\"" + youtube + "\" frameborder = \"0\" allowfullscreen></iframe>";
         popup3D.overlay.setGroundPosition( [localPoiObj.x, localPoiObj.y] );
+        */
+
+        var labelText = localPoiObj.biblePlace + "&nbsp";
+
+        var foldIcon = '<a href =\"javascript:showBaseInfoPoi2D3D()\" >' + '<img src=\"biblemap/image/fold-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">' + '</a>';
+        labelText += '&nbsp;&nbsp;' + foldIcon;
+        labelText += '<br>';
+        labelText += "<iframe width=\"320\" height=\"240\" src=\"" + youtube + "\" frameborder = \"0\" allowfullscreen></iframe>";
+
+        if( window.focusPoiObj !== null && window.focusPoiObj.id == localPoiObj.id ) {
+            poiTooltip3D.removeAndCreate(localPoiObj.id, labelText, [localPoiObj.x, localPoiObj.y], true);
+            poiTooltip3D.setGroundPosition();
+        }
+        else {
+            poiTooltip3D.removeAndCreate(localPoiObj.id, labelText, [localPoiObj.x, localPoiObj.y], false);
+            poiTooltip3D.setGroundPosition();
+        }
+
     };
 
 
@@ -449,7 +488,7 @@ function showIntroBibleMap(  ){
     var lineImage = '<div style=\"height: 14px; background: url(biblemap/image/horizon-line.png);\"></div>';
 
     var popupTitle = document.getElementById( 'noticeTitle' );
-    popupTitle.innerHTML = "공지사항" + lineImage;
+    popupTitle.innerHTML = "biblemap.or.kr 웹 서비스 안내" + lineImage;
 
     var popupContent = document.getElementById( 'noticeContent' );
     popupContent.innerHTML = "";
