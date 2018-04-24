@@ -4,11 +4,12 @@
 
 //  max : zoomIn       min : zoomOut
  var bibleMapPolygonLayers = [
-     { url : '110m-admin-0-countries', order: 1, style: {
+     { url : '110m-admin-0-countries', order: 3, style: {
          historyShow : 'false',
-         visibleRange : { max : 9, min : 1 },
+         visibleRange : { max : 10, min : 1 },
          fillColor : 'rgba( 255, 255, 255, 0.001)',
-         lineStroke : {  color: [174, 122, 40], width : 1, opacity: 0.01  },
+         //  lineStroke : {  color: [174, 122, 40], width : 1, opacity: 0.01  },
+         lineStroke : {  color: [255, 255, 255], width : 1 , opacity: 0.01 },
          //textStroke : { prop: 'name', align: 'center', baseline: 'middle' , font : 'bold 12px arial', color: '#2581D8', outlineColor : '#CECBCB', outlineWidth : 3  }}
          textStroke : { prop: 'label', align: 'center', baseline: 'middle' , font : 'normal 14px Nanum Gothic', color: '#F1EEEE', outlineColor : '#6d6954', outlineWidth : 3  }}
      },
@@ -840,6 +841,9 @@ function createLayer( source  ) {
 
          this.iconFeature = null;
 
+         this.bingMapAerialLayer = null;
+         this.bingMapAerialLabelLayer = null;
+
          var collControls = new ol.Collection();
 
          if( overlay !== undefined && overlay != null ){
@@ -878,39 +882,54 @@ function createLayer( source  ) {
 
          bibleMap = this.map;
 
-         InitWmsLayer(this.map);
-
-         function InitWmsLayer( paramMap) {
+         this.InitWmsLayer = function( ) {
              // var wmsDemLayer = createLayer( new ol.source.Stamen( { layer: 'terrain-background' }) ) ;
 
-             bingMapSource = new ol.source.BingMaps({
-                 key: 'Aj2EBKlpTb_8cxuPEs0OHBBoiplb0HYYaOb8DVHTyCK7dduQSzMTv1i9gb4WwnP2',
-                 imagerySet: "Aerial"
-                 // use maxZoom 19 to see stretched tiles instead of the BingMaps
-                 // "no photos at this zoom level" tiles
-                 // maxZoom: 19
-             });
-
-             var wmsDemLayer = new ol.layer.Tile({
+             this.bingMapAerialLayer = new ol.layer.Tile({
                  visible: false,
                  preload: Infinity,
-                 source: bingMapSource
+                 source: new ol.source.BingMaps({
+                     key: 'Aj2EBKlpTb_8cxuPEs0OHBBoiplb0HYYaOb8DVHTyCK7dduQSzMTv1i9gb4WwnP2',
+                     imagerySet: "Aerial"
+                 })
              });
 
+             this.bingMapAerialLayer.set('id', 1, false);
+             this.bingMapAerialLayer.set('visibleRange', {max: 18, min: 1});
+             this.bingMapAerialLayer.setVisible( true );
+             this.map.addLayer( this.bingMapAerialLayer );
 
-             wmsDemLayer.set('id', 1, false);
-             wmsDemLayer.set('visibleRange', {max: 18, min: 1});
-             paramMap.addLayer(wmsDemLayer);
+             this.bingMapAerialLabelLayer = new ol.layer.Tile({
+                 visible: false,
+                 preload: Infinity,
+                 source: new ol.source.BingMaps({
+                     key: 'Aj2EBKlpTb_8cxuPEs0OHBBoiplb0HYYaOb8DVHTyCK7dduQSzMTv1i9gb4WwnP2',
+                     // imagerySet: "Aerial"
+                     imagerySet: "AerialWithLabels",
+                     culture : "ko"
+                 })
+             });
 
-             /*
-              var wmsOsmLayer = createLayer(  new ol.source.OSM() );
+             this.bingMapAerialLabelLayer.set('id', 2, false);
+             this.bingMapAerialLabelLayer.set('visibleRange', {max: 18, min: 1});
+             this.bingMapAerialLabelLayer.setVisible( false );
+             this.map.addLayer( this.bingMapAerialLabelLayer );
+         };
 
-              wmsOsmLayer.set( 'id', 2, false );
-              wmsOsmLayer.set( 'visibleRange', { max : 18, min : 13 }   );
+         this.InitWmsLayer();
 
-              paramMap.addLayer( wmsOsmLayer );
-              */
-         }
+
+         this.showWithLabel = function( isShow ){
+             if( isShow == true ){
+                 this.bingMapAerialLabelLayer.setVisible( true );
+                 this.bingMapAerialLayer.setVisible( false );
+             }else{
+                 this.bingMapAerialLabelLayer.setVisible( false );
+                 this.bingMapAerialLayer.setVisible( true );
+             }
+             // this.map.updateSize();
+             this.map.render();
+         };
 
          this.zoomIn = function() {
              var zoom = this.view.getZoom();
@@ -936,23 +955,27 @@ function createLayer( source  ) {
                  var layers = bibleMap.getLayers();
 
                  layers.forEach(function (layer) {
+
                      var visibleRange = layer.get('visibleRange');
                      if (typeof visibleRange !== "undefined") {
 
-                         if (visibleRange.min <= zoom && zoom <= visibleRange.max) {
-                             var historyMap = layer.get('historyShow');
-                             if (historyMap) {
-                                 if (historyMap == 'true')
-                                     layer.setVisible(true);
-                                 else
+                         if (layer.get('id') != 1 && layer.get('id') != 2){
+
+                                 if (visibleRange.min <= zoom && zoom <= visibleRange.max) {
+                                     var historyMap = layer.get('historyShow');
+                                     if (historyMap) {
+                                         if (historyMap == 'true')
+                                             layer.setVisible(true);
+                                         else
+                                             layer.setVisible(false);
+                                     }
+                                     else {
+                                         layer.setVisible(true);
+                                     }
+                                 }
+                                 else {
                                      layer.setVisible(false);
-                             }
-                             else {
-                                 layer.setVisible(true);
-                             }
-                         }
-                         else {
-                             layer.setVisible(false);
+                                 }
                          }
 
                      }
@@ -1148,7 +1171,7 @@ function createLayer( source  ) {
      return function( overlay, cssMap ){
          // return new MapManager( overlay, cssMap, createView( [3942321.454123089, 3792452.570684223], 15, 4, 8 ) );
          //return new MapManager( overlay, cssMap, createView( [3844176, 3806822], 15, 4, 7 ) );
-         return new MapManager( overlay, cssMap, createView( [3937988, 3763366 ], 15, 4, 7.4 ) );
+         return new MapManager( overlay, cssMap, createView( [3937988, 3763366 ], 17, 4, 7.4 ) );
      }
 
  }());
@@ -1361,6 +1384,9 @@ function createLayer( source  ) {
 
          this.iconFeature = null;
 
+         this.bingMapAerialLayer = null;
+         this.bingMapAerialLabelLayer = null;
+
          this.memWholeLayerAddToMap = function(){
              for( var idx = 0 ; idx < this.layers.length; idx ++  ) {
                  var layer = this.layers[ idx ];
@@ -1423,6 +1449,7 @@ function createLayer( source  ) {
          mapView = this.view;
 
 
+         /*
          this.map = new ol.Map({
              overlays: [ overlay ],
              layers: [
@@ -1430,6 +1457,8 @@ function createLayer( source  ) {
                      source: new ol.source.BingMaps({
                          key: 'Aj2EBKlpTb_8cxuPEs0OHBBoiplb0HYYaOb8DVHTyCK7dduQSzMTv1i9gb4WwnP2',
                          imagerySet: "Aerial"
+                         // imagerySet: "AerialWithLabels",
+                         // culture : "ko"
                      })
                  })
              ],
@@ -1441,17 +1470,74 @@ function createLayer( source  ) {
                      collapsible: false
                  }) }),
              interactions: ol.interaction.defaults( {mouseWheelZoom: false }),
-             /*
-             interactions: [ new ol.interaction.MouseWheelZoom({
-                 duration: 600,
-             }), new ol.interaction.DragPan({
-                 kinetic: new ol.Kinetic(-0.01, 0.1, 200)
-             }) ],
-             */
+
+             view: this.view
+         });
+         */
+
+         this.map = new ol.Map({
+             overlays: [ overlay ],
+
+             // target: 'map3D',
+             target: 'behindMap2D',
+             controls: ol.control.defaults({
+                 attribution: false,
+                 attributionOptions: ({    // @type {olx.control.AttributionOptions}
+                     collapsible: false
+                 }) }),
+             interactions: ol.interaction.defaults( {mouseWheelZoom: false }),
+
              view: this.view
          });
 
+         this.initWmsLayer3D = function() {
+
+             this.bingMapAerialLayer = new ol.layer.Tile({
+                 visible: false,
+                 preload: Infinity,
+                 source: new ol.source.BingMaps({
+                     key: 'Aj2EBKlpTb_8cxuPEs0OHBBoiplb0HYYaOb8DVHTyCK7dduQSzMTv1i9gb4WwnP2',
+                     imagerySet: "Aerial"
+                 })
+             });
+
+             this.bingMapAerialLayer.set('id', 1, false);
+             this.bingMapAerialLayer.set('visibleRange', {max: 18, min: 1});
+             this.bingMapAerialLayer.setVisible(true);
+             this.map.addLayer(this.bingMapAerialLayer);
+
+             this.bingMapAerialLabelLayer = new ol.layer.Tile({
+                 visible: false,
+                 preload: Infinity,
+                 source: new ol.source.BingMaps({
+                     key: 'Aj2EBKlpTb_8cxuPEs0OHBBoiplb0HYYaOb8DVHTyCK7dduQSzMTv1i9gb4WwnP2',
+                     // imagerySet: "Aerial"
+                     imagerySet: "AerialWithLabels",
+                     culture: "ko"
+                 })
+             });
+
+             this.bingMapAerialLabelLayer.set('id', 2, false);
+             this.bingMapAerialLabelLayer.set('visibleRange', {max: 18, min: 1});
+             this.bingMapAerialLabelLayer.setVisible(false);
+             this.map.addLayer(this.bingMapAerialLabelLayer);
+         };
+
+         this.initWmsLayer3D();
+
          map2DMap = this.map;
+
+         this.showWithLabel = function( isShow ){
+             if( isShow == true ){
+                 this.bingMapAerialLabelLayer.setVisible( true );
+                 this.bingMapAerialLayer.setVisible( false );
+             }else{
+                 this.bingMapAerialLabelLayer.setVisible( false );
+                 this.bingMapAerialLayer.setVisible( true );
+             }
+             // this.map.updateSize();
+             this.map.render();
+         };
 
          this.map.getInteractions().forEach(function(interaction) {
              if (interaction instanceof ol.interaction.MouseWheelZoom) {
@@ -1664,21 +1750,9 @@ function createLayer( source  ) {
          this.mapWheel = function( callback ){
              eventHandler.setInputAction(
                  function( event ) {
-                     /*
-                     ConsoleLog( "wheel !!!  value : " + event);
-
-                     var zoom = mapView.getZoom();
-                     var center = mapView.getCenter();
-
-                     if( event < 0 )
-                         _moveTo( mapView, center, zoom-0.25, 1);
-                     else
-                         _moveTo( mapView, center, zoom+0.25, 1);
-                         */
 
                      if( callback )
                          callback();
-
                  },
                  Cesium.ScreenSpaceEventType['WHEEL'] );
          };
@@ -1836,27 +1910,30 @@ function createLayer( source  ) {
                  layers.forEach(function (layer) {
 
                      var visibleRange = layer.get('visibleRange3D');
-                     if (typeof visibleRange !== "undefined") {
-                         if( typeof( zoom ) != 'undefined'){
-                             if (visibleRange.min <= (zoom-0.7)  && (zoom -0.7 ) <= visibleRange.max) {
-                                 var historyMap = layer.get('historyShow');
-                                 if (historyMap) {
-                                     if (historyMap == 'true')
+
+                     if (layer.get('id') != 1 && layer.get('id') != 2) {
+                         if (typeof visibleRange !== "undefined") {
+                             if (typeof( zoom ) != 'undefined') {
+                                 if (visibleRange.min <= (zoom - 0.7) && (zoom - 0.7 ) <= visibleRange.max) {
+                                     var historyMap = layer.get('historyShow');
+                                     if (historyMap) {
+                                         if (historyMap == 'true')
+                                             layer.setVisible(true);
+                                         else
+                                             layer.setVisible(false);
+                                     }
+                                     else {
                                          layer.setVisible(true);
-                                     else
-                                         layer.setVisible(false);
+                                     }
+                                 } else {
+                                     layer.setVisible(false);
                                  }
-                                 else {
-                                     layer.setVisible(true);
-                                 }
-                             }else{
-                                 layer.setVisible(false);
+
+                             } else {
+                                 layer.setVisible(true);
                              }
 
-                         }else {
-                             layer.setVisible( true );
                          }
-
                      }
                  });
 

@@ -808,3 +808,24 @@ function imageBtnShowControl( isShow){
         $("#homeBtn").hide();
     }
 }
+
+function eventShowLabel( ){
+
+    var img1 = "biblemap/image/label_on.png?version=20171208";
+    var img2 = "biblemap/image/label_off.png?version=20171208";
+
+    var showLabelBtn = document.getElementById("checkShowLabel");
+
+    if( window.isShowLabel == false ) {
+        bibleMapManager.showWithLabel(true);
+        showLabelBtn.src = img1;
+        window.isShowLabel = true;
+    }else {
+        bibleMapManager.showWithLabel(false);
+        showLabelBtn.src = img2;
+        window.isShowLabel = false;
+    }
+
+    $("#sideMenu").removeClass("open");
+}
+

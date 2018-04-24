@@ -651,3 +651,15 @@ function hideDownloading(){
     $("#downloadingDiv").hide();
 
 }
+
+
+function eventShowLabel( ){
+
+    if (document.querySelector('#checkShowLabel').checked) {
+        bibleMapManager.showWithLabel(true);
+        map3D.showWithLabel(true);
+    }else {
+        bibleMapManager.showWithLabel(false);
+        map3D.showWithLabel(false);
+    }
+}

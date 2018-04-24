@@ -269,10 +269,15 @@ function GMDFileDownload( map, map3D, shpUrl, layerId, style, paramLayerManager,
 
                 // var moveLevel = ( paramStyle.visibleRange.min + paramStyle.visibleRange.max ) /2 ;
                 // moveLevel = Math.floor(moveLevel) -2;
+
+                /*
                 var moveLevel = paramStyle.visibleRange.min + 1;
                 if( moveLevel > 13 )
                     //moveLevel = paramStyle.visibleRange.min;
                     moveLevel = 13;
+                    */
+
+                var moveLevel = paramStyle.visibleRange.min;
 
                 var moveLevel3D = moveLevel;
                 if( paramStyle.visibleRange3D !== undefined ){
@@ -412,7 +417,8 @@ function GMDFileDownload( map, map3D, shpUrl, layerId, style, paramLayerManager,
                 var feature = createFeatureFromWkt( wkt, attrs, bTransform, format, paramStyle.textStroke.prop );
 
                 if( attrs.values['color']) {
-                    var strColor = attrs.values['color'].toString();
+                    var colorVal = attrs.values['color'];
+                    var strColor = colorVal;
                     strColor = removeSpaceInWord( strColor );
                     if( strColor != "" ) {
                         var extendStyle = copyObject( paramStyle );
@@ -441,6 +447,12 @@ function GMDFileDownload( map, map3D, shpUrl, layerId, style, paramLayerManager,
         shapeLayer.setVisible( false );
         layerContainer.layers.push( shapeLayer );
         map.addLayer(  shapeLayer );
+
+        /*
+        if( map3D ) {
+            map3D.map.addLayer(shapeLayer);
+        }
+        */
 
         ///////////////////////  3D Map
 

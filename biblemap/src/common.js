@@ -300,8 +300,8 @@ function saveFocusPoiToStorage( ){
 }
 
 function getFocusPoiFromStorage(){
-    // var strObj = localStorage.getItem('bibleMap-poi');
     var strObj = localStorage.getItem('bibleMap-poi');
+    //var strObj = localStorage.getItem('bibleMap-poi');
     if (strObj == null) {
         return null;
     }

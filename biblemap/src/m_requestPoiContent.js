@@ -297,8 +297,10 @@ function showPoiYoutubeInTooltip( poiID, youtubeSrc, youtubeLink ) {
 function moveCenterFocusedPOI( focusedPoiObj ){
     var zoom = bibleMapManager.getView().getZoom();
     // _moveToPos( bibleMapManager.getView(), [focusedPoiObj.x, focusedPoiObj.y], zoom, 200);
-    if( zoom < (focusedPoiObj.zoomIn - 1.0) )
-        _moveToPos( bibleMapManager.getView(), [focusedPoiObj.x, focusedPoiObj.y], (focusedPoiObj.zoomIn - 1.0), 300);
+    //if( zoom < (focusedPoiObj.zoomIn - 1.0) )
+      //  _moveToPos( bibleMapManager.getView(), [focusedPoiObj.x, focusedPoiObj.y], (focusedPoiObj.zoomIn - 1.0), 300);
+    if( zoom < focusedPoiObj.zoomIn )
+        _moveToPos( bibleMapManager.getView(), [focusedPoiObj.x, focusedPoiObj.y], focusedPoiObj.zoomIn, 300);
     else
         _moveToPos( bibleMapManager.getView(), [focusedPoiObj.x, focusedPoiObj.y], zoom, 300);
 

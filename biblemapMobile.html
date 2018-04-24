@@ -53,24 +53,24 @@
     <script type="text/javascript" src="biblemap/openLayers_v4.4.2/ol.js"></script>
     <script type="text/javascript" src="biblemap/src/jQueryRotate.js"></script>
 
-    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20180202"></script>
+    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20180205"></script>
     <script type="text/javascript" src="biblemap/src/m_downloadLayers.js?version=20180201"></script>
 
     <script type="text/javascript" src="biblemap/src/arc.js?version=20170813"></script>
     <script type="text/javascript" src="biblemap/src/common.js?version=20170830"></script>
     <script type="text/javascript" src="biblemap/lib/binaryajax.js?version=20170813"></script>
     <script type="text/javascript" src="biblemap/src/binarywrapper.js?version=20170813"></script>
-    <script type="text/javascript" src="biblemap/src/GMDFileReader.js?version=20170901"></script>
+    <script type="text/javascript" src="biblemap/src/GMDFileReader.js?version=20170902"></script>
     <script type="text/javascript" src="biblemap/src/propertyDB.js?version=20170813"></script>
-    <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170905"></script>
+    <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170906"></script>
     <!-- <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20180121"></script>  -->
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170829"></script>
-    <script type="text/javascript" src="biblemap/src/makeHrefText.js?version=20170829"></script>
-    <script type="text/javascript" src="biblemap/src/m_requestPoiContent.js?version=20170902"></script>
+    <script type="text/javascript" src="biblemap/src/makeHrefText.js?version=20170830"></script>
+    <script type="text/javascript" src="biblemap/src/m_requestPoiContent.js?version=20170904"></script>
 
     <script type="text/javascript" src="biblemap/src/m_searchBible.js?version=20170903"></script>
     <script type="text/javascript" src="biblemap/js/jquery.autocomplete.min.js"></script>
-    <script type="text/javascript" src="biblemap/src/m_windowAdjust.js?version=20170902"></script>
+    <script type="text/javascript" src="biblemap/src/m_windowAdjust.js?version=20170904"></script>
     <script type="text/javascript" src="biblemap/src/m_poiTooltip.js"></script>
 
     <style stype="text/css">
@@ -210,6 +210,12 @@
         </div>
     </div>
 
+    <!--
+    <div id = "divCheckShowLabel" class="content" style ="position: absolute; left: 10px; width:230px; top: 245px; font-size:1.5em; ">
+
+        <input type="image" id="checkShowLabel"  src="biblemap/image/checkBox_off.png?version=20171207" style="position: absolute; border: none; left:42px; width:28px; height: 28px; " onclick="eventShowLabel()">지명 보기
+    </div>  -->
+
     <div id="snsSideDiv" class="content" style ="position: absolute; left: 10px; width:230px; top: 250px; height: 200px; ">
         <input type="image" src="biblemap/image/naver_blog.png?version=20170916" style="position: absolute; left: 40px;  top: 0px; width:40px; height:40px; vertical-align:middle; border:none;"  onclick="gotoSNS(1)">
         <input type="image" src="biblemap/image/naver_cafe.png?version=20170908" style="position: absolute; left: 95px;  top: 0px; width:40px; height:40px; vertical-align:middle; border:none; "  onclick="gotoSNS(2)">
@@ -220,6 +226,8 @@
 <div id="map" class="mapview" style="position:absolute; top:41px;" >
 
     <!-- <div id="dummy" style="position:absolute; left:50px; top:0px; height:20px; background-color: white;">테스트</div>  -->
+
+    <input type="image" id="checkShowLabel"  src="biblemap/image/label_off.png?version=20171208" style="position: absolute; border: none; top: 10px; left:10px; height: 24px; vertical-align:middle;" onclick="eventShowLabel()">
 
     <input id="compassBtn" type="image" src="biblemap/image/compass3.png?version=20171006"  style="position: absolute; border:0; width: 40px; height: 40px;"  onclick="setRotateNorth()">
 
@@ -312,7 +320,6 @@
 
     var isReload = windowReloadByCurDate( 'biblemapMobile-day' );
 
-
     if( isMobile() == false ){
         var iEVersion = IEVersionCheck();
 
@@ -330,6 +337,8 @@
     }
 
 
+
+    $("#checkShowLabel").css( "z-index", 30);
     $("#downloadingDiv").css( "z-index", 30);
 
     $( '#map' ).css( "z-index", 1 );
@@ -398,6 +407,8 @@
     window.zoom = 0;
     window.posX = 0;
     window.posY = 0;
+
+    window.isShowLabel = false;
 
     var footerMenu = createFooterMenu();
 
@@ -770,9 +781,11 @@
         if( IsIntersectExtent( mapBaseExtent, poiObj.x, poiObj.y ) == true) {    // 기본 지도 영역 이내에 있으면
             if (poiZoomIn < 6) {
                 poiZoomIn = 7.8;
-            } else {
+            }
+            /*else {
                 poiZoomIn -= 1;
             }
+            */
 
             // if( curZoom < poiZoomIn ){
             if (IsIntersectExtent(mapExtent, poiObj.x, poiObj.y) == true) {

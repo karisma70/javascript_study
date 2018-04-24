@@ -803,7 +803,8 @@ function moveCenterFocusedPOI( focusedPoiObj ){
         zoom = map3D.view.getZoom();
     }
 
-    var tolerance = 1.0;
+    // var tolerance = 1.0;
+    var tolerance = 0.0;
 
     if( curMapViewMode == 'chkView3D' )
         tolerance = 0;
@@ -817,8 +818,8 @@ function moveCenterFocusedPOI( focusedPoiObj ){
             zoom = map3D.view.getZoom();
     }
 
-    if( zoom < 7 )
-        zoom = 7;
+    // if( zoom < 7 )
+     //   zoom = 7;
 
     //_moveToPos( view, [focusedPoiObj.x, focusedPoiObj.y], zoom, 500);
     _moveToPos( view, [focusedPoiObj.x, focusedPoiObj.y], zoom, 500);
