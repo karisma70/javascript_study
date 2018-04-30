@@ -504,6 +504,8 @@ function adjustPopupWindow(){
 
 function showIntroBibleMap(  ){
 
+    $("#sideMenu").removeClass("open");
+
     adjustPopupWindow();
 
     var lineImage = '<div style=\"height: 14px; background: url(biblemap/image/horizon-line.png);\"></div>';
@@ -524,10 +526,13 @@ function showIntroBibleMap(  ){
     popupContent.innerHTML += '여러분들이 성경을 가까이 하며 하나님의 역사를 더욱 깊게 알기 원하신다면 성경지도 웹 서비스가 도움이 될 것입니다.';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '본 웹사이트에서 사용하는 성경 \'개역한글\'의 저작권은 재단법인 \'대한성서공회\'의 소유임을 알려드립니다.';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '본 웹사이트에 포함된 디지털맵 뷰어는 OpenLayers를 기반으로 제작되었으며, OpenLayers의 라이센스는 2-Clause BSD를 따릅니다.';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '본 웹사이트에서 표현되는 디지털 맵 데이터의 일부는 \'마이크로소프트\'가 제공하는 \'Bing Maps\'를 사용하고 있으며, \'Bing Maps\'를 사용하여 본 웹서비스를 제공하는 \'Mission Wide\'는 \'Bing Maps\'에 관한 라이선스 조항을 준수합니다';
+    popupContent.innerHTML += '본 웹사이트에서 표현되는 디지털 맵 데이터의 일부는 \'마이크로소프트\'가 제공하는 \'Bing Maps\'를 사용하고 있으며, \'Bing Maps\'를 사용하여 본 웹서비스를 제공하는 \'미션와이드\'는 \'Bing Maps\'에 관한 라이선스 조항을 준수합니다';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '본 웹서비스를 사용하는 사용자는 아래 사이트에서 제공하는 라이센스 규정을 준수해야 합니다.';
     popupContent.innerHTML += '<br>';
@@ -544,14 +549,16 @@ function showIntroBibleMap(  ){
     popupContent.innerHTML += '본 웹사이트에서 제공되는 위치정보는 일부 오류를 포함할 수 있음을 알려드리며, 공인된 정확한 정보가 수집되는 대로 수정할 것을 알려드립니다.';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '본 웹사이트는 \'Mission Wide\'가 개발 및 운영, 관리하고 있으며, \'Mission Wide\'는 성경지리를 웹 서비스로 제공하는 비영리 단체입니다.';
+    popupContent.innerHTML += '본 웹사이트는 \'미션와이드\'가 개발 및 운영, 관리하고 있으며, \'미션와이드\'는 성경지리를 웹 서비스로 제공하는 비영리 단체입니다.';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '\'Mission Wide\' 연락처';
+    popupContent.innerHTML += '< 웹 서비스 문의  >';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '카카오톡 ID : 바이블 맵<br>';
+    // popupContent.innerHTML += '카톡하기→ <input type=\"image\" src=\"biblemap/image/kakaotalk_icon.png?version=20170908\" style=\"left: 95px;  top: 0px; width:40px; height:40px; vertical-align:middle; border:none; \"  onclick=\"gotoSNS(2)\">';
+    popupContent.innerHTML += '카톡하기 <input type=\"image\" src=\"biblemap/image/kakaotalk_icon.png?version=20170908\" style=\"left: 95px;  top: 0px; width:40px; height:40px; vertical-align:middle; border:none; \"  onclick=\"gotoSNS(2)\">';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '이메일: missionwide@naver.com';
-    popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '<a href= \"javascript:gotoBibleMapBlog()\" style=\"text-decoration:none; font-weight:bold; color:#2E59BF;\">' + '블로그: blog.naver.com/bible-map</a>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
 
@@ -575,15 +582,21 @@ function showIntroMissionWide(  ) {
 
     popupContent.innerHTML += '\'미션와이드\'는 성경말씀에 대한 관심과 이해를 높이기 위해 설립된 비영리단체입니다.';
     popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '\'미션와이드\'의 목적은 성경 관련 여러 정보를 공유할 수 있는 미디어 매체 기반의 플랫폼을 제공함으로써, 하나님의 말씀에 대한 확신과 강건한 믿음을 갖도록 다리 역할을 하는 것입니다. ';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
     // popupContent.innerHTML += '본 바이블 맵 서비스는 여러분들의 소중한 기부와 후원을 통하여 운영되고 있습니다.';
     popupContent.innerHTML += '본 바이블 맵 웹서비스는 여러분들의 많은 관심과 기대를 필요로 하고 있습니다.';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '여러분들의 많은 성원 부탁드립니다.';
     popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '< 미션와이드 연락처 ><br>';
+    popupContent.innerHTML += '카카오톡 ID : 바이블 맵<br>';
+    popupContent.innerHTML += '카톡하기 <input type=\"image\" src=\"biblemap/image/kakaotalk_icon.png?version=20170908\" style=\"left: 95px;  top: 0px; width:40px; height:40px; vertical-align:middle; border:none; \"  onclick=\"gotoSNS(2)\">';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '이메일: missionwide@naver.com';
     popupContent.innerHTML += '<br>';
 //    popupContent.innerHTML += '< 기부/후원 계좌 안내 >';
 //    popupContent.innerHTML += '<br>';
@@ -594,6 +607,43 @@ function showIntroMissionWide(  ) {
 
     showNoticePopup( '#infoPopup' );
 }
+
+
+function showRecomendWebBrowser(  ) {
+
+    adjustPopupWindow();
+
+    var lineImage = '<div style=\"height: 14px; background: url(biblemap/image/horizon-line.png);\"></div>';
+
+    var popupTitle = document.getElementById('noticeTitle');
+    popupTitle.innerHTML = "웹 브라우저 안내" + lineImage;
+
+    var popupContent = document.getElementById('noticeContent');
+    popupContent.innerHTML = "";
+
+    popupContent.innerHTML += '바이블 맵 웹서비스를 사용하여 주셔서 감사합니다. ';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '본 웹사이트는 \'크롬 브라우저\' 또는 \'사파리 브라우저\'에서 정상동작합니다';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '스마트폰에 설치되어 있는 \'웹 브라우저\'를 실행하여 \'www.biblemap.or.kr\' 주소로 접속하여 주시기 바랍니다';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
+    // popupContent.innerHTML += '본 바이블 맵 서비스는 여러분들의 소중한 기부와 후원을 통하여 운영되고 있습니다.';
+    popupContent.innerHTML += '궁금사항은 카톡이나 이메일로 문의 주시면 감사하겠습니다. ';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '카카오톡 ID : 바이블 맵 <input type=\"image\" src=\"biblemap/image/kakaotalk_icon.png?version=20170908\" style=\"left: 95px;  top: 0px; width:40px; height:40px; vertical-align:middle; border:none; \"  onclick=\"gotoSNS(2)\">';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '이메일: missionwide@naver.com';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '- 미션와이드 -';
+
+    showNoticePopup( '#infoPopup' );
+}
+
 
 
 function gotoBibleMapBlog(){

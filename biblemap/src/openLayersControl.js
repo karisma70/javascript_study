@@ -1563,8 +1563,15 @@ function createLayer( source  ) {
              });
          };
 
-         this.ol3d = new olcs.OLCesium({map: this.map, target: 'map3D'});
-         // this.ol3d = new olcs.OLCesium({map: this.map});
+
+         this.ol3d = new olcs.OLCesium({map: this.map,
+             time : function(){
+                 const d = new Date();
+                 d.setUTCHours( 14 );
+                 return Cesium.JulianDate.fromDate(d);
+             },
+             target: 'map3D'});
+
          this.ol3dScene = this.ol3d.getCesiumScene();
          // this.ol3dScene.screenSpaceCameraController.minimumZoomDistance = 0.01;
          // this.ol3dScene.screenSpaceCameraController.maximumZoomDistance = 1.0;

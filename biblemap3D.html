@@ -29,7 +29,7 @@
 
     <script type="text/javascript" src="biblemap/src/makeHrefText.js?version=20180124"></script>
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20180121"></script>
-    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20180213"></script>
+    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20180214"></script>
     <script type="text/javascript" src="biblemap/src/routePlay.js?version=20171205"></script>
     <script type="text/javascript" src="biblemap/src/trajectoryData.js?version=20170901"></script>
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170829"></script>
@@ -39,7 +39,7 @@
 
     <script type="text/javascript" src="biblemap/src/distanceMeasureControl.js?version=20170820"></script>
     <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170907"></script>
-    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20180205"></script>
+    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20180206"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
     <script type="text/javascript" src="biblemap/src/jQueryRotate.js"></script>
     <!-- <script type="text/javascript" src="biblemap/vendor/jquery-1.8.1.js"></script> -->
@@ -48,7 +48,7 @@
     <script type="text/javascript" src="biblemap/src/jquery.collapse_storage.js"></script>
     <script type="text/javascript" src="biblemap/src/jquery.collapse_cookie_storage.js"></script>
 
-    <script type="text/javascript" src="biblemap/src/windowAdjust.js?version=20180204"></script>
+    <script type="text/javascript" src="biblemap/src/windowAdjust.js?version=20180205"></script>
 
 
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/autocomplete_style.css?version=20170911">
@@ -322,7 +322,7 @@
                 -->
                 <div style="height:5px;"></div>
                 <div>
-                    <input id="checkShowLabel" type ="checkbox" style = "left: 60px; font-size:12px; width: 16px; height: 16px; border: none; vertical-align:middle;"  onclick="eventShowLabel();">&nbsp;지명 보기
+                    <!-- <input id="checkShowLabel" type ="checkbox" style = "left: 60px; font-size:12px; width: 16px; height: 16px; border: none; vertical-align:middle;"  onclick="eventShowLabel();">&nbsp;지명 보기  -->
                     <input type="image" src="biblemap/image/show-info-icon.png?version=20170905" style="position:absolute; left: 160px; width:20px; height:20px; vertical-align:middle" onclick="showHistoryAdmin()">
                 </div>
 
@@ -403,12 +403,14 @@
 </div>
 
 <div id="map" class="mapview" style="position:absolute;">
+    <input id="showLabel2DBtn"  type="image"  src="biblemap/image/label_off.png?version=20171208" style="position: absolute; border: none; top: 5px; left:5px; height: 24px; vertical-align:middle;" onclick="eventShowLabel()">
+
     <input id="view3DBtn" type="image" src="biblemap/image/view_3D_2.png?version=20171218"
            onmouseover="this.src='biblemap/image/view_3D_2_.png?version=20171218';"
            onmouseout="this.src='biblemap/image/view_3D_2.png?version=20171218';"
-           style="position: absolute; border: none; width:35px; height:35px;" onclick="setViewMode3D()">
-           <!-- style="border:1px solid #A0A0A0; position: absolute; width:35px; height:35px;" onclick="setViewMode3D()">  -->
+           style="position: absolute; border: none; width:28px; height:28px;" onclick="setViewMode3D()">
 
+           <!-- style="border:1px solid #A0A0A0; position: absolute; width:35px; height:35px;" onclick="setViewMode3D()">  -->
 
     <!--
     <input id="zoomInBtn2D" type="image" src="biblemap/image/Zoom-In-icon.png?version=20171211"  style="border:none; position: absolute; width:28px; height: 28px;"
@@ -427,6 +429,8 @@
 </div>
 
 <div id="map3D" class="mapview" style="position:absolute;">
+
+    <input id="showLabel3DBtn"  type="image"  src="biblemap/image/label_off.png?version=20171208" style="position: absolute; border: none; top: 5px; left:5px; height: 24px; vertical-align:middle;" onclick="eventShowLabel()">
 
     <input id="compassBtn" type="image" src="biblemap/image/compass2.png?version=20170930"
            onmouseover="this.src='biblemap/image/compass2_.png?version=20170930';"
@@ -454,7 +458,7 @@
            onmouseout="this.src='biblemap/image/home.png?version=20170930';"
            style="position: absolute; border:0; width:30px; height: 30px;" onclick="gotoHome()">
 
-    <input id="view2DBtn" type="image" src="biblemap/image/view_2D_2.png?version=20171207" style="position: absolute; border: none; width: 35px; height:35px;"
+    <input id="view2DBtn" type="image" src="biblemap/image/view_2D_2.png?version=20171207" style="position: absolute; border: none; width: 28px; height:28px;"
            onmouseover="this.src='biblemap/image/view_2D_2_.png?version=20171207';"
            onmouseout="this.src='biblemap/image/view_2D_2.png?version=20171207';"
            onclick="setViewMode2DWithSync()">
@@ -497,7 +501,7 @@
         </div>
         <div id="tab2" class="tab_content">
             검색결과가&nbsp;없습니다 <br> 성경의&nbsp;단어&nbsp;검색&nbsp;버튼을&nbsp;클릭해&nbsp;주세요
-            <a href ="javascript:gotoSearchWord()" style="text-decoration:none; font-weight: bold; fong-size: 1.5em; color:rgb(0, 91, 227); text-align : left;">→ 바로가기 클릭!!</a><br>
+            <a href ="javascript:searchBibleWord()" style="text-decoration:none; font-weight: bold; fong-size: 1.5em; color:rgb(0, 91, 227); text-align : left;">→ 검색 클릭!!</a><br>
         </div>
         <div id="tab3" class="tab_content"  style="padding-left: 5px; border-top:1px solid rgb(215, 215, 215);" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
             검색결과가&nbsp;없습니다 <br> 지도상의&nbsp;지명을&nbsp;클릭하고&nbsp;아이콘&nbsp;'i'를&nbsp;클릭해&nbsp;주세요
@@ -582,12 +586,16 @@
     window.posX = 0;
     window.posY = 0;
 
+    window.isShowLabel = false;
+
     var map3DAddLayerTimer = -1;
     var setGroundLayerTimer;
     var tabMenu = createTabMenu();
     var curMapViewMode = 'chkView2D';   // "chkView2D" |  "chkView3D"  | "chkViewAll"
 
     $("#footerToggle").css( "z-index", "5000" );
+    $("#showLabel2DBtn").css( "z-index", "5000" );
+    $("#showLabel3DBtn").css( "z-index", "5000" );
 
     (function() {
 
@@ -1775,6 +1783,14 @@
         var mapExtent = view.calculateExtent(bibleMap.getSize());
         var curZoom = view.getZoom();
         var mapExtentDistance = getDistance( mapExtent[0],mapExtent[1], mapExtent[2], mapExtent[3] );
+        mapExtentDistance  = mapExtentDistance + (mapExtentDistance * 2);
+
+        mapExtent[0] -= mapExtentDistance;
+        mapExtent[1] -= mapExtentDistance;
+
+        mapExtent[2] += mapExtentDistance;
+        mapExtent[3] += mapExtentDistance;
+
         var mapCenter =  view.getCenter();
         var poiDistance = getDistance( mapCenter[0], mapCenter[1], poiObj.x, poiObj.y );
         var isFar = false;
@@ -1784,12 +1800,14 @@
         var tolerance = 0.0;
         var poiZoomIn = poiObj.zoomIn;
 
+
         if( IsIntersectExtent( mapBaseExtent, poiObj.x, poiObj.y ) == true) {    // 기본 지도 영역 이내에 있으면
             if (poiZoomIn < 6) {
                 poiZoomIn = 7.8;
-            } else {
-                poiZoomIn -= 1;
             }
+            /*else {
+                poiZoomIn -= 1;
+            }*/
 
             // if( curZoom < poiZoomIn ){
             if (IsIntersectExtent(mapExtent, poiObj.x, poiObj.y) == true) {
@@ -1818,8 +1836,10 @@
         }else{
             if( poiZoomIn < 6 )
                 poiZoomIn = 6.5;
+                    /*
             else
                 poiZoomIn -= 1;
+                */
 
             if( isFar == true ) {
                 saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );

@@ -301,7 +301,7 @@ function saveFocusPoiToStorage( ){
 
 function getFocusPoiFromStorage(){
     var strObj = localStorage.getItem('bibleMap-poi');
-    //var strObj = localStorage.getItem('bibleMap-poi');
+    //var strObj = localStorage.getItem('bibleMap-poi-');
     if (strObj == null) {
         return null;
     }
@@ -359,6 +359,7 @@ function saveLocationToStorage( zoom, posX, posY ){
 
 function getLocationFromStorage() {
     var strObj = localStorage.getItem('bibleMap-location');
+    // var strObj = localStorage.getItem('bibleMap-location-');
     if (strObj == null) {
         window.zoom = 0;
         window.posX = 0;
@@ -439,7 +440,6 @@ function saveCurrentDayToStorage( curDate, storageName ){
 }
 
 function getCurrentDayFromStorage( storageName ){
-    // var strObj = localStorage.getItem( 'bibleMap-day');
     var strObj = localStorage.getItem( storageName );
     if( strObj === undefined || strObj == null ){
         return null;

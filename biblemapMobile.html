@@ -43,7 +43,7 @@
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/m_popup.css?version=20170910">
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
-    <script type="text/javascript" src="biblemap/src/common.js?version=20171005"></script>
+    <script type="text/javascript" src="biblemap/src/common.js?version=20171007"></script>
 
     <!--
     <script type="text/javascript" src="biblemap/js/matchMedia.js-master/matchMedia.js"></script>
@@ -70,7 +70,7 @@
 
     <script type="text/javascript" src="biblemap/src/m_searchBible.js?version=20170903"></script>
     <script type="text/javascript" src="biblemap/js/jquery.autocomplete.min.js"></script>
-    <script type="text/javascript" src="biblemap/src/m_windowAdjust.js?version=20170904"></script>
+    <script type="text/javascript" src="biblemap/src/m_windowAdjust.js?version=20170910"></script>
     <script type="text/javascript" src="biblemap/src/m_poiTooltip.js"></script>
 
     <style stype="text/css">
@@ -147,6 +147,7 @@
     </style>
 
 </head>
+</head>
 <body>
 
 <div class="wrapperDiv">
@@ -155,19 +156,21 @@
         <h1 align="center" style="position:absolute; top: 5px; color:white; background: rgb( 32, 67, 109 ); " >성경지도</h1>
         <!-- <input type="image" src="biblemap/image/biblemap_logo.png" style="position:absolute; left:0px; top:0px; width:45px; height:45px; vertical-align:middle; border:0;" onclick="openMenu()">  -->
         <input type="image" src="biblemap/image/m_menu_open.png" style="position:absolute; left:5px; top:5px; width:35px; height:30px; vertical-align:middle; border:0;" onclick="openMenu()">
-        <input id ="bibleMapLogo" type="image" src="biblemap/image/biblemap_logo.png" style="position:absolute; top:0px; width:41opx; height:41px; vertical-align:middle; border:0;" onclick="showIntroBibleMap()">
+        <input id ="bibleMapLogo" type="image" src="biblemap/image/biblemap_logo.png" style="position:absolute; top:0px; width:41opx; height:41px; vertical-align:middle; border:0;" onclick="gotoSNS(1)">
     </div>
 </div>
 
 <!-- <div id="sideMenu"  oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >  -->
 <div id="sideMenu"  >
     <div id="logo" style="height:40px; background-color:rgb( 59, 89, 153 );" >
+        <!-- <input id ="notice" type="image" src="biblemap/image/notice.png?version=20170906" style="position: absolute; left: 5px; top:5px; width:30px; height:30px; vertical-align:middle; " onclick="test()">  -->
         <h1 align="center" style="position:absolute; height:35px; top: 5px; color:white; " >검색메뉴</h1>
     </div>
     <div class="close" >
     </div>
 
     <div id ="bibleSearch" style="position:absolute; left: 10px; top:50px; height: 100px; ">
+        <input type="image" src="biblemap/image/notice.png?version=20170917" style="position: absolute; left: -5px;  top: -45px; width:30px; height:30px; vertical-align:middle; border:none;"  onclick="showIntroBibleMap()">
         <select id ="bibleTitle"  class="customSelect" name="bibleTitle" style="position: absolute; left: 40px; top:5px; width: 180px; height:32px; font-size:1.5em;" ></select>
         <input id ="decChapter" type="image" src="biblemap/image/left_arrow.png?version=20170906" style="position: absolute; left: 40px; top:40px; width:30px; height:30px; vertical-align:middle; " onclick="menuDecreaseBibleChapter()">
         <!-- <input id ="bibleChapter" type="number" class="chapterNum"  style="position: absolute; padding-left: 5px; left: 76px; top: 40px;  width: 40px; height: 30px; font-size:1.5em;" value="1" onchange="examineNumber()">  -->
@@ -218,7 +221,9 @@
 
     <div id="snsSideDiv" class="content" style ="position: absolute; left: 10px; width:230px; top: 250px; height: 200px; ">
         <input type="image" src="biblemap/image/naver_blog.png?version=20170916" style="position: absolute; left: 40px;  top: 0px; width:40px; height:40px; vertical-align:middle; border:none;"  onclick="gotoSNS(1)">
-        <input type="image" src="biblemap/image/naver_cafe.png?version=20170908" style="position: absolute; left: 95px;  top: 0px; width:40px; height:40px; vertical-align:middle; border:none; "  onclick="gotoSNS(2)">
+        <input type="image" src="biblemap/image/kakaotalk_icon.png?version=20170908" style="position: absolute; left: 95px;  top: 0px; width:40px; height:40px; vertical-align:middle; border:none; "  onclick="gotoSNS(2)">
+        <!-- <a href="http://www.biblemap.or.kr"><img src="biblemap/image/naver_cafe.png?version=20170908" style="position: absolute; left: 95px;  top: 0px; width:40px; height:40px; vertical-align:middle; border:none;"> </a> -->
+        <!-- <a href="http://plus.kakao.com/home/@바이블맵"><img src="biblemap/image/naver_cafe.png?version=20170908" style="position: absolute; left: 95px;  top: 0px; width:40px; height:40px; vertical-align:middle; border:none;"> </a> -->
         <input type="image" src="biblemap/image/face_book.png?version=20170908" style="position: absolute; left: 150px;  top: 0px; width:40px; height:40px; vertical-align:middle; border:none; "  onclick="gotoSNS(3)">
     </div>
 </div>
@@ -297,7 +302,7 @@
 
         </div>
 
-        <div id ="contentDiv" style = "position: absolute; overflow-y:scroll; line-height:24px; border-left: 1px solid #DDD;  border-right: 1px solid #DDD; border-bottom: 1px solid #DDD;">
+        <div id ="contentDiv" style = "position: absolute; overflow-y:scroll; line-height:24px; border-left: 1px solid #DDD;  -webkit-overflow-scrolling:touch; border-right: 1px solid #DDD; border-bottom: 1px solid #DDD;">
             <!-- <div id ="contentDiv" style = "overflow-y:scroll; line-height:24px; ">  -->
             <span id ="noticeContent" style="font-size:1.4em; text-align:center; ">
            </span>
@@ -320,6 +325,7 @@
 
     var isReload = windowReloadByCurDate( 'biblemapMobile-day' );
 
+
     if( isMobile() == false ){
         var iEVersion = IEVersionCheck();
 
@@ -336,6 +342,17 @@
         }
     }
 
+
+    var agt = navigator.userAgent.toLowerCase();
+    if( agt.indexOf("chrome") != -1 ||  agt.indexOf("safari") != -1 ){
+    }else {
+        showRecomendWebBrowser();
+    }
+
+
+    function test(){
+        alert("test");
+    }
 
 
     $("#checkShowLabel").css( "z-index", 30);
@@ -740,9 +757,12 @@
             isFar = true;
         }
 
-        var poiZoomIn = poiObj.zoomIn -1;
+        var poiZoomIn = poiObj.zoomIn +1;
+        // var poiZoomIn = poiObj.zoomIn;
+        /*
         if( poiZoomIn > 11 )
             poiZoomIn += 1;
+            */
 
         if( poiZoomIn < 6 )
             poiZoomIn = 6;
@@ -814,8 +834,10 @@
         }else{
             if( poiZoomIn < 6 )
                 poiZoomIn = 6.5;
+                    /*
             else
                 poiZoomIn -= 1;
+                */
 
             if( isFar == true ) {
                 saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );
@@ -970,12 +992,64 @@
             window.open("https://blog.naver.com/bible-map");
         }
         if( kind == 2 ){
-            window.open("http://cafe.naver.com/missionwide");
+            // kakaotalk://
+            window.open("http://pf.kakao.com/_IaxnJC");
+
+            // window.open("safari://www.biblemap.or.kr");         //  동작 안한다.
+            //window.open("mailto://missionwide@naver.com");    //      <a href="mailto:sgb000@hanmail.net">bongdal 에게 메일보내기</a>
+
         }
-        if( kind == 3 ){
+        if( kind == 3 ){        // facebook
             window.open("https://www.facebook.com/biblemap/");
+            // document.checkframe.location = "googlechrome://";
+            /*
+            var agt = navigator.userAgent.toLowerCase();
+            if( agt.indexOf("chrome") != -1 ){
+                alert("It's a chrome!!!");
+            }
+            else if( agt.indexOf("safari") != -1 ){
+                alert("It's a safari!!");
+                window.open("http://www.biblemap.or.kr");
+            }
+            else {
+                alert("몰랑!!!!");
+                //window.open("googlechrome://www.biblemap.or.kr");
+                window.open("http://www.biblemap.or.kr");
+            }
+
+
+            // window.open("googlechrome://www.biblemap.or.kr");
+            */
         }
     }
+
+/*
+    function checkApplicationInstall_callback() {
+
+        if("android"==OSName){
+            try {
+                var s = document.checkframe.document.body.innerHTML;
+                // 어플리케이션 설치되어있음
+
+            } catch (e) {
+                // 어플리케이션 설치 안 되어있음
+                // IOS 는 이영역으로 넘어오질 않음..
+                if (window.confirm("Not installed - android ")){
+                   var android_url = "market://details?id=com.xxx.app";
+                    location.href = android_url;
+                }
+
+            }
+
+        }
+        if("ios" == OSName){
+            if (window.confirm("Not installed - ios")){
+                var ios_url = "https://appsto.re/kr/asdfg";
+                location.href = ios_url;
+            }
+        }
+    }
+    */
 
 
 </script>

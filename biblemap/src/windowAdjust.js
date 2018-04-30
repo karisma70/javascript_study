@@ -252,11 +252,11 @@ var adjustScrDiv = (function(){
 
         setCompassBtnPos( compassBasX, compassBasY );
 
-        view2DBtn.style.top = 5 +'px';
+        view2DBtn.style.top = 38 +'px';
         view2DBtn.style.left = 5 + 'px';
         // view2DBtn.style.left = (window.innerWidth - 230) + 'px';
 
-        view3DBtn.style.top = 5 +'px';
+        view3DBtn.style.top = 38 +'px';
         view3DBtn.style.left = 5 + 'px';
         // view3DBtn.style.left = (window.innerWidth - 230) + 'px';
     }
@@ -653,6 +653,7 @@ function hideDownloading(){
 }
 
 
+/*
 function eventShowLabel( ){
 
     if (document.querySelector('#checkShowLabel').checked) {
@@ -661,5 +662,29 @@ function eventShowLabel( ){
     }else {
         bibleMapManager.showWithLabel(false);
         map3D.showWithLabel(false);
+    }
+}
+*/
+
+function eventShowLabel( ){
+
+    var img1 = "biblemap/image/label_on.png?version=20171208";
+    var img2 = "biblemap/image/label_off.png?version=20171208";
+
+    var showLabel2DBtn = document.getElementById("showLabel2DBtn");
+    var showLabel3DBtn = document.getElementById("showLabel3DBtn");
+
+    if( window.isShowLabel == false ) {
+        bibleMapManager.showWithLabel(true);
+        map3D.showWithLabel(true);
+        showLabel2DBtn.src = img1;
+        showLabel3DBtn.src = img1;
+        window.isShowLabel = true;
+    }else {
+        bibleMapManager.showWithLabel(false);
+        map3D.showWithLabel(false);
+        showLabel2DBtn.src = img2;
+        showLabel3DBtn.src = img2;
+        window.isShowLabel = false;
     }
 }

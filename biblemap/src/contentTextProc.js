@@ -386,7 +386,7 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
         var infoTab = document.getElementById( 'tab3' );
         // infoTab.innerHTML = '<a href=' + '"javascript:moveToPlaceByPoiID( ' + poiObj.id + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: #2682E8 \" >' + '#'+ poiText + '  ' + '</a>';
 
-        var poiTitle = '<a href=' + '\"javascript:moveToPlaceByPoiID( ' + "\'" + poiObj.id + "\'" + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: rgb( 180, 4, 174 ); vertical-align:top; \" >'
+        var poiTitle = '<a href=' + '\"javascript:moveToPlaceByPoiID( ' + "\'" + poiObj.id + "\'" + ')\" style=\"text-decoration:none; font:\'Nanum Gothic\'; font-weight:bold;' + "size:\'30px\';" + 'color: rgb( 180, 4, 174 ); vertical-align:top; \" >'
             + '<img src ="biblemap/image/poi_location.png?version=20170908" style=\"height:20px; \">&nbsp;&nbsp;' +
             poiObj.biblePlace + '</a>';
 
