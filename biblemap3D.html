@@ -479,7 +479,7 @@
 <!-- <div id="footerDummy"></div> -->
 
 <div id="footer">
-    <ul id="tabsMenu" class="tabs">
+    <ul id="tabsMenu" class="tabs" style="position:absolute; top:-37px;">
         <li id="tab1Menu" class="active" rel="tab1">성경본문</span></li>
         <li id="tab2Menu" rel="tab2"><span style="font-color:white; ">단어검색</span></li>
         <li id="tab3Menu" rel="tab3">지명정보</li>
@@ -593,9 +593,13 @@
     var tabMenu = createTabMenu();
     var curMapViewMode = 'chkView2D';   // "chkView2D" |  "chkView3D"  | "chkViewAll"
 
+    $("#tabsMenu").css( "z-index", "5000" );
     $("#footerToggle").css( "z-index", "5000" );
+
+
     $("#showLabel2DBtn").css( "z-index", "5000" );
     $("#showLabel3DBtn").css( "z-index", "5000" );
+
 
     (function() {
 
@@ -1783,7 +1787,7 @@
         var mapExtent = view.calculateExtent(bibleMap.getSize());
         var curZoom = view.getZoom();
         var mapExtentDistance = getDistance( mapExtent[0],mapExtent[1], mapExtent[2], mapExtent[3] );
-        mapExtentDistance  = mapExtentDistance + (mapExtentDistance * 2);
+        mapExtentDistance  = mapExtentDistance + mapExtentDistance;
 
         mapExtent[0] -= mapExtentDistance;
         mapExtent[1] -= mapExtentDistance;
@@ -1811,31 +1815,34 @@
 
             // if( curZoom < poiZoomIn ){
             if (IsIntersectExtent(mapExtent, poiObj.x, poiObj.y) == true) {
-                poiZoomIn = curZoom;
+                // poiZoomIn = ( curZoom + poiZoomIn ) / 2.0;
+                moveTo(view, [poiObj.x, poiObj.y], curZoom);
             } else {
                 tolerance = Math.abs(curZoom - poiZoomIn);
-                if (tolerance > 2) {
+                if (tolerance > 1) {
                     poiZoomIn = ( curZoom + poiZoomIn ) / 2.0;
                 } else {
                     poiZoomIn = curZoom;
                 }
+
+                if( isFar == true ){
+                    flyTo(view, [poiObj.x, poiObj.y], poiZoomIn, function (complete) {
+                        if (complete == true) {
+                        }
+                    });
+                }
+                else
+                {
+                    moveTo(view, [poiObj.x, poiObj.y], poiZoomIn);
+                }
             }
-            if( tolerance > 2 ){
-                flyTo(view, [poiObj.x, poiObj.y], poiZoomIn, function (complete) {
-                    if (complete == true) {
-                    }
-                });
-            }
-            else
-            {
-                moveTo(view, [poiObj.x, poiObj.y], poiZoomIn);
-            }
+
 
             saveLocationToStorage( poiZoomIn, poiObj.x, poiObj.y );
 
         }else{
-            if( poiZoomIn < 6 )
-                poiZoomIn = 6.5;
+            if( poiZoomIn <= 6 )
+                poiZoomIn = 7;
                     /*
             else
                 poiZoomIn -= 1;
