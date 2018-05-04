@@ -1441,8 +1441,8 @@ function createLayer( source  ) {
 
          this.view = new ol.View({
              center: [3844176, 3806822],
-             maxZoom: 19,
-             minZoom: 4,
+             maxZoom: 17,
+             minZoom: 5,
              zoom: 7
          });
 

@@ -114,7 +114,7 @@ var createFooterMenu = (function() {
              this.tab_contain.style.right = 0 + 'px';
              this.tab_contain.style.bottom = 5 + 'px';
 
-             this.tab1.style.top = 30 + 'px';
+             this.tab1.style.top = 60 + 'px';
              this.tab1.style.left = 0 + 'px';
              this.tab1.style.right = 0 + 'px';
              this.tab1.style.bottom = 5 + 'px';

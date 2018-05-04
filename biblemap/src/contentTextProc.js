@@ -206,36 +206,27 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
              poiContentsToTab_( window.focusPoiObj );
         }
 
-        if( window.focusPoiObj != null ){
-            if( window.focusPoiObj.id != localPoiObj.id ) {
-                createPoiTooltip(tooltip2D, "contentFrame2D", false);
-            }
-        }
-        else
-            createPoiTooltip(tooltip2D, "contentFrame2D", false);
+        showBaseInfoPoi2D3D();
 
-        if( window.focusPoiObj != null ){
-            if( window.focusPoiObj.id != localPoiObj.id ) {
-                createPoiTooltip(tooltip3D, "contentFrame3D", false);
-            }
-        }
-        else
-            createPoiTooltip(tooltip3D, "contentFrame3D", false);
-
-        poiTooltip3D.setGroundPosition( );
-
-        // poiContentsToTab();
 
     }, function () {
 
-        if( tooltip2D ) {
-            poiTooltip2D.removeAndCreate( localPoiObj.id, localPoiObj.biblePlace, [localPoiObj.x, localPoiObj.y], false );
-        }
-        if( tooltip3D ) {
+
+        /*
+        if( curMapViewMode ==  "chkView2D") {  //  |  "chkView3D"  | "chkViewAll"
+            poiTooltip2D.removeAndCreate(localPoiObj.id, localPoiObj.biblePlace, [localPoiObj.x, localPoiObj.y], false);
+        }else if( curMapViewMode ==  "chkView3D") {
             poiTooltip3D.removeAndCreate( localPoiObj.id, localPoiObj.biblePlace, [localPoiObj.x, localPoiObj.y], false );
-            // poiTooltip3D.setGroundPosition( [localPoiObj.x, localPoiObj.y] );
+            poiTooltip3D.setGroundPosition(  );
+        }else{
+            poiTooltip2D.removeAndCreate(localPoiObj.id, localPoiObj.biblePlace, [localPoiObj.x, localPoiObj.y], false);
+            poiTooltip3D.removeAndCreate( localPoiObj.id, localPoiObj.biblePlace, [localPoiObj.x, localPoiObj.y], false );
             poiTooltip3D.setGroundPosition(  );
         }
+        */
+
+        showBaseInfoPoi2D3D();
+
 
     });
 
@@ -276,13 +267,6 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
     };
 
     showBaseInfoPoi2D3D = function(){
-        /*
-         if( popup2D ){
-         showBaseInfoPoi( popup2D, "contentFrame2D" );
-         }
-         if( popup3D ) {
-         showBaseInfoPoi(popup3D, "contentFrame3D");
-         }*/
 
         closePopup2D();
         closePopup3D();
@@ -290,12 +274,24 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
         closeTooltip();
 
         if( window.focusPoiObj !== null && window.focusPoiObj.id == localPoiObj.id ) {
-            createPoiTooltip(popup2D, "contentFrame2D", true);
-            createPoiTooltip(popup3D, "contentFrame3D", true);
+            if( curMapViewMode ==  "chkView2D") {  //  |  "chkView3D"  | "chkViewAll"
+                createPoiTooltip(popup2D, "contentFrame2D", true);
+            }else if( curMapViewMode ==  "chkView3D" ) {
+                createPoiTooltip(popup3D, "contentFrame3D", true);
+            }else{
+                createPoiTooltip(popup2D, "contentFrame2D", true);
+                createPoiTooltip(popup3D, "contentFrame3D", true);
+            }
         }else{
             if( window.selectedPoiObj != null ) {
-                createPoiTooltip(popup2D, "contentFrame2D", false);
-                createPoiTooltip(popup3D, "contentFrame3D", false);
+                if( curMapViewMode ==  "chkView2D") {  //  |  "chkView3D"  | "chkViewAll"
+                    createPoiTooltip(popup2D, "contentFrame2D", false);
+                }else if( curMapViewMode ==  "chkView3D" ) {
+                    createPoiTooltip(popup3D, "contentFrame3D", false);
+                }else{
+                    createPoiTooltip(popup2D, "contentFrame2D", false);
+                    createPoiTooltip(popup3D, "contentFrame3D", false);
+                }
             }
         }
 
@@ -303,20 +299,7 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
 
     showYoutubePoi2D = function() {
 
-        /*
-        popup2D.content.innerHTML = localPoiObj.biblePlace;
-        popup2D.content.innerHTML += lineImage;
-
-        if( localPoiObj.title != ""){
-            popup2D.content.innerHTML += "<br>" + localPoiObj.title + "<br>";
-        }
-
-        popup2D.content.innerHTML += "<iframe width=\"320\" height=\"240\" src=\"" + youtube + "\" frameborder = \"0\" allowfullscreen></iframe>";
-        popup2D.overlay.setPosition( [poiObj.x, poiObj.y] );
-        */
-
         var labelText = localPoiObj.biblePlace + "&nbsp";
-
         var foldIcon = '<a href =\"javascript:showBaseInfoPoi2D3D()\" >' + '<img src=\"biblemap/image/fold-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">' + '</a>';
         labelText += '&nbsp;&nbsp;' + foldIcon;
         labelText += '<br>';
@@ -330,23 +313,6 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
     };
 
     showYoutubePoi3D = function() {
-
-        /*
-        // var scriptRef = "<a href =\"javascript:showBaseInfoPoi()\"' >";
-        var scriptRef = "<a href =\"javascript:showBaseInfoPoi2D3D()\"' >";
-        var foldIcon = "<img src=\"biblemap/image/fold-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">";
-        // popup.innerHTML = poiText + " " + scriptRef + foldIcon + "</a>";
-        // popup3D.content.innerHTML = poiText + " " + scriptRef + foldIcon + "</a>";
-        popup3D.content.innerHTML = localPoiObj.biblePlace;
-
-        popup3D.content.innerHTML += lineImage;
-        if( localPoiObj.title != ""){
-            popup3D.content.innerHTML += "<br>" + localPoiObj.title + "<br>";
-        }
-
-        popup3D.content.innerHTML += "<iframe width=\"320\" height=\"240\" src=\"" + youtube + "\" frameborder = \"0\" allowfullscreen></iframe>";
-        popup3D.overlay.setGroundPosition( [localPoiObj.x, localPoiObj.y] );
-        */
 
         var labelText = localPoiObj.biblePlace + "&nbsp";
 
@@ -393,8 +359,10 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
         var strSearchWord = '<a href=' + '\"javascript:searchBibleWord_( ' + "\'" + poiObj.biblePlace + "\'" + ')\">';
         strSearchWord += '&nbsp;&nbsp;&nbsp;<img src =\"biblemap/image/m_search_btn2.png\" style=\"top: -2px; height:22px; vertical-align:top;\">' + '</a>';
 
-        strSearchWord += '<a href=' + '\"javascript:beforePoi( )\"><img src =\"biblemap/image/undo.png?version=20170914\" style=\"position: absolute; left: 215px; top: -2px; width: 24px; height:20px; vertical-align:top;\"></a>';
-        strSearchWord += '<a href=' + '\"javascript:afterPoi( )\"><img src =\"biblemap/image/redo.png?version=20170914\" style=\"position: absolute; left: 255px; top: -2px; width:24px; height:20px; vertical-align:top;\"></a>';
+        // strSearchWord += '<a href=' + '\"javascript:beforePoi( )\"><img src =\"biblemap/image/undo.png?version=20170914\" style=\"position: absolute; left: 215px; top: -32px; width: 24px; height:20px; vertical-align:top;\"></a>';
+        strSearchWord += '&nbsp;&nbsp;&nbsp;<a href=' + '\"javascript:beforePoi( )\"><img src =\"biblemap/image/undo.png?version=20170914\" style=\"left: 215px; top: -32px; width: 24px; height:20px; vertical-align:top;\"></a>';
+        // strSearchWord += '<a href=' + '\"javascript:afterPoi( )\"><img src =\"biblemap/image/redo.png?version=20170914\" style=\"position: absolute; left: 255px; top: -32px; width:24px; height:20px; vertical-align:top;\"></a>';
+        strSearchWord += '&nbsp;&nbsp;&nbsp;<a href=' + '\"javascript:afterPoi( )\"><img src =\"biblemap/image/redo.png?version=20170914\" style=\"left: 255px; top: -32px; width:24px; height:20px; vertical-align:top;\"></a>';
 
         // infoTab.innerHTML = poiTitle + strSearchWord + '<br>' ;
 

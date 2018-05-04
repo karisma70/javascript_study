@@ -190,6 +190,8 @@ var adjustScrDiv = (function(){
 
     var container;
 
+    var tab1Title;
+
     var tab1;
     var tab2;
     var tab3;
@@ -244,6 +246,8 @@ var adjustScrDiv = (function(){
         tab_contain = document.getElementById("tab_contain");
 
         container = document.getElementById('container');
+
+        tab1Title = document.getElementById("tab1Title");
 
         tab1 = document.getElementById("tab1");
         tab2 = document.getElementById("tab2");
@@ -392,23 +396,28 @@ var adjustScrDiv = (function(){
         tab_contain.style.bottom = 5 + 'px';
 
 
-        tab1.style.top = 30 +'px';
+        tab1Title.style.top = 0 +'px';
+        tab1Title.style.left = 0+'px';
+        tab1Title.style.right = 0 + 'px';
+        tab1Title.style.bottom = 5 + 'px';
+
+        tab1.style.top = -10 +'px';
         tab1.style.left = 0+'px';
         tab1.style.right = 0 + 'px';
         tab1.style.bottom = 5 + 'px';
 
-        tab2.style.top = 0 +'px';
+        tab2.style.top = -33 +'px';
         tab2.style.left = 0+'px';
         tab2.style.right = 0 + 'px';
         tab2.style.bottom = 5 + 'px';
 
         // tab3.style.top = 0 +'px';
-        tab3.style.top = 30 +'px';
+        tab3.style.top = -10 +'px';
         tab3.style.left = 0 +'px';
         tab3.style.right = 5 + 'px';
         tab3.style.bottom = 5 + 'px';
 
-        tab4.style.top = 0 +'px';
+        tab4.style.top = -33 +'px';
         tab4.style.left = 15+'px';
         tab4.style.right = 5 + 'px';
         tab4.style.bottom = 5 + 'px';
