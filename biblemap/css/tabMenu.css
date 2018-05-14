@@ -25,15 +25,18 @@ ul.tabs li {
     height: 27px;
     line-height: 27px;
 
+
     /*
     border-top: 1px solid rgb(124, 151, 205);
     border-left: 1px solid rgb(124, 151, 205);
     border-right: 1px solid rgb(124, 151, 205);
-    border-bottom: 1px solid rgb( 101, 126, 194 );
 
-    background: rgb( 59, 89, 153);
-    */
+    background: rgb( 59, 89, 153);  */
 
+    border-top: 1px solid rgb(179, 231, 255);
+    border-left: 1px solid rgb(179, 231, 255);
+    border-right: 1px solid rgb(179, 231, 255);
+    background: rgb( 0, 144, 217);
 
     /*
     border-top: 1px solid rgb(49, 81, 128);
@@ -50,11 +53,12 @@ ul.tabs li {
     */
 
 
+    /*
     border-top: 1px solid rgb(11, 106, 185);
     border-left: 1px solid rgb(11, 106, 185);
     border-right: 1px solid rgb(11, 106, 185);
-    /* background: rgb( 51, 158, 244); */
     background: rgb( 65, 140, 255);
+    */
 
 
     overflow: hidden;
@@ -64,9 +68,9 @@ ul.tabs li {
 }
 
 ul.tabs li:hover {
-    /* background: rgb( 101, 126, 194 );  */
-    background: rgb( 115, 150, 202 );
-    /* background: rgb( 61, 185, 246 );  */
+
+    /* background: rgb( 115, 150, 202 );  */
+    background: rgb( 53, 189, 255);
 }
 
 ul.tabs li.active {

@@ -117,7 +117,7 @@
      { url : 'level_9_poi',  order: 22, style: {
          visibleRange : { max : 25 , min : 9.5 },
          // textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 12px Nanum Gothic', color: "white", outlineColor : "#9b490d", outlineWidth : 2  } }   // 191970
-         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "black", outlineWidth : 3  },
+         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : "black", outlineWidth : 2  },
          visibleRange3D : { max : 25 , min : 10 },
          font3D : 'normal 15px Nanum Gothic'
      }   // 191970
@@ -126,7 +126,7 @@
 
      { url : 'level_8_poi',  order: 23, style: {
          visibleRange : { max : 25 , min : 8.7 },
-         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : '#033078', outlineWidth : 3  },
+         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : '#033078', outlineWidth : 2  },
          visibleRange3D : { max : 25 , min :  9 },
          font3D : 'normal 15px Nanum Gothic'
      }  //3e636a
@@ -135,7 +135,7 @@
      { url: 'history/History_12Sect_poi',  order: 24, style: {
          visibleRange : { max : 11.5, min : 8 },
          // textStroke : { prop: 'label', align: 'center', baseline: 'center', font : 'normal 13px Nanum Gothic', color: '#E7E5E5', outlineColor : '#5F0291', outlineWidth : 3  }}
-         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 15px Nanum Gothic', color: "#FFFFFF", outlineColor : "#5B2B29", outlineWidth : 3  },
+         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 15px Nanum Gothic', color: "#FFFFFF", outlineColor : "#5B2B29", outlineWidth : 2  },
          visibleRange3D : { max : 20 , min :  8 },
          font3D : 'normal 16px Nanum Gothic'
      }
@@ -144,7 +144,7 @@
 
      { url : 'level_7_poi',  order: 25, style: {
          visibleRange : { max : 25 , min : 7 },
-         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : '#033078', outlineWidth : 3  },
+         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 14px Nanum Gothic', color: "white", outlineColor : '#033078', outlineWidth : 2  },
          visibleRange3D : { max : 25 , min :  7 },
          font3D : 'normal 15px Nanum Gothic'
      }
@@ -153,7 +153,7 @@
 
      { url: 'level_6_poi',  order: 26, style: {
          visibleRange : { max : 25 , min : 6 },
-         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 16px Nanum Gothic', color: '#E7E5E5', outlineColor : '#052FFF', outlineWidth : 3  },
+         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 16px Nanum Gothic', color: '#E7E5E5', outlineColor : '#052FFF', outlineWidth : 2  },
          visibleRange3D : { max : 25 , min :  6 },
          font3D : 'normal 17px Nanum Gothic'
      }
@@ -162,7 +162,7 @@
      {
          url: 'level_4_poi',  order: 27, style: {
          visibleRange : { max : 20 , min : 4 },
-         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 17px Nanum Gothic', color: "#E7E5E5", outlineColor : "#105602", outlineWidth : 3  },
+         textStroke : { prop: 'label', align: 'center', baseline: 'middle', font : 'normal 17px Nanum Gothic', color: "#E7E5E5", outlineColor : "#105602", outlineWidth : 2  },
          visibleRange3D : { max : 25 , min :  4 },
          font3D : 'normal 18px Nanum Gothic'
      }

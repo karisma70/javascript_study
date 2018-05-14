@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-    <title>Bible Map</title>
+    <title>Anys Bible Map</title>
 
     <link rel="shortcut icon" href="http://www.biblemap.or.kr/favicon.ico" type="image/x-icon"/>
     <link rel="icon" href="http://www.biblemap.or.kr/favicon.ico" type="image/x-icon"/>
@@ -40,7 +38,7 @@
 
     <script type="text/javascript" src="biblemap/src/distanceMeasureControl.js?version=20170820"></script>
     <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170907"></script>
-    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20180207"></script>
+    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20180208"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
     <script type="text/javascript" src="biblemap/src/jQueryRotate.js"></script>
     <!-- <script type="text/javascript" src="biblemap/vendor/jquery-1.8.1.js"></script> -->
@@ -54,7 +52,7 @@
 
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/autocomplete_style.css?version=20170911">
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/popup.css?version=20170910">
-    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/tabMenu.css?version=20170917">
+    <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/tabMenu.css?version=20170920">
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/bubblePopup.css?version=20171210">
     <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/poiTooltip.css?version=20171213">
     <!-- <link rel="stylesheet" type="text/css" media="all" href="biblemap/css/biblemap.css?version=version=20170916"> -->
@@ -168,7 +166,7 @@
             /* height: 100%; */
             width: 200px;
             float:left;
-            border:1px solid grey;
+            border-right:1px solid grey;
             border-color: rgb( 210, 210, 210);
         }
         .mapview{
@@ -251,7 +249,7 @@
 
             width:200px;
             height: 15px;
-            background-color:rgb( 199, 219, 252  );
+            /* background-color:rgb( 199, 219, 252  );  */
         }
 
         .dummy2 {
@@ -272,8 +270,8 @@
 
 <div class="wrapperDiv">
     <div id="sidebar" style="position:absolute; background-color:rgb( 248, 248, 248  );">
-        <div id="logo" style="height:32px; background-color:rgb( 59, 89, 153 );" onclick="showIntroBibleMap();"><img src="biblemap/image/biblemap_logo.png" style="width:27px; height:33px; vertical-align:middle" >
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span  style="font-size:11pt; font-weight:bold; color:white; text-align:center;  vertical-align:middle; font: 'Hanna', serif;" >성경지도</span></div>
+        <div id="logo" style="height:32px; background-color:rgb( 59, 89, 153 );" onclick="showIntroBibleMap();"><img src="biblemap/image/biblemap_logo.png" style="width:29px; height:31px; vertical-align:middle" >
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span  style="position: absolute; font-size:11pt; left: 48px; top: 7px; font-weight:bold; color:white; text-align:left;  vertical-align:middle; font: 'Hanna', serif;" >ANYS Bible Map</span></div>
 
         <div class="dummy2" style = "height: 8px;"></div>
         <div class="dummy2" style = "height:178px;">
@@ -303,7 +301,7 @@
             <div class="content" style ="position: absolute; width:198px; top: 130px; height: 85px; background-color:#FFFFFF;">
                 <span style="margin-left: 18px; font:'Nanum Gothic'; font-size:12px;">지명</span>
                 <input type="text" name="currency" class="biginput" id="biblePlace" size="16"
-                       style="position: absolute; left: 44px; top: -2px; padding-left: 3px; margin-left: 0px; width:112px; height:21px; font-size:12px; font:'Nanum Gothic'; " value="갈릴리 호수" onkeypress="if(event.keyCode==13) searchBiblePlace();">
+                       style="position: absolute; left: 44px; top: -2px; padding-left: 4px; margin-left: 0px; width:112px; height:21px; font-size:12px; font:'Nanum Gothic'; " value="갈릴리 호수" onkeypress="if(event.keyCode==13) searchBiblePlace();">
                 <input type="image" src="biblemap/image/m_text_clear.png?version=20170916" style="position: absolute; top: 0px;  left: 136px;  width:19px; height:18px; vertical-align:bottom; border:none; "  onclick="clearSearchPlaceWord()">
                 <!-- <input type="button" class="button" value="검색" style="position: absolute; left: 157px; top:-2px; vertical-align:center; margin-left: 2px;" onclick="searchBiblePlace()">  -->
                 <input type="image" src="biblemap/image/poi_location.png?version=20170908" style="position: absolute; left: 160px; top: -4px; width:23px; height:23px; vertical-align:middle; border:none;" onclick="searchBiblePlace()">
@@ -390,11 +388,15 @@
 -->
         <br>
 
-        <div id ="dummy" class = "dummy" style="position: absolute; top:56px; width: 198px; height: 200px;">
-            <span class="hana-font" style="margin-left: 40px; font-size:7pt; font-weight:bold; color:rgb( 59, 89, 153 ); text-align:center;  vertical-align:middle; font: 'Hanna', serif;" >www.biblemap.or.kr</span>
-            <div id ="licenseNotice" style="left: 0px; top:0px; height: 17px; width:198px; background-color:rgb( 199, 219, 252  );" >
+        <div id ="dummy" class = "dummy" style="position: absolute; top:65px; width: 200px; height: 200px;">
+            <span class="hana-font" style="margin-left: 40px; position: absolute; top: -5px; font-size:10pt; font-weight:bold; color:rgb( 59, 89, 153 ); text-align:center;  vertical-align:middle; font: 'Hanna', serif;" >www.biblemap.or.kr</span>
+            <div id ="licenseNotice" style="left: 0px; top:0px; height: 17px; width:198px; " >
                 <!-- <span style="color: rgb(255, 255, 255); font-size:11px; horizontal-align: center;" onclick="showLicenseNotice()" >   Notice</span> -->
-                <a href="http://blog.naver.com/bible-map" target="_blank" style="text-decoration:none"><img src="biblemap/image/L_biblemap_logo.png" style="position: absolute; top: 17px; width:198px; height:182px; vertical-align:middle" ></a>
+                <!-- <a href="http://blog.naver.com/bible-map" target="_blank" style="text-decoration:none"><img src="biblemap/image/L_biblemap_logo.png" style="position: absolute; top: 17px; width:200px; height:182px; vertical-align:middle" ></a> -->
+
+                <a href="http://www.biblemap.or.kr/introBibleMap/index.html" target="_blank" style="text-decoration:none"><img src="biblemap/image/goto_anis_bible_map.png" style="position: absolute; top: 13px; width:200px; border:none; vertical-align:middle" ></a>
+
+                <a href="http://blog.naver.com/bible-map" target="_blank" style="text-decoration:none; text-align:center;"><img src="biblemap/image/blog_logo2.jpg" style="position: absolute; top: 65px; width:200px; height: 135px;text-align:center; border:none; vertical-align:middle" ></a>
             </div>
         </div>
 
@@ -410,13 +412,13 @@
 </div>
 </div>
 
-<div id="map" class="mapview" style="position:absolute;">
-    <input id="showLabel2DBtn"  type="image"  src="biblemap/image/label_off.png?version=20171208" style="position: absolute; border: none; top: 5px; left:5px; height: 24px; vertical-align:middle;" onclick="eventShowLabel()">
+<div id="map" class="mapview" style="position:absolute; border-bottom:3px solid rgb(210, 210, 210);">
+    <input id="showLabel2DBtn"  type="image"  src="biblemap/image/label_off.png?version=20171208" style="position: absolute; border: none; top: 8px; left:5px; width: 48px; vertical-align:middle;" onclick="eventShowLabel()">
 
-    <input id="view3DBtn" type="image" src="biblemap/image/view_3D_2.png?version=20171218"
-           onmouseover="this.src='biblemap/image/view_3D_2_.png?version=20171218';"
-           onmouseout="this.src='biblemap/image/view_3D_2.png?version=20171218';"
-           style="position: absolute; border: none; width:40px; height:40px;" onclick="setViewMode3D()">
+    <input id="view3DBtn" type="image" src="biblemap/image/view_3D_3.png?version=20171220"
+           onmouseover="this.src='biblemap/image/view_3D_3_.png?version=20171218';"
+           onmouseout="this.src='biblemap/image/view_3D_3.png?version=20171220';"
+           style="position: absolute; border: none; width:44px; " onclick="setViewMode3D()">
 
            <!-- style="border:1px solid #A0A0A0; position: absolute; width:35px; height:35px;" onclick="setViewMode3D()">  -->
 
@@ -436,9 +438,9 @@
 
 </div>
 
-<div id="map3D" class="mapview" style="position:absolute;">
+<div id="map3D" class="mapview" style="position:absolute; border-bottom:3px solid rgb(210, 210, 210);">
 
-    <input id="showLabel3DBtn"  type="image"  src="biblemap/image/label_off.png?version=20171208" style="position: absolute; border: none; top: 5px; left:5px; height: 24px; vertical-align:middle;" onclick="eventShowLabel()">
+    <input id="showLabel3DBtn"  type="image"  src="biblemap/image/label_off.png?version=20171208" style="position: absolute; border: none; top: 8px; left:5px; width : 48px; vertical-align:middle;" onclick="eventShowLabel()">
 
     <input id="compassBtn" type="image" src="biblemap/image/compass2.png?version=20170930"
            onmouseover="this.src='biblemap/image/compass2_.png?version=20170930';"
@@ -466,9 +468,9 @@
            onmouseout="this.src='biblemap/image/home.png?version=20170930';"
            style="position: absolute; border:0; width:30px; height: 30px;" onclick="gotoHome()">
 
-    <input id="view2DBtn" type="image" src="biblemap/image/view_2D_2.png?version=20171207" style="position: absolute; border: none; width: 40px; height:40px;"
-           onmouseover="this.src='biblemap/image/view_2D_2_.png?version=20171207';"
-           onmouseout="this.src='biblemap/image/view_2D_2.png?version=20171207';"
+    <input id="view2DBtn" type="image" src="biblemap/image/view_2D_3.png?version=20171211" style="position: absolute; border: none; width: 44px; "
+           onmouseover="this.src='biblemap/image/view_2D_3_.png?version=20171211';"
+           onmouseout="this.src='biblemap/image/view_2D_3.png?version=20171211';"
            onclick="setViewMode2DWithSync()">
 
     <input id="zoomInBtn3D" type="image" src="biblemap/image/Zoom-In-icon.png?version=20171209"  style="border: none; position: absolute; width:29px; height: 29px;"
@@ -502,20 +504,20 @@
             <input id="tabIncBible" type="image" src="biblemap/image/right_arrow.png?version=20170907" style="position: absolute; left: 220px; top: -38px; width:22px; height:22px; vertical-align:middle;" onclick="tabIncreaseBibleChapterAndSearch()">
         </div>
 
-        <div id = "tab3Title" class="divContent" style="position: absolute; padding-left: 10px;  font-size: 16px; top:-36px; width: 400px; height: 35px; overflow-x:hidden; color: rgb( 90, 90, 90 ); " >
+        <div id = "tab3Title" class="divContent" style="position: absolute; padding-left: 10px;  font: 'Hanna', serif; font-size: 15px; top:-36px; width: 400px; height: 35px; overflow-x:hidden; color: rgb( 90, 90, 90 ); " >
             <img src ="biblemap/image/undo.png?version=20170914" style="position:absolute; left: 215px; top: 0px; width: 24px; height:20px; vertical-align:top;">
         </div>
 
 
-        <div id="tab1" class="tab_content" style="position: absolute; top:-30px; padding-left: 10px; border-top:1px solid rgb(215, 215, 215);" >
+        <div id="tab1" class="tab_content" style="position: absolute; top:-30px; padding-left: 10px; padding-right: 10px; border-top:1px solid rgb(215, 215, 215);" >
             Waiting....
         </div>
-        <div id="tab2" class="tab_content" style="position: absolute; " >
+        <div id="tab2" class="tab_content" style="position: absolute; padding-right: 10px;" >
             검색결과가&nbsp;없습니다 <br> 성경의&nbsp;단어&nbsp;검색&nbsp;버튼을&nbsp;클릭해&nbsp;주세요
             <a href ="javascript:searchBibleWord()" style="text-decoration:none; font-weight: bold; fong-size: 1.5em; color:rgb(0, 91, 227); text-align : left;">→ 검색 클릭!!</a><br>
         </div>
 
-        <div id="tab3" class="tab_content"  style="padding-left: 5px; border-top:1px solid rgb(215, 215, 215);" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
+        <div id="tab3" class="tab_content"  style="padding-left: 10px; padding-right: 10px; border-top:1px solid rgb(215, 215, 215);" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
             검색결과가&nbsp;없습니다 <br> 지도상의&nbsp;지명을&nbsp;클릭하고&nbsp;아이콘&nbsp;'i'를&nbsp;클릭해&nbsp;주세요
         </div>
         <div id="tab4" class="tab_content" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
@@ -726,6 +728,7 @@
         if( ret == true ){
             sync2DMapTo3DMap();
             map3D.setGroundWholeLayer();
+            map3D.view3DTilt( 0.05);
             waitOver();
             clearInterval( map3DAddLayerTimer );
             map3DAddLayerTimer = null;
@@ -2090,6 +2093,7 @@
 
         var measureBtn2D = document.getElementById('measureBtn2D');
 
+        var baseX = 10;
         var baseY = 150;
 
         /*
@@ -2109,23 +2113,23 @@
 
         if( divID == 'map') {
             zoomOutBtn2D.style.top = (baseY - 29) + 'px';
-            zoomOutBtn2D.style.left = 5 + 'px';
+            zoomOutBtn2D.style.left = baseX + 'px';
 
             //zoomInBtn2D.style.top = ( (baseY - 30) + ( intervalY * levelLen ) ) + 'px';
             zoomInBtn2D.style.top = ( (baseY - 0) + ( intervalY * levelLen ) ) + 'px';
             // zoomInBtn2D.style.top = 260 + 'px';
-            zoomInBtn2D.style.left = 5 + 'px';
+            zoomInBtn2D.style.left = baseX + 'px';
 
             measureBtn2D.style.top = baseY - 60 +'px';
-            measureBtn2D.style.left = 5 + 'px';
+            measureBtn2D.style.left = baseX + 'px';
         }else {
 
             zoomOutBtn3D.style.top = (baseY - 29) + 'px';
-            zoomOutBtn3D.style.left = 5 + 'px';
+            zoomOutBtn3D.style.left = baseX + 'px';
 
             // zoomInBtn3D.style.top = ( (baseY - 30) + ( intervalY * levelLen ) ) + 'px';
             zoomInBtn3D.style.top = ( (baseY - 0) + ( intervalY * levelLen ) ) + 'px';
-            zoomInBtn3D.style.left = 5 + 'px';
+            zoomInBtn3D.style.left = baseX + 'px';
         }
 
 
@@ -2163,7 +2167,7 @@
             // btn.setAttribute('height', '8px');
             // btn.style.position = "absolute";
             btn.style.top = baseY + (idx * intervalY ) + "px";
-            btn.style.left = "9px";
+            btn.style.left = baseX + 4 + "px";   // "9px";
 
             btn.addEventListener('mouseover', mouseOverFunc, false );
             btn.addEventListener('mouseout', mouseOutFunc, false );

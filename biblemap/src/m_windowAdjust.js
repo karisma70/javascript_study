@@ -48,6 +48,8 @@ var DoubleTap = (function(){        // prevent for double tap
 
 var createFooterMenu = (function() {
 
+    var showMissionWideIntroCount = 0;
+
      function CreateFooter(){
 
          /*
@@ -114,7 +116,7 @@ var createFooterMenu = (function() {
              this.tab_contain.style.right = 0 + 'px';
              this.tab_contain.style.bottom = 5 + 'px';
 
-             this.tab1.style.top = 60 + 'px';
+             this.tab1.style.top = 30 + 'px';
              this.tab1.style.left = 0 + 'px';
              this.tab1.style.right = 0 + 'px';
              this.tab1.style.bottom = 5 + 'px';
@@ -190,11 +192,11 @@ var createFooterMenu = (function() {
              $("#missionWideIntro").hide();
          };
 
-         bottomModeShowControl = function(){
+         bottomModeShowControl = function() {
 
              $("#footer").show();
 
-             $("#tab_contain").css( "z-index", -10 );
+             $("#tab_contain").css("z-index", -10);
 
              $("#tabsMenu").hide();
              $("#tab_contain").hide();
@@ -202,6 +204,19 @@ var createFooterMenu = (function() {
 
 
              $("#footUpArrow").show();
+
+
+             var missionWideLogo = document.getElementById("missionWideLogo");
+
+             showMissionWideIntroCount ++;
+
+             if ( ( showMissionWideIntroCount % 2 ) == 0 ) {
+                 missionWideLogo.src = "biblemap/image/mission_wide_logo.png?version=20180501";
+             }
+             else{
+                 //missionWideLogo.src = "biblemap/image/m_goto_anis_bible_map.png?version=20180501";
+                 missionWideLogo.src = "biblemap/image/m_goto_anis_bible_map2.png?version=20180508";
+             }
              $("#missionWideIntro").show();
          };
 
@@ -435,6 +450,10 @@ var createFooterMenu = (function() {
                 bibleMap.updateSize();
         };
 
+        this.getShowIntroCount = function(){
+            return showMissionWideIntroCount;
+         };
+
         return this;
     }
 
@@ -568,6 +587,16 @@ function showIntroBibleMap(  ){
 }
 
 
+function introAnisBibleMap(){
+    var count = footerMenu.getShowIntroCount();
+    if( count % 2 == 0 ){
+        showIntroMissionWide();
+    }else{
+        gotoSNS( 2 );
+    }
+}
+
+
 function showIntroMissionWide(  ) {
 
     adjustPopupWindow();
@@ -587,7 +616,11 @@ function showIntroMissionWide(  ) {
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
     // popupContent.innerHTML += '본 바이블 맵 서비스는 여러분들의 소중한 기부와 후원을 통하여 운영되고 있습니다.';
-    popupContent.innerHTML += '본 바이블 맵 웹서비스는 여러분들의 많은 관심과 기대를 필요로 하고 있습니다.';
+    popupContent.innerHTML += '본 바이블 맵 웹서비스는 여러분들의 많은 기도와 관심을 필요로 하며, 성경지리 관련 자료를 보유하고 계신 분들의 기증을 기다리고 있습니다';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '사진 또는 이미지와 설명자료를 보유하고 계신 분들은 아래의 연락처로 연락주시면 바이블맵 웹 서비스에 반영하도록 하겠습니다';
+    popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '여러분들의 많은 성원 부탁드립니다.';
     popupContent.innerHTML += '<br>';

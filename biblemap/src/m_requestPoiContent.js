@@ -272,10 +272,12 @@ function showPoiYoutubeInTooltip( poiID, youtubeSrc, youtubeLink ) {
     if( confirm("3G/LTE 네트웍 환경에서 재생시 데이터 사용료가 발생할 수 있습니다") == false )
         return;
 
+    /*
     if( youtubelink !== ""){
         window.open( youtubeLink );
         return;
     }
+    */
 
     var poiObj = layerManager.getPoiObjById( poiID );
 

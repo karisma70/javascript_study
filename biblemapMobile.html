@@ -156,7 +156,7 @@
         <h1 align="center" style="position:absolute; top: 5px; color:white; background: rgb( 32, 67, 109 ); " >성경지도</h1>
         <!-- <input type="image" src="biblemap/image/biblemap_logo.png" style="position:absolute; left:0px; top:0px; width:45px; height:45px; vertical-align:middle; border:0;" onclick="openMenu()">  -->
         <input type="image" src="biblemap/image/m_menu_open.png" style="position:absolute; left:5px; top:5px; width:35px; height:30px; vertical-align:middle; border:0;" onclick="openMenu()">
-        <input id ="bibleMapLogo" type="image" src="biblemap/image/biblemap_logo.png" style="position:absolute; top:0px; width:41opx; height:41px; vertical-align:middle; border:0;" onclick="gotoSNS(1)">
+        <input id ="bibleMapLogo" type="image" src="biblemap/image/biblemap_logo.png" style="position:absolute; top:0px; width:41px; height:41px; vertical-align:middle; border:0;" onclick="gotoSNS(1)">
     </div>
 </div>
 
@@ -286,7 +286,7 @@
 
 
     <div id = "missionWideIntro" style="height:40px;" >
-        <input id ="missionWideLogo" type="image" src="biblemap/image/mission_wide_logo.png?version=20170905" style="position: absolute; left: 8px;  top: 3px; width:160px; height:30px; vertical-align:middle; border:none;"  onclick="showIntroMissionWide()" >
+        <input id ="missionWideLogo" type="image" src="biblemap/image/mission_wide_logo.png?version=20170905" style="position: absolute; left: 1px;  top: 0px; height:38px; vertical-align:middle; border:none;"  onclick="introAnisBibleMap()" >
     </div>
 
     <input id ="footUpArrow" type="image" src="biblemap/image/m_up_arrow.png?version=20170918" style="position: absolute; left: 250px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerUp()">
@@ -326,6 +326,7 @@
     var isReload = windowReloadByCurDate( 'biblemapMobile-day' );
 
 
+
     if( isMobile() == false ){
         var iEVersion = IEVersionCheck();
 
@@ -341,6 +342,7 @@
             }
         }
     }
+
 
 
     var agt = navigator.userAgent.toLowerCase();
