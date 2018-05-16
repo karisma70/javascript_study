@@ -11,7 +11,7 @@
     html {
     -webkit-text-size-adjust: none
     } -->
-    <title>Bible Map</title>
+    <title>Anys Bible Map</title>
     <!-- <link rel="apple-touch-icon" sizes="146x146" href="biblemap/image/biblemap_logo_114x114.png?version=20180214" />  -->
 
     <script>
@@ -70,7 +70,7 @@
 
     <script type="text/javascript" src="biblemap/src/m_searchBible.js?version=20170903"></script>
     <script type="text/javascript" src="biblemap/js/jquery.autocomplete.min.js"></script>
-    <script type="text/javascript" src="biblemap/src/m_windowAdjust.js?version=20170910"></script>
+    <script type="text/javascript" src="biblemap/src/m_windowAdjust.js?version=20170912"></script>
     <script type="text/javascript" src="biblemap/src/m_poiTooltip.js"></script>
 
     <style stype="text/css">
@@ -286,7 +286,7 @@
 
 
     <div id = "missionWideIntro" style="height:40px;" >
-        <input id ="missionWideLogo" type="image" src="biblemap/image/mission_wide_logo.png?version=20170905" style="position: absolute; left: 1px;  top: 0px; height:38px; vertical-align:middle; border:none;"  onclick="introAnisBibleMap()" >
+        <input id ="missionWideLogo" type="image" src="biblemap/image/mission_wide_logo2.png?version=20170905" style="position: absolute; left: 1px;  top: 0px; height:38px; vertical-align:middle; border:none;"  onclick="introAnisBibleMap()" >
     </div>
 
     <input id ="footUpArrow" type="image" src="biblemap/image/m_up_arrow.png?version=20170918" style="position: absolute; left: 250px;  top: 3px; width:25px; height:25px; vertical-align:middle; border:none;"  onclick="footerUp()">
@@ -325,8 +325,6 @@
 
     var isReload = windowReloadByCurDate( 'biblemapMobile-day' );
 
-
-
     if( isMobile() == false ){
         var iEVersion = IEVersionCheck();
 
@@ -343,12 +341,13 @@
         }
     }
 
-
-
     var agt = navigator.userAgent.toLowerCase();
     if( agt.indexOf("chrome") != -1 ||  agt.indexOf("safari") != -1 ){
     }else {
         showRecomendWebBrowser();
+        setInterval( function(){
+            showRecomendWebBrowser();
+        }, 18000 );
     }
 
 
