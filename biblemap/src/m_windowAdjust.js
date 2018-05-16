@@ -211,11 +211,11 @@ var createFooterMenu = (function() {
              showMissionWideIntroCount ++;
 
              if ( ( showMissionWideIntroCount % 2 ) == 0 ) {
-                 missionWideLogo.src = "biblemap/image/mission_wide_logo.png?version=20180501";
+                 missionWideLogo.src = "biblemap/image/mission_wide_logo2.png?version=20180514";
              }
              else{
                  //missionWideLogo.src = "biblemap/image/m_goto_anis_bible_map.png?version=20180501";
-                 missionWideLogo.src = "biblemap/image/m_goto_anis_bible_map2.png?version=20180508";
+                 missionWideLogo.src = "biblemap/image/m_goto_anis_bible_map2.png?version=20180510";
              }
              $("#missionWideIntro").show();
          };
@@ -619,7 +619,7 @@ function showIntroMissionWide(  ) {
     popupContent.innerHTML += '본 바이블 맵 웹서비스는 여러분들의 많은 기도와 관심을 필요로 하며, 성경지리 관련 자료를 보유하고 계신 분들의 기증을 기다리고 있습니다';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '사진 또는 이미지와 설명자료를 보유하고 계신 분들은 아래의 연락처로 연락주시면 바이블맵 웹 서비스에 반영하도록 하겠습니다';
+    popupContent.innerHTML += '성지 관련 사진 또는 이미지와 설명자료를 보유하고 계신 분들은 아래의 연락처로 연락주시면 바이블맵 웹 서비스에 반영하도록 하겠습니다';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '여러분들의 많은 성원 부탁드립니다.';
@@ -631,12 +631,13 @@ function showIntroMissionWide(  ) {
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '이메일: missionwide@naver.com';
     popupContent.innerHTML += '<br>';
-//    popupContent.innerHTML += '< 기부/후원 계좌 안내 >';
-//    popupContent.innerHTML += '<br>';
-//    popupContent.innerHTML += '신한은행 : 100-032-560142';
-//    popupContent.innerHTML += '<br>';
-//    popupContent.innerHTML += '예금주 : 미션와이드';
-//    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '< 기부/후원 계좌 안내 >';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '신한은행 : 100-032-560142';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '예금주 : 미션와이드';
+    popupContent.innerHTML += '<br>';
 
     showNoticePopup( '#infoPopup' );
 }
@@ -657,10 +658,10 @@ function showRecomendWebBrowser(  ) {
     popupContent.innerHTML += '바이블 맵 웹서비스를 사용하여 주셔서 감사합니다. ';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '본 웹사이트는 \'크롬 브라우저\' 또는 \'사파리 브라우저\'에서 정상동작합니다';
+    popupContent.innerHTML += '스마트폰에 설치되어 있는 인터넷 접속 프로그램(웹 브라우저)를 실행하여 \'www.biblemap.or.kr\'에 접속하여 주시기 바랍니다';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '스마트폰에 설치되어 있는 \'웹 브라우저\'를 실행하여 \'www.biblemap.or.kr\' 주소로 접속하여 주시기 바랍니다';
+    popupContent.innerHTML += '본 웹사이트는 \'카카오톡\' 또는 별도의 인터넷 접속 프로그램이 아닌 스마트폰에 설치되어 있는 인터넷 접속 프로그램에서 정상동작합니다';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
     // popupContent.innerHTML += '본 바이블 맵 서비스는 여러분들의 소중한 기부와 후원을 통하여 운영되고 있습니다.';
