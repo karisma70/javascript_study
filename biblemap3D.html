@@ -28,8 +28,8 @@
 
     <script type="text/javascript" src="biblemap/src/makeHrefText.js?version=20180124"></script>
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20180121"></script>
-    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20180216"></script>
-    <script type="text/javascript" src="biblemap/src/routePlay.js?version=20171206"></script>
+    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20180218"></script>
+    <script type="text/javascript" src="biblemap/src/routePlay.js?version=20171205"></script>
     <script type="text/javascript" src="biblemap/src/trajectoryData.js?version=20170901"></script>
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170829"></script>
 
@@ -1393,7 +1393,7 @@
 
 
     function pathAction( ) {
-        closeTooltip();
+
         closePopup3D();
         closePopup2D();
 
@@ -1416,6 +1416,7 @@
             return;
 
         setViewMode2D();
+        closeTooltip();
 
         var pathArrowLayer = CreatePathArrowLayer( trajectory.data, false );
         map3D.addPathLayer( pathArrowLayer );

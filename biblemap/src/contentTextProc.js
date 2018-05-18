@@ -669,6 +669,7 @@ function eventHistoryAdmin( newVal ){
     infoHistoryAdmin();
 
     setViewMode2D();
+    closeTooltip();
 }
 
 function writeInfoTabHistoryAdmin(){
