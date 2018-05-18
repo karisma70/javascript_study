@@ -211,11 +211,11 @@ var createFooterMenu = (function() {
              showMissionWideIntroCount ++;
 
              if ( ( showMissionWideIntroCount % 2 ) == 0 ) {
-                 missionWideLogo.src = "biblemap/image/mission_wide_logo2.png?version=20180514";
+                 missionWideLogo.src = "biblemap/image/mission_wide_logo2.png?version=20180520";
              }
              else{
                  //missionWideLogo.src = "biblemap/image/m_goto_anis_bible_map.png?version=20180501";
-                 missionWideLogo.src = "biblemap/image/m_goto_anis_bible_map2.png?version=20180510";
+                 missionWideLogo.src = "biblemap/image/m_goto_anis_bible_map2.png?version=20180520";
              }
              $("#missionWideIntro").show();
          };
@@ -587,7 +587,7 @@ function showIntroBibleMap(  ){
 }
 
 
-function introAnisBibleMap(){
+function introAnysBibleMap(){
     var count = footerMenu.getShowIntroCount();
     if( count % 2 == 0 ){
         showIntroMissionWide();
@@ -658,13 +658,17 @@ function showRecomendWebBrowser(  ) {
     popupContent.innerHTML += '바이블 맵 웹서비스를 사용하여 주셔서 감사합니다. ';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '스마트폰에 설치되어 있는 인터넷 접속 프로그램(웹 브라우저)를 실행하여 \'www.biblemap.or.kr\'에 접속하여 주시기 바랍니다';
+    popupContent.innerHTML += '현재 접속하신 웹 브라우저는 스마트폰에 기본적으로 설치되어 있는 웹 브라우저가 아니므로 정상동작 하지 않을 수 있습니다';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '본 웹사이트는 \'카카오톡\' 또는 별도의 인터넷 접속 프로그램이 아닌 스마트폰에 설치되어 있는 인터넷 접속 프로그램에서 정상동작합니다';
+    popupContent.innerHTML += '\'카카오톡\' 또는 별도로 설치된 웹 브라우저가 아닌 스마트폰에 기본적으로 설치되어 있는 웹 브라우저를 실행하여 \'www.biblemap.or.kr\'에 접속하여 주시기 바랍니다';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    // popupContent.innerHTML += '본 바이블 맵 서비스는 여러분들의 소중한 기부와 후원을 통하여 운영되고 있습니다.';
+    popupContent.innerHTML += '스마트폰에 기본적으로 설치되어 있는 웹 브라우저는 \'크롬\' 또는 \'사파리\' 앱을 의미합니다';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '잊지마시고 주소창에 www.biblemap.or.kr 를 입력해주세요';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '궁금사항은 카톡이나 이메일로 문의 주시면 감사하겠습니다. ';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';

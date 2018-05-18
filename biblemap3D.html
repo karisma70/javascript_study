@@ -28,7 +28,7 @@
 
     <script type="text/javascript" src="biblemap/src/makeHrefText.js?version=20180124"></script>
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20180121"></script>
-    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20180215"></script>
+    <script type="text/javascript" src="biblemap/src/contentTextProc.js?version=20180216"></script>
     <script type="text/javascript" src="biblemap/src/routePlay.js?version=20171205"></script>
     <script type="text/javascript" src="biblemap/src/trajectoryData.js?version=20170901"></script>
     <script type="text/javascript" src="biblemap/src/httpRequest.js?version=20170829"></script>
@@ -577,7 +577,7 @@
 </div>
 
 <script>
-    setDebug( false );
+    setDebug( true );
 
     if( isMobile() == true ){
         location.replace( 'biblemapMobile.html' );
@@ -1195,6 +1195,9 @@
         setCursorByID('map','default');
         setCursorByID('map3D','default');
 
+        if( isIE == true )
+            showRecommendChrom();
+
         /*
         var delayTime = 1000;
         if( isIE == true ){
@@ -1371,7 +1374,7 @@
         $('input:radio[name="radio2D3D"][value=chkView2D]').prop("checked", true);
 
        // if( window.selectedPoiObj != null )
-            showBaseInfoPoi2D3D();
+        createPoiTooltip2D3D();
     }
 
 
@@ -1385,7 +1388,7 @@
         sync2DMapTo3DMap();
 
      //   if( window.selectedPoiObj != null )
-            showBaseInfoPoi2D3D();
+        createPoiTooltip2D3D();
     }
 
 
@@ -1786,6 +1789,7 @@
         var poiObj = layerManager.getPoiObjById( poiID );
         window.selectedPoiObj = poiObj;
         moveToPlaceByPoiObj( poiObj );
+
     }
 
     function map3DZoomIn(){

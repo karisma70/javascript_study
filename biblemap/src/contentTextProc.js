@@ -206,7 +206,7 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
              poiContentsToTab_( window.focusPoiObj );
         }
 
-        showBaseInfoPoi2D3D();
+        createPoiTooltip2D3D();
 
 
     }, function () {
@@ -225,9 +225,7 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
         }
         */
 
-        showBaseInfoPoi2D3D();
-
-
+        createPoiTooltip2D3D();
     });
 
     showTitlePoi = function( popup, title , frameName ) {
@@ -241,9 +239,10 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
     };
 
 
-    createPoiTooltip = function( popup, frameName, isFocus ){
+    createPoiTooltip = function( poiObj, frameName, isFocus ){
 
         var labelText = "";
+        var poiText = poiObj.biblePlace;
 
         if (youtube != "") {
             if( frameName == "contentFrame2D" )
@@ -266,7 +265,7 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
         }
     };
 
-    showBaseInfoPoi2D3D = function(){
+   createPoiTooltip2D3D = function(){
 
         closePopup2D();
         closePopup3D();
@@ -274,23 +273,24 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
         closeTooltip();
 
         if( window.focusPoiObj !== null && window.focusPoiObj.id == localPoiObj.id ) {
+            ConsoleLog( "FocusPoiObj : " + window.focusPoiObj.biblePlace );
             if( curMapViewMode ==  "chkView2D") {  //  |  "chkView3D"  | "chkViewAll"
-                createPoiTooltip(popup2D, "contentFrame2D", true);
+                createPoiTooltip( window.focusPoiObj, "contentFrame2D", true);
             }else if( curMapViewMode ==  "chkView3D" ) {
-                createPoiTooltip(popup3D, "contentFrame3D", true);
+                createPoiTooltip( window.focusPoiObj, "contentFrame3D", true);
             }else{
-                createPoiTooltip(popup2D, "contentFrame2D", true);
-                createPoiTooltip(popup3D, "contentFrame3D", true);
+                createPoiTooltip( window.focusPoiObj, "contentFrame2D", true);
+                createPoiTooltip( window.focusPoiObj, "contentFrame3D", true);
             }
         }else{
             if( window.selectedPoiObj != null ) {
                 if( curMapViewMode ==  "chkView2D") {  //  |  "chkView3D"  | "chkViewAll"
-                    createPoiTooltip(popup2D, "contentFrame2D", false);
+                    createPoiTooltip( window.selectedPoiObj, "contentFrame2D", false);
                 }else if( curMapViewMode ==  "chkView3D" ) {
-                    createPoiTooltip(popup3D, "contentFrame3D", false);
+                    createPoiTooltip( window.selectedPoiObj, "contentFrame3D", false);
                 }else{
-                    createPoiTooltip(popup2D, "contentFrame2D", false);
-                    createPoiTooltip(popup3D, "contentFrame3D", false);
+                    createPoiTooltip( window.selectedPoiObj, "contentFrame2D", false);
+                    createPoiTooltip( window.selectedPoiObj, "contentFrame3D", false);
                 }
             }
         }
@@ -300,7 +300,7 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
     showYoutubePoi2D = function() {
 
         var labelText = localPoiObj.biblePlace + "&nbsp";
-        var foldIcon = '<a href =\"javascript:showBaseInfoPoi2D3D()\" >' + '<img src=\"biblemap/image/fold-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">' + '</a>';
+        var foldIcon = '<a href =\"javascript:createPoiTooltip2D3D()\" >' + '<img src=\"biblemap/image/fold-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">' + '</a>';
         labelText += '&nbsp;&nbsp;' + foldIcon;
         labelText += '<br>';
         labelText += "<iframe width=\"320\" height=\"240\" src=\"" + youtube + "\" frameborder = \"0\" allowfullscreen></iframe>";
@@ -316,7 +316,7 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
 
         var labelText = localPoiObj.biblePlace + "&nbsp";
 
-        var foldIcon = '<a href =\"javascript:showBaseInfoPoi2D3D()\" >' + '<img src=\"biblemap/image/fold-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">' + '</a>';
+        var foldIcon = '<a href =\"javascript:createPoiTooltip2D3D()\" >' + '<img src=\"biblemap/image/fold-icon.png\" style=\"width:20px; height:20px; vertical-align:middle;\">' + '</a>';
         labelText += '&nbsp;&nbsp;' + foldIcon;
         labelText += '<br>';
         labelText += "<iframe width=\"320\" height=\"240\" src=\"" + youtube + "\" frameborder = \"0\" allowfullscreen></iframe>";
@@ -337,13 +337,7 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
         layerManager.historyInsertPoi( localPoiObj );
         setGlobalFocusPoiObj( localPoiObj );
         poiContentsToTab_( localPoiObj );
-
-        /*
-        createPoiTooltip( popup2D, "contentFrame2D", true );
-        createPoiTooltip(popup3D, "contentFrame3D", true );
-
-        bibleMapManager.createPoiIcon( localPoiObj );        // focus POI Icon 만들기
-        */
+        createPoiTooltip2D3D();
 
     };
 
@@ -381,8 +375,8 @@ function requestPoiContentAndShow( poiObj, tooltip2D, tooltip3D ) {
         infoTab.innerHTML += strConvText;
 
 
-        createPoiTooltip( popup2D, "contentFrame2D", true );
-        createPoiTooltip(popup3D, "contentFrame3D", true );
+        // createPoiTooltip( poiObj, "contentFrame2D", true );
+        // createPoiTooltip(poiObj, "contentFrame3D", true );
 
         // bibleMapManager.createPoiIcon( poiObj );        // focus POI Icon 만들기
         bibleMapManager.setIconPosByPoi(  poiObj );        // focus POI Icon 만들기
@@ -447,7 +441,32 @@ function showTextLayerPopup( title, infoText ){
 
 }
 
+function showRecommendChrom(){
+    var lineImage = '<div style=\"height: 14px; background: url(biblemap/image/horizon-line.png);\"></div>';
 
+    var popupTitle = document.getElementById( 'noticeTitle' );
+    popupTitle.innerHTML = "권장 웹 브라우저 사용 안내" + lineImage;
+
+    var popupContent = document.getElementById( 'noticeContent' );
+    popupContent.innerHTML = "";
+    popupContent.innerHTML += '<br>' + 'Anys Bible Map 웹 서비스를 사용해 주셔서 감사합니다 <br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '본 웹 서비스는 <strong>크롬 웹 브라우저</strong>에 최적화 되어 있으므로 이를 설치하고 사용하기를 권장합니다<br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '아래 링크를 클릭하면 크롬 웹 브라우저 다운로드 설치 페이지로 이동합니다 <br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<a href= \"https://www.google.co.kr/chrome/browser/desktop/index.html\" target=\"_blank\" style=\"text-decoration:none; font-weight:bold; color:#2E59BF;\">' + '<img src = \"biblemap/image/chrome_browser.png\" style=\"width: 48px; height:48px; vertical-align:middle;\" >&nbsp;크롬 브라우저 다운로드</a>';
+    popupContent.innerHTML += '<br><br>';
+    popupContent.innerHTML += '<strong>크롬 웹 브라우저</strong>에서 Anys Bible Map 웹 서비스를 이용하면 보다 빠르고 편리하게 사용할 수 있습니다 <br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '설치가 끝나면 <strong>크롬 웹 브라우저</strong>를 실행하고 주소창에 <strong>\"www.biblemap.or.kr\"</strong>을 입력해 주세요 <br>';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '<br>';
+
+    showNoticePopup( '#infoPopup' );
+
+}
 
 function showIntroBibleMap(  ){
 
