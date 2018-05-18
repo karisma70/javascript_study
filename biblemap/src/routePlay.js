@@ -20,8 +20,8 @@ function CreatePathArrowLayer( trajectoryArray, isArrow ) {
             // linestring
             new ol.style.Style({
                 stroke: new ol.style.Stroke({
-                    color: '#ffcc33',
-                    width: 3
+                    color: '#ffff00',
+                    width: 1.5
                 })
             })
             /*,
@@ -52,7 +52,7 @@ function CreatePathArrowLayer( trajectoryArray, isArrow ) {
                     geometry: new ol.geom.Point(end),
                     image: new ol.style.Icon({
                         // src: 'biblemap/image/arrow.png',
-                        src: 'biblemap/image/arrow2.png',
+                        src: 'biblemap/image/arrow3.png',
                         anchor: [0.75, 0.5],
                         rotateWithView: true,
                         rotation: -rotation
