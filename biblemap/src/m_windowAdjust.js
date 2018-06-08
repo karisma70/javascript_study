@@ -655,16 +655,18 @@ function showRecomendWebBrowser(  ) {
     var popupContent = document.getElementById('noticeContent');
     popupContent.innerHTML = "";
 
-    popupContent.innerHTML += '바이블 맵 웹서비스를 사용하여 주셔서 감사합니다. ';
+    popupContent.innerHTML += '<br>';
+    popupContent.innerHTML += '현재 접속하신 \'카카오톡\' 앱은 스마트폰에 기본적으로 설치되어 있는 \'인터넷 접속 앱\'이 아니므로 바이블맵이 정상동작 하지 않을 수 있습니다';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '현재 접속하신 웹 브라우저는 스마트폰에 기본적으로 설치되어 있는 웹 브라우저가 아니므로 정상동작 하지 않을 수 있습니다';
+    popupContent.innerHTML += '스마트폰에 기본적으로 설치되어 있는 \'인터넷 접속 앱(Chrome 또는 Safari)\'을 실행하여 주소창에 \'www.biblemap.or.kr\'을 입력하여 주시기 바랍니다';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '\'카카오톡\' 또는 별도로 설치된 웹 브라우저가 아닌 스마트폰에 기본적으로 설치되어 있는 웹 브라우저를 실행하여 \'www.biblemap.or.kr\'에 접속하여 주시기 바랍니다';
+    popupContent.innerHTML += '<img src=\"biblemap/image/chromeSel.JPG\" style=\"height:80px; vertical-align:middle\" >';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '스마트폰에 기본적으로 설치되어 있는 웹 브라우저는 \'크롬\' 또는 \'사파리\' 앱을 의미합니다';
+    popupContent.innerHTML += '<img src=\"biblemap/image/safariSel.JPG\" style=\"height:85px; vertical-align:middle\" >';
+    popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '잊지마시고 주소창에 www.biblemap.or.kr 를 입력해주세요';
     popupContent.innerHTML += '<br>';
