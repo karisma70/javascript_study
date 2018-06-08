@@ -656,19 +656,19 @@ function showRecomendWebBrowser(  ) {
     popupContent.innerHTML = "";
 
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '현재 접속하신 \'카카오톡\' 앱은 스마트폰에 기본적으로 설치되어 있는 \'인터넷 접속 앱\'이 아니므로 바이블맵이 정상동작 하지 않을 수 있습니다';
+    popupContent.innerHTML += '현재 접속하신 \'카카오톡\' 앱은 스마트폰에 기본적으로 설치되어 있는 인터넷 접속 앱이 아니므로 바이블맵이 정상동작 하지 않을 수 있습니다';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '스마트폰에 기본적으로 설치되어 있는 \'인터넷 접속 앱(Chrome 또는 Safari)\'을 실행하여 주소창에 \'www.biblemap.or.kr\'을 입력하여 주시기 바랍니다';
+    popupContent.innerHTML += '스마트폰에 기본적으로 설치되어 있는 아래와 같은 Chrome 또는 Safari 인터넷 접속 앱을 실행하여 주소창에 biblemap.or.kr을 입력하여 주시기 바랍니다';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<img src=\"biblemap/image/chromeSel.JPG\" style=\"height:80px; vertical-align:middle\" >';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '<img src=\"biblemap/image/safariSel.JPG\" style=\"height:85px; vertical-align:middle\" >';
+    popupContent.innerHTML += '<img src=\"biblemap/image/safariSel.png\" style=\"height:85px; vertical-align:middle\" >';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
-    popupContent.innerHTML += '잊지마시고 주소창에 www.biblemap.or.kr 를 입력해주세요';
+    popupContent.innerHTML += '잊지마시고 주소창에 biblemap.or.kr 를 입력해주세요';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '<br>';
     popupContent.innerHTML += '궁금사항은 카톡이나 이메일로 문의 주시면 감사하겠습니다. ';

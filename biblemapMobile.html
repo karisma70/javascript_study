@@ -70,7 +70,7 @@
 
     <script type="text/javascript" src="biblemap/src/m_searchBible.js?version=20170903"></script>
     <script type="text/javascript" src="biblemap/js/jquery.autocomplete.min.js"></script>
-    <script type="text/javascript" src="biblemap/src/m_windowAdjust.js?version=20170926"></script>
+    <script type="text/javascript" src="biblemap/src/m_windowAdjust.js?version=20170928"></script>
     <script type="text/javascript" src="biblemap/src/m_poiTooltip.js"></script>
 
     <style stype="text/css">
@@ -153,7 +153,7 @@
 <div class="wrapperDiv">
     <div id="titlebar" style="position:absolute; left:0px; top:0px; height:40px;  background-color:rgb( 32, 67, 109  );">
         <!-- <div id="titlebar" style="position:absolute; left:0px; top:0px; height:40px;  background-color:rgb( 77, 162, 253 );">  -->
-        <h1 align="center" style="position:absolute; top: 5px; color:white; background: rgb( 32, 67, 109 ); " >성경지도</h1>
+        <h1 align="center" style="position:absolute; top: 5px; color:white; background: rgb( 32, 67, 109 ); " >biblemap.or.kr</h1>
         <!-- <input type="image" src="biblemap/image/biblemap_logo.png" style="position:absolute; left:0px; top:0px; width:45px; height:45px; vertical-align:middle; border:0;" onclick="openMenu()">  -->
         <input type="image" src="biblemap/image/m_menu_open.png" style="position:absolute; left:5px; top:5px; width:35px; height:30px; vertical-align:middle; border:0;" onclick="openMenu()">
         <input id ="bibleMapLogo" type="image" src="biblemap/image/biblemap_logo.png" style="position:absolute; top:0px; width:41px; height:41px; vertical-align:middle; border:0;" onclick="gotoSNS(1)">
@@ -343,10 +343,11 @@
     }
 
 
+    /*
     var agt = navigator.userAgent.toLowerCase();
     if( agt.indexOf("chrome") != -1 ||  agt.indexOf("safari") != -1 ){
     }else {
-        document.title = 'www.biblemap.or.kr';
+        document.title = 'biblemap.or.kr';
         if( agt.indexOf("kakaotalk") != -1 ) {
             showRecomendWebBrowser();
             setInterval(function () {
@@ -354,6 +355,7 @@
             }, 18000);
         }
     }
+    */
 
 
     function test(){
@@ -598,6 +600,20 @@
 
     ///////////////////////////////////////////////////
 
+    function checkRecommendBrowser() {
+        var agt = navigator.userAgent.toLowerCase();
+        if (agt.indexOf("chrome") != -1 || agt.indexOf("safari") != -1) {
+        } else {
+            document.title = 'biblemap.or.kr';
+            if (agt.indexOf("kakaotalk") != -1) {
+                showRecomendWebBrowser();
+                setInterval(function () {
+                    showRecomendWebBrowser();
+                }, 18000);
+            }
+        }
+    }
+
 
 
     var downloadGeometries = function(){
@@ -628,10 +644,13 @@
                                 writePoiContentsToTab( window.focusPoiObj, infoText );
                                 tabMenu.selectTab('tab3Menu');
                                 footerMenu.middle();
+
+
                             } );     // poi의  youtube나 기타 컨텐츠를 보여 줄수 있도록 mongodb 검색
-
-
                         }
+
+                        checkRecommendBrowser();
+
                     } );
 
                     setTimeout(hideDownloading, 1000);
