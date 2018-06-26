@@ -1496,7 +1496,8 @@ function createLayer( source  ) {
                  visible: false,
                  preload: Infinity,
                  source: new ol.source.BingMaps({
-                     key: 'Aj2EBKlpTb_8cxuPEs0OHBBoiplb0HYYaOb8DVHTyCK7dduQSzMTv1i9gb4WwnP2',
+                     // key: 'Aj2EBKlpTb_8cxuPEs0OHBBoiplb0HYYaOb8DVHTyCK7dduQSzMTv1i9gb4WwnP2',
+                     key: 'Au5qS3bcsVhs-vxVb7TievmR8kdxUGxuJazbCsYPqBD8xLF6_JNuF0b3DrNRfSrI',
                      imagerySet: "Aerial"
                  })
              });
@@ -1510,7 +1511,8 @@ function createLayer( source  ) {
                  visible: false,
                  preload: Infinity,
                  source: new ol.source.BingMaps({
-                     key: 'Aj2EBKlpTb_8cxuPEs0OHBBoiplb0HYYaOb8DVHTyCK7dduQSzMTv1i9gb4WwnP2',
+                     // key: 'Aj2EBKlpTb_8cxuPEs0OHBBoiplb0HYYaOb8DVHTyCK7dduQSzMTv1i9gb4WwnP2',
+                     key: 'Au5qS3bcsVhs-vxVb7TievmR8kdxUGxuJazbCsYPqBD8xLF6_JNuF0b3DrNRfSrI',
                      // imagerySet: "Aerial"
                      imagerySet: "AerialWithLabels",
                      culture: "ko"
