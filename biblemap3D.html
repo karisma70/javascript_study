@@ -504,7 +504,7 @@
             <input id="tabIncBible" type="image" src="biblemap/image/right_arrow.png?version=20170907" style="position: absolute; left: 220px; top: -38px; width:22px; height:22px; vertical-align:middle;" onclick="tabIncreaseBibleChapterAndSearch()">
         </div>
 
-        <div id = "tab3Title" class="divContent" style="position: absolute; padding-left: 10px;  font: 'Hanna', serif; font-size: 15px; top:-36px; width: 400px; height: 35px; overflow-x:hidden; color: rgb( 90, 90, 90 ); " >
+        <div id = "tab3Title" class="divContent" style="position: absolute; padding-left: 10px;  font: bold 16px Nanum Gothic, serif; top:-36px; width: 400px; height: 35px; overflow-x:hidden; color: rgb( 90, 90, 90 ); " >
             <img src ="biblemap/image/undo.png?version=20170914" style="position:absolute; left: 215px; top: 0px; width: 24px; height:20px; vertical-align:top;">
         </div>
 
@@ -577,7 +577,7 @@
 </div>
 
 <script>
-    setDebug( true );
+    setDebug( false );
 
     if( isMobile() == true ){
         location.replace( 'biblemapMobile.html' );
@@ -590,7 +590,7 @@
     var isIE = true;
 
     var agt = navigator.userAgent.toLowerCase();
-    if (agt.indexOf("chrome") != -1)
+    if (agt.indexOf("chrome") != -1 || agt.indexOf("safari")!= -1 || agt.indexOf("firefox")!= -1 )
         isIE = false;
 
     window.tooltipID = 0;
