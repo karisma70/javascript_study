@@ -44,15 +44,15 @@ function makeHrefWordInText( LayerManager, strWord, bibleTitle, bibleText, color
     */
 
 
-    /*
-    if( strWord == '가이사랴'){
+
+    if( strWord == '요단'){
         ConsoleLog("Debuging Here!!!");
     }
 
-    if( strWord == '빌립보'){
+    if( strWord == '예루살렘'){
         ConsoleLog("Debuging Here!!!");
     }
-    */
+
 
 
     var strPos = bibleText.indexOf(strWord);
@@ -69,7 +69,7 @@ function makeHrefWordInText( LayerManager, strWord, bibleTitle, bibleText, color
                 var hrefPos  = nextString.indexOf("</a>");
                 if( hrefPos > -1 ){
                     strRet += bibleText.substring( strPos + strWord.length,  strPos + strWord.length + 4 );
-                    strRet += makeHrefWordInText(LayerManager, strWord, bibleTitle, bibleText.substring(strPos + ( strWord.length + 5), bibleText.length), color);
+                    strRet += makeHrefWordInText(LayerManager, strWord, bibleTitle, bibleText.substring(strPos + ( strWord.length + 4), bibleText.length), color);
                 }else {
                     strRet += makeHrefWordInText(LayerManager, strWord, bibleTitle, bibleText.substring(strPos + strWord.length, bibleText.length), color);
                 }
