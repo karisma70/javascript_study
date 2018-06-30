@@ -44,7 +44,7 @@ function makeHrefWordInText( LayerManager, strWord, bibleTitle, bibleText, color
     */
 
 
-
+/*
     if( strWord == '요단'){
         ConsoleLog("Debuging Here!!!");
     }
@@ -52,7 +52,7 @@ function makeHrefWordInText( LayerManager, strWord, bibleTitle, bibleText, color
     if( strWord == '예루살렘'){
         ConsoleLog("Debuging Here!!!");
     }
-
+*/
 
 
     var strPos = bibleText.indexOf(strWord);
