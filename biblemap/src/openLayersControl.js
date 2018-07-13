@@ -846,6 +846,8 @@ function createLayer( source  ) {
 
          var collControls = new ol.Collection();
 
+         var bingmap2D = 'Amq6dYDdEZuW4uVXyTa6qOxJgqzlEBPNiUhJaWJDEXRa5BzPGl5XuAmSZX-fujw9';
+
          if( overlay !== undefined && overlay != null ){
              this.map = new ol.Map({
                  overlays: [overlay],
@@ -889,7 +891,7 @@ function createLayer( source  ) {
                  visible: false,
                  preload: Infinity,
                  source: new ol.source.BingMaps({
-                     key: 'Aj2EBKlpTb_8cxuPEs0OHBBoiplb0HYYaOb8DVHTyCK7dduQSzMTv1i9gb4WwnP2',
+                     key: bingmap2D,
                      imagerySet: "Aerial"
                  })
              });
@@ -903,8 +905,7 @@ function createLayer( source  ) {
                  visible: false,
                  preload: Infinity,
                  source: new ol.source.BingMaps({
-                     key: 'Aj2EBKlpTb_8cxuPEs0OHBBoiplb0HYYaOb8DVHTyCK7dduQSzMTv1i9gb4WwnP2',
-                     // imagerySet: "Aerial"
+                     key: bingmap2D,
                      imagerySet: "AerialWithLabels",
                      culture : "ko"
                  })
@@ -1319,6 +1320,8 @@ function createLayer( source  ) {
 
      var iconLayer = null;
 
+     var bigmap3D = 'Au5qS3bcsVhs-vxVb7TievmR8kdxUGxuJazbCsYPqBD8xLF6_JNuF0b3DrNRfSrI';
+
      var createLabelLayer = function( name, posX, posY ){
 
          var iconStyle = new ol.style.Style({
@@ -1448,33 +1451,6 @@ function createLayer( source  ) {
 
          mapView = this.view;
 
-
-         /*
-         this.map = new ol.Map({
-             overlays: [ overlay ],
-             layers: [
-                 new ol.layer.Tile({
-                     source: new ol.source.BingMaps({
-                         key: 'Aj2EBKlpTb_8cxuPEs0OHBBoiplb0HYYaOb8DVHTyCK7dduQSzMTv1i9gb4WwnP2',
-                         imagerySet: "Aerial"
-                         // imagerySet: "AerialWithLabels",
-                         // culture : "ko"
-                     })
-                 })
-             ],
-             // target: 'map3D',
-             target: 'behindMap2D',
-             controls: ol.control.defaults({
-                 attribution: false,
-                 attributionOptions: ({    // @type {olx.control.AttributionOptions}
-                     collapsible: false
-                 }) }),
-             interactions: ol.interaction.defaults( {mouseWheelZoom: false }),
-
-             view: this.view
-         });
-         */
-
          this.map = new ol.Map({
              overlays: [ overlay ],
 
@@ -1496,8 +1472,7 @@ function createLayer( source  ) {
                  visible: false,
                  preload: Infinity,
                  source: new ol.source.BingMaps({
-                     // key: 'Aj2EBKlpTb_8cxuPEs0OHBBoiplb0HYYaOb8DVHTyCK7dduQSzMTv1i9gb4WwnP2',
-                     key: 'Au5qS3bcsVhs-vxVb7TievmR8kdxUGxuJazbCsYPqBD8xLF6_JNuF0b3DrNRfSrI',
+                     key: bigmap3D,
                      imagerySet: "Aerial"
                  })
              });
@@ -1511,8 +1486,7 @@ function createLayer( source  ) {
                  visible: false,
                  preload: Infinity,
                  source: new ol.source.BingMaps({
-                     // key: 'Aj2EBKlpTb_8cxuPEs0OHBBoiplb0HYYaOb8DVHTyCK7dduQSzMTv1i9gb4WwnP2',
-                     key: 'Au5qS3bcsVhs-vxVb7TievmR8kdxUGxuJazbCsYPqBD8xLF6_JNuF0b3DrNRfSrI',
+                     key: bigmap3D,
                      // imagerySet: "Aerial"
                      imagerySet: "AerialWithLabels",
                      culture: "ko"
