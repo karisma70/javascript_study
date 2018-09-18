@@ -70,7 +70,7 @@
 
     <script type="text/javascript" src="biblemap/src/m_searchBible.js?version=20170903"></script>
     <script type="text/javascript" src="biblemap/js/jquery.autocomplete.min.js"></script>
-    <script type="text/javascript" src="biblemap/src/m_windowAdjust.js?version=20170928"></script>
+    <script type="text/javascript" src="biblemap/src/m_windowAdjust.js?version=20170930"></script>
     <script type="text/javascript" src="biblemap/src/m_poiTooltip.js"></script>
 
     <style stype="text/css">
@@ -606,7 +606,8 @@
         } else {
             document.title = 'biblemap.or.kr';
             if (agt.indexOf("kakaotalk") != -1) {
-                showRecomendWebBrowser();
+                // showRecomendWebBrowser();
+                window.location.href = 'googlechrome://biblemap.or.kr';
                 setInterval(function () {
                     showRecomendWebBrowser();
                 }, 18000);

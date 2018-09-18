@@ -1444,7 +1444,7 @@ function createLayer( source  ) {
 
          this.view = new ol.View({
              center: [3844176, 3806822],
-             maxZoom: 17,
+             maxZoom: 19,
              minZoom: 5,
              zoom: 7
          });
@@ -1478,7 +1478,7 @@ function createLayer( source  ) {
              });
 
              this.bingMapAerialLayer.set('id', 1, false);
-             this.bingMapAerialLayer.set('visibleRange', {max: 18, min: 1});
+             this.bingMapAerialLayer.set('visibleRange', {max: 19, min: 1});
              this.bingMapAerialLayer.setVisible(true);
              this.map.addLayer(this.bingMapAerialLayer);
 
@@ -1494,7 +1494,7 @@ function createLayer( source  ) {
              });
 
              this.bingMapAerialLabelLayer.set('id', 2, false);
-             this.bingMapAerialLabelLayer.set('visibleRange', {max: 18, min: 1});
+             this.bingMapAerialLabelLayer.set('visibleRange', {max: 19, min: 1});
              this.bingMapAerialLabelLayer.setVisible(false);
              this.map.addLayer(this.bingMapAerialLabelLayer);
          };
