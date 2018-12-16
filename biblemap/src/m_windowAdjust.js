@@ -83,7 +83,8 @@ var createFooterMenu = (function() {
          this.compassBtn = document.getElementById("compassBtn");
          this.zoomInBtn = document.getElementById("zoomInBtn2D");
          this.zoomOutBtn = document.getElementById("zoomOutBtn2D");
-         this.homeBtn = document.getElementById("homeBtn");
+         // this.zoomInFocusPoiBtn = document.getElementById("zoomInFocusPoiBtn");
+         this.zoomInSelectedPoiBtn = document.getElementById("zoomInSelectedPoiBtn");
 
 
          this.compassBtn.style.top = 5 + 'px';
@@ -91,13 +92,13 @@ var createFooterMenu = (function() {
 
          this.zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
          this.zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
-         this.homeBtn.style.left = (window.innerWidth - 40 ) + 'px';
+         this.zoomInSelectedPoiBtn.style.left = (window.innerWidth - 40 ) + 'px';
 
          function setZOrderMapViewBtn( val ) {
              $('#compassBtn').css("z-index", val);
              $('#zoomInBtn2D').css("z-index", val);
              $('#zoomOutBtn2D').css("z-index", val);
-             $('#homeBtn').css("z-index", val);
+             $('#zoomInSelectedPoiBtn').css("z-index", val);
          }
 
          setZOrderMapViewBtn(2010);
@@ -349,13 +350,13 @@ var createFooterMenu = (function() {
              this.compassBtn.style.top = 5 + 'px';
              this.compassBtn.style.left = (window.innerWidth - 43 ) + 'px';
 
-             this.homeBtn.style.top = ( window.innerHeight - 220 ) + 'px';
+             this.zoomInSelectedPoiBtn.style.top = ( window.innerHeight - 220 ) + 'px';
              this.zoomInBtn.style.top = ( window.innerHeight - 172 ) + 'px';
              this.zoomOutBtn.style.top = (window.innerHeight - 140 ) + 'px';
 
              this.zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
              this.zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
-             this.homeBtn.style.left = (window.innerWidth - 40 ) + 'px';
+             this.zoomInSelectedPoiBtn.style.left = (window.innerWidth - 40 ) + 'px';
 
              this.setTabPosition();
 
@@ -390,14 +391,14 @@ var createFooterMenu = (function() {
             this.compassBtn.style.top = 5 + 'px';
             this.compassBtn.style.left = (window.innerWidth - 43 ) + 'px';
 
-            //this.homeBtn.style.top = ( (window.innerHeight - mapHeight) - 180 ) + 'px';
-            this.homeBtn.style.top = ( mapHeight - 180  ) + 'px';
+            //this.zoomInSelectedPoiBtn.style.top = ( (window.innerHeight - mapHeight) - 180 ) + 'px';
+            this.zoomInSelectedPoiBtn.style.top = ( mapHeight - 180  ) + 'px';
             this.zoomInBtn.style.top = ( mapHeight - 133 ) + 'px';
             this.zoomOutBtn.style.top = ( mapHeight - 100 ) + 'px';
 
             this.zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
             this.zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
-            this.homeBtn.style.left = (window.innerWidth - 40 ) + 'px';
+            this.zoomInSelectedPoiBtn.style.left = (window.innerWidth - 40 ) + 'px';
 
             this.setTabPosition();
 
@@ -431,13 +432,13 @@ var createFooterMenu = (function() {
             this.compassBtn.style.top = 5 + 'px';
             this.compassBtn.style.left = (window.innerWidth - 43 ) + 'px';
 
-            this.homeBtn.style.top = ( window.innerHeight - 180 ) + 'px';
+            this.zoomInSelectedPoiBtn.style.top = ( window.innerHeight - 180 ) + 'px';
             this.zoomInBtn.style.top = (window.innerHeight - 133 ) + 'px';
             this.zoomOutBtn.style.top = (window.innerHeight - 100 ) + 'px';
 
             this.zoomInBtn.style.left = (window.innerWidth - 40 ) + 'px';
             this.zoomOutBtn.style.left = (window.innerWidth - 40 ) + 'px';
-            this.homeBtn.style.left = (window.innerWidth - 40 ) + 'px';
+            this.zoomInSelectedPoiBtn.style.left = (window.innerWidth - 40 ) + 'px';
 
             this.upArrow.style.top = 0 + 'px';
             this.upArrow.style.left = window.innerWidth - 60 + 'px';
@@ -890,12 +891,12 @@ function imageBtnShowControl( isShow){
         $("#compassBtn").show();
         $("#zoomInBtn2D").show();
         $("#zoomOutBtn2D").show();
-        $("#homeBtn").show();
+        $("#zoomInSelectedPoiBtn").show();
     }else{
         $("#compassBtn").hide();
         $("#zoomInBtn2D").hide();
         $("#zoomOutBtn2D").hide();
-        $("#homeBtn").hide();
+        $("#zoomInSelectedPoiBtn").hide();
     }
 }
 

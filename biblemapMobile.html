@@ -70,7 +70,7 @@
 
     <script type="text/javascript" src="biblemap/src/m_searchBible.js?version=20170903"></script>
     <script type="text/javascript" src="biblemap/js/jquery.autocomplete.min.js"></script>
-    <script type="text/javascript" src="biblemap/src/m_windowAdjust.js?version=20170930"></script>
+    <script type="text/javascript" src="biblemap/src/m_windowAdjust.js?version=20170931"></script>
     <script type="text/javascript" src="biblemap/src/m_poiTooltip.js"></script>
 
     <style stype="text/css">
@@ -242,8 +242,13 @@
     <!-- <input id="zoomOutBtn2D" type="image" src="biblemap/image/m_zoom_out.png?version=20171204" style="border:1px solid grey;  position: absolute; width:35px; height: 35px; border:none;"-->
     <input id="zoomOutBtn2D" type="image" src="biblemap/image/minus_btn2.png?version=20171204" style="position: absolute; width:35px; height: 35px; border:none; "
            onclick="map2DZoomOut()">
+
+    <!--
     <input id="homeBtn" type="image" src="biblemap/image/home2.png?version=20171004"
-           style="position: absolute; width:35px; height: 35px; border:none;" onclick="gotoHome()">
+           style="position: absolute; width:35px; height: 35px; border:none;" onclick="gotoHome()">   -->
+    <input id="zoomInSelectedPoiBtn" type="image" src="biblemap/image/poi_zoomin.png?version=20171004"
+           style="position: absolute; width:35px; height: 35px; border:none;" onclick="zoomInSelectedPoi()">
+
 </div>
 
 <div id="footer"  style="border-top: 1px solid rgb(220, 220, 220);" >
@@ -326,6 +331,7 @@
     var isReload = windowReloadByCurDate( 'biblemapMobile-day' );
 
 
+
     if( isMobile() == false ){
         var iEVersion = IEVersionCheck();
 
@@ -341,6 +347,7 @@
             }
         }
     }
+
 
 
     /*
@@ -783,7 +790,14 @@
             isFar = true;
         }
 
+        var curZoom = bibleMap.getView().getZoom();
+
         var poiZoomIn = poiObj.zoomIn +1;
+
+        if( curZoom > poiZoomIn ){
+            poiZoomIn = curZoom;
+        }
+
         // var poiZoomIn = poiObj.zoomIn;
         /*
         if( poiZoomIn > 11 )
@@ -1012,6 +1026,14 @@
             }
         }
     }
+
+    function zoomInSelectedPoi( ) {
+        if( window.selectedPoiObj != null )
+            deepMoveToPlaceByPoiObj( window.selectedPoiObj );
+    }
+
+
+
 
     function gotoSNS( kind ){
         if( kind == 1 ){

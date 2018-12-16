@@ -848,6 +848,7 @@ function createLayer( source  ) {
 
          var bingmap2D = 'Amq6dYDdEZuW4uVXyTa6qOxJgqzlEBPNiUhJaWJDEXRa5BzPGl5XuAmSZX-fujw9';
 
+
          if( overlay !== undefined && overlay != null ){
              this.map = new ol.Map({
                  overlays: [overlay],
@@ -1320,7 +1321,14 @@ function createLayer( source  ) {
 
      var iconLayer = null;
 
-     var bigmap3D = 'Au5qS3bcsVhs-vxVb7TievmR8kdxUGxuJazbCsYPqBD8xLF6_JNuF0b3DrNRfSrI';
+     // var bigmap3D = 'Au5qS3bcsVhs-vxVb7TievmR8kdxUGxuJazbCsYPqBD8xLF6_JNuF0b3DrNRfSrI';
+
+     var bigmap3D = 'Amq6dYDdEZuW4uVXyTa6qOxJgqzlEBPNiUhJaWJDEXRa5BzPGl5XuAmSZX-fujw9';
+
+     var terrainUrl = 'https://maps.tilehosting.com/data/terrain-quantized-mesh/?key=';
+
+     var terrainKey = '8wUwkK3l8MrAH6eKz5Dd';
+
 
      var createLabelLayer = function( name, posX, posY ){
 
@@ -1764,14 +1772,24 @@ function createLayer( source  ) {
          this.ol3dScene.screenSpaceCameraController.maximumZoomDistance = 4000000;
          this.ol3dScene.screenSpaceCameraController._minimumZoomRate = 0.3; // ←
 
+         var terrainSupplier = terrainUrl + terrainKey;
+
          var terrainProvider = new Cesium.CesiumTerrainProvider({
-             url: '//assets.agi.com/stk-terrain/world',
-             // url: 'https://assets.agi.com/stk-terrain/v1/tilesets/world/tiles',
+             // url: '//assets.agi.com/stk-terrain/world',
+             // url: '//assets.agi.com/stk-terrain/v1/tilesets/world/tiles',
+             // url : 'https://maps.tilehosting.com/data/hillshades/{z}/{x}/{y}.png?key=8wUwkK3l8MrAH6eKz5Dd',
+              //  url : 'https://maps.tilehosting.com/data/terrain-quantized-mesh/{z}/{x}/{y}.terrain?key=8wUwkK3l8MrAH6eKz5Dd',
+             url: terrainSupplier,
              requestWaterMask : true,
              requestVertexNormals: true
              // requestWaterMask : true
          });
+
+
+         // var terrainProvider = Cesium.createWorldTerrain();
+
          this.ol3dScene.terrainProvider = terrainProvider;
+
          this.ol3d.setEnabled(true);
          // this.ol3d.setEnabled( false );
          // window.map2 = ol3d;

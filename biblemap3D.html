@@ -10,7 +10,8 @@
     <link rel="stylesheet" type="text/css" media="all" href="http://fonts.googleapis.com/earlyaccess/nanumgothic.css">
     <link rel="stylesheet" type="text/css" media="all" href="http://fonts.googleapis.com/earlyaccess/hanna.css">
     <!-- <link rel="stylesheet" href="https://openlayers.org/en/v4.1.1/css/ol.css" type="text/css"> -->
-    <link rel="stylesheet" href="https://openlayers.org/en/v4.4.2/css/ol.css" type="text/css">
+    <!-- <link rel="stylesheet" href="https://openlayers.org/en/v4.4.2/css/ol.css" type="text/css"> -->
+    <link rel="stylesheet" href="biblemap/openLayers_v4.4.2/css/ol.css" type="text/css">
     <link rel="stylesheet" href="biblemap/css/expandmenu.css?version=20170917">
     <!-- <link rel="stylesheet" href="biblemap/ol-cesium-v1.32/ol.css" type="text/css"> -->
     <link rel="stylesheet" href="ol-cesium/ol.css" type="text/css">
@@ -38,7 +39,7 @@
 
     <script type="text/javascript" src="biblemap/src/distanceMeasureControl.js?version=20170821"></script>
     <script type="text/javascript" src="biblemap/src/GMDFileDownload.js?version=20170907"></script>
-    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20180210"></script>
+    <script type="text/javascript" src="biblemap/src/openLayersControl.js?version=20180214"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
     <script type="text/javascript" src="biblemap/src/jQueryRotate.js"></script>
     <!-- <script type="text/javascript" src="biblemap/vendor/jquery-1.8.1.js"></script> -->
@@ -500,8 +501,8 @@
         <div id = "tab1Title" class="divContent" style="padding-left: 20px; font-weight: bold; font-size:15px; top: 0px; height: 33px; overflow-x:hidden; color: rgb( 90, 90, 90 );" >
             <span id ="tabBibleBook" style="position: absolute; left: 15px; top: -38px; width:125px; font-size:15px; text-align:right;" ></span>
             <input id="tabDecBible" type="image" src="biblemap/image/left_arrow.png?version=20170907" style="position: absolute; top:-38px; left: 140px; width:22px; height:22px; vertical-align:middle; " onclick="tabDecreaseBibleChapterAndSearch()">
-            <span id ="tabBibleChapter" style="position: absolute; top:-38px; left: 155px; width:70px; font-size:15px; text-align:center;">장</span>
-            <input id="tabIncBible" type="image" src="biblemap/image/right_arrow.png?version=20170907" style="position: absolute; left: 220px; top: -38px; width:22px; height:22px; vertical-align:middle;" onclick="tabIncreaseBibleChapterAndSearch()">
+            <span id ="tabBibleChapter" style="position: absolute; top:-38px; left: 160px; width:70px; font-size:15px; text-align:center;">장</span>
+            <input id="tabIncBible" type="image" src="biblemap/image/right_arrow.png?version=20170907" style="position: absolute; left: 250px; top: -38px; width:22px; height:22px; vertical-align:middle;" onclick="tabIncreaseBibleChapterAndSearch()">
         </div>
 
         <div id = "tab3Title" class="divContent" style="position: absolute; padding-left: 10px;  font: bold 16px Nanum Gothic, serif; top:-36px; width: 400px; height: 35px; overflow-x:hidden; color: rgb( 90, 90, 90 ); " >
@@ -514,7 +515,7 @@
         </div>
         <div id="tab2" class="tab_content" style="position: absolute; padding-right: 10px;" >
             검색결과가&nbsp;없습니다 <br> 성경의&nbsp;단어&nbsp;검색&nbsp;버튼을&nbsp;클릭해&nbsp;주세요
-            <a href ="javascript:searchBibleWord()" style="text-decoration:none; font-weight: bold; fong-size: 1.5em; color:rgb(0, 91, 227); text-align : left;">→ 검색 클릭!!</a><br>
+            <a href ="javascript:searchBibleWord()" style="text-decoration:none; font-weight: bold; fong-size: 1.5em; color:rgb(0, 91, 227); text-align : left;">&nbsp;→ 검색 클릭!!</a><br>
         </div>
 
         <div id="tab3" class="tab_content"  style="padding-left: 10px; padding-right: 10px; border-top:1px solid rgb(215, 215, 215);" oncontextmenu="return false" ondragstart="javascript:return false" onselectstart="javascript:return false" onkeydown="return false" >
@@ -592,6 +593,8 @@
     var agt = navigator.userAgent.toLowerCase();
     if (agt.indexOf("chrome") != -1 || agt.indexOf("safari")!= -1 || agt.indexOf("firefox")!= -1 )
         isIE = false;
+    if( agt.indexOf('edge') != -1 )
+        isIE = true;
 
     window.tooltipID = 0;
     window.focusPoiObj = null;
