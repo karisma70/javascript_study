@@ -8,6 +8,9 @@ function writePoiContentsToTab( poiObj, infoText ){
             return;
         }
 
+        // debug
+        // alert("writePoiContentsToTab!!");
+
         $('#tab3Title').empty();
 
         var strPoiTitle = '<a href=' + '\"javascript:moveToPlaceByPoiID( ' + "\'" + poiObj.id + "\'" + ')\" style=\"text-decoration:none; font-weight:bold;' + "size:\'30px\';" + 'color: rgb( 180, 4, 174 )\" >'
@@ -30,6 +33,8 @@ function writePoiContentsToTab( poiObj, infoText ){
 
         var infoTab = document.getElementById('tab3');
 
+        /*
+
         var infoObj = { // title : poiText,
             content: infoText
         };
@@ -38,6 +43,20 @@ function writePoiContentsToTab( poiObj, infoText ){
 
         // infoTab.innerHTML += infoText;
         infoTab.innerHTML = strConvText;
+    */
+
+
+
+        // debug
+    /*
+        if( infoTab == null ){
+            alert("cannot find infoTab!!");
+        }else {
+            alert( "find infoTab!!");
+        }
+
+        infoTab.innferHTML += "gkgkgkdkgkdgkd";
+     */
 
 }
 
@@ -181,6 +200,11 @@ function mobileRequestPoiContentAndShow( paramPoiObj, callback ) {
 
     showPoiInfoInTab = function ( poiID ) {      // tabMenu 에서 정보 보여주기
 
+
+        // debug
+        alert("showPoiInfoInTab j!!");
+
+
         if( poiID == null ){
             alert("poiID == null error!!  at showPoiInfoTab ");
             return;
@@ -193,6 +217,7 @@ function mobileRequestPoiContentAndShow( paramPoiObj, callback ) {
             return;
         }
 
+
 /*
         var tempPoi = layerManager.historyCurrentPoi();
         if( tempPoi !== undefined ) {
@@ -203,10 +228,18 @@ function mobileRequestPoiContentAndShow( paramPoiObj, callback ) {
         }
         */
 
+        // debug
+        alert("before layerManager.historyInsertPoi(poiObj);");
+
+        // 여기가 문제다
         layerManager.historyInsertPoi(poiObj);
 
-        // bibleMapManager.createPoiIcon( poiObj );        // focus POI Icon 만들기
+        // debug
+        alert("before bibleMapManager.setIconPosByPoi( poiObj );");
         bibleMapManager.setIconPosByPoi( poiObj );        // focus POI Icon 만들기
+
+        // debug
+        alert("before wsetGlobalFocusPoiObj!!");
 
         setGlobalFocusPoiObj( poiObj );
 

@@ -77,18 +77,34 @@ HistoryClickedPoi = function(){
     this.cursor = -1;
 
     this.insertPoi = function( poiObj ){
+
+        // var out = "maxCount : " + this.maxCount + ",  poiQue.length : " + this.poiQue.length + ", poiObj.biblePlace : " + poiObj.biblePlace;
+        // alert( out );
+
         if( this.poiQue.length > 0 ){
+           //  alert( "1" );
             if( poiObj.id == this.poiQue[ this.poiQue.length-1].id )    // 동일한 id가 다시 들어오면 넣지 않는다
                 return;
+            // alert( "2" );
             this.poiQue.push(poiObj);
+           // alert( "3" );
         }
         else {
+           //  alert( "4" );
             this.poiQue.push(poiObj);
+           //  alert( "5" );
         }
-        if( this.poiQue.length > this.maxCount )
+        if( this.poiQue.length > this.maxCount ) {
             this.poiQue.shift();
+           // alert( "6" );
+        }
+        // alert( "7" );
         this.cursor = this.poiQue.length-1;
-        ConsoleLog( "insertPoi =>  cursor: " + this.cursor, ", poiName: " + poiObj.biblePlace );
+        // ConsoleLog( "insertPoi =>  cursor: " + this.cursor, ", poiName: " + poiObj.biblePlace );
+
+        // alert( "8, " +  poiObj.biblePlace );
+        // var out2 = "insertPoi =>  cursor: " + this.cursor + ", poiName: " + poiObj.biblePlace;
+        // alert( out2 );
 
         this.wholePrint();
     };
@@ -127,6 +143,8 @@ HistoryClickedPoi = function(){
     };
 
     this.wholePrint = function(){
+
+        return;
 
         for( var idx in this.poiQue ){
             var tempObj = this.poiQue[idx];

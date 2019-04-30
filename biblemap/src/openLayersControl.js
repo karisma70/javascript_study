@@ -1313,8 +1313,6 @@ function createLayer( source  ) {
  var init3dMap = ( function(){
 
      var mapView = null;
-     var map2DMap = null;
-
      var selectedFeatures = null;
      var scene3D = null;
      var staticOverlay = null;
@@ -1325,9 +1323,9 @@ function createLayer( source  ) {
 
      var bigmap3D = 'Amq6dYDdEZuW4uVXyTa6qOxJgqzlEBPNiUhJaWJDEXRa5BzPGl5XuAmSZX-fujw9';
 
-     var terrainUrl = 'https://maps.tilehosting.com/data/terrain-quantized-mesh/?key=';
+     var terrainUrl = 'https://api.maptiler.com/tiles/terrain-quantized-mesh/?key=';
 
-     var terrainKey = '8wUwkK3l8MrAH6eKz5Dd';
+     var terrainKey = 'IvgrAsCM6g5RUk0Ynn1Q';
 
 
      var createLabelLayer = function( name, posX, posY ){
@@ -1773,6 +1771,7 @@ function createLayer( source  ) {
          this.ol3dScene.screenSpaceCameraController._minimumZoomRate = 0.3; // ←
 
          var terrainSupplier = terrainUrl + terrainKey;
+         // var terrainSupplier =terrainUrl;
 
          var terrainProvider = new Cesium.CesiumTerrainProvider({
              // url: '//assets.agi.com/stk-terrain/world',
