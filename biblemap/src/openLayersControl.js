@@ -1312,6 +1312,7 @@ function createLayer( source  ) {
 
  var init3dMap = ( function(){
 
+
      var mapView = null;
      var selectedFeatures = null;
      var scene3D = null;
@@ -1319,13 +1320,12 @@ function createLayer( source  ) {
 
      var iconLayer = null;
 
-     // var bigmap3D = 'Au5qS3bcsVhs-vxVb7TievmR8kdxUGxuJazbCsYPqBD8xLF6_JNuF0b3DrNRfSrI';
 
      var bigmap3D = 'Amq6dYDdEZuW4uVXyTa6qOxJgqzlEBPNiUhJaWJDEXRa5BzPGl5XuAmSZX-fujw9';
 
      var terrainUrl = 'https://api.maptiler.com/tiles/terrain-quantized-mesh/?key=';
 
-     var terrainKey = 'IvgrAsCM6g5RUk0Ynn1Q';
+     var terrainKey =  'krAsku17I6HXcHMQKXKN';
 
 
      var createLabelLayer = function( name, posX, posY ){
